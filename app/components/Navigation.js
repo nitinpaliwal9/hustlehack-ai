@@ -1,0 +1,351 @@
+'use client'
+
+import Link from 'next/link'
+import Image from 'next/image'
+import { useState, useEffect } from 'react'
+import { useAuth } from '../hooks/useAuth'
+
+export default function Navigation() {
+  const [isScrolled, setIsScrolled] = useState(false)
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
+  
+  // Use authentication hook
+  const { user, isAuthenticated, signIn, signUp, signInWithGoogle, signOut, checkNetworkStatus, error: authError } = useAuth()
+  
+  // Show warning if Supabase is not configured
+  useEffect(() => {
+    if (authError && authError.includes('Supabase not configured')) {
+      console.warn('⚠️ Supabase not configured. Authentication features will be disabled.')
+    }
+  }, [authError])
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 0)
+    }
+    window.addEventListener('scroll', handleScroll)
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
+
+  // Enhanced authentication handlers
+  const handleSignOut = async (e) => {
+    e.preventDefault()
+    try {
+      await signOut()
+    } catch (error) {
+      console.error('Sign out error:', error)
+    }
+  }
+
+  const handleLogin = async (e) => {
+    e.preventDefault()
+    if (!checkNetworkStatus()) return
+    
+    const email = document.getElementById('loginEmail')?.value?.trim()
+    const password = document.getElementById('loginPassword')?.value?.trim()
+    
+    if (!email || !password) {
+      if (typeof window !== 'undefined' && window.showNotification) {
+        window.showNotification('Please enter both email and password', 'error')
+      }
+      return
+    }
+    
+    setIsLoading(true)
+    try {
+      await signIn(email, password)
+      closeModal('login-modal')
+      // Redirect to dashboard
+      setTimeout(() => {
+        window.location.href = '/dashboard'
+      }, 1500)
+    } catch (error) {
+      console.error('Login error:', error)
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  const handleSignup = async (e) => {
+    e.preventDefault()
+    if (!checkNetworkStatus()) return
+    
+    const name = document.getElementById('name')?.value?.trim()
+    const email = document.getElementById('email')?.value?.trim()
+    const password = document.getElementById('password')?.value?.trim()
+    const role = document.getElementById('role')?.value
+    
+    if (!name || !email || !password || !role) {
+      if (typeof window !== 'undefined' && window.showNotification) {
+        window.showNotification('Please fill in all fields', 'error')
+      }
+      return
+    }
+    
+    if (password.length < 6) {
+      if (typeof window !== 'undefined' && window.showNotification) {
+        window.showNotification('Password must be at least 6 characters long', 'error')
+      }
+      return
+    }
+    
+    setIsLoading(true)
+    try {
+      await signUp(email, password, { name, role })
+      closeModal('signup-modal')
+    } catch (error) {
+      console.error('Signup error:', error)
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  const handleGoogleSignIn = async () => {
+    try {
+      await signInWithGoogle()
+    } catch (error) {
+      console.error('Google sign in error:', error)
+    }
+  }
+
+  const openUserProfile = () => {
+    if (isAuthenticated) {
+      window.location.href = '/dashboard'
+    } else {
+      openModal('login-modal')
+    }
+  }
+
+  const togglePasswordVisibility = (fieldId) => {
+    if (typeof window !== 'undefined' && window.togglePasswordVisibility) {
+      window.togglePasswordVisibility(fieldId)
+    }
+  }
+
+  const toggleMobileMenu = () => {
+    setIsMobileMenuOpen(!isMobileMenuOpen)
+  }
+
+  const switchToSignup = () => {
+    closeModal('login-modal')
+    setTimeout(() => openModal('signup-modal'), 300)
+  }
+
+  const switchToLogin = () => {
+    closeModal('signup-modal')
+    setTimeout(() => openModal('login-modal'), 300)
+  }
+
+  const openModal = (modalId) => {
+    if (typeof window !== 'undefined' && window.openModal) {
+      window.openModal(modalId)
+    }
+  }
+
+  const closeModal = (modalId) => {
+    if (typeof window !== 'undefined' && window.closeModal) {
+      window.closeModal(modalId)
+    }
+  }
+
+  // Get display name
+  const getDisplayName = () => {
+    if (!user) return 'User'
+    return user.user_metadata?.name || user.email?.split('@')[0] || 'User'
+  }
+
+  return (
+    <>
+      {/* Navigation */}
+      <nav className={`navbar ${isScrolled ? 'scrolled' : ''}`}>
+        <div className="nav-container">
+          <Link href="/" className="logo">
+            <Image 
+              src="/assets/images/logo (2).png" 
+              alt="HustleHack AI Logo" 
+              className="logo-icon" 
+              width={40}
+              height={40}
+              onError={(e) => { e.target.style.display = 'none' }}
+            />
+            <span className="logo-text">HustleHack AI</span>
+          </Link>
+          
+          <ul className="nav-menu">
+            <li><Link href="/" className="nav-link">Home</Link></li>
+            <li><Link href="/#features" className="nav-link">Features</Link></li>
+            <li><Link href="/#pricing" className="nav-link">Pricing</Link></li>
+            <li><Link href="/resources" className="nav-link">Resources</Link></li>
+            <li><Link href="/about" className="nav-link">About</Link></li>
+            <li><Link href="/contact" className="nav-link">Contact</Link></li>
+          </ul>
+          
+          <div className="nav-actions">
+            <button className="theme-toggle btn btn-ghost" onClick={() => window.toggleTheme && window.toggleTheme()}>
+              🌙
+            </button>
+            
+            {/* Show auth buttons when not authenticated */}
+            {!isAuthenticated && (
+              <>
+                <a href="#" className="btn btn-ghost" onClick={() => openModal('login-modal')}>Sign In</a>
+                <a href="#" className="btn btn-primary" onClick={() => openModal('signup-modal')}>Get Started</a>
+              </>
+            )}
+            
+            {/* Profile Dropdown (show when authenticated) */}
+            {isAuthenticated && (
+              <div className="profile-dropdown" id="profileDropdown">
+                <button className="profile-btn btn btn-ghost" id="profileBtn">
+                  <span className="profile-avatar">👤</span>
+                  <span className="profile-name">{getDisplayName()}</span>
+                  <span className="profile-arrow">▼</span>
+                </button>
+                <div className="profile-menu" id="profileMenu">
+                  <Link href="/dashboard" className="profile-menu-item">
+                    <span className="profile-menu-icon">🎯</span>
+                    Dashboard
+                  </Link>
+                  <Link href="/profile" className="profile-menu-item">
+                    <span className="profile-menu-icon">👤</span>
+                    Profile Settings
+                  </Link>
+                  <Link href="/billing" className="profile-menu-item">
+                    <span className="profile-menu-icon">💳</span>
+                    Billing
+                  </Link>
+                  <Link href="/help" className="profile-menu-item">
+                    <span className="profile-menu-icon">❓</span>
+                    Help & Support
+                  </Link>
+                  <div className="profile-menu-divider"></div>
+                  <button className="profile-menu-item" onClick={handleSignOut}>
+                    <span className="profile-menu-icon">🚪</span>
+                    Sign Out
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
+          
+          <button className="mobile-menu-toggle">☰</button>
+        </div>
+      </nav>
+
+      {/* Login Modal */}
+      <div id="login-modal" className="modal">
+        <div className="modal-content">
+          <button className="modal-close" onClick={() => closeModal('login-modal')}>&times;</button>
+          <h2 style={{ color: 'white', textAlign: 'center', marginBottom: '2rem' }}>Welcome Back!</h2>
+          
+          {/* Google Sign In Button */}
+          <button 
+            type="button" 
+            className="btn-google" 
+            onClick={handleGoogleSignIn}
+            style={{ width: '100%', marginBottom: '1rem' }}
+          >
+            <svg className="google-icon" viewBox="0 0 24 24" width="20" height="20">
+              <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+              <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+              <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+              <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+            </svg>
+            <span>Continue with Google</span>
+          </button>
+          
+          <div className="auth-divider" style={{ textAlign: 'center', margin: '1rem 0', position: 'relative' }}>
+            <span style={{ background: 'var(--bg-color)', padding: '0 1rem', color: 'var(--gray-400)' }}>or continue with email</span>
+          </div>
+          
+          <form id="loginForm" onSubmit={handleLogin}>
+            <div className="form-group">
+              <label className="form-label">Email Address</label>
+              <input type="email" id="loginEmail" className="form-input" placeholder="Enter your email" required />
+            </div>
+            
+            <div className="form-group">
+              <label className="form-label">Password</label>
+              <div className="password-input-container">
+                <input type="password" id="loginPassword" className="form-input" placeholder="Enter your password" required />
+                <button type="button" className="password-toggle" onClick={() => togglePasswordVisibility('loginPassword')}>
+                  👁️
+                </button>
+              </div>
+            </div>
+            
+            <button 
+              type="submit" 
+              id="loginBtn" 
+              className="btn btn-primary" 
+              style={{ width: '100%', marginBottom: '1rem' }}
+              disabled={isLoading}
+            >
+              {isLoading ? 'Signing In...' : 'Sign In'}
+            </button>
+            
+            <div style={{ textAlign: 'center' }}>
+              <a href="#" style={{ color: 'var(--primary)', textDecoration: 'none' }}>Forgot Password?</a>
+            </div>
+            
+            <div style={{ textAlign: 'center', marginTop: '2rem', paddingTop: '2rem', borderTop: '1px solid rgba(255,255,255,0.1)' }}>
+              <p style={{ color: 'var(--gray-400)' }}>Don&apos;t have an account? <a href="#" style={{ color: 'var(--primary)', textDecoration: 'none' }} onClick={switchToSignup}>Sign Up</a></p>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      {/* Sign Up Modal */}
+      <div id="signup-modal" className="modal">
+        <div className="modal-content">
+          <button className="modal-close" onClick={() => closeModal('signup-modal')}>&times;</button>
+          <h2 style={{ color: 'white', textAlign: 'center', marginBottom: '2rem' }}>🚀 Start Your Journey</h2>
+          
+          <form id="signupForm">
+            <div className="form-group">
+              <label className="form-label">Full Name</label>
+              <input type="text" id="name" className="form-input" placeholder="Your Name" required />
+            </div>
+            
+            <div className="form-group">
+              <label className="form-label">Email</label>
+              <input type="email" id="email" className="form-input" placeholder="Your Email" required />
+            </div>
+            
+            <div className="form-group">
+              <label className="form-label">Password</label>
+              <div className="password-input-container">
+                <input type="password" id="password" className="form-input" placeholder="Password" required />
+                <button type="button" className="password-toggle" onClick={() => togglePasswordVisibility('password')}>
+                  👁️
+                </button>
+              </div>
+            </div>
+            
+            <div className="form-group">
+              <label className="form-label">I am a...</label>
+              <select id="role" className="form-input" required>
+                <option value="">Select your role</option>
+                <option value="Student">Student</option>
+                <option value="Content Creator">Content Creator</option>
+                <option value="Entrepreneur">Entrepreneur</option>
+                <option value="Freelancer">Freelancer</option>
+                <option value="Hustler">Hustler</option>
+              </select>
+            </div>
+            
+            <button type="submit" className="btn btn-primary" style={{ width: '100%', marginBottom: '1rem' }} id="signupBtn">
+              <span className="btn-text">Create Account</span>
+              <span className="btn-loading" style={{ display: 'none' }}>Creating Account...</span>
+            </button>
+            
+            <div style={{ textAlign: 'center', marginTop: '2rem', paddingTop: '2rem', borderTop: '1px solid rgba(255,255,255,0.1)' }}>
+              <p style={{ color: 'var(--gray-400)' }}>Already have an account? <a href="#" style={{ color: 'var(--primary)', textDecoration: 'none' }} onClick={switchToLogin}>Sign In</a></p>
+            </div>
+          </form>
+        </div>
+      </div>
+    </>
+  )
+}

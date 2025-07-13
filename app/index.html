@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HustleHack AI - Unleash AI. Build Faster. Learn Smarter.</title>
+    <meta name="description" content="AI-powered platform for young Indian students, creators, and solopreneurs. Tools, templates, prompts & guides to help you grow faster.">
+    
+    <!-- Enhanced SEO Meta Tags -->
+    <meta name="keywords" content="AI tools, productivity, students, creators, solopreneurs, India, templates, prompts, automation">
+    <meta name="author" content="HustleHack AI">
+    <meta name="robots" content="index, follow">
+    <meta name="language" content="English">
+    <meta name="revisit-after" content="7 days">
+    
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="HustleHack AI - Unleash AI. Build Faster. Learn Smarter.">
+    <meta property="og:description" content="AI-powered platform for young Indian students, creators, and solopreneurs. Tools, templates, prompts & guides to help you grow faster.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://hustlehackai.com">
+    <meta property="og:image" content="/assets/images/logo (2).png">
+    <meta property="og:site_name" content="HustleHack AI">
+    
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="HustleHack AI - Unleash AI. Build Faster. Learn Smarter.">
+    <meta name="twitter:description" content="AI-powered platform for young Indian students, creators, and solopreneurs.">
+    <meta name="twitter:image" content="/assets/images/logo (2).png">
+    
+    <!-- Performance & Security -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="theme-color" content="#7F5AF0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="dns-prefetch" href="https://bmgvtzwesdkitdjfszsh.supabase.co">
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="/assets/css/style.css">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="/assets/images/logo (2).png"/>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="#" class="logo">
+                <img src="/assets/images/logo (2).png" alt="HustleHack AI Logo" class="logo-icon" onerror="this.style.display='none'">
+                <span class="logo-text">HustleHack AI</span>
+            </a>
+            
+            <ul class="nav-menu">
+                <li><a href="#home" class="nav-link">Home</a></li>
+                <li><a href="#features" class="nav-link">Features</a></li>
+                <li><a href="#pricing" class="nav-link">Pricing</a></li>
+                <li><a href="/pages/resources.html" class="nav-link">Resources</a></li>
+                <li><a href="/pages/about.html" class="nav-link">About</a></li>
+                <li><a href="/pages/contact.html" class="nav-link">Contact</a></li>
+            </ul>
+            
+            <div class="nav-actions">
+                <button class="theme-toggle btn btn-ghost">🌙</button>
+                <a href="#" class="btn btn-ghost" data-modal="login-modal">Sign In</a>
+                <a href="#" class="btn btn-primary" data-modal="signup-modal">Get Started</a>
+                <!-- Profile Dropdown (hidden by default) -->
+                <div class="profile-dropdown" id="profileDropdown" style="display: none;">
+                    <button class="profile-btn btn btn-ghost" id="profileBtn">
+                        <span class="profile-avatar">👤</span>
+                        <span class="profile-name">User</span>
+                        <span class="profile-arrow">▼</span>
+                    </button>
+                    <div class="profile-menu" id="profileMenu">
+                        <a href="javascript:void(0);" class="profile-menu-item" onclick="openUserProfile()">
+                            <span class="profile-menu-icon">🎯</span>
+                            Dashboard
+                        </a>
+                        <a href="#profile" class="profile-menu-item">
+                            <span class="profile-menu-icon">👤</span>
+                            Profile Settings
+                        </a>
+                        <a href="#billing" class="profile-menu-item">
+                            <span class="profile-menu-icon">💳</span>
+                            Billing
+                        </a>
+                        <a href="#help" class="profile-menu-item">
+                            <span class="profile-menu-icon">❓</span>
+                            Help & Support
+                        </a>
+                        <div class="profile-menu-divider"></div>
+                        <button class="profile-menu-item" onclick="handleSignOut(event)">
+                            <span class="profile-menu-icon">🚪</span>
+                            Sign Out
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <button class="mobile-menu-toggle">☰</button>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="hero-title">Unleash AI. Build Faster. Learn Smarter.</h1>
+                <p class="hero-subtitle">AI tools, templates, prompts & guides to help you grow faster — all in one toolkit designed for young Indian students, creators, and solopreneurs.</p>
+                
+                <div class="hero-actions">
+                    <button id="google-login-btn-hero" class="btn btn-google btn-lg">
+                        <svg class="google-icon" viewBox="0 0 24 24" width="20" height="20">
+                            <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                            <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                            <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+                            <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+                        </svg>
+                        <span>🚀 Continue with Google</span>
+                        <div class="btn-loading" style="display: none;">
+                            <div class="spinner"></div>
+                        </div>
+                    </button>
+                    <a href="#" class="btn btn-primary btn-lg" data-modal="signup-modal">📧 Sign Up with Email</a>
+                    <a href="#features" class="btn btn-ghost btn-lg">✨ Explore Features</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section id="how-it-works" class="section">
+        <div class="container">
+            <h2 class="section-title">How It Works</h2>
+            <p class="section-subtitle">Get started with HustleHack AI in three simple steps</p>
+            
+            <div class="grid grid-3">
+                <div class="card">
+                    <span class="card-icon">🔍</span>
+                    <h3 class="card-title">Pick Your Plan</h3>
+                    <p class="card-description">Choose from our flexible plans designed for different needs and budgets. Start with basics or go pro.</p>
+                </div>
+                
+                <div class="card">
+                    <span class="card-icon">🎁</span>
+                    <h3 class="card-title">Unlock Tools & Resources</h3>
+                    <p class="card-description">Access AI tools, templates, prompts, and exclusive content to supercharge your productivity.</p>
+                </div>
+                
+                <div class="card">
+                    <span class="card-icon">🚀</span>
+                    <h3 class="card-title">Grow & Scale</h3>
+                    <p class="card-description">Apply your newfound skills to grow your studies, side hustles, and creative projects faster than ever.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="section">
+        <div class="container">
+            <h2 class="section-title">Why Choose HustleHack AI?</h2>
+            <p class="section-subtitle">Everything you need to succeed in the AI-driven world</p>
+            
+            <div class="grid grid-4">
+                <div class="card">
+                    <span class="card-icon">✨</span>
+                    <h3 class="card-title">Weekly AI Drops</h3>
+                    <p class="card-description">Fresh AI tools, prompts, and resources delivered weekly to keep you ahead of the curve.</p>
+                </div>
+                
+                <div class="card">
+                    <span class="card-icon">🛠️</span>
+                    <h3 class="card-title">Tools & Templates</h3>
+                    <p class="card-description">Ready-to-use templates, blueprints, and automation tools for instant productivity boost.</p>
+                </div>
+                
+                <div class="card">
+                    <span class="card-icon">📚</span>
+                    <h3 class="card-title">Study & Creator Resources</h3>
+                    <p class="card-description">Comprehensive guides, tutorials, and resources for students and content creators.</p>
+                </div>
+                
+                <div class="card">
+                    <span class="card-icon">🧠</span>
+                    <h3 class="card-title">Learn AI on the Go</h3>
+                    <p class="card-description">Mobile-friendly platform with bite-sized learning modules that fit your schedule.</p>
+                </div>
+                
+                <div class="card">
+                    <span class="card-icon">🎯</span>
+                    <h3 class="card-title">Personalized Learning</h3>
+                    <p class="card-description">AI-powered recommendations based on your interests and learning goals.</p>
+                </div>
+                
+                <div class="card">
+                    <span class="card-icon">🌟</span>
+                    <h3 class="card-title">Community Access</h3>
+                    <p class="card-description">Connect with like-minded hustlers, get feedback, and collaborate on projects.</p>
+                </div>
+                
+                <div class="card">
+                    <span class="card-icon">💡</span>
+                    <h3 class="card-title">Innovation Hub</h3>
+                    <p class="card-description">Access to cutting-edge AI tools and beta features before they go mainstream.</p>
+                </div>
+                
+                <div class="card">
+                    <span class="card-icon">🏆</span>
+                    <h3 class="card-title">Success Tracking</h3>
+                    <p class="card-description">Track your progress, achievements, and growth with detailed analytics.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section id="pricing" class="section">
+        <div class="container">
+            <h2 class="section-title">Choose Your Plan</h2>
+            <p class="section-subtitle">Flexible pricing that grows with your ambitions</p>
+            
+            <div class="grid grid-3">
+                <div class="pricing-card">
+                    <div class="pricing-rating">
+                        <div class="rating-stars">
+                            <span class="star filled">★</span>
+                            <span class="star filled">★</span>
+                            <span class="star filled">★</span>
+                            <span class="star filled">★</span>
+                            <span class="star partial">★</span>
+                        </div>
+                        <span class="rating-text">4.2/5 (2,847 reviews)</span>
+                    </div>
+                    <h3 class="pricing-title">Starter Hustle</h3>
+                    <p class="pricing-subtitle">Perfect for getting started</p>
+                    <div class="pricing-container">
+                        <div class="pricing-original">₹499</div>
+                        <div class="pricing-current">₹99<span class="pricing-period">/month</span></div>
+                        <div class="pricing-discount">80% OFF</div>
+                    </div>
+                    <ul class="pricing-features">
+                        <li>Essential AI tools & templates</li>
+                        <li>Basic automation scripts</li>
+                        <li>Community access</li>
+                        <li>Email support</li>
+                    </ul>
+                    <a href="https://rzp.io/rzp/ppw09ED" class="btn btn-outline" target="_blank">Get Started Now</a>
+                    <p class="pricing-note">One-month access, renew anytime manually</p>
+                </div>
+                
+                <div class="pricing-card featured">
+                    <div class="pricing-badge">Most Popular</div>
+                    <div class="pricing-rating">
+                        <div class="rating-stars">
+                            <span class="star filled">★</span>
+                            <span class="star filled">★</span>
+                            <span class="star filled">★</span>
+                            <span class="star filled">★</span>
+                            <span class="star filled">★</span>
+                        </div>
+                        <span class="rating-text">4.8/5 (5,632 reviews)</span>
+                    </div>
+                    <h3 class="pricing-title">Creator Mode</h3>
+                    <p class="pricing-subtitle">For serious creators</p>
+                    <div class="pricing-container">
+                        <div class="pricing-original">₹799</div>
+                        <div class="pricing-current">₹199<span class="pricing-period">/month</span></div>
+                        <div class="pricing-discount">75% OFF</div>
+                    </div>
+                    <ul class="pricing-features">
+                        <li>Everything in Starter +</li>
+                        <li>Advanced AI workflows</li>
+                        <li>Premium templates library</li>
+                        <li>Priority support</li>
+                        <li>Weekly live sessions</li>
+                    </ul>
+                    <a href="https://rzp.io/rzp/atTfuqqZ" class="btn btn-primary" target="_blank">Level Up Now</a>
+                    <p class="pricing-note">One-month access, renew anytime manually</p>
+                </div>
+                
+                <div class="pricing-card">
+                    <div class="pricing-rating">
+                        <div class="rating-stars">
+                            <span class="star filled">★</span>
+                            <span class="star filled">★</span>
+                            <span class="star filled">★</span>
+                            <span class="star filled">★</span>
+                            <span class="star half">★</span>
+                        </div>
+                        <span class="rating-text">4.5/5 (1,923 reviews)</span>
+                    </div>
+                    <h3 class="pricing-title">Pro Hacker</h3>
+                    <p class="pricing-subtitle">Maximum firepower</p>
+                    <div class="pricing-container">
+                        <div class="pricing-original">₹1,199</div>
+                        <div class="pricing-current">₹299<span class="pricing-period">/month</span></div>
+                        <div class="pricing-discount">75% OFF</div>
+                    </div>
+                    <ul class="pricing-features">
+                        <li>Everything in Creator +</li>
+                        <li>Exclusive AI models</li>
+                        <li>Custom automation builds</li>
+                        <li>1-on-1 strategy calls</li>
+                        <li>VIP community access</li>
+                    </ul>
+                    <a href="https://rzp.io/rzp/nraUuNBx" class="btn btn-outline" target="_blank">Go Pro Now</a>
+                    <p class="pricing-note">One-month access, renew anytime manually</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section id="testimonials" class="section">
+        <div class="container">
+            <h2 class="section-title">What Our Users Say</h2>
+            <p class="section-subtitle">Join thousands of students and creators who are already winning with AI</p>
+            
+            <div class="grid grid-3">
+                <div class="card">
+                    <p class="card-description">"HustleHack AI transformed my content creation workflow. I'm now producing 3x more content with better quality!"</p>
+                    <div style="margin-top: 1rem;">
+                        <strong style="color: var(--accent);">Priya Sharma</strong>
+                        <p style="color: var(--gray-400); font-size: 0.9rem; margin: 0;">Content Creator, Mumbai</p>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <p class="card-description">"The AI study tools helped me crack my engineering entrance exam. The personalized learning path was a game-changer!"</p>
+                    <div style="margin-top: 1rem;">
+                        <strong style="color: var(--accent);">Arjun Patel</strong>
+                        <p style="color: var(--gray-400); font-size: 0.9rem; margin: 0;">Student, Delhi</p>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <p class="card-description">"My freelance business grew 5x after using HustleHack's automation tools. The ROI was incredible!"</p>
+                    <div style="margin-top: 1rem;">
+                        <strong style="color: var(--accent);">Sneha Reddy</strong>
+                        <p style="color: var(--gray-400); font-size: 0.9rem; margin: 0;">Freelancer, Bangalore</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section id="faq" class="section">
+        <div class="container">
+            <h2 class="section-title">Frequently Asked Questions</h2>
+            <p class="section-subtitle">Everything you need to know about HustleHack AI</p>
+            
+            <div class="faq-container">
+                <div class="faq-item">
+                    <button class="faq-question" onclick="toggleFAQ(this)">
+                        What is HustleHack AI?
+                        <span class="faq-icon">+</span>
+                    </button>
+                    <div class="faq-answer">
+                        <p>HustleHack AI is a comprehensive platform designed for young Indian students, creators, and solopreneurs. We provide AI tools, templates, prompts, and resources to help you learn faster, create better content, and grow your ventures using artificial intelligence.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <button class="faq-question" onclick="toggleFAQ(this)">
+                        How do I get started?
+                        <span class="faq-icon">+</span>
+                    </button>
+                    <div class="faq-answer">
+                        <p>Getting started is easy! Simply choose a plan that fits your needs, sign up for an account, and you'll get instant access to our platform. We also provide onboarding tutorials to help you make the most of our tools.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <button class="faq-question" onclick="toggleFAQ(this)">
+                        Can I cancel my subscription anytime?
+                        <span class="faq-icon">+</span>
+                    </button>
+                    <div class="faq-answer">
+                        <p>Yes, you can cancel your subscription at any time. There are no long-term contracts or cancellation fees. You'll continue to have access to your account until the end of your current billing cycle.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <button class="faq-question" onclick="toggleFAQ(this)">
+                        Do you offer student discounts?
+                        <span class="faq-icon">+</span>
+                    </button>
+                    <div class="faq-answer">
+                        <p>Yes! We offer special student pricing for verified students. Contact our support team with your student ID to learn more about available discounts and verification process.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <button class="faq-question" onclick="toggleFAQ(this)">
+                        What payment methods do you accept?
+                        <span class="faq-icon">+</span>
+                    </button>
+                    <div class="faq-answer">
+                        <p>We accept all major credit cards, debit cards, UPI, net banking, and digital wallets. All payments are processed securely through our payment partners.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <button class="faq-question" onclick="toggleFAQ(this)">
+                        Is there a free trial available?
+                        <span class="faq-icon">+</span>
+                    </button>
+                    <div class="faq-answer">
+                        <p>Yes! We offer a 7-day free trial for new users. You can explore all features and decide which plan works best for you before committing to a subscription.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Final CTA Section -->
+    <section class="section" style="background: linear-gradient(135deg, #7F5AF0, #00FFC2); color: white;">
+        <div class="container text-center">
+            <h2 class="section-title" style="color: white;">Ready to Unlock Your AI Superpowers?</h2>
+            <p class="section-subtitle" style="color: white; opacity: 0.9;">Join thousands of students and creators who are already building their future with AI</p>
+            
+            <div class="hero-actions">
+                <a href="https://rzp.io/rzp/ppw09ED" class="btn btn-lg" style="background: white; color: #7F5AF0;" target="_blank">🚀 Start with Starter Hustle - ₹99</a>
+                <a href="#pricing" class="btn btn-lg" style="background: rgba(255,255,255,0.2); color: white; border: 2px solid white;">Compare Plans</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="section" style="background: #0F0F1B; border-top: 1px solid rgba(255,255,255,0.1);">
+        <div class="container">
+            <div class="grid grid-4">
+                <div>
+                    <h3 style="color: white; margin-bottom: 1rem;">HustleHack AI</h3>
+                    <p style="color: var(--gray-400); margin-bottom: 1rem;">Empowering the next generation of Indian creators and entrepreneurs with AI.</p>
+                    <div style="display: flex; gap: 1rem;">
+                        <a href="#" style="color: var(--primary); text-decoration: none;">Instagram</a>
+                        <a href="#" style="color: var(--primary); text-decoration: none;">Telegram</a>
+                        <a href="#" style="color: var(--primary); text-decoration: none;">Twitter</a>
+                    </div>
+                </div>
+                
+                <div>
+                    <h4 style="color: white; margin-bottom: 1rem;">Product</h4>
+                    <ul style="list-style: none; color: var(--gray-400);">
+                        <li><a href="#features" style="color: var(--gray-400); text-decoration: none;">Features</a></li>
+                        <li><a href="#pricing" style="color: var(--gray-400); text-decoration: none;">Pricing</a></li>
+                        <li><a href="/pages/resources.html" style="color: var(--gray-400); text-decoration: none;">Resources</a></li>
+                        <li><a href="#" style="color: var(--gray-400); text-decoration: none;">API</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 style="color: white; margin-bottom: 1rem;">Company</h4>
+                    <ul style="list-style: none; color: var(--gray-400);">
+                        <li><a href="/pages/about.html" style="color: var(--gray-400); text-decoration: none;">About</a></li>
+                        <li><a href="#" style="color: var(--gray-400); text-decoration: none;">Careers</a></li>
+                        <li><a href="/pages/press.html" style="color: var(--gray-400); text-decoration: none;">Press</a></li>
+                        <li><a href="/pages/contact.html" style="color: var(--gray-400); text-decoration: none;">Contact</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 style="color: white; margin-bottom: 1rem;">Legal</h4>
+                    <ul style="list-style: none; color: var(--gray-400);">
+                        <li><a href="/policies/privacy-policy.html" style="color: var(--gray-400); text-decoration: none;">Privacy Policy</a></li>
+                        <li><a href="/policies/terms-and-conditions.html" style="color: var(--gray-400); text-decoration: none;">Terms of Service</a></li>
+                        <li><a href="/policies/cookie-policy.html" style="color: var(--gray-400); text-decoration: none;">Cookie Policy</a></li>
+                        <li><a href="/policies/gdpr.html" style="color: var(--gray-400); text-decoration: none;">GDPR</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div style="text-align: center; margin-top: 2rem; padding-top: 2rem; border-top: 1px solid rgba(255,255,255,0.1);">
+                <p style="color: var(--gray-400);">© 2024 HustleHack AI. All rights reserved. Made with ❤️ in India.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Login Modal -->
+    <div id="login-modal" class="modal">
+        <div class="modal-content">
+            <button class="modal-close">&times;</button>
+            <h2 style="color: white; text-align: center; margin-bottom: 2rem;">Welcome Back!</h2>
+            
+            <form id="loginForm">
+                <div class="form-group">
+                    <label class="form-label">Email Address</label>
+                    <input type="email" id="loginEmail" class="form-input" placeholder="Enter your email" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Password</label>
+                    <div class="password-input-container">
+                        <input type="password" id="loginPassword" class="form-input" placeholder="Enter your password" required>
+                        <button type="button" class="password-toggle" onclick="togglePasswordVisibility('loginPassword')">
+                            👁️
+                        </button>
+                    </div>
+                </div>
+                
+                <button type="submit" id="loginBtn" class="btn btn-primary" style="width: 100%; margin-bottom: 1rem;">Sign In</button>
+                
+                <div style="text-align: center;">
+                    <a href="#" style="color: var(--primary); text-decoration: none;">Forgot Password?</a>
+                </div>
+                
+                <div style="text-align: center; margin-top: 2rem; padding-top: 2rem; border-top: 1px solid rgba(255,255,255,0.1);">
+                    <p style="color: var(--gray-400);">Don't have an account? <a href="#" style="color: var(--primary); text-decoration: none;" onclick="switchToSignup()">Sign Up</a></p>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Sign Up Modal -->
+    <div id="signup-modal" class="modal">
+        <div class="modal-content">
+            <button class="modal-close">&times;</button>
+            <h2 style="color: white; text-align: center; margin-bottom: 2rem;">🚀 Start Your Journey</h2>
+            
+            <form id="signupForm">
+                <div class="form-group">
+                    <label class="form-label">Full Name</label>
+                    <input type="text" id="name" class="form-input" placeholder="Your Name" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Email</label>
+                    <input type="email" id="email" class="form-input" placeholder="Your Email" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Password</label>
+                    <div class="password-input-container">
+                        <input type="password" id="password" class="form-input" placeholder="Password" required>
+                        <button type="button" class="password-toggle" onclick="togglePasswordVisibility('password')">
+                            👁️
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">I am a...</label>
+                    <select id="role" class="form-input" required>
+                        <option value="">Select your role</option>
+                        <option value="Student">Student</option>
+                        <option value="Content Creator">Content Creator</option>
+                        <option value="Entrepreneur">Entrepreneur</option>
+                        <option value="Freelancer">Freelancer</option>
+                        <option value="Hustler">Hustler</option>
+                    </select>
+                </div>
+                
+                <button type="submit" class="btn btn-primary" style="width: 100%; margin-bottom: 1rem;" id="signupBtn">
+                    <span class="btn-text">Create Account</span>
+                    <span class="btn-loading" style="display: none;">Creating Account...</span>
+                </button>
+                
+                <div style="text-align: center; margin-top: 2rem; padding-top: 2rem; border-top: 1px solid rgba(255,255,255,0.1);">
+                    <p style="color: var(--gray-400);">Already have an account? <a href="#" style="color: var(--primary); text-decoration: none;" onclick="switchToLogin()">Sign In</a></p>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+    <script>
+        window.supabase = supabase.createClient(
+            'https://bmgvtzwesdkitdjfszsh.supabase.co',
+            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJtZ3Z0endlc2RraXRkamZzenNoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTIwODExNjksImV4cCI6MjA2NzY1NzE2OX0.55QH6xY6nvvRs17WbHfMiVT6Yh3MWcuKtOVQ7vuEVvU'
+        );
+    </script>
+
+    <script src="/assets/js/script.js"></script>
+</body>
+</html>
