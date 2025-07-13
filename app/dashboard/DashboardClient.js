@@ -120,23 +120,24 @@ export default function DashboardClient() {
   };
 
   if (loading) return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center">
       <div className="text-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-        <p className="text-gray-600">Loading your dashboard...</p>
+        <div className="animate-spin rounded-full h-16 w-16 border-4 border-[#7F5AF0] border-t-transparent mx-auto mb-6"></div>
+        <p className="text-xl text-gray-700 font-medium">Loading your dashboard...</p>
+        <p className="text-gray-500 mt-2">Preparing your personalized experience</p>
       </div>
     </div>
   );
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Header */}
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 space-y-12">
+        {/* Header Section */}
+        <div className="text-center mb-16">
+          <h1 className="text-4xl font-bold text-gray-900 mb-4">
             👋 {userData.name === 'Hustler' ? 'Hello, Hustler!' : `Hello, ${userData.name}!`}
           </h1>
-          <p className="text-gray-600">
+          <p className="text-xl text-gray-600">
             ✉️ {userData.email === 'Email: Not available' ? 
               <span className="text-gray-400 italic">Email: Not available</span> : 
               userData.email
@@ -145,41 +146,44 @@ export default function DashboardClient() {
         </div>
 
         {/* Plan Info Card */}
-        <div className="bg-white rounded-lg shadow p-6 mb-8">
+        <div className="bg-white rounded-2xl shadow-lg p-8 mb-12 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 border border-gray-100">
           <div className="flex items-center justify-between">
             <div>
-              <h2 className="text-xl font-semibold text-gray-900">💼 Plan</h2>
-              <p className={`text-2xl font-bold mt-1 ${
-                userData.plan === 'Not active' ? 'text-gray-400' : 'text-blue-600'
+              <h2 className="text-2xl font-semibold text-gray-900 mb-3">💼 Your Plan</h2>
+              <p className={`text-3xl font-bold mt-1 ${
+                userData.plan === 'Not active' ? 'text-gray-400' : 'text-[#7F5AF0]'
               }`}>
                 {userData.plan === 'Not active' ? 
                   <span className="italic">Not active</span> : 
                   userData.plan
                 }
               </p>
-              <p className="text-sm text-gray-500 mt-1">
+              <p className="text-gray-500 mt-2 text-lg">
                 ⏳ Expires on: {userData.expiry === 'Data not available' ? 
                   <span className="text-gray-400 italic">Data not available</span> : 
                   userData.expiry
                 }
               </p>
             </div>
+            <div className="hidden md:block">
+              <div className="w-32 h-32 bg-gradient-to-br from-[#7F5AF0] to-[#00FFC2] rounded-full opacity-10"></div>
+            </div>
           </div>
         </div>
 
         {/* Plan Expiry Warning */}
         {userData.expiry !== 'Data not available' && new Date(userData.expiry) - new Date() < 5 * 24 * 60 * 60 * 1000 && (
-          <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-8">
+          <div className="bg-yellow-50 border border-yellow-200 rounded-2xl p-6 mb-12 shadow-lg">
             <div className="flex items-center">
               <div className="flex-shrink-0">
-                <svg className="h-5 w-5 text-yellow-400" viewBox="0 0 20 20" fill="currentColor">
+                <svg className="h-6 w-6 text-yellow-400" viewBox="0 0 20 20" fill="currentColor">
                   <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
                 </svg>
               </div>
               <div className="ml-3">
-                <h3 className="text-sm font-medium text-yellow-800">Plan Expiring Soon</h3>
-                <div className="mt-2 text-sm text-yellow-700">
-                  <p>Your plan is about to expire soon. <a href="/#pricing" className="font-medium underline hover:text-yellow-600">Renew now</a> to continue accessing premium features.</p>
+                <h3 className="text-lg font-medium text-yellow-800">Plan Expiring Soon</h3>
+                <div className="mt-2 text-yellow-700">
+                  <p>Your plan is about to expire soon. <a href="/#pricing" className="font-medium underline hover:text-yellow-600 transition-colors">Renew now</a> to continue accessing premium features.</p>
                 </div>
               </div>
             </div>
@@ -187,9 +191,9 @@ export default function DashboardClient() {
         )}
 
         {/* Resources Section */}
-        <div className="mb-8">
-          <h2 className="text-2xl font-bold text-gray-900 mb-6">Your Resources</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="mb-16">
+          <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">🚀 Your Resources</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {resources.map(resource => (
               <DashboardCard 
                 key={resource.id} 
@@ -201,30 +205,39 @@ export default function DashboardClient() {
         </div>
 
         {/* Recent Activity */}
-        <div className="mt-8">
-          <h2 className="text-xl font-bold">Your Recent Activity</h2>
-          {recentActivity.length > 0 ? (
-            <ul className="mt-4 space-y-2">
-              {recentActivity.map((activity, index) => (
-                <li key={index} className="flex justify-between items-center p-2 bg-gray-50 rounded">
-                  <span>{activity.action} {activity.resource_name}</span>
-                  <span className="text-sm text-gray-500">
-                    {new Date(activity.created_at).toLocaleDateString()}
-                  </span>
-                </li>
-              ))}
-            </ul>
-          ) : (
-            <p className="text-gray-500 mt-4">No recent activity yet. Start accessing resources to see your activity here!</p>
-          )}
+        <div className="mb-16">
+          <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">📊 Recent Activity</h2>
+          <div className="bg-white rounded-2xl shadow-lg p-8">
+            {recentActivity.length > 0 ? (
+              <ul className="space-y-4">
+                {recentActivity.map((activity, index) => (
+                  <li key={index} className="flex justify-between items-center p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors">
+                    <span className="font-medium text-gray-900">{activity.action} {activity.resource_name}</span>
+                    <span className="text-sm text-gray-500">
+                      {new Date(activity.created_at).toLocaleDateString()}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p className="text-gray-400 text-center text-lg italic">No recent activity logged yet</p>
+            )}
+          </div>
         </div>
 
         {/* Call to Action */}
-        <div className="mt-8">
-          <Link href="/#pricing" className="text-blue-600 font-medium underline">Upgrade / Renew Plan</Link>
-          <p className="mt-2 text-sm">For support, reach us at <a href="mailto:hustlehackai@gmail.com" className="text-blue-600 font-medium underline">hustlehackai@gmail.com</a></p>
+        <div className="bg-gradient-to-r from-[#7F5AF0] to-[#00FFC2] rounded-2xl p-8 text-center text-white shadow-lg">
+          <h3 className="text-2xl font-bold mb-4">🎯 Ready to Upgrade?</h3>
+          <p className="text-lg mb-6 opacity-90">Unlock premium features and boost your productivity</p>
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+            <Link href="/#pricing" className="bg-white text-[#7F5AF0] px-8 py-3 rounded-xl font-bold text-lg hover:bg-gray-50 transition-colors shadow-md">
+              Upgrade / Renew Plan
+            </Link>
+            <a href="mailto:hustlehackai@gmail.com" className="text-white underline hover:text-gray-100 transition-colors">
+              Need help? Contact support
+            </a>
+          </div>
         </div>
-
       </div>
     </div>
   );
