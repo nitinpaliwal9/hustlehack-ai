@@ -1,5 +1,6 @@
 import Navigation from '../components/Navigation'
 import DashboardClient from './DashboardClient'
+import Footer from '../components/Footer'
 
 export const metadata = {
   title: 'Dashboard - HustleHack AI',
@@ -11,6 +12,7 @@ export default function Dashboard() {
     <div>
       <Navigation />
       <DashboardClient />
+      <Footer />
     </div>
   )
 }

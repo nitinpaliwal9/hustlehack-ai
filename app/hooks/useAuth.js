@@ -221,6 +221,19 @@ export function useAuth() {
     setError(null)
 
     try {
+      // Debug information for production troubleshooting
+      console.log('🔍 Debug Info:')
+      console.log('- Current origin:', window.location.origin)
+      console.log('- Supabase URL:', supabaseUrl)
+      console.log('- Environment:', process.env.NODE_ENV)
+      
+      // Check if we're on production and show specific guidance
+      const isProduction = window.location.origin.includes('hustlehackai.in')
+      const redirectUrl = `${window.location.origin}/auth/callback`
+      
+      console.log('- Is Production:', isProduction)
+      console.log('- Redirect URL:', redirectUrl)
+      
       // Show loading notification
       if (typeof window !== 'undefined' && window.showNotification) {
         window.showNotification('🔄 Redirecting to Google...', 'info', 2000)
@@ -229,7 +242,7 @@ export function useAuth() {
       const { data, error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
         options: {
-          redirectTo: `${window.location.origin}/auth/callback`,
+          redirectTo: redirectUrl,
           queryParams: {
             access_type: 'offline',
             prompt: 'consent',
@@ -237,20 +250,32 @@ export function useAuth() {
         }
       })
 
-      if (error) throw error
+      if (error) {
+        console.error('❌ Supabase OAuth Error:', error)
+        throw error
+      }
 
-      console.log('✅ Google OAuth flow initiated successfully')
+      console.log('✅ Google OAuth flow initiated successfully', data)
       return data
     } catch (error) {
+      console.error('❌ Google Sign-in Error Details:')
+      console.error('- Error message:', error.message)
+      console.error('- Error code:', error.code)
+      console.error('- Full error:', error)
+      
       setError(error.message)
       
-      // Handle specific error cases
-      let errorMessage = 'Failed to initiate Google login. Please try again.'
+      // Handle specific error cases with better messaging
+      let errorMessage = 'Google sign-in failed. Please try again.'
       
       if (error.message.includes('popup')) {
         errorMessage = 'Please allow popups for this site and try again.'
       } else if (error.message.includes('network')) {
         errorMessage = 'Network error. Please check your internet connection.'
+      } else if (error.message.includes('oauth')) {
+        errorMessage = 'OAuth configuration error. Please contact support.'
+      } else if (error.message.includes('redirect')) {
+        errorMessage = 'Redirect configuration error. Please contact support.'
       }
       
       if (typeof window !== 'undefined' && window.showNotification) {
