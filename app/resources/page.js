@@ -34,21 +34,21 @@ export default function ResourcesPage() {
                 <span className="card-icon">📱</span>
                 <h3 className="card-title">Social Media Prompt Pack</h3>
                 <p className="card-description">50+ AI-ready prompts to automate your content calendar. Generate viral posts, engaging captions, trending hashtags, and strategic content plans across all platforms effortlessly.</p>
-                <Link href="/resources/toolkits-and-templates/social-media-prompt-pack/social-media-prompt-pack" className="btn btn-primary">Explore Pack →</Link>
+                <Link href="/resources/toolkits-and-templates/social-media-prompt-pack" className="btn btn-primary">Explore Pack →</Link>
               </div>
               
               <div className="resource-card">
                 <span className="card-icon">💼</span>
                 <h3 className="card-title">Student Productivity Suite</h3>
                 <p className="card-description">Complete toolkit for academic success. Note-taking templates, study planners, and AI study assistants.</p>
-                <Link href="/resources/toolkits-and-templates/student-productivity-suite/student-productivity-suite" className="card-link">Explore Suite →</Link>
+                <Link href="/resources/toolkits-and-templates/student-productivity-suite" className="card-link">Explore Suite →</Link>
               </div>
               
               <div className="resource-card">
                 <span className="card-icon">🎨</span>
                 <h3 className="card-title">Creator's AI Toolkit</h3>
                 <p className="card-description">Everything creators need: video scripts, thumbnail ideas, content calendars, and engagement strategies.</p>
-                <Link href="/resources/toolkits-and-templates/creators-ai-toolkit/creators-ai-toolkit" className="card-link">Explore Toolkit →</Link>
+                <Link href="/resources/toolkits-and-templates/creators-ai-toolkit" className="card-link">Explore Toolkit →</Link>
               </div>
               
               <div className="resource-card">

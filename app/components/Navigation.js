@@ -28,6 +28,72 @@ export default function Navigation() {
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
+  // Close mobile menu when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (isMobileMenuOpen && !event.target.closest('.mobile-nav-menu') && !event.target.closest('.mobile-menu-toggle')) {
+        setIsMobileMenuOpen(false)
+      }
+    }
+    
+    if (isMobileMenuOpen) {
+      document.addEventListener('click', handleClickOutside)
+      document.body.style.overflow = 'hidden' // Prevent scrolling when menu is open
+    } else {
+      document.body.style.overflow = 'unset'
+    }
+    
+    return () => {
+      document.removeEventListener('click', handleClickOutside)
+      document.body.style.overflow = 'unset'
+    }
+  }, [isMobileMenuOpen])
+
+  // Debug CSS loading
+  useEffect(() => {
+    console.log('🎨 DEBUG: Navigation component mounted')
+    console.log('🎨 DEBUG: Checking if mobile menu styles are loaded...')
+    
+    const checkStyles = () => {
+      const mobileMenuStyle = getComputedStyle(document.documentElement).getPropertyValue('--primary')
+      console.log('🎨 DEBUG: CSS custom property --primary:', mobileMenuStyle)
+      
+      // Check if our mobile menu styles are loaded
+      const testElement = document.createElement('div')
+      testElement.className = 'mobile-nav-menu'
+      document.body.appendChild(testElement)
+      
+      const computedStyles = getComputedStyle(testElement)
+      console.log('🎨 DEBUG: Mobile menu background:', computedStyles.background)
+      console.log('🎨 DEBUG: Mobile menu position:', computedStyles.position)
+      console.log('🎨 DEBUG: Mobile menu display:', computedStyles.display)
+      
+      document.body.removeChild(testElement)
+    }
+    
+    // Check styles after a short delay to ensure CSS is loaded
+    setTimeout(checkStyles, 100)
+  }, [])
+
+  // Debug mobile menu visibility
+  useEffect(() => {
+    if (isMobileMenuOpen) {
+      console.log('🔍 DEBUG: Mobile menu is open, checking DOM...')
+      setTimeout(() => {
+        const mobileMenu = document.querySelector('.mobile-nav-menu')
+        if (mobileMenu) {
+          console.log('🔍 DEBUG: Mobile menu found in DOM')
+          console.log('🔍 DEBUG: Mobile menu computed styles:', getComputedStyle(mobileMenu))
+          console.log('🔍 DEBUG: Mobile menu position:', mobileMenu.style.position)
+          console.log('🔍 DEBUG: Mobile menu zIndex:', mobileMenu.style.zIndex)
+          console.log('🔍 DEBUG: Mobile menu display:', mobileMenu.style.display)
+        } else {
+          console.log('❌ DEBUG: Mobile menu NOT found in DOM')
+        }
+      }, 100)
+    }
+  }, [isMobileMenuOpen])
+
   // Enhanced authentication handlers
   const handleSignOut = async (e) => {
     e.preventDefault()
@@ -124,7 +190,13 @@ export default function Navigation() {
   }
 
   const toggleMobileMenu = () => {
-    setIsMobileMenuOpen(!isMobileMenuOpen)
+    console.log('Toggling mobile menu. Current state:', isMobileMenuOpen);
+    setIsMobileMenuOpen(!isMobileMenuOpen);
+    console.log('Mobile menu state after toggle:', !isMobileMenuOpen);
+  }
+
+  const closeMobileMenu = () => {
+    setIsMobileMenuOpen(false)
   }
 
   const switchToSignup = () => {
@@ -229,8 +301,53 @@ export default function Navigation() {
             )}
           </div>
           
-          <button className="mobile-menu-toggle">☰</button>
+          <button className={`mobile-menu-toggle ${isMobileMenuOpen ? 'active' : ''}`} onClick={toggleMobileMenu}>☰</button>
         </div>
+        
+        {/* Mobile Menu */}
+        {isMobileMenuOpen && (
+          <div style={{
+            position: 'fixed',
+            top: '0',
+            left: '0',
+            width: '100vw',
+            height: '100vh',
+            backgroundColor: '#000000',
+            zIndex: '99999',
+            color: 'white',
+            padding: '20px',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            fontSize: '24px'
+          }}>
+            <h1 style={{ color: 'white', marginBottom: '40px' }}>MOBILE MENU TEST</h1>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+              <a href="/" style={{ color: 'white', textDecoration: 'none', fontSize: '18px' }}>🏠 Home</a>
+              <a href="/#features" style={{ color: 'white', textDecoration: 'none', fontSize: '18px' }}>✨ Features</a>
+              <a href="/#pricing" style={{ color: 'white', textDecoration: 'none', fontSize: '18px' }}>💰 Pricing</a>
+              <a href="/resources" style={{ color: 'white', textDecoration: 'none', fontSize: '18px' }}>📚 Resources</a>
+              <a href="/about" style={{ color: 'white', textDecoration: 'none', fontSize: '18px' }}>ℹ️ About</a>
+              <a href="/contact" style={{ color: 'white', textDecoration: 'none', fontSize: '18px' }}>📞 Contact</a>
+            </div>
+            <button 
+              onClick={closeMobileMenu} 
+              style={{ 
+                marginTop: '40px', 
+                padding: '10px 20px', 
+                backgroundColor: '#7F5AF0', 
+                color: 'white', 
+                border: 'none', 
+                borderRadius: '5px',
+                fontSize: '16px',
+                cursor: 'pointer'
+              }}
+            >
+              Close Menu
+            </button>
+          </div>
+        )}
       </nav>
 
       {/* Login Modal */}
@@ -349,3 +466,4 @@ export default function Navigation() {
     </>
   )
 }
+ 

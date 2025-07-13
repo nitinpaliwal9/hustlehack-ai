@@ -1,8 +1,12 @@
 // HustleHack AI - Next.js Client-Side Utilities
 // Modern JavaScript for React components and Next.js app
 
-// Global utilities and helpers
-class ClientUtils {
+// Check if ClientUtils is already defined
+if (typeof window !== 'undefined' && window.ClientUtils) {
+  console.log('ClientUtils already loaded, skipping initialization');
+} else {
+  // Global utilities and helpers
+  class ClientUtils {
   static instance = null;
   
   constructor() {
@@ -505,22 +509,23 @@ class ClientUtils {
     console.error(`Error in ${context}:`, error);
     this.showNotification(`❌ An error occurred: ${error.message}`, 'error');
   }
+  }
+
+  // Initialize the utilities
+  const clientUtils = new ClientUtils();
+
+  // Export for React components
+  window.ClientUtils = ClientUtils;
+  window.clientUtils = clientUtils;
+
+  // Export commonly used functions globally
+  window.showNotification = (message, type, duration) => clientUtils.showNotification(message, type, duration);
+  window.toggleFAQ = (button) => clientUtils.toggleFAQ(button);
+  window.toggleTheme = () => clientUtils.toggleTheme();
+  window.togglePasswordVisibility = (inputId) => clientUtils.togglePasswordVisibility(inputId);
+  window.openModal = (modalId) => clientUtils.openModal(modalId);
+  window.closeModal = (modalId) => clientUtils.closeModal(modalId);
 }
-
-// Initialize the utilities
-const clientUtils = new ClientUtils();
-
-// Export for React components
-window.ClientUtils = ClientUtils;
-window.clientUtils = clientUtils;
-
-// Export commonly used functions globally
-window.showNotification = (message, type, duration) => clientUtils.showNotification(message, type, duration);
-window.toggleFAQ = (button) => clientUtils.toggleFAQ(button);
-window.toggleTheme = () => clientUtils.toggleTheme();
-window.togglePasswordVisibility = (inputId) => clientUtils.togglePasswordVisibility(inputId);
-window.openModal = (modalId) => clientUtils.openModal(modalId);
-window.closeModal = (modalId) => clientUtils.closeModal(modalId);
 
 // CSS Animations (to be added to global styles)
 const animationStyles = `

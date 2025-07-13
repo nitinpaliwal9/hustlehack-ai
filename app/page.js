@@ -3,22 +3,37 @@
 import Navigation from './components/Navigation'
 import { useEffect } from 'react'
 import { useAuth } from './hooks/useAuth'
+import { useRouter } from 'next/navigation'
 
 export default function HomePage() {
-  const { signInWithGoogle } = useAuth()
+  const { signInWithGoogle, user, isLoading } = useAuth()
+  const router = useRouter()
   
   // Load client utilities on component mount
   useEffect(() => {
+    // Check if script is already loaded
+    const existingScript = document.querySelector('script[src="/js/client-utils.js"]')
+    if (existingScript) {
+      console.log('Client utils script already loaded')
+      return
+    }
+    
     const script = document.createElement('script')
     script.src = '/js/client-utils.js'
     script.async = true
+    script.onload = () => {
+      console.log('Client utils loaded successfully')
+    }
+    script.onerror = (error) => {
+      console.error('Error loading client utils:', error)
+    }
     document.head.appendChild(script)
     
     return () => {
       // Cleanup script on unmount
-      const existingScript = document.querySelector('script[src="/js/client-utils.js"]')
-      if (existingScript) {
-        document.head.removeChild(existingScript)
+      const scriptToRemove = document.querySelector('script[src="/js/client-utils.js"]')
+      if (scriptToRemove) {
+        document.head.removeChild(scriptToRemove)
       }
     }
   }, [])
@@ -77,6 +92,11 @@ export default function HomePage() {
             <p className="hero-subtitle">AI tools, templates, prompts & guides to help you grow faster — all in one toolkit designed for young Indian students, creators, and solopreneurs.</p>
             
             <div className="hero-actions">
+            {user ? (
+              <button className="btn btn-google btn-lg" onClick={() => router.push('/dashboard')}>
+                <span>Go to Dashboard</span>
+              </button>
+            ) : (
               <button id="google-login-btn-hero" className="btn btn-google btn-lg" onClick={handleGoogleSignIn}>
                 <svg className="google-icon" viewBox="0 0 24 24" width="20" height="20">
                   <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
@@ -89,6 +109,7 @@ export default function HomePage() {
                   <div className="spinner"></div>
                 </div>
               </button>
+            )}
               <a href="#" className="btn btn-primary btn-lg" data-modal="signup-modal">📧 Sign Up with Email</a>
               <a href="#features" className="btn btn-ghost btn-lg">✨ Explore Features</a>
             </div>

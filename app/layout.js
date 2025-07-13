@@ -59,7 +59,7 @@ export default function RootLayout({ children }) {
         <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
         <meta name="revisit-after" content="7 days" />
       </head>
-      <body className={`${inter.className} font-inter`}>
+      <body className={`${inter.variable} ${poppins.variable} font-inter font-poppins`}>
         {children}
       </body>
     </html>
