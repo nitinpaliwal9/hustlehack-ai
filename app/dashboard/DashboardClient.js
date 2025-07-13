@@ -120,24 +120,30 @@ export default function DashboardClient() {
   };
 
   if (loading) return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center">
-      <div className="text-center">
-        <div className="animate-spin rounded-full h-16 w-16 border-4 border-[#7F5AF0] border-t-transparent mx-auto mb-6"></div>
-        <p className="text-xl text-gray-700 font-medium">Loading your dashboard...</p>
-        <p className="text-gray-500 mt-2">Preparing your personalized experience</p>
+    <div className="min-h-screen bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">
+      <div className="text-center animate-fade-in">
+        <div className="relative mb-8">
+          <div className="animate-spin rounded-full h-20 w-20 border-4 border-[#7F5AF0] border-t-transparent mx-auto"></div>
+          <div className="absolute inset-0 rounded-full bg-gradient-to-r from-[#7F5AF0] to-[#00FFC2] opacity-20 animate-pulse"></div>
+        </div>
+        <p className="text-2xl text-gray-700 font-bold mb-2">Loading your dashboard...</p>
+        <p className="text-gray-500 text-lg">Preparing your personalized experience</p>
+        <div className="mt-6 w-64 mx-auto bg-gray-200 rounded-full h-2 overflow-hidden">
+          <div className="h-full bg-gradient-to-r from-[#7F5AF0] to-[#00FFC2] animate-shimmer"></div>
+        </div>
       </div>
     </div>
   );
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 space-y-12">
+<div className="min-h-screen bg-gradient-to-br from-gray-100 to-gray-200">
+<div className="max-w-5xl mx-auto px-6 py-10 space-y-12">
         {/* Header Section */}
-        <div className="text-center mb-16">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">
+        <div className="text-center mb-16 animate-fade-in">
+          <h1 className="text-5xl font-bold text-gray-900 mb-4 hover:text-[#7F5AF0] transition-all duration-300 transform hover:scale-105">
             👋 {userData.name === 'Hustler' ? 'Hello, Hustler!' : `Hello, ${userData.name}!`}
           </h1>
-          <p className="text-xl text-gray-600">
+          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
             ✉️ {userData.email === 'Email: Not available' ? 
               <span className="text-gray-400 italic">Email: Not available</span> : 
               userData.email
@@ -146,11 +152,11 @@ export default function DashboardClient() {
         </div>
 
         {/* Plan Info Card */}
-        <div className="bg-white rounded-2xl shadow-lg p-8 mb-12 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 border border-gray-100">
+        <div className="bg-white rounded-2xl shadow-lg p-8 mb-12 transition-all duration-300 transform hover:scale-105 hover:shadow-xl border-l-4 border-[#7F5AF0] animate-slide-up">
           <div className="flex items-center justify-between">
             <div>
               <h2 className="text-2xl font-semibold text-gray-900 mb-3">💼 Your Plan</h2>
-              <p className={`text-3xl font-bold mt-1 ${
+              <p className={`text-3xl font-bold mt-1 transition-colors ${
                 userData.plan === 'Not active' ? 'text-gray-400' : 'text-[#7F5AF0]'
               }`}>
                 {userData.plan === 'Not active' ? 
@@ -166,7 +172,7 @@ export default function DashboardClient() {
               </p>
             </div>
             <div className="hidden md:block">
-              <div className="w-32 h-32 bg-gradient-to-br from-[#7F5AF0] to-[#00FFC2] rounded-full opacity-10"></div>
+              <div className="w-32 h-32 bg-gradient-to-br from-[#7F5AF0] to-[#00FFC2] rounded-full opacity-20 animate-pulse"></div>
             </div>
           </div>
         </div>
@@ -192,26 +198,27 @@ export default function DashboardClient() {
 
         {/* Resources Section */}
         <div className="mb-16">
-          <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">🚀 Your Resources</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {resources.map(resource => (
-              <DashboardCard 
-                key={resource.id} 
-                resource={resource} 
-                onAccess={logUserActivity} 
-              />
+          <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center hover:text-[#7F5AF0] transition-colors">🚀 Your Resources</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 sm:gap-6">
+            {resources.map((resource, index) => (
+              <div key={resource.id} className="animate-fade-in-up" style={{animationDelay: `${index * 0.1}s`}}>
+                <DashboardCard 
+                  resource={resource} 
+                  onAccess={logUserActivity} 
+                />
+              </div>
             ))}
           </div>
         </div>
 
         {/* Recent Activity */}
         <div className="mb-16">
-          <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">📊 Recent Activity</h2>
-          <div className="bg-white rounded-2xl shadow-lg p-8">
+          <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center hover:text-[#7F5AF0] transition-colors">📊 Recent Activity</h2>
+          <div className="bg-white rounded-2xl shadow-lg p-8 hover:shadow-xl transition-shadow duration-300">
             {recentActivity.length > 0 ? (
               <ul className="space-y-4">
                 {recentActivity.map((activity, index) => (
-                  <li key={index} className="flex justify-between items-center p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors">
+                  <li key={index} className="flex justify-between items-center p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition-all duration-200 transform hover:scale-105">
                     <span className="font-medium text-gray-900">{activity.action} {activity.resource_name}</span>
                     <span className="text-sm text-gray-500">
                       {new Date(activity.created_at).toLocaleDateString()}
@@ -226,11 +233,11 @@ export default function DashboardClient() {
         </div>
 
         {/* Call to Action */}
-        <div className="bg-gradient-to-r from-[#7F5AF0] to-[#00FFC2] rounded-2xl p-8 text-center text-white shadow-lg">
+        <div className="bg-gradient-to-r from-[#7F5AF0] to-[#00FFC2] rounded-2xl p-8 text-center text-white shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300">
           <h3 className="text-2xl font-bold mb-4">🎯 Ready to Upgrade?</h3>
           <p className="text-lg mb-6 opacity-90">Unlock premium features and boost your productivity</p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <Link href="/#pricing" className="bg-white text-[#7F5AF0] px-8 py-3 rounded-xl font-bold text-lg hover:bg-gray-50 transition-colors shadow-md">
+            <Link href="/#pricing" className="bg-white text-[#7F5AF0] px-8 py-3 rounded-xl font-bold text-lg hover:bg-gray-50 transition-all duration-300 shadow-md hover:shadow-lg transform hover:scale-105">
               Upgrade / Renew Plan
             </Link>
             <a href="mailto:hustlehackai@gmail.com" className="text-white underline hover:text-gray-100 transition-colors">
