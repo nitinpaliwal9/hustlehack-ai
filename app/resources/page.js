@@ -55,7 +55,7 @@ export default function ResourcesPage() {
                 <span className="card-icon">🚀</span>
                 <h3 className="card-title">Startup Launch Kit</h3>
                 <p className="card-description">From idea to launch: business plan templates, pitch decks, marketing strategies, and growth hacks.</p>
-                <Link href="#" className="card-link">Launch Now →</Link>
+                <Link href="/resources/toolkits-and-templates/startup-launch-kit" className="card-link">Launch Now →</Link>
               </div>
               
               <div className="resource-card">

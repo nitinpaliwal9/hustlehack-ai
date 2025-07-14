@@ -46,7 +46,7 @@ export default function Page() {
       </div>
 
       {/* Hero Section */}
-      <section className="hero bg-gradient" style={{padding: '5rem 0', background: 'linear-gradient(135deg, #7F5AF0, #00FFC2)', position: 'relative', overflow: 'hidden'}}>
+      <section className="hero" style={{padding: '5rem 0', background: 'var(--bg-primary)', position: 'relative', overflow: 'hidden'}}>
         <div className="container text-center" style={{position: 'relative', zIndex: 1}}>
           <div className="inline-block bg-accent text-dark-bg px-6 py-3 rounded-full text-sm font-semibold mb-8" style={{boxShadow: 'var(--shadow-glow)'}}>
             🔥 MOST POPULAR
