@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, Suspense } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useAuth } from '../../hooks/useAuth'
 import Navigation from '../../components/Navigation'
@@ -15,7 +15,7 @@ import {
   Shield
 } from 'lucide-react'
 
-export default function ResetPasswordPage() {
+function ResetPasswordContent() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const { updatePassword, isLoading, error } = useAuth()
@@ -319,5 +319,41 @@ export default function ResetPasswordPage() {
         </div>
       </div>
     </div>
+  )
+}
+
+// Loading component for Suspense fallback
+function ResetPasswordLoading() {
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black">
+      <Navigation />
+      
+      <div className="pt-24 pb-12 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-md mx-auto">
+          <div className="bg-gray-800/90 backdrop-blur-md rounded-2xl p-8 border border-gray-700/50 shadow-2xl">
+            <div className="text-center">
+              <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-r from-primary to-accent rounded-full mb-6 relative overflow-hidden shadow-lg">
+                <div className="absolute inset-0 bg-gradient-to-t from-primary/20 to-accent/20 animate-pulse"></div>
+                <Key className="w-10 h-10 text-white relative z-10" />
+              </div>
+              <h1 className="text-3xl font-bold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent mb-2">Reset Your Password</h1>
+              <div className="flex items-center justify-center mt-8">
+                <Loader className="w-6 h-6 animate-spin text-primary" />
+                <span className="ml-2 text-gray-400">Loading...</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+// Main export with Suspense boundary
+export default function ResetPasswordPage() {
+  return (
+    <Suspense fallback={<ResetPasswordLoading />}>
+      <ResetPasswordContent />
+    </Suspense>
   )
 }

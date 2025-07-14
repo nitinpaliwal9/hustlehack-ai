@@ -860,39 +860,53 @@ export default function ProfileSettingsPage() {
                       ) : (
                         <div className="space-y-4">
                           {!is2FASetupOpen ? (
-                            <button
-                              onClick={handleEnable2FA}
-                              disabled={isSaving}
-                              className="flex items-center gap-2 px-6 py-3 bg-green-500/20 hover:bg-green-500/30 text-green-400 rounded-lg transition-colors disabled:opacity-50"
-                            >
-                              {isSaving ? (
-                                <Loader className="w-4 h-4 animate-spin" />
-                              ) : (
-                                <Shield className="w-4 h-4" />
-                              )}
-                              {isSaving ? 'Setting up...' : 'Enable 2FA'}
-                            </button>
-                          ) : (
                             <div className="space-y-4">
+                              <div className="flex items-center gap-3 p-4 bg-yellow-500/10 border border-yellow-500/20 rounded-xl backdrop-blur-sm">
+                                <div className="p-1 bg-yellow-500/20 rounded-full">
+                                  <AlertCircle className="w-5 h-5 text-yellow-400" />
+                                </div>
+                                <div className="flex-1">
+                                  <span className="text-yellow-400 font-medium">2FA is not enabled</span>
+                                  <p className="text-yellow-300/70 text-sm mt-1">Enable 2FA for enhanced account security</p>
+                                </div>
+                              </div>
+                              <button
+                                onClick={handleEnable2FA}
+                                disabled={isSaving}
+                                className="flex items-center gap-2 px-6 py-3 bg-green-500/20 hover:bg-green-500/30 text-green-400 rounded-xl transition-all duration-200 disabled:opacity-50 border border-green-500/20 hover:border-green-500/40"
+                              >
+                                {isSaving ? (
+                                  <Loader className="w-4 h-4 animate-spin" />
+                                ) : (
+                                  <Shield className="w-4 h-4" />
+                                )}
+                                <span className="font-medium">{isSaving ? 'Setting up...' : 'Enable 2FA'}</span>
+                              </button>
+                            </div>
+                          ) : (
+                            <div className="space-y-6 p-6 bg-gray-700/30 rounded-xl border border-gray-600/30">
                               <div className="text-center">
-                                <h4 className="text-white font-medium mb-2">Scan QR Code</h4>
-                                <p className="text-gray-300 text-sm mb-4">
+                                <div className="inline-flex items-center justify-center w-12 h-12 bg-gradient-to-r from-primary/20 to-accent/20 rounded-full mb-4">
+                                  <Shield className="w-6 h-6 text-primary" />
+                                </div>
+                                <h4 className="text-xl font-semibold text-white mb-2">Setup Two-Factor Authentication</h4>
+                                <p className="text-gray-300 text-sm mb-6 leading-relaxed">
                                   Scan this QR code with your authenticator app (Google Authenticator, Authy, etc.)
                                 </p>
                                 {qrCodeUrl && (
-                                  <div className="inline-block p-4 bg-white rounded-lg">
+                                  <div className="inline-block p-6 bg-white rounded-xl shadow-lg">
                                     <img src={qrCodeUrl} alt="2FA QR Code" className="w-48 h-48 mx-auto" />
                                   </div>
                                 )}
                               </div>
                               
-                              <div className="space-y-2">
+                              <div className="space-y-3">
                                 <label className="block text-sm font-medium text-gray-200">Verification Code</label>
-                                <div className="flex gap-2">
+                                <div className="flex gap-3">
                                   <input
                                     type="text"
                                     placeholder="Enter 6-digit code"
-                                    className="flex-1 px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:ring-2 focus:ring-primary focus:border-transparent"
+                                    className="flex-1 px-4 py-3 bg-gray-700/70 backdrop-blur-sm border border-gray-600/50 rounded-xl text-white placeholder-gray-400 focus:ring-2 focus:ring-primary focus:border-primary/50 transition-all duration-200 text-center text-lg font-mono"
                                     value={verificationCode}
                                     onChange={(e) => setVerificationCode(e.target.value.replace(/\D/g, '').slice(0, 6))}
                                     maxLength={6}
@@ -900,7 +914,7 @@ export default function ProfileSettingsPage() {
                                   <button
                                     onClick={handleVerify2FA}
                                     disabled={isVerifying2FA || verificationCode.length !== 6}
-                                    className="px-6 py-3 bg-gradient-to-r from-primary to-accent text-white rounded-lg hover:from-primary/80 hover:to-accent/80 transition-all disabled:opacity-50"
+                                    className="px-6 py-3 bg-gradient-to-r from-primary to-accent text-white rounded-xl hover:from-primary/80 hover:to-accent/80 transition-all duration-200 disabled:opacity-50 font-medium"
                                   >
                                     {isVerifying2FA ? (
                                       <Loader className="w-5 h-5 animate-spin" />
@@ -910,7 +924,10 @@ export default function ProfileSettingsPage() {
                                   </button>
                                 </div>
                                 {errors.verification && (
-                                  <p className="text-sm text-red-400">{errors.verification}</p>
+                                  <div className="flex items-center gap-2 text-sm text-red-400 bg-red-500/10 p-3 rounded-lg">
+                                    <AlertCircle className="w-4 h-4" />
+                                    <span>{errors.verification}</span>
+                                  </div>
                                 )}
                               </div>
                               
@@ -920,7 +937,7 @@ export default function ProfileSettingsPage() {
                                   setVerificationCode('')
                                   setQrCodeUrl('')
                                 }}
-                                className="text-gray-400 hover:text-white transition-colors"
+                                className="w-full text-gray-400 hover:text-white transition-all duration-200 py-2 font-medium"
                               >
                                 Cancel Setup
                               </button>

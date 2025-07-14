@@ -12,7 +12,7 @@ export default function Navigation() {
   const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false)
   
   // Use authentication hook
-  const { user, isAuthenticated, signIn, signUp, signInWithGoogle, signOut, checkNetworkStatus, error: authError } = useAuth()
+  const { user, isAuthenticated, signIn, signUp, signInWithGoogle, signOut, resetPassword, checkNetworkStatus, error: authError } = useAuth()
   
   // Show warning if Supabase is not configured
   useEffect(() => {
