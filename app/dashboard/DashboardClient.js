@@ -8,7 +8,9 @@ import DashboardCard from '../../components/DashboardCard';
 import UserAnalytics from './components/UserAnalytics';
 import AIToolsGrid from './components/AIToolsGrid';
 import ResourceLibrary from './components/ResourceLibrary';
-import { BarChart3, Brain, BookOpen, Trophy, Settings, Bell, User, TrendingUp, Zap } from 'lucide-react';
+import PromptLibrary from './components/PromptLibrary';
+import QuickActions from './components/QuickActions';
+import { BarChart3, Brain, BookOpen, Trophy, Settings, Bell, User, TrendingUp, Zap, FileText } from 'lucide-react';
 
 export default function DashboardClient() {
   const { user, isAuthenticated, isLoading, supabase, checkUserProfile } = useAuth();
@@ -168,11 +170,24 @@ export default function DashboardClient() {
 
   const tabs = [
     { id: 'overview', name: 'Overview', icon: BarChart3 },
+    { id: 'quick-actions', name: 'Quick Actions', icon: Zap },
     { id: 'analytics', name: 'Analytics', icon: TrendingUp },
     { id: 'ai-tools', name: 'AI Tools', icon: Brain },
+    { id: 'prompts', name: 'Prompts', icon: FileText },
     { id: 'resources', name: 'Resources', icon: BookOpen },
     { id: 'achievements', name: 'Achievements', icon: Trophy }
   ];
+
+  const handleQuickAction = (tab, action) => {
+    setActiveTab(tab)
+    // Additional logic for specific actions can be added here
+    if (action && typeof window !== 'undefined') {
+      setTimeout(() => {
+        // Trigger specific action based on the action parameter
+        console.log(`Executing action: ${action} in tab: ${tab}`)
+      }, 100)
+    }
+  };
 
   const renderTabContent = () => {
     switch (activeTab) {
@@ -250,10 +265,14 @@ export default function DashboardClient() {
             </div>
           </div>
         );
+      case 'quick-actions':
+        return <QuickActions userPlan={userData.plan} onActionClick={handleQuickAction} />;
       case 'analytics':
         return <UserAnalytics user={user} userProfile={userData} />;
       case 'ai-tools':
         return <AIToolsGrid userPlan={userData.plan} />;
+      case 'prompts':
+        return <PromptLibrary userPlan={userData.plan} />;
       case 'resources':
         return <ResourceLibrary />;
       case 'achievements':

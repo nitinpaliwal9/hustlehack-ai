@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, LineChart, Line, AreaChart, Area } from 'recharts'
 import { TrendingUp, Target, Clock, Award, Brain, Zap, Activity, Users, Calendar, Trophy } from 'lucide-react'
+import ShareAchievement from './ShareAchievement'
 
 export default function UserAnalytics({ user, userProfile }) {
   const [analytics, setAnalytics] = useState({
@@ -298,9 +299,12 @@ export default function UserAnalytics({ user, userProfile }) {
                 </div>
               </div>
               {achievement.unlocked ? (
-                <div className="flex items-center gap-2 text-sm text-green-600">
-                  <Award className="w-4 h-4" />
-                  <span>Unlocked {new Date(achievement.date).toLocaleDateString()}</span>
+                <div className="space-y-2">
+                  <div className="flex items-center gap-2 text-sm text-green-600">
+                    <Award className="w-4 h-4" />
+                    <span>Unlocked {new Date(achievement.date).toLocaleDateString()}</span>
+                  </div>
+                  <ShareAchievement achievement={achievement} />
                 </div>
               ) : (
                 <div className="space-y-1">
