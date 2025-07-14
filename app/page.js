@@ -1,7 +1,7 @@
 'use client'
 
 import Navigation from './components/Navigation'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useAuth } from './hooks/useAuth'
 import { useRouter } from 'next/navigation'
 import Footer from './components/Footer'
@@ -9,9 +9,11 @@ import Footer from './components/Footer'
 export default function HomePage() {
   const { signInWithGoogle, user, isLoading } = useAuth()
   const router = useRouter()
+  const [openFAQ, setOpenFAQ] = useState(Array(6).fill(false));
   
   // Load client utilities on component mount
   useEffect(() => {
+    if (typeof window === 'undefined') return;
     // Check if script is already loaded
     const existingScript = document.querySelector('script[src="/js/client-utils.js"]')
     if (existingScript) {
@@ -68,17 +70,12 @@ export default function HomePage() {
       }
     }
   }
-  const toggleFAQ = (button) => {
-    const answer = button.nextElementSibling
-    const icon = button.querySelector('.faq-icon')
-    
-    if (answer.classList.contains('show')) {
-      answer.classList.remove('show')
-      icon.textContent = '+'
-    } else {
-      answer.classList.add('show')
-      icon.textContent = '-'
-    }
+  const toggleFAQ = (idx) => {
+    setOpenFAQ((prev) => {
+      const updated = [...prev];
+      updated[idx] = !updated[idx];
+      return updated;
+    });
   }
 
   return (
@@ -325,18 +322,52 @@ export default function HomePage() {
           <h2 className="section-title" tabIndex="0">Frequently Asked Questions</h2>
           <p className="section-subtitle" tabIndex="0">Everything you need to know about HustleHack AI</p>
           <div className="faq-container" role="list">
-            {/** FAQ items below, with improved keyboard navigation */}
-            {[...document.querySelectorAll('.faq-item')].map((item, idx) => (
+            {/* FAQ items with React state for open/close */}
+            {[
+              {
+                q: 'What is HustleHack AI?',
+                a: 'HustleHack AI is a comprehensive platform designed for young Indian students, creators, and solopreneurs. We provide AI tools, templates, prompts, and resources to help you learn faster, create better content, and grow your ventures using artificial intelligence.'
+              },
+              {
+                q: 'How do I get started?',
+                a: 'Getting started is easy! Simply choose a plan that fits your needs, sign up for an account, and you\'ll get instant access to our platform. We also provide onboarding tutorials to help you make the most of our tools.'
+              },
+              {
+                q: 'Can I cancel my subscription anytime?',
+                a: 'Yes, you can cancel your subscription at any time. There are no long-term contracts or cancellation fees. You\'ll continue to have access to your account until the end of your current billing cycle.'
+              },
+              {
+                q: 'Do you offer student discounts?',
+                a: 'Yes! We offer special student pricing for verified students. Contact our support team with your student ID to learn more about available discounts and verification process.'
+              },
+              {
+                q: 'What payment methods do you accept?',
+                a: 'We accept all major credit cards, debit cards, UPI, net banking, and digital wallets. All payments are processed securely through our payment partners.'
+              },
+              {
+                q: 'Is there a free trial available?',
+                a: 'Yes! We offer a 7-day free trial for new users. You can explore all features and decide which plan works best for you before committing to a subscription.'
+              }
+            ].map((item, idx) => (
               <div className="faq-item" role="listitem" tabIndex="0" key={idx}>
-                <button className="faq-question" onClick={(e) => toggleFAQ(e.target)} aria-expanded="false" aria-controls={`faq-answer-${idx}`}>Question {idx + 1}
-                  <span className="faq-icon">+</span>
+                <button
+                  className="faq-question"
+                  onClick={() => toggleFAQ(idx)}
+                  aria-expanded={openFAQ[idx]}
+                  aria-controls={`faq-answer-${idx}`}
+                >
+                  {item.q}
+                  <span className="faq-icon">{openFAQ[idx] ? '-' : '+'}</span>
                 </button>
-                <div className="faq-answer" id={`faq-answer-${idx}`} hidden>
-                  <p>Answer {idx + 1}</p>
+                <div
+                  className={`faq-answer${openFAQ[idx] ? ' show' : ''}`}
+                  id={`faq-answer-${idx}`}
+                  hidden={!openFAQ[idx]}
+                >
+                  <p>{item.a}</p>
                 </div>
               </div>
             ))}
-            {/* Replace above with actual FAQ content as in original code, but with ARIA and tabIndex */}
           </div>
         </div>
       </section>
