@@ -11,7 +11,7 @@ export default function CompleteProfileClient() {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
-    phone: '',
+    phone: '+91 ',
     role: ''
   })
   const [formErrors, setFormErrors] = useState({})
@@ -60,8 +60,9 @@ export default function CompleteProfileClient() {
       case 'phone':
         if (!value.trim()) return 'Phone number is required'
         const cleanPhone = value.replace(/\D/g, '')
-        if (cleanPhone.length < 10) return 'Phone number must be at least 10 digits'
-        if (cleanPhone.length > 15) return 'Phone number must be less than 15 digits'
+        // For Indian numbers, expect 12 digits (91 + 10 digits)
+        if (cleanPhone.length < 12) return 'Please enter a valid Indian phone number'
+        if (cleanPhone.length > 13) return 'Phone number is too long'
         return ''
       case 'role':
         if (!value) return 'Please select your role'
@@ -100,11 +101,18 @@ export default function CompleteProfileClient() {
     try {
       console.log('Submitting profile data:', formData)
       
-      await completeProfile({
+      // Set a timeout to prevent infinite loading
+      const timeoutPromise = new Promise((_, reject) => {
+        setTimeout(() => reject(new Error('Request timed out')), 30000) // 30 seconds timeout
+      })
+      
+      const profilePromise = completeProfile({
         name: formData.name,
         phone: formData.phone,
         role: formData.role
       })
+      
+      await Promise.race([profilePromise, timeoutPromise])
 
       console.log('Profile completed successfully')
       
@@ -117,11 +125,17 @@ export default function CompleteProfileClient() {
       }, 1500)
     } catch (error) {
       console.error('Profile completion failed:', error)
-      // Error handling is already done in the completeProfile function
-    } finally {
-      setTimeout(() => {
-        setIsSubmitting(false)
-      }, 1000)
+      
+      // Show user-friendly error message
+      if (typeof window !== 'undefined' && window.showNotification) {
+        const errorMessage = error.message.includes('timed out') 
+          ? 'Request timed out. Please check your internet connection and try again.'
+          : 'Failed to complete profile. Please try again.'
+        window.showNotification(`❌ ${errorMessage}`, 'error', 5000)
+      }
+      
+      // Reset form state
+      setIsSubmitting(false)
     }
   }
 
@@ -131,13 +145,15 @@ export default function CompleteProfileClient() {
     // Handle phone number formatting
     let processedValue = value
     if (name === 'phone') {
-      // Remove all non-digits first
-      processedValue = value.replace(/\D/g, '')
-      // Format as (XXX) XXX-XXXX for US numbers
-      if (processedValue.length >= 6) {
-        processedValue = `(${processedValue.slice(0, 3)}) ${processedValue.slice(3, 6)}-${processedValue.slice(6, 10)}`
-      } else if (processedValue.length >= 3) {
-        processedValue = `(${processedValue.slice(0, 3)}) ${processedValue.slice(3)}`
+      // Don't allow removal of +91 prefix
+      if (!value.startsWith('+91 ')) {
+        processedValue = '+91 ' + value.replace(/[^0-9]/g, '')
+      } else {
+        // Remove all non-digits except the +91 prefix
+        const phoneDigits = value.slice(4).replace(/\D/g, '')
+        // Limit to 10 digits after +91
+        const limitedDigits = phoneDigits.slice(0, 10)
+        processedValue = '+91 ' + limitedDigits
       }
     }
     
@@ -364,7 +380,7 @@ export default function CompleteProfileClient() {
                         ? 'border-[#7F5AF0] shadow-lg shadow-[#7F5AF0]/20'
                         : 'border-gray-600 hover:border-gray-500'
                     } focus:ring-0 focus:outline-none`}
-                    placeholder="(555) 123-4567"
+                    placeholder="+91 9876543210"
                     required
                   />
                 </div>

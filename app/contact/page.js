@@ -902,7 +902,9 @@ export default function ContactPage() {
               </div>
               
               <a 
-                href="mailto:hustlehackai@gmail.com" 
+                href="mailto:hustlehackai@gmail.com?subject=Contact%20from%20HustleHack%20AI&body=Hello%20HustleHack%20AI%20Team,%0D%0A%0D%0AI%20would%20like%20to%20get%20in%20touch%20regarding:%0D%0A%0D%0A[Please%20describe%20your%20inquiry%20here]%0D%0A%0D%0AThank%20you!"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="btn btn-primary" 
                 style={{
                   width: '100%',

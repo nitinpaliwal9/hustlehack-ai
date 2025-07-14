@@ -37,6 +37,66 @@
   --border-color: rgba(0, 0, 0, 0.1);
 }
 
+/* Light mode specific styles */
+[data-theme="light"] .hero {
+  background: linear-gradient(135deg, #F9FAFB 0%, #E5E7EB 100%);
+  color: var(--text-primary);
+}
+
+[data-theme="light"] .hero-title {
+  color: var(--text-primary);
+}
+
+[data-theme="light"] .hero-subtitle {
+  color: var(--text-secondary);
+}
+
+[data-theme="light"] .section {
+  background: var(--bg-primary);
+  color: var(--text-primary);
+}
+
+[data-theme="light"] .section-title {
+  color: var(--text-primary);
+}
+
+[data-theme="light"] .section-subtitle {
+  color: var(--text-secondary);
+}
+
+[data-theme="light"] .card {
+  background: rgba(255, 255, 255, 0.8);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+}
+
+[data-theme="light"] .card-title {
+  color: var(--text-primary);
+}
+
+[data-theme="light"] .card-description {
+  color: var(--text-secondary);
+}
+
+[data-theme="light"] .navbar {
+  background: rgba(249, 250, 251, 0.95);
+  border-bottom: 1px solid var(--border-color);
+}
+
+[data-theme="light"] .pricing-card {
+  background: rgba(255, 255, 255, 0.9);
+  border: 2px solid var(--border-color);
+  color: var(--text-primary);
+}
+
+[data-theme="light"] .pricing-title {
+  color: var(--text-primary);
+}
+
+[data-theme="light"] .pricing-features li {
+  color: var(--text-primary);
+}
+
 :root {
   /* Legacy variables for backward compatibility */
   --dark-bg: var(--bg-primary);

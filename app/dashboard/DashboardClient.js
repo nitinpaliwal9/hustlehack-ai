@@ -5,6 +5,10 @@ import { useAuth } from '../hooks/useAuth';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import DashboardCard from '../../components/DashboardCard';
+import UserAnalytics from './components/UserAnalytics';
+import AIToolsGrid from './components/AIToolsGrid';
+import ResourceLibrary from './components/ResourceLibrary';
+import { BarChart3, Brain, BookOpen, Trophy, Settings, Bell, User, TrendingUp, Zap } from 'lucide-react';
 
 export default function DashboardClient() {
   const { user, isAuthenticated, isLoading, supabase, checkUserProfile } = useAuth();
@@ -12,12 +16,13 @@ export default function DashboardClient() {
   const [userData, setUserData] = useState({ 
     name: 'Hustler', 
     email: 'Email: Not available', 
-    plan: 'Not active', 
+    plan: 'starter', 
     expiry: 'Data not available' 
   });
   const [resources, setResources] = useState([]);
   const [recentActivity, setRecentActivity] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [activeTab, setActiveTab] = useState('overview');
 
   useEffect(() => {
     const fetchData = async () => {
@@ -161,6 +166,120 @@ export default function DashboardClient() {
     </div>
   );
 
+  const tabs = [
+    { id: 'overview', name: 'Overview', icon: BarChart3 },
+    { id: 'analytics', name: 'Analytics', icon: TrendingUp },
+    { id: 'ai-tools', name: 'AI Tools', icon: Brain },
+    { id: 'resources', name: 'Resources', icon: BookOpen },
+    { id: 'achievements', name: 'Achievements', icon: Trophy }
+  ];
+
+  const renderTabContent = () => {
+    switch (activeTab) {
+      case 'overview':
+        return (
+          <div className="space-y-8">
+            {/* Quick Stats */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div className="bg-white rounded-xl shadow-lg p-6 border border-gray-200">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm text-gray-600">Current Plan</p>
+                    <p className="text-2xl font-bold text-purple-600 capitalize">{userData.plan}</p>
+                  </div>
+                  <Zap className="w-8 h-8 text-purple-500" />
+                </div>
+              </div>
+              <div className="bg-white rounded-xl shadow-lg p-6 border border-gray-200">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm text-gray-600">Tools Used</p>
+                    <p className="text-2xl font-bold text-blue-600">12</p>
+                  </div>
+                  <Brain className="w-8 h-8 text-blue-500" />
+                </div>
+              </div>
+              <div className="bg-white rounded-xl shadow-lg p-6 border border-gray-200">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm text-gray-600">Achievements</p>
+                    <p className="text-2xl font-bold text-green-600">8</p>
+                  </div>
+                  <Trophy className="w-8 h-8 text-green-500" />
+                </div>
+              </div>
+            </div>
+
+            {/* Resources Section */}
+            <div className="space-y-6">
+              <h2 className="text-2xl font-bold text-gray-900">🚀 Your Resources</h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {resources.map((resource, index) => (
+                  <div key={resource.id} className="animate-fade-in-up" style={{animationDelay: `${index * 0.1}s`}}>
+                    <DashboardCard 
+                      resource={resource} 
+                      onAccess={logUserActivity} 
+                    />
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Recent Activity */}
+            <div className="bg-white rounded-xl shadow-lg border border-gray-200 p-6">
+              <h3 className="text-xl font-bold text-gray-900 mb-4">📊 Recent Activity</h3>
+              {recentActivity.length > 0 ? (
+                <ul className="space-y-3">
+                  {recentActivity.map((activity, index) => (
+                    <li key={index} className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
+                      <span className="font-medium text-gray-900">
+                        <span className="capitalize">{activity.action}</span> {activity.resource_name}
+                      </span>
+                      <span className="text-sm text-gray-500">
+                        {new Date(activity.created_at).toLocaleDateString()}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <div className="text-center py-8">
+                  <div className="text-6xl mb-4 opacity-50">📊</div>
+                  <p className="text-gray-400 text-lg">No recent activity logged yet</p>
+                </div>
+              )}
+            </div>
+          </div>
+        );
+      case 'analytics':
+        return <UserAnalytics user={user} userProfile={userData} />;
+      case 'ai-tools':
+        return <AIToolsGrid userPlan={userData.plan} />;
+      case 'resources':
+        return <ResourceLibrary />;
+      case 'achievements':
+        return (
+          <div className="space-y-8">
+            <h2 className="text-3xl font-bold text-gray-900">🏆 Your Achievements</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {/* Achievement cards will be here */}
+              <div className="bg-white rounded-xl shadow-lg p-6 border border-gray-200">
+                <div className="text-center">
+                  <div className="text-4xl mb-4">🎯</div>
+                  <h3 className="text-lg font-semibold text-gray-900">First Steps</h3>
+                  <p className="text-sm text-gray-600 mt-2">Complete your first task</p>
+                  <div className="mt-4 px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm font-medium">
+                    Unlocked
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        );
+      default:
+        return null;
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -177,6 +296,31 @@ export default function DashboardClient() {
                 userData.email
               }
             </p>
+          </div>
+
+          {/* Navigation Tabs */}
+          <div className="bg-white rounded-xl shadow-lg border border-gray-200 p-2">
+            <nav className="flex space-x-2">
+              {tabs.map((tab) => (
+                <button
+                  key={tab.id}
+                  onClick={() => setActiveTab(tab.id)}
+                  className={`flex items-center gap-2 px-4 py-3 rounded-lg font-medium transition-all duration-300 ${
+                    activeTab === tab.id
+                      ? 'bg-purple-600 text-white shadow-lg'
+                      : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
+                  }`}
+                >
+                  <tab.icon className="w-5 h-5" />
+                  {tab.name}
+                </button>
+              ))}
+            </nav>
+          </div>
+
+          {/* Tab Content */}
+          <div className="animate-fade-in">
+            {renderTabContent()}
           </div>
 
           {/* Plan Info Card */}
