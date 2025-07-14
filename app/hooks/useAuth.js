@@ -69,7 +69,15 @@ export function useAuth() {
         
         if (event === 'SIGNED_IN' && session?.user) {
           // Check user profile status
-          await checkUserProfile(session.user)
+          const profileStatus = await checkUserProfile(session.user)
+          
+          // If profile is incomplete, redirect to complete-profile
+          if (profileStatus === 'incomplete') {
+            console.log('🔁 Profile incomplete, redirecting to complete-profile')
+            if (typeof window !== 'undefined') {
+              window.location.href = '/complete-profile'
+            }
+          }
         }
       }
     )
@@ -82,7 +90,7 @@ export function useAuth() {
     try {
       const { data: existingUser, error } = await supabase
         .from('users')
-        .select('id, name, email, role')
+        .select('id, name, email, role, profile_completed')
         .eq('id', user.id)
         .single()
 
@@ -91,11 +99,11 @@ export function useAuth() {
         return 'error'
       }
 
-      if (existingUser) {
-        console.log('✅ User profile exists')
+      if (existingUser && existingUser.profile_completed === true) {
+        console.log('✅ User profile complete')
         return 'complete'
       } else {
-        console.log('📝 User profile missing')
+        console.log('📝 User profile incomplete or missing')
         return 'incomplete'
       }
     } catch (error) {
@@ -321,6 +329,73 @@ export function useAuth() {
     }
   }, [])
 
+  // Complete user profile (first time setup)
+  const completeProfile = useCallback(async (profileData) => {
+    if (!supabase || !user) throw new Error('User not authenticated')
+
+    setIsLoading(true)
+    setError(null)
+
+    try {
+      console.log('Starting profile completion for user:', user.id)
+      console.log('Profile data:', profileData)
+
+      // Update user profile in database
+      const { data: insertData, error: insertError } = await supabase
+        .from('users')
+        .upsert({
+          id: user.id,
+          email: user.email,
+          name: profileData.name,
+          phone: profileData.phone,
+          role: profileData.role,
+          profile_completed: true,
+          last_login: new Date().toISOString(),
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString()
+        })
+        .select()
+
+      if (insertError) {
+        console.error('Profile completion error:', insertError)
+        throw insertError
+      }
+
+      console.log('Profile completion successful:', insertData)
+
+      // Update auth user metadata
+      const { data: authData, error: authError } = await supabase.auth.updateUser({
+        data: {
+          name: profileData.name,
+          phone: profileData.phone,
+          role: profileData.role
+        }
+      })
+
+      if (authError) {
+        console.error('Auth metadata update error:', authError)
+        // Don't throw here as the main profile update was successful
+      }
+
+      if (typeof window !== 'undefined' && window.showNotification) {
+        window.showNotification('✅ Profile completed successfully!', 'success')
+      }
+
+      return { profileData: insertData, authData }
+    } catch (error) {
+      console.error('Complete profile error:', error)
+      setError(error.message)
+      
+      if (typeof window !== 'undefined' && window.showNotification) {
+        window.showNotification(`❌ Failed to complete profile: ${error.message}`, 'error')
+      }
+      
+      throw error
+    } finally {
+      setIsLoading(false)
+    }
+  }, [user])
+
   // Update user profile
   const updateProfile = useCallback(async (updates) => {
     if (!supabase || !user) throw new Error('User not authenticated')
@@ -443,6 +518,7 @@ export function useAuth() {
     signIn,
     signInWithGoogle,
     signOut,
+    completeProfile,
     updateProfile,
     resetPassword,
     getUserProfile,

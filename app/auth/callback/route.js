@@ -21,6 +21,31 @@ export async function GET(request) {
       }
 
       console.log('✅ OAuth callback successful')
+      
+      // Get the current user
+      const { data: { user }, error: userError } = await supabase.auth.getUser()
+      
+      if (userError || !user) {
+        console.error('Error getting user after OAuth:', userError)
+        return NextResponse.redirect(`${origin}/dashboard`)
+      }
+
+      // Check if user profile is complete
+      const { data: userProfile, error: profileError } = await supabase
+        .from('users')
+        .select('profile_completed')
+        .eq('id', user.id)
+        .single()
+
+      console.log('Profile check result:', { userProfile, profileError })
+
+      // If profile doesn't exist or profile_completed is false, redirect to complete-profile
+      if (profileError || !userProfile || userProfile.profile_completed === false) {
+        console.log('🔁 Redirecting to complete-profile')
+        return NextResponse.redirect(`${origin}/complete-profile`)
+      }
+
+      // Profile is complete, redirect to dashboard
       return NextResponse.redirect(`${origin}/dashboard`)
     } catch (error) {
       console.error('OAuth exchange error:', error)

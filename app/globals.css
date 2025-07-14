@@ -55,6 +55,13 @@
   --spacing-xl: 2rem;
   --spacing-2xl: 3rem;
   --spacing-3xl: 4rem;
+  --spacing-4xl: 5rem;
+  --spacing-5xl: 6rem;
+  
+  /* Dashboard specific spacing */
+  --dashboard-section-gap: 2rem;
+  --dashboard-card-padding: 1.5rem;
+  --dashboard-container-padding: 2rem;
   
   /* Typography */
   --font-primary: var(--font-inter), -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
@@ -346,6 +353,90 @@ section[id] {
 .hover-lift:hover {
   transform: translateY(-5px);
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+}
+
+/* Dashboard specific utilities */
+.dashboard-section {
+  margin-bottom: var(--dashboard-section-gap);
+}
+
+.dashboard-card {
+  padding: var(--dashboard-card-padding);
+  border-radius: var(--radius-2xl);
+  background: white;
+  box-shadow: var(--shadow-lg);
+  transition: all 0.3s ease;
+}
+
+.dashboard-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-xl);
+}
+
+.dashboard-container {
+  padding: var(--dashboard-container-padding);
+  max-width: 1280px;
+  margin: 0 auto;
+}
+
+/* Responsive spacing adjustments */
+@media (max-width: 768px) {
+  :root {
+    --dashboard-section-gap: 1.5rem;
+    --dashboard-card-padding: 1rem;
+    --dashboard-container-padding: 1rem;
+  }
+}
+
+/* Spacing utility classes */
+.space-y-consistent > * + * {
+  margin-top: var(--dashboard-section-gap);
+}
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 1.5rem;
+}
+
+@media (min-width: 768px) {
+  .dashboard-grid {
+    gap: 2rem;
+  }
+}
+
+/* Enhanced card effects */
+.card-hover-effect {
+  position: relative;
+  overflow: hidden;
+}
+
+.card-hover-effect::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(127, 90, 240, 0.1), transparent);
+  transition: left 0.5s;
+}
+
+.card-hover-effect:hover::before {
+  left: 100%;
+}
+
+/* Better section spacing */
+.dashboard-section-wrapper {
+  padding: var(--spacing-lg) 0;
+}
+
+.dashboard-section-wrapper:first-child {
+  padding-top: var(--spacing-xl);
+}
+
+.dashboard-section-wrapper:last-child {
+  padding-bottom: var(--spacing-xl);
 }
 
 /* Dashboard specific scrollbar */
