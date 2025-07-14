@@ -27,12 +27,14 @@ export function useAuth() {
   const [isLoading, setIsLoading] = useState(true)
   const [isAuthenticated, setIsAuthenticated] = useState(false)
   const [error, setError] = useState(null)
+  const [criticalError, setCriticalError] = useState(null); // For fatal config/network errors
 
   // Initialize auth state
   useEffect(() => {
     if (!supabase) {
       setIsLoading(false)
       setError('Supabase not configured. Please add environment variables.')
+      setCriticalError('Supabase is not configured. Please check your environment variables.');
       return
     }
 
@@ -70,7 +72,11 @@ export function useAuth() {
         if (event === 'SIGNED_IN' && session?.user) {
           // Check user profile status
           const profileStatus = await checkUserProfile(session.user)
-          
+          // If checkUserProfile returns 'error', set critical error and do not redirect
+          if (profileStatus === 'error') {
+            setCriticalError('Could not connect to the database. Please try again later.');
+            return;
+          }
           // If profile is incomplete, redirect to complete-profile
           if (profileStatus === 'incomplete') {
             console.log('🔁 Profile incomplete, redirecting to complete-profile')
@@ -97,9 +103,10 @@ export function useAuth() {
   }, [])
 
   // Check user profile status
-  const checkUserProfile = async (user) => {
+  const checkUserProfile = useCallback(async (user) => {
     if (!supabase || !user) {
       console.warn('Supabase not initialized or user not provided')
+      // Do not throw, just return error
       return 'error'
     }
 
@@ -137,9 +144,13 @@ export function useAuth() {
       }
     } catch (error) {
       console.error('Error in checkUserProfile:', error)
+      // If it's a network/config error, return 'error' so the UI can handle it
+      if (error.message && error.message.includes('Failed to fetch')) {
+        return 'error';
+      }
       return 'incomplete' // Default to incomplete for safety
     }
-  }
+  }, [])
 
   // Sign up with email
   const signUp = useCallback(async (email, password, userData = {}) => {
@@ -197,7 +208,10 @@ export function useAuth() {
 
   // Sign in with email
   const signIn = useCallback(async (email, password) => {
-    if (!supabase) throw new Error('Supabase not initialized')
+    if (!supabase) {
+      setCriticalError('Supabase is not configured. Please check your environment variables.');
+      throw new Error('Supabase not initialized')
+    }
 
     setIsLoading(true)
     setError(null)
@@ -790,6 +804,7 @@ export function useAuth() {
     isLoading,
     isAuthenticated,
     error,
+    criticalError,
     
     // Actions
     signUp,
@@ -812,6 +827,7 @@ export function useAuth() {
     
     // Utilities
     clearError: () => setError(null),
+    clearCriticalError: () => setCriticalError(null),
     supabase
   }
 }

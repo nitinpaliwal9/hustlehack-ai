@@ -18,6 +18,7 @@ export default function CompleteProfileClient() {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [focusedField, setFocusedField] = useState(null)
   const [isSuccess, setIsSuccess] = useState(false)
+  const [profileCheckError, setProfileCheckError] = useState(false);
 
   useEffect(() => {
     // Check if user is authenticated
@@ -36,15 +37,17 @@ export default function CompleteProfileClient() {
     }
 
     // Check if profile is already complete
-    if (user) {
+    if (user && !profileCheckError) {
       checkUserProfile(user).then(status => {
         if (status === 'complete') {
           console.log('Profile already complete, redirecting to contact form')
           router.push('/contact')
+        } else if (status === 'error') {
+          setProfileCheckError(true);
         }
       })
     }
-  }, [user, isLoading, isAuthenticated, router, checkUserProfile])
+  }, [user, isLoading, isAuthenticated, router, checkUserProfile, profileCheckError])
 
   const validateField = (name, value) => {
     switch (name) {
@@ -237,6 +240,18 @@ export default function CompleteProfileClient() {
         </div>
       </div>
     )
+  }
+
+  if (profileCheckError) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <p className="text-red-600 text-xl font-bold mb-4">We couldn't connect to our database.</p>
+          <p className="text-gray-700 mb-2">Please check your internet connection or try again later.</p>
+          <button onClick={() => window.location.reload()} className="mt-4 px-4 py-2 bg-blue-600 text-white rounded">Retry</button>
+        </div>
+      </div>
+    );
   }
 
   return (

@@ -13,7 +13,7 @@ import QuickActions from './components/QuickActions';
 import { BarChart3, Brain, BookOpen, Trophy, Settings, Bell, User, TrendingUp, Zap, FileText } from 'lucide-react';
 
 export default function DashboardClient() {
-  const { user, isAuthenticated, isLoading, supabase, checkUserProfile } = useAuth();
+  const { user, isAuthenticated, isLoading, supabase, checkUserProfile, criticalError, clearCriticalError } = useAuth();
   const router = useRouter();
   const [userData, setUserData] = useState({ 
     name: 'Hustler', 
@@ -25,115 +25,128 @@ export default function DashboardClient() {
   const [recentActivity, setRecentActivity] = useState([]);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('overview');
+  const [profileCheckError, setProfileCheckError] = useState(false);
+
+  // Move fetchData outside useEffect for clarity
+  const fetchData = async () => {
+    setLoading(true);
+    try {
+      // Check if user is authenticated
+      if (!isAuthenticated) {
+        console.warn("User not authenticated, redirecting to home");
+        router.push('/');
+        return;
+      }
+
+      if (!user) {
+        console.warn("User not logged in or session not ready");
+        return;
+      }
+
+      // Check if profile is complete
+      const profileStatus = await checkUserProfile(user);
+      if (profileStatus === 'incomplete') {
+        console.log('Profile incomplete, redirecting to complete-profile');
+        router.push('/complete-profile');
+        return;
+      }
+
+      const { data: subscription, error: subError } = await supabase
+        .from('subscriptions')
+        .select('plan_name, expiry_date')
+        .eq('user_id', user.id)
+        .single();
+
+      if (subError) {
+        console.warn('Subscription error:', subError);
+        // Don't throw error, use fallback data instead
+      }
+
+      const { data: resources, error: resError } = await supabase
+        .from('resources')
+        .select('id, title, type, plan_required, description, download_url');
+      if (resError) {
+        console.warn('Resources error:', resError);
+        // Continue with empty resources array
+      }
+
+      const { data: activity, error: actError } = await supabase
+        .from('user_activity')
+        .select('action, resource_name, created_at')
+        .eq('user_id', user.id)
+        .order('created_at', { ascending: false })
+        .limit(5);
+      if (actError) {
+        console.warn('Activity error:', actError);
+        // Continue with empty activity array
+      }
+
+      // Get user profile data
+      const { data: userProfile, error: profileError } = await supabase
+        .from('users')
+        .select('name, email, role, phone')
+        .eq('id', user.id)
+        .single();
+
+      setUserData({
+        name: userProfile?.name || user.user_metadata?.name || user.email.split('@')[0],
+        email: userProfile?.email || user.email,
+        role: userProfile?.role,
+        phone: userProfile?.phone,
+        plan: subscription?.plan_name || 'Not active',
+        expiry: subscription?.expiry_date || 'Data not available'
+      });
+
+      const unlockedResources = (resources || []).map(resource => ({
+        ...resource,
+        name: resource.title, // Map title to name for compatibility
+        category: resource.type, // Map type to category for compatibility
+        min_plan: resource.plan_required, // Map plan_required to min_plan for compatibility
+        unlocked: subscription?.plan_name && subscription.plan_name.localeCompare(resource.plan_required) >= 0
+      }));
+
+      setResources(unlockedResources);
+      setRecentActivity(activity || []);
+    } catch (error) {
+      console.error('[Dashboard] Error fetching user:', error.message);
+      
+      // Fallback resources to show even without database data
+      const fallbackResources = [
+        { id: 1, name: 'Social Media Prompt Pack', category: 'Toolkits & Templates', min_plan: 'starter', unlocked: userData.plan === 'creator' || userData.plan === 'pro' },
+        { id: 2, name: 'AI Content Generator', category: 'Weekly Drops', min_plan: 'creator', unlocked: userData.plan === 'creator' || userData.plan === 'pro' },
+        { id: 3, name: 'Advanced Automation Scripts', category: 'Pro Tools', min_plan: 'pro', unlocked: userData.plan === 'pro' },
+        { id: 4, name: 'Study Guide Templates', category: 'Prompt Packs', min_plan: 'starter', unlocked: userData.plan === 'creator' || userData.plan === 'pro' },
+        { id: 5, name: 'Business Plan Generator', category: 'Toolkits & Templates', min_plan: 'creator', unlocked: userData.plan === 'creator' || userData.plan === 'pro' },
+        { id: 6, name: 'Premium AI Models', category: 'Weekly Drops', min_plan: 'pro', unlocked: userData.plan === 'pro' }
+      ];
+      
+      setResources(fallbackResources);
+      setRecentActivity([
+        { action: 'accessed', resource_name: 'Social Media Prompt Pack', created_at: new Date().toISOString() },
+        { action: 'downloaded', resource_name: 'AI Content Generator', created_at: new Date(Date.now() - 86400000).toISOString() }
+      ]);
+    } finally {
+      setLoading(false);
+      console.log('[Dashboard] User info loaded:', userData);
+    }
+  };
 
   useEffect(() => {
-    const fetchData = async () => {
-      setLoading(true);
-      try {
-        // Check if user is authenticated
-        if (!isAuthenticated) {
-          console.warn("User not authenticated, redirecting to home");
-          router.push('/');
-          return;
-        }
-
-        if (!user) {
-          console.warn("User not logged in or session not ready");
-          return;
-        }
-
-        // Check if profile is complete
-        const profileStatus = await checkUserProfile(user);
-        if (profileStatus === 'incomplete') {
-          console.log('Profile incomplete, redirecting to complete-profile');
-          router.push('/complete-profile');
-          return;
-        }
-
-        const { data: subscription, error: subError } = await supabase
-          .from('subscriptions')
-          .select('plan_name, expiry_date')
-          .eq('user_id', user.id)
-          .single();
-
-        if (subError) {
-          console.warn('Subscription error:', subError);
-          // Don't throw error, use fallback data instead
-        }
-
-        const { data: resources, error: resError } = await supabase
-          .from('resources')
-          .select('id, title, type, plan_required, description, download_url');
-        if (resError) {
-          console.warn('Resources error:', resError);
-          // Continue with empty resources array
-        }
-
-        const { data: activity, error: actError } = await supabase
-          .from('user_activity')
-          .select('action, resource_name, created_at')
-          .eq('user_id', user.id)
-          .order('created_at', { ascending: false })
-          .limit(5);
-        if (actError) {
-          console.warn('Activity error:', actError);
-          // Continue with empty activity array
-        }
-
-        // Get user profile data
-        const { data: userProfile, error: profileError } = await supabase
-          .from('users')
-          .select('name, email, role, phone')
-          .eq('id', user.id)
-          .single();
-
-        setUserData({
-          name: userProfile?.name || user.user_metadata?.name || user.email.split('@')[0],
-          email: userProfile?.email || user.email,
-          role: userProfile?.role,
-          phone: userProfile?.phone,
-          plan: subscription?.plan_name || 'Not active',
-          expiry: subscription?.expiry_date || 'Data not available'
-        });
-
-        const unlockedResources = (resources || []).map(resource => ({
-          ...resource,
-          name: resource.title, // Map title to name for compatibility
-          category: resource.type, // Map type to category for compatibility
-          min_plan: resource.plan_required, // Map plan_required to min_plan for compatibility
-          unlocked: subscription?.plan_name && subscription.plan_name.localeCompare(resource.plan_required) >= 0
-        }));
-
-        setResources(unlockedResources);
-        setRecentActivity(activity || []);
-      } catch (error) {
-        console.error('[Dashboard] Error fetching user:', error.message);
-        
-        // Fallback resources to show even without database data
-        const fallbackResources = [
-          { id: 1, name: 'Social Media Prompt Pack', category: 'Toolkits & Templates', min_plan: 'starter', unlocked: userData.plan === 'creator' || userData.plan === 'pro' },
-          { id: 2, name: 'AI Content Generator', category: 'Weekly Drops', min_plan: 'creator', unlocked: userData.plan === 'creator' || userData.plan === 'pro' },
-          { id: 3, name: 'Advanced Automation Scripts', category: 'Pro Tools', min_plan: 'pro', unlocked: userData.plan === 'pro' },
-          { id: 4, name: 'Study Guide Templates', category: 'Prompt Packs', min_plan: 'starter', unlocked: userData.plan === 'creator' || userData.plan === 'pro' },
-          { id: 5, name: 'Business Plan Generator', category: 'Toolkits & Templates', min_plan: 'creator', unlocked: userData.plan === 'creator' || userData.plan === 'pro' },
-          { id: 6, name: 'Premium AI Models', category: 'Weekly Drops', min_plan: 'pro', unlocked: userData.plan === 'pro' }
-        ];
-        
-        setResources(fallbackResources);
-        setRecentActivity([
-          { action: 'accessed', resource_name: 'Social Media Prompt Pack', created_at: new Date().toISOString() },
-          { action: 'downloaded', resource_name: 'AI Content Generator', created_at: new Date(Date.now() - 86400000).toISOString() }
-        ]);
-      } finally {
-        setLoading(false);
-        console.log('[Dashboard] User info loaded:', userData);
-      }
-    };
-    console.log('[Dashboard] Fetching user data...');
-    if (!isLoading) {
-      fetchData();
+    if (!isLoading && !isAuthenticated) {
+      router.push('/');
+      return;
     }
-  }, [user, isAuthenticated, isLoading, checkUserProfile, router]);
+
+    if (user && !profileCheckError) {
+      checkUserProfile(user).then(status => {
+        if (status === 'complete') {
+          router.push('/contact');
+        } else if (status === 'error') {
+          setProfileCheckError(true);
+        }
+      });
+    }
+  }, [user, isLoading, isAuthenticated, router, checkUserProfile, profileCheckError]);
 
   const logUserActivity = async (resourceName) => {
     try {
@@ -164,6 +177,17 @@ export default function DashboardClient() {
     }
   };
 
+  if (criticalError) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <p className="text-red-600 text-xl font-bold mb-4">{criticalError}</p>
+          <button onClick={clearCriticalError} className="mt-4 px-4 py-2 bg-blue-600 text-white rounded">Retry</button>
+        </div>
+      </div>
+    );
+  }
+
   if (loading) return (
     <div className="min-h-screen bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">
       <div className="text-center animate-fade-in">
@@ -179,6 +203,18 @@ export default function DashboardClient() {
       </div>
     </div>
   );
+
+  if (profileCheckError) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <p className="text-red-600 text-xl font-bold mb-4">We couldn't connect to our database.</p>
+          <p className="text-gray-700 mb-2">Please check your internet connection or try again later.</p>
+          <button onClick={() => window.location.reload()} className="mt-4 px-4 py-2 bg-blue-600 text-white rounded">Retry</button>
+        </div>
+      </div>
+    );
+  }
 
   const tabs = [
     { id: 'overview', name: 'Overview', icon: BarChart3 },
