@@ -27,7 +27,7 @@ export async function GET(request) {
       
       if (userError || !user) {
         console.error('Error getting user after OAuth:', userError)
-        return NextResponse.redirect(`${origin}/dashboard`)
+        return NextResponse.redirect(`${origin}/contact`)
       }
 
       // Check if user profile is complete
@@ -45,8 +45,8 @@ export async function GET(request) {
         return NextResponse.redirect(`${origin}/complete-profile`)
       }
 
-      // Profile is complete, redirect to dashboard
-      return NextResponse.redirect(`${origin}/dashboard`)
+      // Profile is complete, redirect to contact form
+      return NextResponse.redirect(`${origin}/contact`)
     } catch (error) {
       console.error('OAuth exchange error:', error)
       return NextResponse.redirect(`${origin}/?error=auth_error`)

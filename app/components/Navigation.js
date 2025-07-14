@@ -122,9 +122,9 @@ export default function Navigation() {
     try {
       await signIn(email, password)
       closeModal('login-modal')
-      // Redirect to dashboard
+      // Redirect to contact form
       setTimeout(() => {
-        window.location.href = '/dashboard'
+        window.location.href = '/contact'
       }, 1500)
     } catch (error) {
       console.error('Login error:', error)
@@ -177,7 +177,7 @@ export default function Navigation() {
 
   const openUserProfile = () => {
     if (isAuthenticated) {
-      window.location.href = '/dashboard'
+      window.location.href = '/contact'
     } else {
       openModal('login-modal')
     }

@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react'
 import { useAuth } from '../hooks/useAuth'
 import { useRouter } from 'next/navigation'
+import { User, Mail, Phone, Briefcase, CheckCircle, AlertCircle, ArrowRight, Loader, UserPlus, Shield, Zap } from 'lucide-react'
 
 export default function CompleteProfileClient() {
   const { user, isLoading, isAuthenticated, completeProfile, checkUserProfile } = useAuth()
@@ -15,6 +16,8 @@ export default function CompleteProfileClient() {
   })
   const [formErrors, setFormErrors] = useState({})
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [focusedField, setFocusedField] = useState(null)
+  const [isSuccess, setIsSuccess] = useState(false)
 
   useEffect(() => {
     // Check if user is authenticated
@@ -36,36 +39,44 @@ export default function CompleteProfileClient() {
     if (user) {
       checkUserProfile(user).then(status => {
         if (status === 'complete') {
-          console.log('Profile already complete, redirecting to dashboard')
-          router.push('/dashboard')
+          console.log('Profile already complete, redirecting to contact form')
+          router.push('/contact')
         }
       })
     }
   }, [user, isLoading, isAuthenticated, router, checkUserProfile])
 
+  const validateField = (name, value) => {
+    switch (name) {
+      case 'name':
+        if (!value.trim()) return 'Name is required'
+        if (value.trim().length < 2) return 'Name must be at least 2 characters'
+        if (value.trim().length > 50) return 'Name must be less than 50 characters'
+        return ''
+      case 'email':
+        if (!value.trim()) return 'Email is required'
+        if (!/\S+@\S+\.\S+/.test(value)) return 'Please enter a valid email address'
+        return ''
+      case 'phone':
+        if (!value.trim()) return 'Phone number is required'
+        const cleanPhone = value.replace(/\D/g, '')
+        if (cleanPhone.length < 10) return 'Phone number must be at least 10 digits'
+        if (cleanPhone.length > 15) return 'Phone number must be less than 15 digits'
+        return ''
+      case 'role':
+        if (!value) return 'Please select your role'
+        return ''
+      default:
+        return ''
+    }
+  }
+
   const validateForm = () => {
     const errors = {}
-
-    if (!formData.name.trim()) {
-      errors.name = 'Name is required'
-    }
-
-    if (!formData.email.trim()) {
-      errors.email = 'Email is required'
-    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      errors.email = 'Please enter a valid email address'
-    }
-
-    if (!formData.phone.trim()) {
-      errors.phone = 'Phone number is required'
-    } else if (!/^\d{10,15}$/.test(formData.phone.replace(/\D/g, ''))) {
-      errors.phone = 'Please enter a valid phone number (10-15 digits)'
-    }
-
-    if (!formData.role) {
-      errors.role = 'Please select your role'
-    }
-
+    Object.keys(formData).forEach(field => {
+      const error = validateField(field, formData[field])
+      if (error) errors[field] = error
+    })
     setFormErrors(errors)
     return Object.keys(errors).length === 0
   }
@@ -74,6 +85,13 @@ export default function CompleteProfileClient() {
     e.preventDefault()
     
     if (!validateForm()) {
+      // Focus on first error field
+      const firstErrorField = Object.keys(formErrors)[0]
+      const element = document.getElementById(firstErrorField)
+      if (element) {
+        element.focus()
+        element.scrollIntoView({ behavior: 'smooth', block: 'center' })
+      }
       return
     }
 
@@ -90,21 +108,42 @@ export default function CompleteProfileClient() {
 
       console.log('Profile completed successfully')
       
-      // Redirect to dashboard after successful completion
-      router.push('/dashboard')
+      // Show success state briefly before redirect
+      setIsSuccess(true)
+      
+      // Redirect to contact form after successful completion
+      setTimeout(() => {
+        router.push('/contact')
+      }, 1500)
     } catch (error) {
       console.error('Profile completion failed:', error)
       // Error handling is already done in the completeProfile function
     } finally {
-      setIsSubmitting(false)
+      setTimeout(() => {
+        setIsSubmitting(false)
+      }, 1000)
     }
   }
 
   const handleChange = (e) => {
     const { name, value } = e.target
+    
+    // Handle phone number formatting
+    let processedValue = value
+    if (name === 'phone') {
+      // Remove all non-digits first
+      processedValue = value.replace(/\D/g, '')
+      // Format as (XXX) XXX-XXXX for US numbers
+      if (processedValue.length >= 6) {
+        processedValue = `(${processedValue.slice(0, 3)}) ${processedValue.slice(3, 6)}-${processedValue.slice(6, 10)}`
+      } else if (processedValue.length >= 3) {
+        processedValue = `(${processedValue.slice(0, 3)}) ${processedValue.slice(3)}`
+      }
+    }
+    
     setFormData(prev => ({
       ...prev,
-      [name]: value
+      [name]: processedValue
     }))
     
     // Clear error when user starts typing
@@ -114,6 +153,42 @@ export default function CompleteProfileClient() {
         [name]: ''
       }))
     }
+  }
+
+  const handleFocus = (fieldName) => {
+    setFocusedField(fieldName)
+  }
+
+  const handleBlur = (e) => {
+    const { name, value } = e.target
+    setFocusedField(null)
+    
+    // Validate field on blur
+    const error = validateField(name, value)
+    if (error) {
+      setFormErrors(prev => ({
+        ...prev,
+        [name]: error
+      }))
+    }
+  }
+
+  // Success screen
+  if (isSuccess) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-green-50 to-green-100 flex items-center justify-center">
+        <div className="text-center animate-fade-in">
+          <div className="relative mb-8">
+            <div className="w-24 h-24 bg-gradient-to-r from-green-500 to-emerald-500 rounded-full flex items-center justify-center mx-auto mb-6 animate-pulse">
+              <CheckCircle size={48} className="text-white" />
+            </div>
+          </div>
+          <h2 className="text-3xl font-bold text-gray-900 mb-4">Profile Completed Successfully!</h2>
+          <p className="text-lg text-gray-600 mb-2">Welcome to HustleHack AI! 🚀</p>
+          <p className="text-gray-500">Redirecting you to get started...</p>
+        </div>
+      </div>
+    )
   }
 
   if (isLoading) {
@@ -149,150 +224,280 @@ export default function CompleteProfileClient() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-100 to-gray-200 py-12">
-      <div className="max-w-2xl mx-auto px-6">
-        {/* Header */}
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 py-8">
+      <div className="max-w-4xl mx-auto px-4">
+        {/* Header Section */}
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">
-            🎯 Complete Your Profile
+          <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-[#7F5AF0] to-[#00FFC2] rounded-full mb-6">
+            <UserPlus className="w-8 h-8 text-white" />
+          </div>
+          <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4 leading-tight">
+            Complete Your Profile
           </h1>
-          <p className="text-xl text-gray-600">
+          <p className="text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed">
             Just a few details to get you started on your HustleHack AI journey
           </p>
         </div>
 
-        {/* Form */}
-        <div className="bg-white rounded-2xl shadow-xl p-8 border-l-4 border-[#7F5AF0]">
-          <form onSubmit={handleSubmit} className="space-y-6">
-            {/* Name Field */}
-            <div>
-              <label htmlFor="name" className="block text-sm font-semibold text-gray-700 mb-2">
-                Full Name *
-              </label>
-              <input
-                type="text"
-                id="name"
-                name="name"
-                value={formData.name}
-                onChange={handleChange}
-                className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-[#7F5AF0] focus:border-[#7F5AF0] transition-colors ${
-                  formErrors.name ? 'border-red-500' : 'border-gray-300'
-                }`}
-                placeholder="Enter your full name"
-                required
-              />
-              {formErrors.name && (
-                <p className="mt-1 text-sm text-red-600">{formErrors.name}</p>
-              )}
+        {/* Progress Indicators */}
+        <div className="flex justify-center mb-8">
+          <div className="flex items-center space-x-4">
+            <div className="flex items-center">
+              <div className="w-8 h-8 bg-[#7F5AF0] rounded-full flex items-center justify-center text-white text-sm font-bold">1</div>
+              <span className="ml-2 text-sm text-gray-600">Sign Up</span>
             </div>
-
-            {/* Email Field */}
-            <div>
-              <label htmlFor="email" className="block text-sm font-semibold text-gray-700 mb-2">
-                Email Address *
-              </label>
-              <input
-                type="email"
-                id="email"
-                name="email"
-                value={formData.email}
-                onChange={handleChange}
-                className={`w-full px-4 py-3 border rounded-lg bg-gray-50 focus:ring-2 focus:ring-[#7F5AF0] focus:border-[#7F5AF0] transition-colors ${
-                  formErrors.email ? 'border-red-500' : 'border-gray-300'
-                }`}
-                placeholder="Your email address"
-                required
-                disabled // Email is prefilled and disabled
-              />
-              {formErrors.email && (
-                <p className="mt-1 text-sm text-red-600">{formErrors.email}</p>
-              )}
+            <div className="w-12 h-0.5 bg-[#7F5AF0]"></div>
+            <div className="flex items-center">
+              <div className="w-8 h-8 bg-[#7F5AF0] rounded-full flex items-center justify-center text-white text-sm font-bold">2</div>
+              <span className="ml-2 text-sm text-[#7F5AF0] font-medium">Complete Profile</span>
             </div>
-
-            {/* Phone Field */}
-            <div>
-              <label htmlFor="phone" className="block text-sm font-semibold text-gray-700 mb-2">
-                Phone Number *
-              </label>
-              <input
-                type="tel"
-                id="phone"
-                name="phone"
-                value={formData.phone}
-                onChange={handleChange}
-                className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-[#7F5AF0] focus:border-[#7F5AF0] transition-colors ${
-                  formErrors.phone ? 'border-red-500' : 'border-gray-300'
-                }`}
-                placeholder="Enter your phone number"
-                required
-              />
-              {formErrors.phone && (
-                <p className="mt-1 text-sm text-red-600">{formErrors.phone}</p>
-              )}
+            <div className="w-12 h-0.5 bg-gray-300"></div>
+            <div className="flex items-center">
+              <div className="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center text-gray-600 text-sm font-bold">3</div>
+              <span className="ml-2 text-sm text-gray-500">Get Started</span>
             </div>
-
-            {/* Role Field */}
-            <div>
-              <label htmlFor="role" className="block text-sm font-semibold text-gray-700 mb-2">
-                Your Role *
-              </label>
-              <select
-                id="role"
-                name="role"
-                value={formData.role}
-                onChange={handleChange}
-                className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-[#7F5AF0] focus:border-[#7F5AF0] transition-colors ${
-                  formErrors.role ? 'border-red-500' : 'border-gray-300'
-                }`}
-                required
-              >
-                <option value="">Select your role</option>
-                <option value="Student">Student</option>
-                <option value="Creator">Creator</option>
-                <option value="Entrepreneur">Entrepreneur</option>
-                <option value="Other">Other</option>
-              </select>
-              {formErrors.role && (
-                <p className="mt-1 text-sm text-red-600">{formErrors.role}</p>
-              )}
-            </div>
-
-            {/* Submit Button */}
-            <div className="pt-6">
-              <button
-                type="submit"
-                disabled={isSubmitting}
-                className={`w-full py-3 px-6 rounded-lg text-white font-semibold text-lg transition-all duration-300 ${
-                  isSubmitting 
-                    ? 'bg-gray-400 cursor-not-allowed' 
-                    : 'bg-gradient-to-r from-[#7F5AF0] to-[#00FFC2] hover:from-[#6D4DC6] hover:to-[#00E6B3] transform hover:scale-105 shadow-lg hover:shadow-xl'
-                }`}
-              >
-                {isSubmitting ? (
-                  <div className="flex items-center justify-center">
-                    <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
-                    Completing Profile...
-                  </div>
-                ) : (
-                  'Complete Profile & Continue'
-                )}
-              </button>
-            </div>
-          </form>
+          </div>
         </div>
 
-        {/* Footer Note */}
-        <div className="text-center mt-8 text-gray-500">
-          <p>
-            By completing your profile, you agree to our{' '}
-            <a href="/policies/terms-and-conditions" className="text-[#7F5AF0] hover:underline">
-              Terms of Service
-            </a>{' '}
-            and{' '}
-            <a href="/policies/privacy-policy" className="text-[#7F5AF0] hover:underline">
-              Privacy Policy
-            </a>
-          </p>
+        {/* Main Form Container */}
+        <div className="bg-white rounded-3xl shadow-2xl border border-gray-100 overflow-hidden">
+          {/* Form Header */}
+          <div className="bg-gradient-to-r from-[#7F5AF0] to-[#00FFC2] p-8 text-center">
+            <h2 className="text-2xl font-bold text-white mb-2">Tell us about yourself</h2>
+            <p className="text-white/90">This helps us personalize your experience</p>
+          </div>
+
+          {/* Form Content */}
+          <div className="p-8 md:p-12">
+            <form onSubmit={handleSubmit} className="space-y-8">
+              {/* Name Field */}
+              <div className="relative">
+                <label htmlFor="name" className="block text-sm font-semibold text-gray-700 mb-3">
+                  Full Name *
+                </label>
+                <div className="relative">
+                  <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                    <User className={`w-5 h-5 transition-colors ${
+                      focusedField === 'name' ? 'text-[#7F5AF0]' : 'text-gray-400'
+                    }`} />
+                  </div>
+                  <input
+                    type="text"
+                    id="name"
+                    name="name"
+                    value={formData.name}
+                    onChange={handleChange}
+                    onFocus={() => handleFocus('name')}
+                    onBlur={handleBlur}
+                    className={`w-full pl-12 pr-4 py-4 border-2 rounded-xl text-lg transition-all duration-300 ${
+                      formErrors.name 
+                        ? 'border-red-500 focus:border-red-500' 
+                        : focusedField === 'name'
+                        ? 'border-[#7F5AF0] shadow-lg shadow-[#7F5AF0]/20'
+                        : 'border-gray-200 hover:border-gray-300'
+                    } focus:ring-0 focus:outline-none`}
+                    placeholder="Enter your full name"
+                    required
+                  />
+                </div>
+                {formErrors.name && (
+                  <div className="mt-2 flex items-center text-red-600">
+                    <AlertCircle className="w-4 h-4 mr-1" />
+                    <span className="text-sm">{formErrors.name}</span>
+                  </div>
+                )}
+              </div>
+
+              {/* Email Field */}
+              <div className="relative">
+                <label htmlFor="email" className="block text-sm font-semibold text-gray-700 mb-3">
+                  Email Address *
+                </label>
+                <div className="relative">
+                  <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                    <Mail className="w-5 h-5 text-gray-400" />
+                  </div>
+                  <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    value={formData.email}
+                    onChange={handleChange}
+                    className="w-full pl-12 pr-4 py-4 border-2 border-gray-200 rounded-xl text-lg bg-gray-50 cursor-not-allowed"
+                    placeholder="Your email address"
+                    required
+                    disabled
+                  />
+                  <div className="absolute inset-y-0 right-0 pr-4 flex items-center pointer-events-none">
+                    <Shield className="w-5 h-5 text-green-500" />
+                  </div>
+                </div>
+                <p className="mt-2 text-sm text-gray-500 flex items-center">
+                  <CheckCircle className="w-4 h-4 mr-1 text-green-500" />
+                  Email verified
+                </p>
+              </div>
+
+              {/* Phone Field */}
+              <div className="relative">
+                <label htmlFor="phone" className="block text-sm font-semibold text-gray-700 mb-3">
+                  Phone Number *
+                </label>
+                <div className="relative">
+                  <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                    <Phone className={`w-5 h-5 transition-colors ${
+                      focusedField === 'phone' ? 'text-[#7F5AF0]' : 'text-gray-400'
+                    }`} />
+                  </div>
+                  <input
+                    type="tel"
+                    id="phone"
+                    name="phone"
+                    value={formData.phone}
+                    onChange={handleChange}
+                    onFocus={() => handleFocus('phone')}
+                    onBlur={handleBlur}
+                    className={`w-full pl-12 pr-4 py-4 border-2 rounded-xl text-lg transition-all duration-300 ${
+                      formErrors.phone 
+                        ? 'border-red-500 focus:border-red-500' 
+                        : focusedField === 'phone'
+                        ? 'border-[#7F5AF0] shadow-lg shadow-[#7F5AF0]/20'
+                        : 'border-gray-200 hover:border-gray-300'
+                    } focus:ring-0 focus:outline-none`}
+                    placeholder="(555) 123-4567"
+                    required
+                  />
+                </div>
+                {formErrors.phone && (
+                  <div className="mt-2 flex items-center text-red-600">
+                    <AlertCircle className="w-4 h-4 mr-1" />
+                    <span className="text-sm">{formErrors.phone}</span>
+                  </div>
+                )}
+              </div>
+
+              {/* Role Field */}
+              <div className="relative">
+                <label htmlFor="role" className="block text-sm font-semibold text-gray-700 mb-3">
+                  Your Role *
+                </label>
+                <div className="relative">
+                  <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                    <Briefcase className={`w-5 h-5 transition-colors ${
+                      focusedField === 'role' ? 'text-[#7F5AF0]' : 'text-gray-400'
+                    }`} />
+                  </div>
+                  <select
+                    id="role"
+                    name="role"
+                    value={formData.role}
+                    onChange={handleChange}
+                    onFocus={() => handleFocus('role')}
+                    onBlur={handleBlur}
+                    className={`w-full pl-12 pr-4 py-4 border-2 rounded-xl text-lg transition-all duration-300 appearance-none bg-white ${
+                      formErrors.role 
+                        ? 'border-red-500 focus:border-red-500' 
+                        : focusedField === 'role'
+                        ? 'border-[#7F5AF0] shadow-lg shadow-[#7F5AF0]/20'
+                        : 'border-gray-200 hover:border-gray-300'
+                    } focus:ring-0 focus:outline-none cursor-pointer`}
+                    required
+                  >
+                    <option value="">Select your role</option>
+                    <option value="Student">🎓 Student</option>
+                    <option value="Creator">🎨 Creator</option>
+                    <option value="Entrepreneur">💼 Entrepreneur</option>
+                    <option value="Other">🔧 Other</option>
+                  </select>
+                  <div className="absolute inset-y-0 right-0 pr-4 flex items-center pointer-events-none">
+                    <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                    </svg>
+                  </div>
+                </div>
+                {formErrors.role && (
+                  <div className="mt-2 flex items-center text-red-600">
+                    <AlertCircle className="w-4 h-4 mr-1" />
+                    <span className="text-sm">{formErrors.role}</span>
+                  </div>
+                )}
+              </div>
+
+              {/* Form Benefits */}
+              <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-2xl p-6 my-8">
+                <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center">
+                  <Zap className="w-5 h-5 mr-2 text-[#7F5AF0]" />
+                  What you'll get:
+                </h3>
+                <div className="grid md:grid-cols-3 gap-4">
+                  <div className="flex items-center space-x-3">
+                    <div className="w-8 h-8 bg-[#7F5AF0] rounded-full flex items-center justify-center flex-shrink-0">
+                      <CheckCircle className="w-4 h-4 text-white" />
+                    </div>
+                    <span className="text-sm text-gray-700">Personalized AI tools</span>
+                  </div>
+                  <div className="flex items-center space-x-3">
+                    <div className="w-8 h-8 bg-[#7F5AF0] rounded-full flex items-center justify-center flex-shrink-0">
+                      <CheckCircle className="w-4 h-4 text-white" />
+                    </div>
+                    <span className="text-sm text-gray-700">Priority support</span>
+                  </div>
+                  <div className="flex items-center space-x-3">
+                    <div className="w-8 h-8 bg-[#7F5AF0] rounded-full flex items-center justify-center flex-shrink-0">
+                      <CheckCircle className="w-4 h-4 text-white" />
+                    </div>
+                    <span className="text-sm text-gray-700">Exclusive features</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Submit Button */}
+              <div className="pt-6">
+                <button
+                  type="submit"
+                  disabled={isSubmitting}
+                  className={`w-full py-5 px-8 rounded-2xl text-white font-bold text-lg transition-all duration-500 flex items-center justify-center space-x-3 ${
+                    isSubmitting 
+                      ? 'bg-gray-400 cursor-not-allowed transform scale-95' 
+                      : 'bg-gradient-to-r from-[#7F5AF0] to-[#00FFC2] hover:from-[#6D4DC6] hover:to-[#00E6B3] transform hover:scale-105 shadow-2xl hover:shadow-[#7F5AF0]/25'
+                  }`}
+                >
+                  {isSubmitting ? (
+                    <>
+                      <Loader className="w-6 h-6 animate-spin" />
+                      <span>Completing Profile...</span>
+                    </>
+                  ) : (
+                    <>
+                      <span>Complete Profile & Continue</span>
+                      <ArrowRight className="w-6 h-6" />
+                    </>
+                  )}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        {/* Security & Privacy Note */}
+        <div className="text-center mt-12 max-w-2xl mx-auto">
+          <div className="bg-white rounded-2xl shadow-lg p-6 border border-gray-100">
+            <div className="flex items-center justify-center mb-4">
+              <Shield className="w-6 h-6 text-green-500 mr-2" />
+              <span className="text-lg font-semibold text-gray-900">Your data is secure</span>
+            </div>
+            <p className="text-gray-600 text-sm leading-relaxed">
+              By completing your profile, you agree to our{' '}
+              <a href="/policies/terms-and-conditions" className="text-[#7F5AF0] hover:underline font-medium">
+                Terms of Service
+              </a>{' '}
+              and{' '}
+              <a href="/policies/privacy-policy" className="text-[#7F5AF0] hover:underline font-medium">
+                Privacy Policy
+              </a>
+              . We use industry-standard encryption to protect your information.
+            </p>
+          </div>
         </div>
       </div>
     </div>

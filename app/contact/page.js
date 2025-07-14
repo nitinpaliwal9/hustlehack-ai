@@ -1,6 +1,7 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { useAuth } from '../hooks/useAuth'
 import Navigation from '../components/Navigation'
 import Footer from '../components/Footer'
 import Link from 'next/link'
@@ -9,6 +10,8 @@ import '../legacy-styles.css'
 
 // Contact Form Component
 function ContactForm() {
+  const { user, isAuthenticated } = useAuth()
+  
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -16,6 +19,17 @@ function ContactForm() {
     message: '',
     priority: 'normal'
   })
+  
+  // Pre-fill form data for authenticated users
+  useEffect(() => {
+    if (isAuthenticated && user) {
+      setFormData(prev => ({
+        ...prev,
+        name: user.user_metadata?.name || user.email?.split('@')[0] || '',
+        email: user.email || ''
+      }))
+    }
+  }, [isAuthenticated, user])
   
   const [errors, setErrors] = useState({})
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -666,6 +680,8 @@ function ContactForm() {
 }
 
 export default function ContactPage() {
+  const { user, isAuthenticated } = useAuth()
+  
   return (
     <div>
       <Navigation />
@@ -681,6 +697,33 @@ export default function ContactPage() {
       }}>
         <div className="container">
           <div className="hero-content text-center">
+            {isAuthenticated && user && (
+              <div style={{
+                background: 'rgba(127, 90, 240, 0.1)',
+                border: '2px solid rgba(127, 90, 240, 0.3)',
+                borderRadius: '16px',
+                padding: '1.5rem',
+                marginBottom: '2rem',
+                maxWidth: '600px',
+                margin: '0 auto 2rem auto'
+              }}>
+                <p style={{
+                  fontSize: '1.125rem',
+                  color: 'var(--accent)',
+                  fontWeight: '600',
+                  margin: '0'
+                }}>
+                  👋 Welcome back, {user.user_metadata?.name || user.email?.split('@')[0] || 'Hustler'}!
+                </p>
+                <p style={{
+                  fontSize: '0.9rem',
+                  color: 'var(--text-secondary)',
+                  margin: '0.5rem 0 0 0'
+                }}>
+                  We're excited to hear from you. Share your thoughts, questions, or project ideas below.
+                </p>
+              </div>
+            )}
             <h1 className="hero-title" style={{
               fontSize: '3.5rem',
               fontWeight: '900',
@@ -704,7 +747,10 @@ export default function ContactPage() {
               fontWeight: '500',
               marginBottom: '3rem'
             }}>
-              Ready to supercharge your AI journey? We're here to help you unlock your potential with cutting-edge tools and personalized support.
+              {isAuthenticated 
+                ? "Thanks for signing in! We're here to help you with any questions or support you need."
+                : "Ready to supercharge your AI journey? We're here to help you unlock your potential with cutting-edge tools and personalized support."
+              }
             </p>
             
             {/* Quick Stats */}
