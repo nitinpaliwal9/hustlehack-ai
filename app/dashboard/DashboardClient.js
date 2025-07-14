@@ -18,7 +18,7 @@ export default function DashboardClient() {
   const [userData, setUserData] = useState({ 
     name: 'Hustler', 
     email: 'Email: Not available', 
-    plan: 'starter', 
+    plan: 'Not active', 
     expiry: 'Data not available' 
   });
   const [resources, setResources] = useState([]);
@@ -130,21 +130,16 @@ export default function DashboardClient() {
           console.error('[Dashboard] Error fetching user:', error.message);
           setProfileCheckError(true);
           
-          // Fallback resources to show even without database data
-          const fallbackResources = [
-            { id: 1, name: 'Social Media Prompt Pack', category: 'Toolkits & Templates', min_plan: 'starter', unlocked: userData.plan === 'creator' || userData.plan === 'pro' },
-            { id: 2, name: 'AI Content Generator', category: 'Weekly Drops', min_plan: 'creator', unlocked: userData.plan === 'creator' || userData.plan === 'pro' },
-            { id: 3, name: 'Advanced Automation Scripts', category: 'Pro Tools', min_plan: 'pro', unlocked: userData.plan === 'pro' },
-            { id: 4, name: 'Study Guide Templates', category: 'Prompt Packs', min_plan: 'starter', unlocked: userData.plan === 'creator' || userData.plan === 'pro' },
-            { id: 5, name: 'Business Plan Generator', category: 'Toolkits & Templates', min_plan: 'creator', unlocked: userData.plan === 'creator' || userData.plan === 'pro' },
-            { id: 6, name: 'Premium AI Models', category: 'Weekly Drops', min_plan: 'pro', unlocked: userData.plan === 'pro' }
-          ];
-          
-          setResources(fallbackResources);
-          setRecentActivity([
-            { action: 'accessed', resource_name: 'Social Media Prompt Pack', created_at: new Date().toISOString() },
-            { action: 'downloaded', resource_name: 'AI Content Generator', created_at: new Date(Date.now() - 86400000).toISOString() }
-          ]);
+          setUserData({
+            name: 'Data not available',
+            email: 'Data not available',
+            role: 'Data not available',
+            phone: 'Data not available',
+            plan: 'Not active',
+            expiry: 'Data not available'
+          });
+          setResources([]);
+          setRecentActivity([]);
         } finally {
           setLoading(false);
         }
@@ -253,7 +248,7 @@ export default function DashboardClient() {
           <div className="space-y-8">
             {/* Quick Stats */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <div className="bg-white rounded-xl shadow-lg p-6 border border-gray-200">
+              <div className="rounded-xl shadow-lg p-6 border border-[var(--border-color)]" style={{ background: 'var(--bg-surface)' }}>
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-sm text-gray-600">Current Plan</p>
@@ -262,7 +257,7 @@ export default function DashboardClient() {
                   <Zap className="w-8 h-8 text-purple-500" />
                 </div>
               </div>
-              <div className="bg-white rounded-xl shadow-lg p-6 border border-gray-200">
+              <div className="rounded-xl shadow-lg p-6 border border-[var(--border-color)]" style={{ background: 'var(--bg-surface)' }}>
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-sm text-gray-600">Tools Used</p>
@@ -271,7 +266,7 @@ export default function DashboardClient() {
                   <Brain className="w-8 h-8 text-blue-500" />
                 </div>
               </div>
-              <div className="bg-white rounded-xl shadow-lg p-6 border border-gray-200">
+              <div className="rounded-xl shadow-lg p-6 border border-[var(--border-color)]" style={{ background: 'var(--bg-surface)' }}>
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-sm text-gray-600">Achievements</p>
@@ -298,7 +293,7 @@ export default function DashboardClient() {
             </div>
 
             {/* Recent Activity */}
-            <div className="bg-white rounded-xl shadow-lg border border-gray-200 p-6">
+            <div className="rounded-xl shadow-lg border border-[var(--border-color)] p-6" style={{ background: 'var(--bg-surface)' }}>
               <h3 className="text-xl font-bold text-gray-900 mb-4">📊 Recent Activity</h3>
               {recentActivity.length > 0 ? (
                 <ul className="space-y-3">
@@ -338,7 +333,7 @@ export default function DashboardClient() {
             <h2 className="text-3xl font-bold text-gray-900">🏆 Your Achievements</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {/* Achievement cards will be here */}
-              <div className="bg-white rounded-xl shadow-lg p-6 border border-gray-200">
+              <div className="rounded-xl shadow-lg p-6 border border-[var(--border-color)]" style={{ background: 'var(--bg-surface)' }}>
                 <div className="text-center">
                   <div className="text-4xl mb-4">🎯</div>
                   <h3 className="text-lg font-semibold text-gray-900">First Steps</h3>
@@ -357,7 +352,7 @@ export default function DashboardClient() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
+    <div className="min-h-screen" style={{ background: 'var(--bg-primary)', color: 'var(--text-primary)' }}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Main Content Container */}
         <div className="pt-8 pb-16 space-y-8">
@@ -375,7 +370,7 @@ export default function DashboardClient() {
           </div>
 
           {/* Navigation Tabs */}
-          <div className="bg-white rounded-xl shadow-lg border border-gray-200 p-2">
+          <div className="rounded-xl shadow-lg border border-[var(--border-color)] p-2" style={{ background: 'var(--bg-surface)' }}>
             <nav className="flex space-x-2">
               {tabs.map((tab) => (
                 <button
@@ -400,7 +395,7 @@ export default function DashboardClient() {
           </div>
 
           {/* Plan Info Card */}
-          <div className="bg-white rounded-2xl shadow-lg border border-gray-200 hover:shadow-xl transition-all duration-300 transform hover:scale-[1.02] animate-slide-up">
+          <div className="rounded-2xl shadow-lg border border-[var(--border-color)] hover:shadow-xl transition-all duration-300 transform hover:scale-[1.02] animate-slide-up" style={{ background: 'var(--bg-surface)' }}>
             <div className="p-6 sm:p-8 lg:p-10">
               <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
                 <div className="flex-1 space-y-4">
@@ -433,7 +428,7 @@ export default function DashboardClient() {
 
           {/* Plan Expiry Warning */}
           {userData.expiry !== 'Data not available' && new Date(userData.expiry) - new Date() < 5 * 24 * 60 * 60 * 1000 && (
-            <div className="bg-yellow-50 border border-yellow-200 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300">
+            <div className="bg-yellow-50 border border-yellow-200 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300" style={{ background: 'var(--bg-surface)' }}>
               <div className="p-6 sm:p-8">
                 <div className="flex items-start gap-4">
                   <div className="flex-shrink-0">
@@ -484,7 +479,7 @@ export default function DashboardClient() {
                 Track your latest interactions and resource usage
               </p>
             </div>
-            <div className="bg-white rounded-2xl shadow-lg border border-gray-200 hover:shadow-xl transition-all duration-300">
+            <div className="rounded-2xl shadow-lg border border-[var(--border-color)] hover:shadow-xl transition-all duration-300" style={{ background: 'var(--bg-surface)' }}>
               <div className="p-6 sm:p-8">
                 {recentActivity.length > 0 ? (
                   <ul className="space-y-3">
@@ -511,7 +506,7 @@ export default function DashboardClient() {
           </div>
 
           {/* Call to Action */}
-          <div className="bg-gradient-to-r from-[#7F5AF0] to-[#00FFC2] rounded-2xl shadow-lg hover:shadow-xl transform hover:scale-[1.02] transition-all duration-300">
+          <div className="bg-gradient-to-r from-[#7F5AF0] to-[#00FFC2] rounded-2xl shadow-lg hover:shadow-xl transform hover:scale-[1.02] transition-all duration-300" style={{ background: 'var(--bg-surface)' }}>
             <div className="p-8 sm:p-10 text-center text-white">
               <div className="space-y-6">
                 <div className="space-y-2">

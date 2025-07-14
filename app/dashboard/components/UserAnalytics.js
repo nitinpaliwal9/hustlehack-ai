@@ -22,64 +22,80 @@ export default function UserAnalytics({ user, userProfile }) {
   const [selectedTimeframe, setSelectedTimeframe] = useState('week')
   const [isLoading, setIsLoading] = useState(true)
 
-  // Mock data - in production, this would come from your database
+  // Fetch analytics from Supabase
   useEffect(() => {
     const fetchAnalytics = async () => {
-      setIsLoading(true)
-      
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1500))
-      
-      const mockAnalytics = {
-        totalUsage: 247,
-        streakDays: 12,
-        completedTasks: 38,
-        toolsUsed: 15,
-        learningProgress: 65,
-        weeklyActivity: [
-          { name: 'Mon', usage: 45, tasks: 8 },
-          { name: 'Tue', usage: 52, tasks: 12 },
-          { name: 'Wed', usage: 38, tasks: 6 },
-          { name: 'Thu', usage: 65, tasks: 15 },
-          { name: 'Fri', usage: 47, tasks: 9 },
-          { name: 'Sat', usage: 35, tasks: 7 },
-          { name: 'Sun', usage: 28, tasks: 4 }
-        ],
-        categoryUsage: [
-          { name: 'Content Creation', value: 35, color: '#7F5AF0' },
-          { name: 'AI Tools', value: 28, color: '#00FFC2' },
-          { name: 'Templates', value: 20, color: '#FFE27A' },
-          { name: 'Automation', value: 17, color: '#FF6B6B' }
-        ],
-        progressData: [
-          { week: 'Week 1', progress: 15, tasks: 5 },
-          { week: 'Week 2', progress: 28, tasks: 12 },
-          { week: 'Week 3', progress: 45, tasks: 18 },
-          { week: 'Week 4', progress: 65, tasks: 25 }
-        ],
-        achievements: [
-          { id: 1, title: 'First Steps', description: 'Complete your first task', icon: '🎯', unlocked: true, date: '2024-01-15' },
-          { id: 2, title: 'Streak Master', description: '7-day usage streak', icon: '🔥', unlocked: true, date: '2024-01-20' },
-          { id: 3, title: 'AI Explorer', description: 'Use 10 different AI tools', icon: '🤖', unlocked: true, date: '2024-01-25' },
-          { id: 4, title: 'Content Creator', description: 'Generate 50 pieces of content', icon: '✍️', unlocked: false, progress: 67 },
-          { id: 5, title: 'Automation Expert', description: 'Create 5 automation workflows', icon: '⚡', unlocked: false, progress: 40 },
-          { id: 6, title: 'Learning Champion', description: 'Complete 100 learning modules', icon: '🎓', unlocked: false, progress: 25 }
-        ],
-        learningPath: [
-          { id: 1, title: 'AI Fundamentals', completed: true, progress: 100, modules: 8, timeSpent: 120 },
-          { id: 2, title: 'Content Creation Mastery', completed: true, progress: 100, modules: 12, timeSpent: 180 },
-          { id: 3, title: 'Automation Basics', completed: false, progress: 75, modules: 10, timeSpent: 95 },
-          { id: 4, title: 'Advanced AI Tools', completed: false, progress: 30, modules: 15, timeSpent: 45 },
-          { id: 5, title: 'Business Applications', completed: false, progress: 0, modules: 20, timeSpent: 0 }
-        ]
+      setIsLoading(true);
+      try {
+        // TODO: Replace with actual Supabase client from context/props
+        const supabase = null;
+        if (!user || !supabase) {
+          setAnalytics({
+            totalUsage: 0,
+            streakDays: 0,
+            completedTasks: 0,
+            toolsUsed: 0,
+            learningProgress: 0,
+            weeklyActivity: [],
+            categoryUsage: [],
+            progressData: [],
+            achievements: [],
+            learningPath: []
+          });
+          setIsLoading(false);
+          return;
+        }
+        // Example: Fetch analytics from a 'user_analytics' table
+        const { data, error } = await supabase
+          .from('user_analytics')
+          .select('*')
+          .eq('user_id', user.id)
+          .single();
+        if (error || !data) {
+          setAnalytics({
+            totalUsage: 0,
+            streakDays: 0,
+            completedTasks: 0,
+            toolsUsed: 0,
+            learningProgress: 0,
+            weeklyActivity: [],
+            categoryUsage: [],
+            progressData: [],
+            achievements: [],
+            learningPath: []
+          });
+        } else {
+          setAnalytics({
+            totalUsage: data.total_usage || 0,
+            streakDays: data.streak_days || 0,
+            completedTasks: data.completed_tasks || 0,
+            toolsUsed: data.tools_used || 0,
+            learningProgress: data.learning_progress || 0,
+            weeklyActivity: data.weekly_activity || [],
+            categoryUsage: data.category_usage || [],
+            progressData: data.progress_data || [],
+            achievements: data.achievements || [],
+            learningPath: data.learning_path || []
+          });
+        }
+      } catch (e) {
+        setAnalytics({
+          totalUsage: 0,
+          streakDays: 0,
+          completedTasks: 0,
+          toolsUsed: 0,
+          learningProgress: 0,
+          weeklyActivity: [],
+          categoryUsage: [],
+          progressData: [],
+          achievements: [],
+          learningPath: []
+        });
       }
-      
-      setAnalytics(mockAnalytics)
-      setIsLoading(false)
-    }
-    
-    fetchAnalytics()
-  }, [selectedTimeframe])
+      setIsLoading(false);
+    };
+    fetchAnalytics();
+  }, [selectedTimeframe, user]);
 
   const StatCard = ({ title, value, icon: Icon, subtitle, color = 'from-blue-500 to-purple-600', trend }) => (
     <div className="bg-white rounded-xl shadow-lg border border-gray-200 p-6 hover:shadow-xl transition-all duration-300 transform hover:scale-105">

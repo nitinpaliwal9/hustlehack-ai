@@ -46,80 +46,32 @@ export default function PromptLibrary({ userPlan = 'starter' }) {
     { id: 'education', name: 'Education', icon: BookOpen }
   ]
 
-  // Mock data - in production, this would come from your database
+  // Fetch prompts from Supabase
   useEffect(() => {
     const fetchPrompts = async () => {
-      setLoading(true)
-      
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000))
-      
-      const mockPrompts = [
-        {
-          id: 1,
-          title: 'Blog Post Generator',
-          description: 'Generate engaging blog posts on any topic',
-          content: 'Write a comprehensive blog post about [TOPIC]. Include an engaging introduction, 3-5 main points with examples, and a strong conclusion. Make it SEO-friendly and actionable.',
-          category: 'content',
-          tags: ['blog', 'seo', 'writing'],
-          author: 'John Doe',
-          isPublic: true,
-          likes: 45,
-          uses: 123,
-          createdAt: '2024-01-15',
-          isOwner: true
-        },
-        {
-          id: 2,
-          title: 'Social Media Caption',
-          description: 'Create engaging captions for social media posts',
-          content: 'Create an engaging [PLATFORM] caption for [CONTENT TYPE]. Include relevant hashtags, a call-to-action, and make it [TONE]. Keep it under [CHARACTER LIMIT] characters.',
-          category: 'social',
-          tags: ['social media', 'captions', 'engagement'],
-          author: 'Jane Smith',
-          isPublic: true,
-          likes: 32,
-          uses: 89,
-          createdAt: '2024-01-20',
-          isOwner: false
-        },
-        {
-          id: 3,
-          title: 'Email Marketing Template',
-          description: 'Professional email marketing campaigns',
-          content: 'Write a professional email marketing campaign for [PRODUCT/SERVICE]. Include a compelling subject line, personalized greeting, value proposition, benefits, and clear call-to-action.',
-          category: 'marketing',
-          tags: ['email', 'marketing', 'conversion'],
-          author: 'Mike Johnson',
-          isPublic: true,
-          likes: 67,
-          uses: 156,
-          createdAt: '2024-01-10',
-          isOwner: false
-        },
-        {
-          id: 4,
-          title: 'Code Review Assistant',
-          description: 'Get detailed code reviews and suggestions',
-          content: 'Review the following [LANGUAGE] code and provide detailed feedback on: 1) Code quality and best practices 2) Potential bugs or issues 3) Performance optimizations 4) Security considerations 5) Improvement suggestions\n\nCode:\n[CODE_HERE]',
-          category: 'coding',
-          tags: ['code review', 'programming', 'debugging'],
-          author: 'You',
-          isPublic: false,
-          likes: 0,
-          uses: 12,
-          createdAt: '2024-01-25',
-          isOwner: true
+      setLoading(true);
+      try {
+        // TODO: Replace with actual Supabase client from context/props
+        const supabase = null;
+        // Example: Fetch prompts from a 'prompts' table
+        const { data, error } = await supabase
+          .from('prompts')
+          .select('*');
+        if (error || !data) {
+          setPrompts([]);
+          setFilteredPrompts([]);
+        } else {
+          setPrompts(data);
+          setFilteredPrompts(data);
         }
-      ]
-      
-      setPrompts(mockPrompts)
-      setFilteredPrompts(mockPrompts)
-      setLoading(false)
-    }
-    
-    fetchPrompts()
-  }, [])
+      } catch (e) {
+        setPrompts([]);
+        setFilteredPrompts([]);
+      }
+      setLoading(false);
+    };
+    fetchPrompts();
+  }, []);
 
   // Filter prompts based on search and category
   useEffect(() => {
