@@ -84,9 +84,9 @@ export function useAuth() {
               window.location.href = '/complete-profile'
             }
           } else if (profileStatus === 'complete') {
-            console.log('✅ Profile complete, redirecting to contact form')
+            console.log('✅ Profile complete, redirecting to dashboard')
             if (typeof window !== 'undefined') {
-              window.location.href = '/contact'
+              window.location.href = '/dashboard'
             }
           }
         }
