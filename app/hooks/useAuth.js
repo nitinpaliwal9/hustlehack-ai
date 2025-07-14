@@ -366,57 +366,157 @@ export function useAuth() {
     setError(null)
 
     try {
-      console.log('Starting profile completion for user:', user.id)
-      console.log('Profile data:', profileData)
+      console.log('🔄 Starting profile completion for user:', user.id)
+      console.log('📋 Profile data:', profileData)
+      console.log('🔐 User auth details:', {
+        id: user.id,
+        email: user.email,
+        email_confirmed_at: user.email_confirmed_at,
+        role: user.role
+      })
 
-      // Update user profile in database
-      const { data: insertData, error: insertError } = await supabase
+      // Check if user exists in database first
+      console.log('🔍 Checking if user exists in database...')
+      const { data: existingUser, error: checkError } = await supabase
         .from('users')
-        .upsert({
-          id: user.id,
-          email: user.email,
-          name: profileData.name,
-          phone: profileData.phone,
-          role: profileData.role,
-          profile_completed: true,
-          last_login: new Date().toISOString(),
-          created_at: new Date().toISOString(),
-          updated_at: new Date().toISOString()
+        .select('id, email, name, role, profile_completed')
+        .eq('id', user.id)
+        .single()
+
+      if (checkError && checkError.code !== 'PGRST116') {
+        console.error('❌ Error checking existing user:', checkError)
+        console.error('❌ Error details:', {
+          code: checkError.code,
+          message: checkError.message,
+          details: checkError.details,
+          hint: checkError.hint
         })
+        
+        // Check for RLS policy violations
+        if (checkError.message?.includes('permission denied') || 
+            checkError.message?.includes('insufficient privileges') ||
+            checkError.code === '42501') {
+          throw new Error('Database permission denied. Please contact support if this persists.')
+        }
+        
+        throw checkError
+      }
+
+      if (existingUser) {
+        console.log('👤 Found existing user:', existingUser)
+      } else {
+        console.log('🆕 New user - will be created')
+      }
+
+      // Prepare upsert data
+      const upsertData = {
+        id: user.id,
+        email: user.email,
+        name: profileData.name,
+        phone: profileData.phone,
+        role: profileData.role,
+        profile_completed: true,
+        last_login: new Date().toISOString(),
+        updated_at: new Date().toISOString()
+      }
+
+      // Add created_at only for new users
+      if (!existingUser) {
+        upsertData.created_at = new Date().toISOString()
+      }
+
+      console.log('💾 Upserting user profile with data:', upsertData)
+
+      // Add timeout to prevent infinite hanging
+      const timeoutPromise = new Promise((_, reject) => {
+        setTimeout(() => reject(new Error('Profile completion timed out after 30 seconds')), 30000)
+      })
+
+      const upsertPromise = supabase
+        .from('users')
+        .upsert(upsertData)
         .select()
 
+      const { data: insertData, error: insertError } = await Promise.race([
+        upsertPromise,
+        timeoutPromise
+      ])
+
       if (insertError) {
-        console.error('Profile completion error:', insertError)
+        console.error('❌ Profile completion error:', insertError)
+        console.error('❌ Error details:', {
+          code: insertError.code,
+          message: insertError.message,
+          details: insertError.details,
+          hint: insertError.hint
+        })
+        
+        // Enhanced error handling for common issues
+        if (insertError.message?.includes('permission denied') || 
+            insertError.message?.includes('insufficient privileges') ||
+            insertError.code === '42501') {
+          throw new Error('Database permission denied. Row-Level Security may be blocking this operation.')
+        }
+        
+        if (insertError.message?.includes('violates row-level security policy')) {
+          throw new Error('Profile update blocked by security policy. Please contact support.')
+        }
+        
+        if (insertError.message?.includes('duplicate key')) {
+          throw new Error('User profile already exists. Please refresh the page and try again.')
+        }
+        
+        if (insertError.message?.includes('timeout') || insertError.code === '57014') {
+          throw new Error('Database operation timed out. Please check your internet connection and try again.')
+        }
+        
         throw insertError
       }
 
-      console.log('Profile completion successful:', insertData)
+      console.log('✅ Profile completion successful:', insertData)
 
-      // Update auth user metadata
-      const { data: authData, error: authError } = await supabase.auth.updateUser({
-        data: {
-          name: profileData.name,
-          phone: profileData.phone,
-          role: profileData.role
+      // Update auth user metadata (non-blocking)
+      try {
+        console.log('🔄 Updating auth user metadata...')
+        const { data: authData, error: authError } = await supabase.auth.updateUser({
+          data: {
+            name: profileData.name,
+            phone: profileData.phone,
+            role: profileData.role
+          }
+        })
+
+        if (authError) {
+          console.warn('⚠️ Auth metadata update error (non-critical):', authError)
+        } else {
+          console.log('✅ Auth metadata updated successfully')
         }
-      })
-
-      if (authError) {
-        console.error('Auth metadata update error:', authError)
-        // Don't throw here as the main profile update was successful
+      } catch (authError) {
+        console.warn('⚠️ Auth metadata update failed (non-critical):', authError)
       }
 
       if (typeof window !== 'undefined' && window.showNotification) {
         window.showNotification('✅ Profile completed successfully!', 'success')
       }
 
-      return { profileData: insertData, authData }
+      return { profileData: insertData }
     } catch (error) {
-      console.error('Complete profile error:', error)
+      console.error('❌ Complete profile error:', error)
+      console.error('❌ Error stack:', error.stack)
+      
       setError(error.message)
       
+      let userMessage = error.message
+      if (error.message.includes('not authenticated')) {
+        userMessage = 'Please sign in again and try completing your profile.'
+      } else if (error.message.includes('timed out')) {
+        userMessage = 'The operation timed out. Please check your internet connection and try again.'
+      } else if (error.message.includes('permission denied')) {
+        userMessage = 'Permission denied. Please contact support if this issue persists.'
+      }
+      
       if (typeof window !== 'undefined' && window.showNotification) {
-        window.showNotification(`❌ Failed to complete profile: ${error.message}`, 'error')
+        window.showNotification(`❌ Failed to complete profile: ${userMessage}`, 'error')
       }
       
       throw error
