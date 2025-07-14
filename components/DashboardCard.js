@@ -3,12 +3,13 @@
 import React from 'react'
 
 export default function DashboardCard({ resource, onAccess }) {
-  const getResourceIcon = (category) => {
-    switch (category) {
-      case 'Toolkits & Templates': return '🛠️'
-      case 'Weekly Drops': return '📦'
-      case 'Pro Tools': return '⚡'
-      case 'Prompt Packs': return '📝'
+  const getResourceIcon = (type) => {
+    switch (type) {
+      case 'template': return '🛠️'
+      case 'prompt_pack': return '📝'
+      case 'video': return '🎥'
+      case 'pdf': return '📄'
+      case 'notion': return '📓'
       default: return '📄'
     }
   }
@@ -23,12 +24,12 @@ export default function DashboardCard({ resource, onAccess }) {
         {/* Header Section */}
         <div className="flex items-start justify-between mb-6">
           <div className="flex items-start gap-4 flex-1">
-            <div className="text-4xl animate-bounce flex-shrink-0">{getResourceIcon(resource.category)}</div>
+            <div className="text-4xl animate-bounce flex-shrink-0">{getResourceIcon(resource.type)}</div>
             <div className="flex-1 min-w-0">
               <h3 className="text-xl font-bold text-gray-900 hover:text-[#7F5AF0] transition-colors leading-tight mb-1">
-                {resource.name}
+                {resource.name || resource.title}
               </h3>
-              <p className="text-sm text-gray-500">{resource.category}</p>
+              <p className="text-sm text-gray-500">{resource.category || resource.type}</p>
             </div>
           </div>
           {resource.unlocked ? (

@@ -98,28 +98,46 @@ export function useAuth() {
 
   // Check user profile status
   const checkUserProfile = async (user) => {
+    if (!supabase || !user) {
+      console.warn('Supabase not initialized or user not provided')
+      return 'error'
+    }
+
     try {
       const { data: existingUser, error } = await supabase
         .from('users')
-        .select('id, name, email, role, profile_completed')
+        .select('id, name, email, role, profile_completed, phone')
         .eq('id', user.id)
         .single()
 
-      if (error && error.code !== 'PGRST116') {
-        console.error('Error checking user profile:', error)
-        return 'error'
+      if (error) {
+        console.warn('Error checking user profile:', error)
+        // If user doesn't exist (PGRST116), they need to complete profile
+        if (error.code === 'PGRST116') {
+          console.log('📝 User profile missing - needs completion')
+          return 'incomplete'
+        }
+        // For other errors, assume incomplete to be safe
+        return 'incomplete'
       }
 
-      if (existingUser && existingUser.profile_completed === true) {
+      // Check if profile is truly complete
+      const isComplete = existingUser && 
+        existingUser.profile_completed === true && 
+        existingUser.name && 
+        existingUser.role && 
+        existingUser.phone
+
+      if (isComplete) {
         console.log('✅ User profile complete')
         return 'complete'
       } else {
-        console.log('📝 User profile incomplete or missing')
+        console.log('📝 User profile incomplete')
         return 'incomplete'
       }
     } catch (error) {
       console.error('Error in checkUserProfile:', error)
-      return 'error'
+      return 'incomplete' // Default to incomplete for safety
     }
   }
 

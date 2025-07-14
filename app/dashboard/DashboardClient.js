@@ -56,12 +56,18 @@ export default function DashboardClient() {
           .eq('user_id', user.id)
           .single();
 
-        if (subError) throw subError;
+        if (subError) {
+          console.warn('Subscription error:', subError);
+          // Don't throw error, use fallback data instead
+        }
 
         const { data: resources, error: resError } = await supabase
           .from('resources')
-          .select('id, name, category, min_plan');
-        if (resError) throw resError;
+          .select('id, title, type, plan_required, description, download_url');
+        if (resError) {
+          console.warn('Resources error:', resError);
+          // Continue with empty resources array
+        }
 
         const { data: activity, error: actError } = await supabase
           .from('user_activity')
@@ -69,7 +75,10 @@ export default function DashboardClient() {
           .eq('user_id', user.id)
           .order('created_at', { ascending: false })
           .limit(5);
-        if (actError) throw actError;
+        if (actError) {
+          console.warn('Activity error:', actError);
+          // Continue with empty activity array
+        }
 
         // Get user profile data
         const { data: userProfile, error: profileError } = await supabase
@@ -87,9 +96,12 @@ export default function DashboardClient() {
           expiry: subscription?.expiry_date || 'Data not available'
         });
 
-        const unlockedResources = resources.map(resource => ({
+        const unlockedResources = (resources || []).map(resource => ({
           ...resource,
-          unlocked: subscription?.plan_name && subscription.plan_name.localeCompare(resource.min_plan) >= 0
+          name: resource.title, // Map title to name for compatibility
+          category: resource.type, // Map type to category for compatibility
+          min_plan: resource.plan_required, // Map plan_required to min_plan for compatibility
+          unlocked: subscription?.plan_name && subscription.plan_name.localeCompare(resource.plan_required) >= 0
         }));
 
         setResources(unlockedResources);
