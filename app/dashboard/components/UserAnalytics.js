@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, LineChart, Line, AreaChart, Area } from 'recharts'
 import { TrendingUp, Target, Clock, Award, Brain, Zap, Activity, Users, Calendar, Trophy } from 'lucide-react'
 import ShareAchievement from './ShareAchievement'
+import { createClient } from '@supabase/supabase-js';
 
 export default function UserAnalytics({ user, userProfile }) {
   const [analytics, setAnalytics] = useState({
@@ -28,7 +29,7 @@ export default function UserAnalytics({ user, userProfile }) {
       setIsLoading(true);
       try {
         // TODO: Replace with actual Supabase client from context/props
-        const supabase = null;
+        const supabase = createClient();
         if (!user || !supabase) {
           setAnalytics({
             totalUsage: 0,

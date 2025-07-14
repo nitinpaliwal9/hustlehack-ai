@@ -193,16 +193,16 @@ export default function DashboardClient() {
   }
 
   if (loading) return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">
+    <div className="min-h-screen flex items-center justify-center" style={{ background: 'var(--bg-primary)' }}>
       <div className="text-center animate-fade-in">
         <div className="relative mb-8">
-          <div className="animate-spin rounded-full h-20 w-20 border-4 border-[#7F5AF0] border-t-transparent mx-auto"></div>
-          <div className="absolute inset-0 rounded-full bg-gradient-to-r from-[#7F5AF0] to-[#00FFC2] opacity-20 animate-pulse"></div>
+          <div className="animate-spin rounded-full h-20 w-20 border-4 border-[var(--primary)] border-t-transparent mx-auto"></div>
+          <div className="absolute inset-0 rounded-full bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] opacity-20 animate-pulse"></div>
         </div>
-        <p className="text-2xl text-gray-700 font-bold mb-2">Loading your dashboard...</p>
-        <p className="text-gray-500 text-lg">Preparing your personalized experience</p>
-        <div className="mt-6 w-64 mx-auto bg-gray-200 rounded-full h-2 overflow-hidden">
-          <div className="h-full bg-gradient-to-r from-[#7F5AF0] to-[#00FFC2] animate-shimmer"></div>
+        <p className="text-2xl font-bold mb-2" style={{ color: 'var(--text-primary)' }}>Loading your dashboard...</p>
+        <p className="text-lg" style={{ color: 'var(--text-secondary)' }}>Preparing your personalized experience</p>
+        <div className="mt-6 w-64 mx-auto rounded-full h-2 overflow-hidden" style={{ background: 'var(--bg-surface)' }}>
+          <div className="h-full bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] animate-shimmer"></div>
         </div>
       </div>
     </div>
@@ -248,7 +248,7 @@ export default function DashboardClient() {
           <div className="space-y-8">
             {/* Quick Stats */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <div className="rounded-xl shadow-lg p-6 border border-[var(--border-color)]" style={{ background: 'var(--bg-surface)' }}>
+              <div className="rounded-xl shadow-lg p-6 border border-[var(--border-color)]" style={{ background: 'rgba(36,41,46,0.96)' }}>
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-sm text-gray-600">Current Plan</p>
@@ -257,7 +257,7 @@ export default function DashboardClient() {
                   <Zap className="w-8 h-8 text-purple-500" />
                 </div>
               </div>
-              <div className="rounded-xl shadow-lg p-6 border border-[var(--border-color)]" style={{ background: 'var(--bg-surface)' }}>
+              <div className="rounded-xl shadow-lg p-6 border border-[var(--border-color)]" style={{ background: 'rgba(36,41,46,0.96)' }}>
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-sm text-gray-600">Tools Used</p>
@@ -266,7 +266,7 @@ export default function DashboardClient() {
                   <Brain className="w-8 h-8 text-blue-500" />
                 </div>
               </div>
-              <div className="rounded-xl shadow-lg p-6 border border-[var(--border-color)]" style={{ background: 'var(--bg-surface)' }}>
+              <div className="rounded-xl shadow-lg p-6 border border-[var(--border-color)]" style={{ background: 'rgba(36,41,46,0.96)' }}>
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-sm text-gray-600">Achievements</p>
@@ -293,7 +293,7 @@ export default function DashboardClient() {
             </div>
 
             {/* Recent Activity */}
-            <div className="rounded-xl shadow-lg border border-[var(--border-color)] p-6" style={{ background: 'var(--bg-surface)' }}>
+            <div className="rounded-xl shadow-lg border border-[var(--border-color)] p-6" style={{ background: 'rgba(36,41,46,0.96)' }}>
               <h3 className="text-xl font-bold text-gray-900 mb-4">📊 Recent Activity</h3>
               {recentActivity.length > 0 ? (
                 <ul className="space-y-3">
@@ -333,7 +333,7 @@ export default function DashboardClient() {
             <h2 className="text-3xl font-bold text-gray-900">🏆 Your Achievements</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {/* Achievement cards will be here */}
-              <div className="rounded-xl shadow-lg p-6 border border-[var(--border-color)]" style={{ background: 'var(--bg-surface)' }}>
+              <div className="rounded-xl shadow-lg p-6 border border-[var(--border-color)]" style={{ background: 'rgba(36,41,46,0.96)' }}>
                 <div className="text-center">
                   <div className="text-4xl mb-4">🎯</div>
                   <h3 className="text-lg font-semibold text-gray-900">First Steps</h3>
@@ -355,13 +355,13 @@ export default function DashboardClient() {
     <div className="min-h-screen" style={{ background: 'var(--bg-primary)', color: 'var(--text-primary)' }}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Main Content Container */}
-        <div className="pt-8 pb-16 space-y-8">
+        <div className="pt-4 sm:pt-8 pb-8 sm:pb-16 space-y-6 sm:space-y-8">
           {/* Header Section */}
           <div className="text-center space-y-4 animate-fade-in">
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 transition-all duration-300 transform hover:scale-105 hover:text-[#7F5AF0]">
+            <h1 className="text-2xl sm:text-4xl lg:text-5xl font-bold text-gray-900 transition-all duration-300 transform hover:scale-105 hover:text-[#7F5AF0]">
               👋 {userData.name === 'Hustler' ? 'Hello, Hustler!' : `Hello, ${userData.name}!`}
             </h1>
-            <p className="text-lg sm:text-xl text-gray-600 max-w-3xl mx-auto">
+            <p className="text-base sm:text-lg text-gray-600 max-w-3xl mx-auto">
               ✉️ {userData.email === 'Email: Not available' ? 
                 <span className="text-gray-400 italic">Email: Not available</span> : 
                 userData.email
@@ -371,16 +371,31 @@ export default function DashboardClient() {
 
           {/* Navigation Tabs */}
           <div className="rounded-xl shadow-lg border border-[var(--border-color)] p-2" style={{ background: 'var(--bg-surface)' }}>
-            <nav className="flex space-x-2">
-              {tabs.map((tab) => (
+            <nav className="flex space-x-2" role="tablist" aria-label="Dashboard navigation tabs">
+              {tabs.map((tab, idx) => (
                 <button
                   key={tab.id}
+                  role="tab"
+                  aria-selected={activeTab === tab.id}
+                  aria-controls={`tabpanel-${tab.id}`}
+                  id={`tab-${tab.id}`}
+                  tabIndex={activeTab === tab.id ? 0 : -1}
                   onClick={() => setActiveTab(tab.id)}
-                  className={`flex items-center gap-2 px-4 py-3 rounded-lg font-medium transition-all duration-300 ${
+                  onKeyDown={e => {
+                    if (e.key === 'ArrowRight') {
+                      setActiveTab(tabs[(idx + 1) % tabs.length].id);
+                      e.preventDefault();
+                    } else if (e.key === 'ArrowLeft') {
+                      setActiveTab(tabs[(idx - 1 + tabs.length) % tabs.length].id);
+                      e.preventDefault();
+                    }
+                  }}
+                  className={`flex items-center gap-2 px-4 py-3 rounded-lg font-medium transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)] focus-visible:ring-offset-2 ${
                     activeTab === tab.id
-                      ? 'bg-purple-600 text-white shadow-lg'
-                      : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
+                      ? 'bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] text-black shadow-lg'
+                      : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[rgba(255,255,255,0.05)]'
                   }`}
+                  style={{ minWidth: 140 }}
                 >
                   <tab.icon className="w-5 h-5" />
                   {tab.name}
@@ -390,7 +405,7 @@ export default function DashboardClient() {
           </div>
 
           {/* Tab Content */}
-          <div className="animate-fade-in">
+          <div className="animate-fade-in" id={`tabpanel-${activeTab}`} role="tabpanel" aria-labelledby={`tab-${activeTab}`}> 
             {renderTabContent()}
           </div>
 
@@ -450,10 +465,10 @@ export default function DashboardClient() {
           {/* Resources Section */}
           <div className="space-y-8">
             <div className="text-center space-y-2">
-              <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 hover:text-[#7F5AF0] transition-colors">
+              <h2 className="text-xl sm:text-3xl font-bold text-gray-900 hover:text-[#7F5AF0] transition-colors">
                 🚀 Your Resources
               </h2>
-              <p className="text-gray-600 max-w-2xl mx-auto">
+              <p className="text-sm sm:text-base text-gray-600 max-w-2xl mx-auto">
                 Access your tools, templates, and premium content based on your subscription plan
               </p>
             </div>
@@ -472,10 +487,10 @@ export default function DashboardClient() {
           {/* Recent Activity */}
           <div className="space-y-8">
             <div className="text-center space-y-2">
-              <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 hover:text-[#7F5AF0] transition-colors">
+              <h2 className="text-xl sm:text-3xl font-bold text-gray-900 hover:text-[#7F5AF0] transition-colors">
                 📊 Recent Activity
               </h2>
-              <p className="text-gray-600 max-w-2xl mx-auto">
+              <p className="text-sm sm:text-base text-gray-600 max-w-2xl mx-auto">
                 Track your latest interactions and resource usage
               </p>
             </div>
@@ -510,16 +525,16 @@ export default function DashboardClient() {
             <div className="p-8 sm:p-10 text-center text-white">
               <div className="space-y-6">
                 <div className="space-y-2">
-                  <h3 className="text-2xl sm:text-3xl font-bold">🎯 Ready to Upgrade?</h3>
-                  <p className="text-lg sm:text-xl opacity-90 max-w-2xl mx-auto">
+                  <h3 className="text-lg sm:text-2xl font-bold">🎯 Ready to Upgrade?</h3>
+                  <p className="text-sm sm:text-lg opacity-90 max-w-2xl mx-auto">
                     Unlock premium features and boost your productivity
                   </p>
                 </div>
-                <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-                  <Link href="/#pricing" className="bg-white text-[#7F5AF0] px-8 py-4 rounded-xl font-bold text-lg hover:bg-gray-50 transition-all duration-300 shadow-md hover:shadow-lg transform hover:scale-105">
+                <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4">
+                  <Link href="/#pricing" className="bg-white text-[#7F5AF0] px-6 sm:px-8 py-3 sm:py-4 rounded-xl font-bold text-base sm:text-lg hover:bg-gray-50 transition-all duration-300 shadow-md hover:shadow-lg transform hover:scale-105">
                     Upgrade / Renew Plan
                   </Link>
-                  <a href="mailto:hustlehackai@gmail.com" className="text-white underline hover:text-gray-100 transition-colors text-lg">
+                  <a href="mailto:hustlehackai@gmail.com" className="text-white underline hover:text-gray-100 transition-colors text-base sm:text-lg">
                     Need help? Contact support
                   </a>
                 </div>

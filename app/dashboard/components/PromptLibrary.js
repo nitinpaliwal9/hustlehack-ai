@@ -17,6 +17,7 @@ import {
   BookOpen,
   Brain
 } from 'lucide-react'
+import { createClient } from '@supabase/supabase-js';
 
 export default function PromptLibrary({ userPlan = 'starter' }) {
   const [prompts, setPrompts] = useState([])
@@ -52,7 +53,7 @@ export default function PromptLibrary({ userPlan = 'starter' }) {
       setLoading(true);
       try {
         // TODO: Replace with actual Supabase client from context/props
-        const supabase = null;
+        const supabase = createClient();
         // Example: Fetch prompts from a 'prompts' table
         const { data, error } = await supabase
           .from('prompts')
