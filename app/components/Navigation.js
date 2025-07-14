@@ -9,6 +9,7 @@ export default function Navigation() {
   const [isScrolled, setIsScrolled] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
+  const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false)
   
   // Use authentication hook
   const { user, isAuthenticated, signIn, signUp, signInWithGoogle, signOut, checkNetworkStatus, error: authError } = useAuth()
@@ -28,11 +29,17 @@ export default function Navigation() {
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
-  // Close mobile menu when clicking outside
+  // Close mobile menu and profile dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
+      // Close mobile menu
       if (isMobileMenuOpen && !event.target.closest('.mobile-nav-menu') && !event.target.closest('.mobile-menu-toggle')) {
         setIsMobileMenuOpen(false)
+      }
+      
+      // Close profile dropdown
+      if (isProfileDropdownOpen && !event.target.closest('.profile-dropdown')) {
+        setIsProfileDropdownOpen(false)
       }
     }
     
@@ -43,11 +50,15 @@ export default function Navigation() {
       document.body.style.overflow = 'unset'
     }
     
+    if (isProfileDropdownOpen || isMobileMenuOpen) {
+      document.addEventListener('click', handleClickOutside)
+    }
+    
     return () => {
       document.removeEventListener('click', handleClickOutside)
       document.body.style.overflow = 'unset'
     }
-  }, [isMobileMenuOpen])
+  }, [isMobileMenuOpen, isProfileDropdownOpen])
 
   // Debug CSS loading
   useEffect(() => {
@@ -199,6 +210,16 @@ export default function Navigation() {
     setIsMobileMenuOpen(false)
   }
 
+  const toggleProfileDropdown = (e) => {
+    e.preventDefault()
+    e.stopPropagation()
+    setIsProfileDropdownOpen(!isProfileDropdownOpen)
+  }
+
+  const closeProfileDropdown = () => {
+    setIsProfileDropdownOpen(false)
+  }
+
   const switchToSignup = () => {
     closeModal('login-modal')
     setTimeout(() => openModal('signup-modal'), 300)
@@ -207,6 +228,29 @@ export default function Navigation() {
   const switchToLogin = () => {
     closeModal('signup-modal')
     setTimeout(() => openModal('login-modal'), 300)
+  }
+
+  const handleForgotPassword = async () => {
+    const email = document.getElementById('loginEmail')?.value?.trim()
+    
+    if (!email) {
+      if (typeof window !== 'undefined' && window.showNotification) {
+        window.showNotification('Please enter your email address first', 'error')
+      }
+      return
+    }
+    
+    try {
+      await resetPassword(email)
+      closeModal('login-modal')
+      if (typeof window !== 'undefined' && window.showNotification) {
+        window.showNotification('Password reset email sent! Check your inbox.', 'success')
+      }
+    } catch (error) {
+      if (typeof window !== 'undefined' && window.showNotification) {
+        window.showNotification('Failed to send reset email. Please try again.', 'error')
+      }
+    }
   }
 
   const openModal = (modalId) => {
@@ -268,31 +312,31 @@ export default function Navigation() {
             
             {/* Profile Dropdown (show when authenticated) */}
             {isAuthenticated && (
-              <div className="profile-dropdown" id="profileDropdown">
-                <button className="profile-btn btn btn-ghost" id="profileBtn">
+              <div className={`profile-dropdown ${isProfileDropdownOpen ? 'active' : ''}`} id="profileDropdown">
+                <button className="profile-btn btn btn-ghost" id="profileBtn" onClick={toggleProfileDropdown}>
                   <span className="profile-avatar">👤</span>
                   <span className="profile-name">{getDisplayName()}</span>
-                  <span className="profile-arrow">▼</span>
+                  <span className={`profile-arrow ${isProfileDropdownOpen ? 'rotate' : ''}`}>▼</span>
                 </button>
-                <div className="profile-menu" id="profileMenu">
-                  <Link href="/dashboard" className="profile-menu-item">
+                <div className={`profile-menu ${isProfileDropdownOpen ? 'show' : ''}`} id="profileMenu">
+                  <Link href="/dashboard" className="profile-menu-item" onClick={closeProfileDropdown}>
                     <span className="profile-menu-icon">🎯</span>
                     Dashboard
                   </Link>
-                  <Link href="/profile" className="profile-menu-item">
+                  <Link href="/contact" className="profile-menu-item" onClick={closeProfileDropdown}>
                     <span className="profile-menu-icon">👤</span>
                     Profile Settings
                   </Link>
-                  <Link href="/billing" className="profile-menu-item">
+                  <Link href="/billing" className="profile-menu-item" onClick={closeProfileDropdown}>
                     <span className="profile-menu-icon">💳</span>
                     Billing
                   </Link>
-                  <Link href="/help" className="profile-menu-item">
+                  <Link href="/help" className="profile-menu-item" onClick={closeProfileDropdown}>
                     <span className="profile-menu-icon">❓</span>
                     Help & Support
                   </Link>
                   <div className="profile-menu-divider"></div>
-                  <button className="profile-menu-item" onClick={handleSignOut}>
+                  <button className="profile-menu-item" onClick={(e) => { e.preventDefault(); closeProfileDropdown(); handleSignOut(e); }}>
                     <span className="profile-menu-icon">🚪</span>
                     Sign Out
                   </button>
@@ -403,7 +447,7 @@ export default function Navigation() {
             </button>
             
             <div style={{ textAlign: 'center' }}>
-              <a href="#" style={{ color: 'var(--primary)', textDecoration: 'none' }}>Forgot Password?</a>
+              <a href="#" onClick={handleForgotPassword} style={{ color: 'var(--primary)', textDecoration: 'none' }}>Forgot Password?</a>
             </div>
             
             <div style={{ textAlign: 'center', marginTop: '2rem', paddingTop: '2rem', borderTop: '1px solid rgba(255,255,255,0.1)' }}>

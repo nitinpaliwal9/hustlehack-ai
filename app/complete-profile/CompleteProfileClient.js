@@ -176,16 +176,16 @@ export default function CompleteProfileClient() {
   // Success screen
   if (isSuccess) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-green-50 to-green-100 flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black flex items-center justify-center">
         <div className="text-center animate-fade-in">
           <div className="relative mb-8">
             <div className="w-24 h-24 bg-gradient-to-r from-green-500 to-emerald-500 rounded-full flex items-center justify-center mx-auto mb-6 animate-pulse">
               <CheckCircle size={48} className="text-white" />
             </div>
           </div>
-          <h2 className="text-3xl font-bold text-gray-900 mb-4">Profile Completed Successfully!</h2>
-          <p className="text-lg text-gray-600 mb-2">Welcome to HustleHack AI! 🚀</p>
-          <p className="text-gray-500">Redirecting you to get started...</p>
+          <h2 className="text-3xl font-bold text-white mb-4">Profile Completed Successfully!</h2>
+          <p className="text-lg text-gray-300 mb-2">Welcome to HustleHack AI! 🚀</p>
+          <p className="text-gray-400">Redirecting you to get started...</p>
         </div>
       </div>
     )
@@ -193,14 +193,14 @@ export default function CompleteProfileClient() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black flex items-center justify-center">
         <div className="text-center animate-fade-in">
           <div className="relative mb-8">
             <div className="animate-spin rounded-full h-20 w-20 border-4 border-[#7F5AF0] border-t-transparent mx-auto"></div>
             <div className="absolute inset-0 rounded-full bg-gradient-to-r from-[#7F5AF0] to-[#00FFC2] opacity-20 animate-pulse"></div>
           </div>
-          <p className="text-2xl text-gray-700 font-bold mb-2">Loading...</p>
-          <p className="text-gray-500 text-lg">Please wait while we prepare your profile</p>
+          <p className="text-2xl text-white font-bold mb-2">Loading...</p>
+          <p className="text-gray-300 text-lg">Please wait while we prepare your profile</p>
         </div>
       </div>
     )
@@ -208,10 +208,10 @@ export default function CompleteProfileClient() {
 
   if (!isAuthenticated) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black flex items-center justify-center">
         <div className="text-center">
-          <h2 className="text-2xl font-bold text-gray-900 mb-4">Access Denied</h2>
-          <p className="text-gray-600 mb-4">You need to be logged in to complete your profile.</p>
+          <h2 className="text-2xl font-bold text-white mb-4">Access Denied</h2>
+          <p className="text-gray-300 mb-4">You need to be logged in to complete your profile.</p>
           <button
             onClick={() => router.push('/')}
             className="bg-[#7F5AF0] text-white px-6 py-3 rounded-lg hover:bg-[#6D4DC6] transition-colors"
@@ -224,17 +224,17 @@ export default function CompleteProfileClient() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 py-8">
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black py-8">
       <div className="max-w-4xl mx-auto px-4">
         {/* Header Section */}
-        <div className="text-center mb-12">
+        <div className="text-center mb-12 pt-24">
           <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-[#7F5AF0] to-[#00FFC2] rounded-full mb-6">
             <UserPlus className="w-8 h-8 text-white" />
           </div>
-          <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4 leading-tight">
+          <h1 className="text-4xl md:text-5xl font-bold text-white mb-4 leading-tight">
             Complete Your Profile
           </h1>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed">
+          <p className="text-xl text-gray-300 max-w-2xl mx-auto leading-relaxed">
             Just a few details to get you started on your HustleHack AI journey
           </p>
         </div>
@@ -244,23 +244,23 @@ export default function CompleteProfileClient() {
           <div className="flex items-center space-x-4">
             <div className="flex items-center">
               <div className="w-8 h-8 bg-[#7F5AF0] rounded-full flex items-center justify-center text-white text-sm font-bold">1</div>
-              <span className="ml-2 text-sm text-gray-600">Sign Up</span>
+              <span className="ml-2 text-sm text-gray-300">Sign Up</span>
             </div>
             <div className="w-12 h-0.5 bg-[#7F5AF0]"></div>
             <div className="flex items-center">
               <div className="w-8 h-8 bg-[#7F5AF0] rounded-full flex items-center justify-center text-white text-sm font-bold">2</div>
               <span className="ml-2 text-sm text-[#7F5AF0] font-medium">Complete Profile</span>
             </div>
-            <div className="w-12 h-0.5 bg-gray-300"></div>
+            <div className="w-12 h-0.5 bg-gray-600"></div>
             <div className="flex items-center">
-              <div className="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center text-gray-600 text-sm font-bold">3</div>
-              <span className="ml-2 text-sm text-gray-500">Get Started</span>
+              <div className="w-8 h-8 bg-gray-600 rounded-full flex items-center justify-center text-gray-400 text-sm font-bold">3</div>
+              <span className="ml-2 text-sm text-gray-400">Get Started</span>
             </div>
           </div>
         </div>
 
         {/* Main Form Container */}
-        <div className="bg-white rounded-3xl shadow-2xl border border-gray-100 overflow-hidden">
+        <div className="bg-gray-800 rounded-3xl shadow-2xl border border-gray-700 overflow-hidden">
           {/* Form Header */}
           <div className="bg-gradient-to-r from-[#7F5AF0] to-[#00FFC2] p-8 text-center">
             <h2 className="text-2xl font-bold text-white mb-2">Tell us about yourself</h2>
@@ -272,13 +272,13 @@ export default function CompleteProfileClient() {
             <form onSubmit={handleSubmit} className="space-y-8">
               {/* Name Field */}
               <div className="relative">
-                <label htmlFor="name" className="block text-sm font-semibold text-gray-700 mb-3">
+                <label htmlFor="name" className="block text-sm font-semibold text-gray-200 mb-3">
                   Full Name *
                 </label>
                 <div className="relative">
                   <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
                     <User className={`w-5 h-5 transition-colors ${
-                      focusedField === 'name' ? 'text-[#7F5AF0]' : 'text-gray-400'
+                      focusedField === 'name' ? 'text-[#7F5AF0]' : 'text-gray-500'
                     }`} />
                   </div>
                   <input
@@ -289,12 +289,12 @@ export default function CompleteProfileClient() {
                     onChange={handleChange}
                     onFocus={() => handleFocus('name')}
                     onBlur={handleBlur}
-                    className={`w-full pl-12 pr-4 py-4 border-2 rounded-xl text-lg transition-all duration-300 ${
+                    className={`w-full pl-12 pr-4 py-4 border-2 rounded-xl text-lg transition-all duration-300 bg-gray-700 text-white placeholder-gray-400 ${
                       formErrors.name 
                         ? 'border-red-500 focus:border-red-500' 
                         : focusedField === 'name'
                         ? 'border-[#7F5AF0] shadow-lg shadow-[#7F5AF0]/20'
-                        : 'border-gray-200 hover:border-gray-300'
+                        : 'border-gray-600 hover:border-gray-500'
                     } focus:ring-0 focus:outline-none`}
                     placeholder="Enter your full name"
                     required
@@ -310,12 +310,12 @@ export default function CompleteProfileClient() {
 
               {/* Email Field */}
               <div className="relative">
-                <label htmlFor="email" className="block text-sm font-semibold text-gray-700 mb-3">
+                <label htmlFor="email" className="block text-sm font-semibold text-gray-200 mb-3">
                   Email Address *
                 </label>
                 <div className="relative">
                   <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                    <Mail className="w-5 h-5 text-gray-400" />
+                    <Mail className="w-5 h-5 text-gray-500" />
                   </div>
                   <input
                     type="email"
@@ -323,7 +323,7 @@ export default function CompleteProfileClient() {
                     name="email"
                     value={formData.email}
                     onChange={handleChange}
-                    className="w-full pl-12 pr-4 py-4 border-2 border-gray-200 rounded-xl text-lg bg-gray-50 cursor-not-allowed"
+                    className="w-full pl-12 pr-4 py-4 border-2 border-gray-600 rounded-xl text-lg bg-gray-700 text-gray-300 cursor-not-allowed"
                     placeholder="Your email address"
                     required
                     disabled
@@ -332,7 +332,7 @@ export default function CompleteProfileClient() {
                     <Shield className="w-5 h-5 text-green-500" />
                   </div>
                 </div>
-                <p className="mt-2 text-sm text-gray-500 flex items-center">
+                <p className="mt-2 text-sm text-gray-400 flex items-center">
                   <CheckCircle className="w-4 h-4 mr-1 text-green-500" />
                   Email verified
                 </p>
@@ -340,13 +340,13 @@ export default function CompleteProfileClient() {
 
               {/* Phone Field */}
               <div className="relative">
-                <label htmlFor="phone" className="block text-sm font-semibold text-gray-700 mb-3">
+                <label htmlFor="phone" className="block text-sm font-semibold text-gray-200 mb-3">
                   Phone Number *
                 </label>
                 <div className="relative">
                   <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
                     <Phone className={`w-5 h-5 transition-colors ${
-                      focusedField === 'phone' ? 'text-[#7F5AF0]' : 'text-gray-400'
+                      focusedField === 'phone' ? 'text-[#7F5AF0]' : 'text-gray-500'
                     }`} />
                   </div>
                   <input
@@ -357,12 +357,12 @@ export default function CompleteProfileClient() {
                     onChange={handleChange}
                     onFocus={() => handleFocus('phone')}
                     onBlur={handleBlur}
-                    className={`w-full pl-12 pr-4 py-4 border-2 rounded-xl text-lg transition-all duration-300 ${
+                    className={`w-full pl-12 pr-4 py-4 border-2 rounded-xl text-lg transition-all duration-300 bg-gray-700 text-white placeholder-gray-400 ${
                       formErrors.phone 
                         ? 'border-red-500 focus:border-red-500' 
                         : focusedField === 'phone'
                         ? 'border-[#7F5AF0] shadow-lg shadow-[#7F5AF0]/20'
-                        : 'border-gray-200 hover:border-gray-300'
+                        : 'border-gray-600 hover:border-gray-500'
                     } focus:ring-0 focus:outline-none`}
                     placeholder="(555) 123-4567"
                     required
@@ -378,13 +378,13 @@ export default function CompleteProfileClient() {
 
               {/* Role Field */}
               <div className="relative">
-                <label htmlFor="role" className="block text-sm font-semibold text-gray-700 mb-3">
+                <label htmlFor="role" className="block text-sm font-semibold text-gray-200 mb-3">
                   Your Role *
                 </label>
                 <div className="relative">
                   <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
                     <Briefcase className={`w-5 h-5 transition-colors ${
-                      focusedField === 'role' ? 'text-[#7F5AF0]' : 'text-gray-400'
+                      focusedField === 'role' ? 'text-[#7F5AF0]' : 'text-gray-500'
                     }`} />
                   </div>
                   <select
@@ -394,12 +394,12 @@ export default function CompleteProfileClient() {
                     onChange={handleChange}
                     onFocus={() => handleFocus('role')}
                     onBlur={handleBlur}
-                    className={`w-full pl-12 pr-4 py-4 border-2 rounded-xl text-lg transition-all duration-300 appearance-none bg-white ${
+                    className={`w-full pl-12 pr-4 py-4 border-2 rounded-xl text-lg transition-all duration-300 appearance-none bg-gray-700 text-white ${
                       formErrors.role 
                         ? 'border-red-500 focus:border-red-500' 
                         : focusedField === 'role'
                         ? 'border-[#7F5AF0] shadow-lg shadow-[#7F5AF0]/20'
-                        : 'border-gray-200 hover:border-gray-300'
+                        : 'border-gray-600 hover:border-gray-500'
                     } focus:ring-0 focus:outline-none cursor-pointer`}
                     required
                   >
@@ -410,7 +410,7 @@ export default function CompleteProfileClient() {
                     <option value="Other">🔧 Other</option>
                   </select>
                   <div className="absolute inset-y-0 right-0 pr-4 flex items-center pointer-events-none">
-                    <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg className="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                     </svg>
                   </div>
@@ -424,8 +424,8 @@ export default function CompleteProfileClient() {
               </div>
 
               {/* Form Benefits */}
-              <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-2xl p-6 my-8">
-                <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center">
+              <div className="bg-gradient-to-r from-gray-700 to-gray-600 rounded-2xl p-6 my-8">
+                <h3 className="text-lg font-semibold text-white mb-4 flex items-center">
                   <Zap className="w-5 h-5 mr-2 text-[#7F5AF0]" />
                   What you'll get:
                 </h3>
@@ -434,19 +434,19 @@ export default function CompleteProfileClient() {
                     <div className="w-8 h-8 bg-[#7F5AF0] rounded-full flex items-center justify-center flex-shrink-0">
                       <CheckCircle className="w-4 h-4 text-white" />
                     </div>
-                    <span className="text-sm text-gray-700">Personalized AI tools</span>
+                    <span className="text-sm text-gray-200">Personalized AI tools</span>
                   </div>
                   <div className="flex items-center space-x-3">
                     <div className="w-8 h-8 bg-[#7F5AF0] rounded-full flex items-center justify-center flex-shrink-0">
                       <CheckCircle className="w-4 h-4 text-white" />
                     </div>
-                    <span className="text-sm text-gray-700">Priority support</span>
+                    <span className="text-sm text-gray-200">Priority support</span>
                   </div>
                   <div className="flex items-center space-x-3">
                     <div className="w-8 h-8 bg-[#7F5AF0] rounded-full flex items-center justify-center flex-shrink-0">
                       <CheckCircle className="w-4 h-4 text-white" />
                     </div>
-                    <span className="text-sm text-gray-700">Exclusive features</span>
+                    <span className="text-sm text-gray-200">Exclusive features</span>
                   </div>
                 </div>
               </div>
@@ -481,12 +481,12 @@ export default function CompleteProfileClient() {
 
         {/* Security & Privacy Note */}
         <div className="text-center mt-12 max-w-2xl mx-auto">
-          <div className="bg-white rounded-2xl shadow-lg p-6 border border-gray-100">
+          <div className="bg-gray-800 rounded-2xl shadow-lg p-6 border border-gray-700">
             <div className="flex items-center justify-center mb-4">
               <Shield className="w-6 h-6 text-green-500 mr-2" />
-              <span className="text-lg font-semibold text-gray-900">Your data is secure</span>
+              <span className="text-lg font-semibold text-white">Your data is secure</span>
             </div>
-            <p className="text-gray-600 text-sm leading-relaxed">
+            <p className="text-gray-300 text-sm leading-relaxed">
               By completing your profile, you agree to our{' '}
               <a href="/policies/terms-and-conditions" className="text-[#7F5AF0] hover:underline font-medium">
                 Terms of Service

@@ -1347,6 +1347,12 @@ function updateUIForAuthenticatedUser(user) {
         btn.style.display = 'none';
     });
     
+    // Hide the "Sign Up with Email" button in hero section
+    const heroSignupBtn = document.querySelector('.hero-actions [data-modal="signup-modal"]');
+    if (heroSignupBtn) {
+        heroSignupBtn.style.display = 'none';
+    }
+    
     // Show and update profile dropdown
     const profileDropdown = document.getElementById('profileDropdown');
     if (profileDropdown) {
@@ -1415,6 +1421,12 @@ function updateUIForUnauthenticatedUser() {
     document.querySelectorAll('[data-modal="login-modal"], [data-modal="signup-modal"]').forEach(btn => {
         btn.style.display = 'inline-flex';
     });
+    
+    // Show the "Sign Up with Email" button in hero section
+    const heroSignupBtn = document.querySelector('.hero-actions [data-modal="signup-modal"]');
+    if (heroSignupBtn) {
+        heroSignupBtn.style.display = 'inline-flex';
+    }
     
     // Hide profile dropdown
     const profileDropdown = document.getElementById('profileDropdown');

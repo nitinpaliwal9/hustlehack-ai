@@ -84,6 +84,12 @@ export function useAuth() {
             }
           }
         }
+        
+        // Update UI for authentication state changes
+        if (event === 'SIGNED_OUT') {
+          setUser(null)
+          setIsAuthenticated(false)
+        }
       }
     )
 
@@ -477,6 +483,155 @@ export function useAuth() {
     }
   }, [])
 
+  // Update password (for reset flow)
+  const updatePassword = useCallback(async (newPassword) => {
+    if (!supabase) throw new Error('Supabase not initialized')
+
+    setIsLoading(true)
+    setError(null)
+
+    try {
+      const { error } = await supabase.auth.updateUser({
+        password: newPassword
+      })
+
+      if (error) throw error
+
+      if (typeof window !== 'undefined' && window.showNotification) {
+        window.showNotification('✅ Password updated successfully!', 'success')
+      }
+
+      return { success: true }
+    } catch (error) {
+      setError(error.message)
+      
+      if (typeof window !== 'undefined' && window.showNotification) {
+        window.showNotification(`❌ Failed to update password: ${error.message}`, 'error')
+      }
+      
+      throw error
+    } finally {
+      setIsLoading(false)
+    }
+  }, [])
+
+  // Enable 2FA
+  const enable2FA = useCallback(async () => {
+    if (!supabase || !user) throw new Error('User not authenticated')
+
+    setIsLoading(true)
+    setError(null)
+
+    try {
+      // Generate TOTP secret
+      const { data, error } = await supabase.auth.mfa.enroll({
+        factorType: 'totp',
+        issuer: 'HustleHack AI',
+        friendlyName: user.email
+      })
+
+      if (error) throw error
+
+      return {
+        qrCode: data.qr_code,
+        secret: data.secret,
+        factorId: data.id
+      }
+    } catch (error) {
+      setError(error.message)
+      
+      if (typeof window !== 'undefined' && window.showNotification) {
+        window.showNotification(`❌ Failed to enable 2FA: ${error.message}`, 'error')
+      }
+      
+      throw error
+    } finally {
+      setIsLoading(false)
+    }
+  }, [user])
+
+  // Verify 2FA setup
+  const verify2FASetup = useCallback(async (factorId, code) => {
+    if (!supabase) throw new Error('Supabase not initialized')
+
+    setIsLoading(true)
+    setError(null)
+
+    try {
+      const { data, error } = await supabase.auth.mfa.verify({
+        factorId,
+        challengeId: factorId,
+        code
+      })
+
+      if (error) throw error
+
+      if (typeof window !== 'undefined' && window.showNotification) {
+        window.showNotification('✅ 2FA enabled successfully!', 'success')
+      }
+
+      return { success: true }
+    } catch (error) {
+      setError(error.message)
+      
+      if (typeof window !== 'undefined' && window.showNotification) {
+        window.showNotification(`❌ Invalid code. Please try again.`, 'error')
+      }
+      
+      throw error
+    } finally {
+      setIsLoading(false)
+    }
+  }, [])
+
+  // Disable 2FA
+  const disable2FA = useCallback(async (factorId) => {
+    if (!supabase) throw new Error('Supabase not initialized')
+
+    setIsLoading(true)
+    setError(null)
+
+    try {
+      const { error } = await supabase.auth.mfa.unenroll({
+        factorId
+      })
+
+      if (error) throw error
+
+      if (typeof window !== 'undefined' && window.showNotification) {
+        window.showNotification('✅ 2FA disabled successfully!', 'success')
+      }
+
+      return { success: true }
+    } catch (error) {
+      setError(error.message)
+      
+      if (typeof window !== 'undefined' && window.showNotification) {
+        window.showNotification(`❌ Failed to disable 2FA: ${error.message}`, 'error')
+      }
+      
+      throw error
+    } finally {
+      setIsLoading(false)
+    }
+  }, [])
+
+  // Get user's 2FA factors
+  const get2FAFactors = useCallback(async () => {
+    if (!supabase || !user) return []
+
+    try {
+      const { data, error } = await supabase.auth.mfa.listFactors()
+      
+      if (error) throw error
+      
+      return data.totp || []
+    } catch (error) {
+      console.error('Error getting 2FA factors:', error)
+      return []
+    }
+  }, [user])
+
   // Get user profile
   const getUserProfile = useCallback(async () => {
     if (!supabase || !user) return null
@@ -526,9 +681,16 @@ export function useAuth() {
     completeProfile,
     updateProfile,
     resetPassword,
+    updatePassword,
     getUserProfile,
     checkUserProfile,
     checkNetworkStatus,
+    
+    // 2FA Functions
+    enable2FA,
+    verify2FASetup,
+    disable2FA,
+    get2FAFactors,
     
     // Utilities
     clearError: () => setError(null),
