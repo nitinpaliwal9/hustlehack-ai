@@ -117,7 +117,8 @@ export default function CompleteProfileClient() {
           plan_expiry: null,
           profile_completed: true,
           updated_at: new Date().toISOString(),
-        });
+        })
+        .select(); // Add this to get the updated user row in the response
       if (upsertError) throw upsertError;
 
       // First-100 check and upsert subscription

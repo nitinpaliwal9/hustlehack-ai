@@ -122,23 +122,28 @@ CREATE POLICY "Users can insert their own activity" ON public.user_activity
 CREATE OR REPLACE FUNCTION public.handle_new_user()
 RETURNS TRIGGER AS $$
 BEGIN
-    INSERT INTO public.users (id, email, name, created_at, updated_at)
+    -- Insert user profile
+    INSERT INTO public.users (id, email, name, profile_completed, plan, created_at, updated_at)
     VALUES (
         NEW.id,
         NEW.email,
-        COALESCE(NEW.raw_user_meta_data->>'name', NEW.email),
+        COALESCE(NEW.raw_user_meta_data->>'name', split_part(NEW.email, '@', 1)),
+        false, -- set profile_completed to false for new users
+        'Not Active', -- set plan to 'Not Active' for new users
         NOW(),
         NOW()
-    );
+    ) ON CONFLICT (id) DO UPDATE SET
+        email = EXCLUDED.email,
+        updated_at = NOW();
     
-    -- Create default subscription
+    -- Insert default subscription
     INSERT INTO public.subscriptions (user_id, plan_name, created_at, updated_at)
     VALUES (
         NEW.id,
         'starter',
         NOW(),
         NOW()
-    );
+    ) ON CONFLICT DO NOTHING;
     
     RETURN NEW;
 END;
