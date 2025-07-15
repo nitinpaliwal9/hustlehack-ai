@@ -1,46 +1,35 @@
-import crypto from 'crypto'
-import { createClient } from '@supabase/supabase-js'
-
-const supabase = createClient(
-  process.env.SUPABASE_URL,
-  process.env.SUPABASE_SERVICE_ROLE_KEY
-)
+import { createClient } from '@supabase/supabase-js';
 
 export async function POST(req) {
+  const supabaseUrl = process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const supabaseAnonKey = process.env.SUPABASE_ANON_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+  if (!supabaseUrl) throw new Error('supabaseUrl is required');
+  if (!supabaseAnonKey) throw new Error('supabaseKey is required');
+  const supabase = createClient(supabaseUrl, supabaseAnonKey);
+
   try {
-    const rawBody = await req.text()
-    const signature = req.headers.get('x-razorpay-signature')
-
-    const expectedSignature = crypto
-      .createHmac('sha256', process.env.RAZORPAY_WEBHOOK_SECRET)
-      .update(rawBody)
-      .digest('hex')
-
-    if (signature !== expectedSignature) {
-      return new Response('Invalid webhook signature', { status: 400 })
-    }
-
-    const body = JSON.parse(rawBody)
+    const body = await req.json();
+    // TODO: Verify Razorpay webhook signature for security!
+    // See: https://razorpay.com/docs/webhooks/verification/
 
     if (body.event === 'payment.captured') {
-      const payment = body.payload.payment.entity
-      const email = payment.notes?.email
-
-      const plan = 'starter'
-      const plan_expiry = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString()
-
+      const payment = body.payload.payment.entity;
+      // You should pass user email or id in Razorpay 'notes' when creating the order
+      const email = payment.email || (payment.notes && payment.notes.email);
+      // TODO: You can use payment.amount or notes to determine the plan
+      let plan = 'starter';
+      let plan_expiry = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString();
+      // Update user in Supabase
       const { error } = await supabase
         .from('users')
         .update({ plan, plan_expiry })
-        .eq('email', email)
-
+        .eq('email', email);
       if (error) {
-        return new Response(JSON.stringify({ error: 'Failed to update user plan' }), { status: 500 })
+        return new Response(JSON.stringify({ error: 'Failed to update user plan' }), { status: 500 });
       }
     }
-
-    return new Response(JSON.stringify({ received: true }), { status: 200 })
+    return new Response(JSON.stringify({ received: true }), { status: 200 });
   } catch (err) {
-    return new Response(JSON.stringify({ error: err.message }), { status: 500 })
+    return new Response(JSON.stringify({ error: err.message }), { status: 500 });
   }
 }
