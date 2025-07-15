@@ -417,22 +417,22 @@ export default function Navigation() {
           }}>
             <h1 style={{ color: 'white', marginBottom: '40px' }}>MOBILE MENU TEST</h1>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-              <a href="/" style={{ color: 'white', textDecoration: 'none', fontSize: '18px' }}>🏠 Home</a>
-              <a href="/#features" style={{ color: 'white', textDecoration: 'none', fontSize: '18px' }}>✨ Features</a>
-              <a href="/#pricing" style={{ color: 'white', textDecoration: 'none', fontSize: '18px' }}>💰 Pricing</a>
-              <a href="/resources" style={{ color: 'white', textDecoration: 'none', fontSize: '18px' }}>📚 Resources</a>
-              <a href="/about" style={{ color: 'white', textDecoration: 'none', fontSize: '18px' }}>ℹ️ About</a>
-              <a href="/contact" style={{ color: 'white', textDecoration: 'none', fontSize: '18px' }}>📞 Contact</a>
+              <Link href="/" style={{ color: 'white', textDecoration: 'none', fontSize: '18px' }}>🏠 Home</Link>
+              <Link href="/#features" style={{ color: 'white', textDecoration: 'none', fontSize: '18px' }}>✨ Features</Link>
+              <Link href="/#pricing" style={{ color: 'white', textDecoration: 'none', fontSize: '18px' }}>💰 Pricing</Link>
+              <Link href="/resources" style={{ color: 'white', textDecoration: 'none', fontSize: '18px' }}>📚 Resources</Link>
+              <Link href="/about" style={{ color: 'white', textDecoration: 'none', fontSize: '18px' }}>ℹ️ About</Link>
+              <Link href="/contact" style={{ color: 'white', textDecoration: 'none', fontSize: '18px' }}>📞 Contact</Link>
             </div>
             {isAuthenticated && (
               <div style={{ marginTop: '40px', width: '100%' }}>
                 <div style={{ color: '#7F5AF0', fontWeight: 'bold', marginBottom: '10px', fontSize: '16px' }}>
                   <span role="img" aria-label="profile">👤</span> Account
                 </div>
-                <a href="/dashboard" style={mobileMenuLinkStyle}>🎯 Dashboard</a>
-                <a href="/contact" style={mobileMenuLinkStyle}>👤 Profile Settings</a>
-                <a href="/billing" style={mobileMenuLinkStyle}>💳 Billing</a>
-                <a href="/help" style={mobileMenuLinkStyle}>❓ Help & Support</a>
+                <Link href="/dashboard" style={mobileMenuLinkStyle}>🎯 Dashboard</Link>
+                <Link href="/contact" style={mobileMenuLinkStyle}>👤 Profile Settings</Link>
+                <Link href="/billing" style={mobileMenuLinkStyle}>💳 Billing</Link>
+                <Link href="/help" style={mobileMenuLinkStyle}>❓ Help & Support</Link>
                 <button
                   onClick={handleSignOut}
                   style={{

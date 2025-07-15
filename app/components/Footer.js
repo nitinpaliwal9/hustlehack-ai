@@ -22,16 +22,16 @@ export default function Footer() {
               <li><Link href="/#features" className="footer-link">Features</Link></li>
               <li><Link href="/#pricing" className="footer-link">Pricing</Link></li>
               <li><Link href="/resources" className="footer-link">Resources</Link></li>
-              <li><a href="/contact" className="footer-link">API</a></li>
+              <li><Link href="/contact" className="footer-link">API</Link></li>
             </ul>
           </div>
           <div>
             <h4 className="text-lg font-semibold text-white mb-3">Company</h4>
             <ul className="space-y-2">
               <li><Link href="/about" className="footer-link">About</Link></li>
-              <li><a href="/contact" className="footer-link">Careers</a></li>
-              <li><a href="/contact" className="footer-link">Press</a></li>
-              <li><a href="/contact" className="footer-link">Contact</a></li>
+              <li><Link href="/contact" className="footer-link">Careers</Link></li>
+              <li><Link href="/contact" className="footer-link">Press</Link></li>
+              <li><Link href="/contact" className="footer-link">Contact</Link></li>
             </ul>
           </div>
           <div>

@@ -6,19 +6,12 @@ import { useAuth } from './hooks/useAuth'
 import { useRouter } from 'next/navigation'
 import Footer from './components/Footer'
 import LoadingSpinner from './components/LoadingSpinner'
+import Link from 'next/link'
 
 export default function HomePage() {
   const { signInWithGoogle, user, isLoading } = useAuth()
   const router = useRouter()
   const [openFAQ, setOpenFAQ] = useState(Array(6).fill(false));
-  
-  if (isLoading) {
-    return (
-      <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-        <LoadingSpinner message="Loading..." />
-      </div>
-    );
-  }
   
   // Load client utilities on component mount
   useEffect(() => {
@@ -87,9 +80,17 @@ export default function HomePage() {
     });
   }
 
+  if (isLoading) {
+    return (
+      <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <LoadingSpinner message="Loading..." />
+      </div>
+    );
+  }
+  
   return (
     <div>
-      <a href="#home" className="skip-link" tabIndex="0">Skip to main content</a>
+      <Link href="#home" className="skip-link" tabIndex="0">Skip to main content</Link>
       <Navigation />
 
       {/* Hero Section */}
@@ -301,21 +302,21 @@ export default function HomePage() {
           <p className="section-subtitle" tabIndex="0">Join thousands of students and creators who are already winning with AI</p>
           <div className="grid grid-3" role="list">
             <div className="card" role="listitem" tabIndex="0">
-              <p className="card-description">"HustleHack AI transformed my content creation workflow. I'm now producing 3x more content with better quality!"</p>
+              <p className="card-description">&quot;HustleHack AI transformed my content creation workflow. I&apos;m now producing 3x more content with better quality!&quot;</p>
               <div style={{marginTop: '1rem'}}>
                 <strong style={{color: 'var(--accent)'}}>Priya Sharma</strong>
                 <p style={{color: 'var(--gray-400)', fontSize: '0.9rem', margin: 0}}>Content Creator, Mumbai</p>
               </div>
             </div>
             <div className="card" role="listitem" tabIndex="0">
-              <p className="card-description">"The AI study tools helped me crack my engineering entrance exam. The personalized learning path was a game-changer!"</p>
+              <p className="card-description">&quot;The AI study tools helped me crack my engineering entrance exam. The personalized learning path was a game-changer!&quot;</p>
               <div style={{marginTop: '1rem'}}>
                 <strong style={{color: 'var(--accent)'}}>Arjun Patel</strong>
                 <p style={{color: 'var(--gray-400)', fontSize: '0.9rem', margin: 0}}>Student, Delhi</p>
               </div>
             </div>
             <div className="card" role="listitem" tabIndex="0">
-              <p className="card-description">"My freelance business grew 5x after using HustleHack's automation tools. The ROI was incredible!"</p>
+              <p className="card-description">&quot;My freelance business grew 5x after using HustleHack&apos;s automation tools. The ROI was incredible!&quot;</p>
               <div style={{marginTop: '1rem'}}>
                 <strong style={{color: 'var(--accent)'}}>Sneha Reddy</strong>
                 <p style={{color: 'var(--gray-400)', fontSize: '0.9rem', margin: 0}}>Freelancer, Bangalore</p>
@@ -343,7 +344,7 @@ export default function HomePage() {
               },
               {
                 q: 'Can I cancel my subscription anytime?',
-                a: 'Yes, you can cancel your subscription at any time. There are no long-term contracts or cancellation fees. You\'ll continue to have access to your account until the end of your current billing cycle.'
+                a: 'Yes, you can cancel your subscription at any time. There are no long-term contracts or cancellation fees. You&apos;ll continue to have access to your account until the end of your current billing cycle.'
               },
               {
                 q: 'Do you offer student discounts?',
