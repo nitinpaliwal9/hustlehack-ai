@@ -59,10 +59,17 @@ export function useAuth() {
             setCriticalError('Could not connect to the database. Please try again later.');
             return;
           }
-          // If profile is incomplete, redirect to complete-profile
+          // If profile is incomplete, upsert a minimal user row and redirect to complete-profile
           if (profileStatus === 'incomplete') {
-            console.log('🔁 Profile incomplete, redirecting to complete-profile')
             if (typeof window !== 'undefined') {
+              // Upsert minimal user row if not exists
+              await supabase.from('users').upsert({
+                id: session.user.id,
+                email: session.user.email,
+                profile_completed: false,
+                created_at: new Date().toISOString(),
+                updated_at: new Date().toISOString()
+              });
               window.location.href = '/complete-profile'
             }
           } else if (profileStatus === 'complete') {

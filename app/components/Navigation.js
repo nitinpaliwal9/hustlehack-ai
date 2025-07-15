@@ -312,6 +312,14 @@ export default function Navigation() {
   useFocusTrap(isMobileMenuOpen, loginModalRef);
   useFocusTrap(isMobileMenuOpen, signupModalRef);
 
+  const mobileMenuLinkStyle = {
+    color: 'white',
+    textDecoration: 'none',
+    fontSize: '18px',
+    display: 'block',
+    margin: '10px 0'
+  };
+
   return (
     <>
       {/* Navigation */}
@@ -416,6 +424,34 @@ export default function Navigation() {
               <a href="/about" style={{ color: 'white', textDecoration: 'none', fontSize: '18px' }}>ℹ️ About</a>
               <a href="/contact" style={{ color: 'white', textDecoration: 'none', fontSize: '18px' }}>📞 Contact</a>
             </div>
+            {isAuthenticated && (
+              <div style={{ marginTop: '40px', width: '100%' }}>
+                <div style={{ color: '#7F5AF0', fontWeight: 'bold', marginBottom: '10px', fontSize: '16px' }}>
+                  <span role="img" aria-label="profile">👤</span> Account
+                </div>
+                <a href="/dashboard" style={mobileMenuLinkStyle}>🎯 Dashboard</a>
+                <a href="/contact" style={mobileMenuLinkStyle}>👤 Profile Settings</a>
+                <a href="/billing" style={mobileMenuLinkStyle}>💳 Billing</a>
+                <a href="/help" style={mobileMenuLinkStyle}>❓ Help & Support</a>
+                <button
+                  onClick={handleSignOut}
+                  style={{
+                    ...mobileMenuLinkStyle,
+                    background: 'none',
+                    border: 'none',
+                    color: '#FF5A5F',
+                    textAlign: 'left',
+                    width: '100%',
+                    padding: 0,
+                    marginTop: '10px',
+                    fontSize: '18px',
+                    cursor: 'pointer'
+                  }}
+                >
+                  🚪 Sign Out
+                </button>
+              </div>
+            )}
             <button 
               onClick={closeMobileMenu} 
               style={{ 

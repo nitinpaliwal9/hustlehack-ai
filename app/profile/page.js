@@ -29,6 +29,7 @@ import {
   CreditCard,
   Download
 } from 'lucide-react'
+import LoadingSpinner from '../components/LoadingSpinner'
 
 export default function ProfileSettingsPage() {
   const { 
@@ -41,7 +42,8 @@ export default function ProfileSettingsPage() {
     enable2FA,
     verify2FASetup,
     disable2FA,
-    get2FAFactors
+    get2FAFactors,
+    checkUserProfile
   } = useAuth()
   const router = useRouter()
   
@@ -389,15 +391,20 @@ export default function ProfileSettingsPage() {
     }
   }
 
-  if (isLoading) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black flex items-center justify-center">
-        <div className="text-center">
-          <Loader className="w-8 h-8 animate-spin text-primary mx-auto mb-4" />
-          <p className="text-gray-300">Loading profile...</p>
-        </div>
-      </div>
-    )
+  useEffect(() => {
+    if (!isLoading && user) {
+      checkUserProfile(user).then(status => {
+        if (status !== 'complete') {
+          router.push('/complete-profile')
+        } else {
+          // setProfileChecked(true) // This state variable is not defined in the original file
+        }
+      })
+    }
+  }, [isLoading, user, checkUserProfile, router])
+
+  if (isLoading || !user || !profileChecked) {
+    return <LoadingSpinner message="Loading..." />
   }
 
   if (!isAuthenticated) {

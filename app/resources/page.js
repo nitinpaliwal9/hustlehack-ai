@@ -1,7 +1,13 @@
+'use client'
+
 import Link from 'next/link'
 import Navigation from '../components/Navigation'
 import Footer from '../components/Footer'
 import './resources.css'
+import { useAuth } from '../hooks/useAuth'
+import { useEffect, useState } from 'react'
+import { useRouter } from 'next/navigation'
+import LoadingSpinner from '../components/LoadingSpinner'
 
 // --- SEO Metadata for Resources Page ---
 export const metadata = {
@@ -70,6 +76,26 @@ export const metadata = {
 // Add internal links to /pricing, /, and between toolkits.
 
 export default function ResourcesPage() {
+  const { user, isLoading, checkUserProfile } = useAuth()
+  const router = useRouter()
+  const [profileChecked, setProfileChecked] = useState(false)
+
+  useEffect(() => {
+    if (!isLoading && user) {
+      checkUserProfile(user).then(status => {
+        if (status !== 'complete') {
+          router.push('/complete-profile')
+        } else {
+          setProfileChecked(true)
+        }
+      })
+    }
+  }, [isLoading, user, checkUserProfile, router])
+
+  if (isLoading || !user || !profileChecked) {
+    return <LoadingSpinner message="Loading..." />
+  }
+
   return (
     <div>
       <a href="#main-content" className="skip-link" tabIndex="0">Skip to main content</a>

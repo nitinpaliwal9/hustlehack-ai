@@ -5,11 +5,20 @@ import { useEffect, useState } from 'react'
 import { useAuth } from './hooks/useAuth'
 import { useRouter } from 'next/navigation'
 import Footer from './components/Footer'
+import LoadingSpinner from './components/LoadingSpinner'
 
 export default function HomePage() {
   const { signInWithGoogle, user, isLoading } = useAuth()
   const router = useRouter()
   const [openFAQ, setOpenFAQ] = useState(Array(6).fill(false));
+  
+  if (isLoading) {
+    return (
+      <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <LoadingSpinner message="Loading..." />
+      </div>
+    );
+  }
   
   // Load client utilities on component mount
   useEffect(() => {

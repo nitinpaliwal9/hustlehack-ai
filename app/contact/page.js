@@ -1,3 +1,10 @@
+'use client'
+
+import { useAuth } from '../hooks/useAuth'
+import { useEffect, useState } from 'react'
+import { useRouter } from 'next/navigation'
+import LoadingSpinner from '../components/LoadingSpinner'
+
 // --- SEO Metadata for Contact Page ---
 export const metadata = {
   title: "Contact HustleHack AI | Gen Z Support & Collab",
@@ -27,6 +34,26 @@ export const metadata = {
 };
 
 export default function ContactPage() {
+  const { user, isLoading, checkUserProfile } = useAuth()
+  const router = useRouter()
+  const [profileChecked, setProfileChecked] = useState(false)
+
+  useEffect(() => {
+    if (!isLoading && user) {
+      checkUserProfile(user).then(status => {
+        if (status !== 'complete') {
+          router.push('/complete-profile')
+        } else {
+          setProfileChecked(true)
+        }
+      })
+    }
+  }, [isLoading, user, checkUserProfile, router])
+
+  if (isLoading || !user || !profileChecked) {
+    return <LoadingSpinner message="Loading..." />
+  }
+
   return (
     <main className="contact-main">
       <h1>Contact HustleHack AI</h1>
