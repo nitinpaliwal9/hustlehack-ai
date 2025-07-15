@@ -495,6 +495,15 @@ export function useAuth() {
         window.showNotification('✅ Profile completed successfully!', 'success')
       }
 
+      // Check if the user is among the first 100 signups
+      const eligible = await isUserInFirst100(user.id);
+      if (eligible) {
+        const success = await upsertSubscriptionForFirst100(user.id);
+        if (success) {
+          // Show congratulatory popup, etc.
+        }
+      }
+
       return { profileData: insertData }
     } catch (error) {
       console.error('❌ Complete profile error:', error)
@@ -779,6 +788,57 @@ export function useAuth() {
     }
     return true
   }, [])
+
+  async function upsertSubscriptionForFirst100(userId) {
+    // Set expiry to 30 days from now
+    const expiryDate = new Date();
+    expiryDate.setDate(expiryDate.getDate() + 30);
+
+    const { data, error } = await supabase
+      .from('subscriptions')
+      .upsert([
+        {
+          user_id: userId,
+          plan_name: 'creator',
+          expiry_date: expiryDate.toISOString(), // Use expiryDate if your column is timestamp without timezone
+          // created_at and updated_at will auto-populate
+        }
+      ], { onConflict: ['user_id'] }); // Ensures only one row per user
+
+    if (error) {
+      console.error('Error upserting subscription:', error);
+      // Handle error (show notification, etc.)
+      return false;
+    }
+    return true;
+  }
+
+  async function isUserInFirst100(userId) {
+    // Fetch the user's created_at timestamp
+    const { data: userData, error: userError } = await supabase
+      .from('users')
+      .select('created_at')
+      .eq('id', userId)
+      .single();
+
+    if (userError || !userData) {
+      console.error('Error fetching user:', userError);
+      return false;
+    }
+
+    // Count users who signed up before or at the same time
+    const { count, error: countError } = await supabase
+      .from('users')
+      .select('id', { count: 'exact', head: true })
+      .lte('created_at', userData.created_at);
+
+    if (countError) {
+      console.error('Error counting users:', countError);
+      return false;
+    }
+
+    return count <= 100;
+  }
 
   return {
     // State

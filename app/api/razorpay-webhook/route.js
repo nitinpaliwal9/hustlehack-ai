@@ -14,15 +14,41 @@ export async function POST(req) {
 
     if (body.event === 'payment.captured') {
       const payment = body.payload.payment.entity;
-      // You should pass user email or id in Razorpay 'notes' when creating the order
       const email = payment.email || (payment.notes && payment.notes.email);
-      // TODO: You can use payment.amount or notes to determine the plan
+      // TODO: Use payment.amount or notes to determine the plan
       let plan = 'starter';
-      let plan_expiry = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString();
-      // Update user in Supabase
+      let now = new Date();
+      let newExpiry;
+
+      // Fetch current user plan and expiry
+      const { data: user, error: userError } = await supabase
+        .from('users')
+        .select('plan, plan_expiry')
+        .eq('email', email)
+        .single();
+      if (userError) {
+        return new Response(JSON.stringify({ error: 'User not found' }), { status: 404 });
+      }
+
+      // If same plan and not expired, extend from current expiry
+      if (user.plan === plan && user.plan_expiry && new Date(user.plan_expiry) > now) {
+        newExpiry = new Date(user.plan_expiry);
+        newExpiry.setDate(newExpiry.getDate() + 30);
+      } else {
+        // New plan or expired, set expiry to 30 days from now
+        newExpiry = new Date(now.getTime() + 30 * 24 * 60 * 60 * 1000);
+      }
+
+      // If upgrading to a higher plan, you can add logic here to check plan hierarchy
+      // For now, any plan change resets expiry from today
+      if (user.plan !== plan) {
+        newExpiry = new Date(now.getTime() + 30 * 24 * 60 * 60 * 1000);
+      }
+
+      // Update user
       const { error } = await supabase
         .from('users')
-        .update({ plan, plan_expiry })
+        .update({ plan, plan_expiry: newExpiry.toISOString() })
         .eq('email', email);
       if (error) {
         return new Response(JSON.stringify({ error: 'Failed to update user plan' }), { status: 500 });

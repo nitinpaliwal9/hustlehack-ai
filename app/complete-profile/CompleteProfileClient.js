@@ -7,7 +7,7 @@ import { User, Mail, Phone, Briefcase, CheckCircle, AlertCircle, ArrowRight, Loa
 import { supabase } from '../../lib/supabaseClient';
 
 export default function CompleteProfileClient() {
-  const { user, isLoading, isAuthenticated, completeProfile, checkUserProfile } = useAuth()
+  const { user, isLoading, isAuthenticated, completeProfile, checkUserProfile, isUserInFirst100, upsertSubscriptionForFirst100 } = useAuth()
   const router = useRouter()
   const [formData, setFormData] = useState({
     name: '',
@@ -104,19 +104,7 @@ export default function CompleteProfileClient() {
     setIsSubmitting(true)
 
     try {
-      // Count total users
-      const { count, error: countError } = await supabase
-        .from('users')
-        .select('*', { count: 'exact', head: true });
-      if (countError) throw countError;
-      // Decide plan and expiry
-      let plan = 'No active plan';
-      let plan_expiry = null;
-      if (count <= 100) {
-        plan = 'creator';
-        plan_expiry = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString();
-      }
-      // Upsert user profile
+      // Upsert user profile (no plan logic here)
       const { error: upsertError } = await supabase
         .from('users')
         .upsert({
@@ -125,13 +113,19 @@ export default function CompleteProfileClient() {
           email: formData.email,
           phone: formData.phone,
           role: formData.role,
-          plan,
-          plan_expiry,
+          plan: 'No active plan',
+          plan_expiry: null,
           profile_completed: true,
           updated_at: new Date().toISOString(),
         });
       if (upsertError) throw upsertError;
-      if (plan === 'creator') setShowCongrats(true);
+
+      // First-100 check and upsert subscription
+      const eligible = await isUserInFirst100(user.id);
+      if (eligible) {
+        const subSuccess = await upsertSubscriptionForFirst100(user.id);
+        if (subSuccess) setShowCongrats(true);
+      }
       setIsSuccess(true);
       setTimeout(() => {
         router.push('/contact');
@@ -139,8 +133,8 @@ export default function CompleteProfileClient() {
     } catch (error) {
       console.error('Profile completion failed:', error);
       if (typeof window !== 'undefined' && window.showNotification) {
-        const errorMessage = error.message.includes('timed out')
-          ? 'Request timed out. Please check your internet connection and try again.'
+        const errorMessage = error.message && error.message.includes('timed out')
+          ? 'Request timed out. Please check your connection.'
           : 'Failed to complete profile. Please try again.';
         window.showNotification(`❌ ${errorMessage}`, 'error', 5000);
       }
