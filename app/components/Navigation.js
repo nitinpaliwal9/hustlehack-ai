@@ -2,8 +2,44 @@
 
 import Link from 'next/link'
 import Image from 'next/image'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useAuth } from '../hooks/useAuth'
+
+// Focus trap utility
+function useFocusTrap(isOpen, modalRef) {
+  useEffect(() => {
+    if (!isOpen || !modalRef.current) return;
+    const focusableSelectors = [
+      'a[href]', 'button:not([disabled])', 'textarea:not([disabled])', 'input:not([disabled])', 'select:not([disabled])', '[tabindex]:not([tabindex="-1"])'
+    ];
+    const focusableEls = modalRef.current.querySelectorAll(focusableSelectors.join(','));
+    if (!focusableEls.length) return;
+    const firstEl = focusableEls[0];
+    const lastEl = focusableEls[focusableEls.length - 1];
+    function trap(e) {
+      if (e.key === 'Tab') {
+        if (e.shiftKey) {
+          if (document.activeElement === firstEl) {
+            e.preventDefault();
+            lastEl.focus();
+          }
+        } else {
+          if (document.activeElement === lastEl) {
+            e.preventDefault();
+            firstEl.focus();
+          }
+        }
+      }
+      if (e.key === 'Escape') {
+        modalRef.current.querySelector('.modal-close')?.click();
+      }
+    }
+    modalRef.current.addEventListener('keydown', trap);
+    // Focus first element
+    setTimeout(() => firstEl.focus(), 10);
+    return () => modalRef.current.removeEventListener('keydown', trap);
+  }, [isOpen, modalRef]);
+}
 
 export default function Navigation() {
   const [isScrolled, setIsScrolled] = useState(false)
@@ -271,6 +307,11 @@ export default function Navigation() {
     return user.user_metadata?.name || user.email?.split('@')[0] || 'User'
   }
 
+  const loginModalRef = useRef(null);
+  const signupModalRef = useRef(null);
+  useFocusTrap(isMobileMenuOpen, loginModalRef);
+  useFocusTrap(isMobileMenuOpen, signupModalRef);
+
   return (
     <>
       {/* Navigation */}
@@ -395,7 +436,7 @@ export default function Navigation() {
       </nav>
 
       {/* Login Modal */}
-      <div id="login-modal" className="modal">
+      <div id="login-modal" className="modal" ref={loginModalRef}>
         <div className="modal-content">
           <button className="modal-close" onClick={() => closeModal('login-modal')}>&times;</button>
           <h2 style={{ color: 'white', textAlign: 'center', marginBottom: '2rem' }}>Welcome Back!</h2>
@@ -458,7 +499,7 @@ export default function Navigation() {
       </div>
 
       {/* Sign Up Modal */}
-      <div id="signup-modal" className="modal">
+      <div id="signup-modal" className="modal" ref={signupModalRef}>
         <div className="modal-content">
           <button className="modal-close" onClick={() => closeModal('signup-modal')}>&times;</button>
           <h2 style={{ color: 'white', textAlign: 'center', marginBottom: '2rem' }}>🚀 Start Your Journey</h2>

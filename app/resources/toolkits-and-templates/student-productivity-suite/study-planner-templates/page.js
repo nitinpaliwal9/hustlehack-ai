@@ -67,9 +67,11 @@ export default function StudyPlannerTemplatesPage() {
                     Progress tracking
                   </div>
                 </div>
-                <button className="w-full bg-purple-600 hover:bg-purple-700 text-white font-medium py-2 px-4 rounded-lg transition-colors">
-                  Download Template
-                </button>
+                <Link href="/resources/toolkits-and-templates/student-productivity-suite/study-planner-templates/daily-weekly-planners/daily-study-planner" passHref legacyBehavior>
+                  <a className="w-full block bg-purple-600 hover:bg-purple-700 text-white font-medium py-2 px-4 rounded-lg transition-colors text-center">
+                    View & Download
+                  </a>
+                </Link>
               </div>
 
               {/* Weekly Study Schedule */}

@@ -329,10 +329,12 @@ export default function CompleteProfileClient() {
                     } focus:ring-0 focus:outline-none`}
                     placeholder="Enter your full name"
                     required
+                    aria-invalid={!!formErrors.name}
+                    aria-describedby={formErrors.name ? 'name-error' : undefined}
                   />
                 </div>
                 {formErrors.name && (
-                  <div className="mt-2 flex items-center text-red-600">
+                  <div className="mt-2 flex items-center text-red-600" id="name-error">
                     <AlertCircle className="w-4 h-4 mr-1" />
                     <span className="text-sm">{formErrors.name}</span>
                   </div>
@@ -354,10 +356,19 @@ export default function CompleteProfileClient() {
                     name="email"
                     value={formData.email}
                     onChange={handleChange}
-                    className="w-full pl-12 pr-4 py-4 border-2 border-gray-600 rounded-xl text-lg bg-gray-700 text-gray-300 cursor-not-allowed"
-                    placeholder="Your email address"
+                    onFocus={() => handleFocus('email')}
+                    onBlur={handleBlur}
+                    className={`w-full pl-12 pr-4 py-4 border-2 rounded-xl text-lg transition-all duration-300 bg-gray-700 text-white placeholder-gray-400 ${
+                      formErrors.email 
+                        ? 'border-red-500 focus:border-red-500' 
+                        : focusedField === 'email'
+                        ? 'border-[#7F5AF0] shadow-lg shadow-[#7F5AF0]/20'
+                        : 'border-gray-600 hover:border-gray-500'
+                    } focus:ring-0 focus:outline-none`}
+                    placeholder="Enter your email address"
                     required
-                    disabled
+                    aria-invalid={!!formErrors.email}
+                    aria-describedby={formErrors.email ? 'email-error' : undefined}
                   />
                   <div className="absolute inset-y-0 right-0 pr-4 flex items-center pointer-events-none">
                     <Shield className="w-5 h-5 text-green-500" />
@@ -397,10 +408,12 @@ export default function CompleteProfileClient() {
                     } focus:ring-0 focus:outline-none`}
                     placeholder="+91 9876543210"
                     required
+                    aria-invalid={!!formErrors.phone}
+                    aria-describedby={formErrors.phone ? 'phone-error' : undefined}
                   />
                 </div>
                 {formErrors.phone && (
-                  <div className="mt-2 flex items-center text-red-600">
+                  <div className="mt-2 flex items-center text-red-600" id="phone-error">
                     <AlertCircle className="w-4 h-4 mr-1" />
                     <span className="text-sm">{formErrors.phone}</span>
                   </div>
@@ -433,6 +446,8 @@ export default function CompleteProfileClient() {
                         : 'border-gray-600 hover:border-gray-500'
                     } focus:ring-0 focus:outline-none cursor-pointer`}
                     required
+                    aria-invalid={!!formErrors.role}
+                    aria-describedby={formErrors.role ? 'role-error' : undefined}
                   >
                     <option value="">Select your role</option>
                     <option value="Student">🎓 Student</option>
@@ -447,7 +462,7 @@ export default function CompleteProfileClient() {
                   </div>
                 </div>
                 {formErrors.role && (
-                  <div className="mt-2 flex items-center text-red-600">
+                  <div className="mt-2 flex items-center text-red-600" id="role-error">
                     <AlertCircle className="w-4 h-4 mr-1" />
                     <span className="text-sm">{formErrors.role}</span>
                   </div>

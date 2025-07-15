@@ -237,6 +237,8 @@ if (typeof window !== 'undefined' && window.ClientUtils) {
   showNotification(message, type = 'info', duration = 3000) {
     const notification = document.createElement('div');
     notification.className = `notification notification-${type}`;
+    notification.setAttribute('role', 'alert');
+    notification.setAttribute('aria-live', type === 'error' || type === 'warning' ? 'assertive' : 'polite');
     
     const icons = {
       success: '✅',

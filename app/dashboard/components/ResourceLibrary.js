@@ -35,14 +35,14 @@ export default function ResourceLibrary() {
     <div className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition duration-300">
       <div className="flex items-center mb-4">
         <resource.icon className="w-6 h-6 text-indigo-500 mr-2" />
-        <h3 className="text-lg font-semibold text-gray-900">{resource.title}</h3>
+        <h3 className="text-lg font-semibold" style={{ color: 'var(--text-primary)' }}>{resource.title}</h3>
       </div>
-      <p className="text-sm text-gray-500 mb-4">{resource.category}</p>
+      <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>{resource.category}</p>
       <div className="flex justify-between items-center">
         <Link href={resource.url} className="text-indigo-600 hover:underline">
           {resource.type === 'tool' || resource.type === 'template' ? 'Open' : 'View'}
         </Link>
-        <div className="flex items-center text-gray-500">
+        <div className="flex items-center" style={{ color: 'var(--text-secondary)' }}>
           <Download className="w-4 h-4 mr-1" /> {resource.downloads}
         </div>
       </div>
@@ -52,7 +52,7 @@ export default function ResourceLibrary() {
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center mb-4">
-        <h2 className="text-2xl font-bold text-gray-900">🌐 Resource Library</h2>
+        <h2 className="text-2xl font-bold" style={{ color: 'var(--text-primary)' }}>🌐 Resource Library</h2>
         <Link href="/resources/all" className="text-indigo-600 hover:underline">View All</Link>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">

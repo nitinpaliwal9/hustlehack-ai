@@ -3,10 +3,71 @@ import Navigation from '../components/Navigation'
 import Footer from '../components/Footer'
 import './resources.css'
 
+// --- SEO Metadata for Resources Page ---
 export const metadata = {
-  title: 'Resources - HustleHack AI',
-  description: 'Premium AI resources, toolkits, templates, and guides for students, creators, and entrepreneurs.'
-}
+  title: "AI Tools & Notion Templates for Students & Creators | HustleHack AI",
+  description: "Explore free AI tools, Notion templates, and startup kits for Gen Z. Perfect for students, creators, and founders in India.",
+  openGraph: {
+    title: "AI Tools & Notion Templates for Students & Creators | HustleHack AI",
+    description: "Explore free AI tools, Notion templates, and startup kits for Gen Z. Perfect for students, creators, and founders in India.",
+    url: "https://yourdomain.com/resources",
+    siteName: "HustleHack AI",
+    images: [
+      {
+        url: "/assets/images/logo.png",
+        width: 800,
+        height: 600,
+        alt: "HustleHack AI Logo - Gen Z AI Tools",
+      },
+    ],
+    locale: "en_IN",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "AI Tools & Notion Templates for Students & Creators | HustleHack AI",
+    description: "Explore free AI tools, Notion templates, and startup kits for Gen Z. Perfect for students, creators, and founders in India.",
+    images: ["/assets/images/logo.png"],
+  },
+};
+
+// --- Semantic Structure & Headings Suggestion ---
+// Use this as a template for your main content:
+/*
+<main>
+  <section>
+    <h1>Explore Free AI Tools & Notion Templates</h1>
+    <p>Discover toolkits, templates, and resources for Gen Z students, creators, and founders.</p>
+  </section>
+  <section>
+    <h2>Student Productivity Suite</h2>
+    <article>...</article>
+    <a href="/resources/toolkits-and-templates/student-productivity-suite" className="cta">See all study tools</a>
+  </section>
+  <section>
+    <h2>Startup Launch Kit</h2>
+    <article>...</article>
+    <a href="/resources/toolkits-and-templates/startup-launch-kit" className="cta">Explore Startup Launch Kit</a>
+  </section>
+  <section>
+    <h2>Social Media Prompt Pack</h2>
+    <article>...</article>
+    <a href="/resources/toolkits-and-templates/social-media-prompt-pack" className="cta">Get Social Media Prompts</a>
+  </section>
+  <section>
+    <h2>Creators’ AI Toolkit</h2>
+    <article>...</article>
+    <a href="/resources/toolkits-and-templates/creators-ai-toolkit" className="cta">Unlock Creators’ Toolkit</a>
+  </section>
+  <nav>
+    <a href="/pricing">Upgrade for Pro features</a>
+    <a href="/">Back to Home</a>
+  </nav>
+</main>
+*/
+// Add alt text to all images and CTAs as shown above.
+// Use Next.js <Image /> for all images for performance.
+// Add internal links to /pricing, /, and between toolkits.
 
 export default function ResourcesPage() {
   return (

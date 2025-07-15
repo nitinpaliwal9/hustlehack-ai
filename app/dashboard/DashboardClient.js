@@ -12,6 +12,91 @@ import PromptLibrary from './components/PromptLibrary';
 import QuickActions from './components/QuickActions';
 import { BarChart3, Brain, BookOpen, Trophy, Settings, Bell, User, TrendingUp, Zap, FileText } from 'lucide-react';
 
+// --- New: Reusable Section Components ---
+function PlanInfoCard({ plan, expiry }) {
+  return (
+    <div className="rounded-2xl shadow-lg border border-[var(--border-color)] hover:shadow-xl transition-all duration-300 transform hover:scale-[1.02] animate-slide-up" style={{ background: 'var(--bg-surface)' }}>
+      <div className="p-6 sm:p-8 lg:p-10">
+        <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
+          <div className="flex-1 space-y-4">
+            <div className="flex items-center gap-3">
+              <div className="w-4 h-4 bg-gradient-to-r from-[#7F5AF0] to-[#00FFC2] rounded-full"></div>
+              <h2 className="text-2xl sm:text-3xl font-semibold" style={{ color: 'var(--text-primary)' }}>💼 Your Plan</h2>
+            </div>
+            <p className="text-3xl sm:text-4xl font-bold transition-colors" style={{ color: plan === 'Not active' ? 'var(--text-secondary)' : 'var(--primary)' }}>
+              {plan === 'Not active' ? <span className="italic">Not active</span> : plan}
+            </p>
+            <p className="text-lg flex items-center gap-2" style={{ color: 'var(--text-secondary)' }}>
+              <span className="text-2xl">⏳</span>
+              <span>Expires on: {expiry === 'Data not available' ? <span className="italic">Data not available</span> : expiry}</span>
+            </p>
+          </div>
+          <div className="hidden lg:block">
+            <div className="w-24 h-24 bg-gradient-to-br from-[#7F5AF0] to-[#00FFC2] rounded-full opacity-20 animate-pulse"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function ResourcesSection({ resources, onAccess }) {
+  return (
+    <div className="space-y-8">
+      <div className="text-center space-y-2">
+        <h2 className="text-xl sm:text-3xl font-bold" style={{ color: 'var(--text-primary)' }}>🚀 Your Resources</h2>
+        <p className="text-sm sm:text-base" style={{ color: 'var(--text-secondary)' }}>
+          Access your tools, templates, and premium content based on your subscription plan
+        </p>
+      </div>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+        {resources.map((resource, index) => (
+          <div key={resource.id} className="animate-fade-in-up" style={{ animationDelay: `${index * 0.1}s` }}>
+            <DashboardCard resource={resource} onAccess={onAccess} />
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function RecentActivitySection({ recentActivity }) {
+  return (
+    <div className="space-y-8">
+      <div className="text-center space-y-2">
+        <h2 className="text-xl sm:text-3xl font-bold" style={{ color: 'var(--text-primary)' }}>📊 Recent Activity</h2>
+        <p className="text-sm sm:text-base" style={{ color: 'var(--text-secondary)' }}>
+          Track your latest interactions and resource usage
+        </p>
+      </div>
+      <div className="rounded-2xl shadow-lg border border-[var(--border-color)] hover:shadow-xl transition-all duration-300" style={{ background: 'var(--bg-surface)' }}>
+        <div className="p-6 sm:p-8">
+          {recentActivity.length > 0 ? (
+            <ul className="space-y-3">
+              {recentActivity.map((activity, index) => (
+                <li key={index} className="flex flex-col sm:flex-row sm:justify-between sm:items-center p-4 rounded-xl hover:bg-[rgba(255,255,255,0.07)] transition-all duration-200 transform hover:scale-[1.02] gap-2" style={{ background: 'rgba(36,41,46,0.7)' }}>
+                  <span className="font-medium" style={{ color: 'var(--text-primary)' }}>
+                    <span className="capitalize">{activity.action}</span> {activity.resource_name}
+                  </span>
+                  <span className="text-sm" style={{ color: 'var(--text-secondary)' }}>
+                    {new Date(activity.created_at).toLocaleDateString()}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <div className="text-center py-8">
+              <div className="text-6xl mb-4 opacity-50">📊</div>
+              <p className="text-lg" style={{ color: 'var(--text-secondary)' }}>No recent activity logged yet</p>
+              <p className="text-sm mt-2" style={{ color: 'var(--text-secondary)' }}>Your resource usage will appear here</p>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function DashboardClient() {
   const { user, isAuthenticated, isLoading, supabase, checkUserProfile, criticalError, clearCriticalError } = useAuth();
   const router = useRouter();
@@ -410,36 +495,7 @@ export default function DashboardClient() {
           </div>
 
           {/* Plan Info Card */}
-          <div className="rounded-2xl shadow-lg border border-[var(--border-color)] hover:shadow-xl transition-all duration-300 transform hover:scale-[1.02] animate-slide-up" style={{ background: 'var(--bg-surface)' }}>
-            <div className="p-6 sm:p-8 lg:p-10">
-              <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
-                <div className="flex-1 space-y-4">
-                  <div className="flex items-center gap-3">
-                    <div className="w-4 h-4 bg-gradient-to-r from-[#7F5AF0] to-[#00FFC2] rounded-full"></div>
-                    <h2 className="text-2xl sm:text-3xl font-semibold text-gray-900">💼 Your Plan</h2>
-                  </div>
-                  <p className={`text-3xl sm:text-4xl font-bold transition-colors ${
-                    userData.plan === 'Not active' ? 'text-gray-400' : 'text-[#7F5AF0]'
-                  }`}>
-                    {userData.plan === 'Not active' ? 
-                      <span className="italic">Not active</span> : 
-                      userData.plan
-                    }
-                  </p>
-                  <p className="text-gray-500 text-lg flex items-center gap-2">
-                    <span className="text-2xl">⏳</span>
-                    <span>Expires on: {userData.expiry === 'Data not available' ? 
-                      <span className="text-gray-400 italic">Data not available</span> : 
-                      userData.expiry
-                    }</span>
-                  </p>
-                </div>
-                <div className="hidden lg:block">
-                  <div className="w-24 h-24 bg-gradient-to-br from-[#7F5AF0] to-[#00FFC2] rounded-full opacity-20 animate-pulse"></div>
-                </div>
-              </div>
-            </div>
-          </div>
+          <PlanInfoCard plan={userData.plan} expiry={userData.expiry} />
 
           {/* Plan Expiry Warning */}
           {userData.expiry !== 'Data not available' && new Date(userData.expiry) - new Date() < 5 * 24 * 60 * 60 * 1000 && (
@@ -463,62 +519,10 @@ export default function DashboardClient() {
           )}
 
           {/* Resources Section */}
-          <div className="space-y-8">
-            <div className="text-center space-y-2">
-              <h2 className="text-xl sm:text-3xl font-bold text-gray-900 hover:text-[#7F5AF0] transition-colors">
-                🚀 Your Resources
-              </h2>
-              <p className="text-sm sm:text-base text-gray-600 max-w-2xl mx-auto">
-                Access your tools, templates, and premium content based on your subscription plan
-              </p>
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
-              {resources.map((resource, index) => (
-                <div key={resource.id} className="animate-fade-in-up" style={{animationDelay: `${index * 0.1}s`}}>
-                  <DashboardCard 
-                    resource={resource} 
-                    onAccess={logUserActivity} 
-                  />
-                </div>
-              ))}
-            </div>
-          </div>
+          <ResourcesSection resources={resources} onAccess={logUserActivity} />
 
           {/* Recent Activity */}
-          <div className="space-y-8">
-            <div className="text-center space-y-2">
-              <h2 className="text-xl sm:text-3xl font-bold text-gray-900 hover:text-[#7F5AF0] transition-colors">
-                📊 Recent Activity
-              </h2>
-              <p className="text-sm sm:text-base text-gray-600 max-w-2xl mx-auto">
-                Track your latest interactions and resource usage
-              </p>
-            </div>
-            <div className="rounded-2xl shadow-lg border border-[var(--border-color)] hover:shadow-xl transition-all duration-300" style={{ background: 'var(--bg-surface)' }}>
-              <div className="p-6 sm:p-8">
-                {recentActivity.length > 0 ? (
-                  <ul className="space-y-3">
-                    {recentActivity.map((activity, index) => (
-                      <li key={index} className="flex flex-col sm:flex-row sm:justify-between sm:items-center p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition-all duration-200 transform hover:scale-[1.02] gap-2">
-                        <span className="font-medium text-gray-900">
-                          <span className="capitalize">{activity.action}</span> {activity.resource_name}
-                        </span>
-                        <span className="text-sm text-gray-500">
-                          {new Date(activity.created_at).toLocaleDateString()}
-                        </span>
-                      </li>
-                    ))}
-                  </ul>
-                ) : (
-                  <div className="text-center py-8">
-                    <div className="text-6xl mb-4 opacity-50">📊</div>
-                    <p className="text-gray-400 text-lg">No recent activity logged yet</p>
-                    <p className="text-gray-500 text-sm mt-2">Your resource usage will appear here</p>
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
+          <RecentActivitySection recentActivity={recentActivity} />
 
           {/* Call to Action */}
           <div className="bg-gradient-to-r from-[#7F5AF0] to-[#00FFC2] rounded-2xl shadow-lg hover:shadow-xl transform hover:scale-[1.02] transition-all duration-300" style={{ background: 'var(--bg-surface)' }}>

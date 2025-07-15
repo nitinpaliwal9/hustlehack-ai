@@ -1,0 +1,89 @@
+{
+  "toolkits-and-templates": {
+    "social-media-prompt-pack": {},
+    "student-productivity-suite": {
+      "study-planner-templates": {
+        "daily-weekly-planners": {
+          "daily-study-planner": {},
+          "weekly-study-schedule": {},
+          "monthly-study-calendar": {},
+          "study-habit-integration": {}
+        },
+        "exam-preparation-templates": {
+          "exam-study-timeline": {},
+          "subject-specific-study-plans": {},
+          "revision-techniques-guide": {},
+          "mock-test-scheduler": {}
+        },
+        "goal-setting-and-progress-tracking": {
+          "academic-goal-planner": {},
+          "study-progress-tracker": {},
+          "weekly-reflection-journal": {},
+          "achievement-celebration-planner": {}
+        },
+        "specialized-templates": {
+          "group-study-coordinator": {},
+          "research-project-planner": {},
+          "assignment-tracker": {},
+          "study-session-optimizer": {}
+        }
+      },
+      "note-taking-systems": {},
+      "productivity-habit-tracker": {},
+      "essay-writing-toolkit": {},
+      "exam-prep-strategies": {},
+      "group-study-organizer": {},
+      "creative-project-templates": {},
+      "time-management-mastery": {},
+      "research-paper-toolkit": {},
+      "study-aesthetic-pack": {}
+    },
+    "creators-ai-toolkit": {
+      "ai-video-script-generator": {},
+      "thumbnail-hookboard": {},
+      "30-day-ai-content-calendar-generator": {},
+      "dm-and-comment-engine": {},
+      "niche-content-prompt-vault": {},
+      "creator-metrics-tracker": {}
+    },
+    "startup-launch-kit": {
+      "ai-idea-validator": {},
+      "one-page-builder": {},
+      "pitch-deck-generator": {},
+      "zero-budget-growth-hacks": {},
+      "auto-docs-pack": {},
+      "launch-day-automation-checklist": {}
+    },
+    "freelancers-arsenal": {},
+    "ai-automation-scripts": {}
+  },
+  "free-guides-and-blueprints": {
+    "ai-for-beginners": {},
+    "growth-hacking-with-ai": {},
+    "student-success-blueprint": {},
+    "ai-side-hustle-ideas": {}
+  },
+  "weekly-drop-archive": {
+    "week-15-jan-2025": {},
+    "week-14-jan-2025": {},
+    "week-13-jan-2025": {},
+    "week-12-dec-2024": {},
+    "week-11-dec-2024": {},
+    "week-10-dec-2024": {}
+  },
+  "ai-tools-stack": {
+    "chatgpt": {},
+    "midjourney": {},
+    "notion-ai": {},
+    "runway-ml": {},
+    "beautiful-ai": {},
+    "perplexity-ai": {},
+    "mubert": {},
+    "copy-ai": {}
+  },
+  "reels-and-video-shorts": {
+    "60-second-ai-tips": {},
+    "tool-tutorials": {},
+    "success-stories": {}
+  }
+}

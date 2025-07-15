@@ -255,28 +255,33 @@ export default function AIToolsGrid({ userPlan = 'starter' }) {
     const usagePercentage = (tool.usage / tool.limit) * 100
     
     return (
-      <div className={`bg-white rounded-xl shadow-lg border-2 transition-all duration-300 hover:shadow-xl ${
-        unlocked ? 'border-transparent hover:border-purple-200' : 'border-gray-200 opacity-75'
-      }`}>
+      <div
+        className="rounded-xl shadow-lg border-2 transition-all duration-300 hover:shadow-xl"
+        style={{
+          background: 'var(--bg-surface)',
+          borderColor: unlocked ? 'var(--border-color)' : 'var(--border-color)',
+          opacity: unlocked ? 1 : 0.75
+        }}
+      >
         <div className="p-6">
           {/* Header */}
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-3">
-              <div className={`p-3 rounded-lg bg-gradient-to-r ${tool.color}`}>
-                <tool.icon className="w-6 h-6 text-white" />
+              <div className={`p-3 rounded-lg bg-gradient-to-r ${tool.color}`}> 
+                <tool.icon className="w-6 h-6" style={{ color: '#fff' }} />
               </div>
               <div>
-                <h3 className="font-bold text-gray-900">{tool.name}</h3>
-                <p className="text-sm text-gray-600">{tool.category}</p>
+                <h3 className="font-bold" style={{ color: 'var(--text-primary)' }}>{tool.name}</h3>
+                <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>{tool.category}</p>
               </div>
             </div>
             <div className="flex items-center gap-2">
               {unlocked ? (
-                <span className="px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full font-medium">
+                <span className="px-2 py-1 text-xs rounded-full font-medium" style={{ background: 'rgba(0,255,194,0.12)', color: '#00FFC2' }}>
                   Unlocked
                 </span>
               ) : (
-                <span className="px-2 py-1 bg-red-100 text-red-800 text-xs rounded-full font-medium">
+                <span className="px-2 py-1 text-xs rounded-full font-medium" style={{ background: 'rgba(127,90,240,0.12)', color: '#7F5AF0' }}>
                   Locked
                 </span>
               )}
@@ -284,22 +289,22 @@ export default function AIToolsGrid({ userPlan = 'starter' }) {
           </div>
 
           {/* Description */}
-          <p className="text-gray-600 mb-4">{tool.description}</p>
+          <p className="mb-4" style={{ color: 'var(--text-secondary)' }}>{tool.description}</p>
 
           {/* Usage Bar */}
           {unlocked && (
             <div className="mb-4">
-              <div className="flex justify-between text-sm text-gray-600 mb-1">
+              <div className="flex justify-between text-sm mb-1" style={{ color: 'var(--text-secondary)' }}>
                 <span>Usage this month</span>
                 <span>{tool.usage}/{tool.limit}</span>
               </div>
-              <div className="w-full bg-gray-200 rounded-full h-2">
-                <div 
-                  className={`h-2 rounded-full transition-all duration-300 ${
-                    usagePercentage > 80 ? 'bg-red-500' : 
-                    usagePercentage > 60 ? 'bg-yellow-500' : 'bg-green-500'
-                  }`}
-                  style={{ width: `${usagePercentage}%` }}
+              <div className="w-full rounded-full h-2" style={{ background: 'rgba(255,255,255,0.08)' }}>
+                <div
+                  className="h-2 rounded-full transition-all duration-300"
+                  style={{
+                    width: `${usagePercentage}%`,
+                    background: usagePercentage > 80 ? '#EF4444' : usagePercentage > 60 ? '#F59E42' : '#00FFC2'
+                  }}
                 />
               </div>
             </div>
@@ -308,11 +313,12 @@ export default function AIToolsGrid({ userPlan = 'starter' }) {
           {/* Action Button */}
           <button
             onClick={() => unlocked ? setActiveTool(tool) : null}
-            className={`w-full py-3 px-4 rounded-lg font-medium transition-all duration-300 ${
+            className="w-full py-3 px-4 rounded-lg font-medium transition-all duration-300"
+            style={
               unlocked
-                ? 'bg-gradient-to-r from-purple-600 to-pink-600 text-white hover:from-purple-700 hover:to-pink-700 transform hover:scale-105'
-                : 'bg-gray-100 text-gray-500 cursor-not-allowed'
-            }`}
+                ? { background: 'linear-gradient(90deg, #7F5AF0 0%, #00FFC2 100%)', color: '#fff', boxShadow: '0 2px 8px rgba(127,90,240,0.15)' }
+                : { background: 'var(--bg-surface)', color: 'var(--text-secondary)', cursor: 'not-allowed', opacity: 0.7 }
+            }
             disabled={!unlocked}
           >
             {unlocked ? 'Use Tool' : `Upgrade to ${tool.minPlan}`}
@@ -328,22 +334,23 @@ export default function AIToolsGrid({ userPlan = 'starter' }) {
     const processing = isProcessing[tool.id]
 
     return (
-      <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-        <div className="bg-white rounded-xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
-          <div className="p-6 border-b border-gray-200">
+      <div className="fixed inset-0" style={{ background: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 16, zIndex: 50 }}>
+        <div className="rounded-xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto" style={{ background: 'var(--bg-primary)', color: 'var(--text-primary)' }}>
+          <div className="p-6" style={{ borderBottom: '1px solid var(--border-color)' }}>
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <div className={`p-3 rounded-lg bg-gradient-to-r ${tool.color}`}>
-                  <tool.icon className="w-6 h-6 text-white" />
+                <div className={`p-3 rounded-lg bg-gradient-to-r ${tool.color}`}> 
+                  <tool.icon className="w-6 h-6" style={{ color: '#fff' }} />
                 </div>
                 <div>
-                  <h2 className="text-2xl font-bold text-gray-900">{tool.name}</h2>
-                  <p className="text-gray-600">{tool.description}</p>
+                  <h2 className="text-2xl font-bold" style={{ color: 'var(--text-primary)' }}>{tool.name}</h2>
+                  <p style={{ color: 'var(--text-secondary)' }}>{tool.description}</p>
                 </div>
               </div>
               <button
                 onClick={onClose}
-                className="text-gray-500 hover:text-gray-700 text-2xl"
+                className="text-2xl"
+                style={{ color: 'var(--text-secondary)' }}
               >
                 ×
               </button>
@@ -353,11 +360,11 @@ export default function AIToolsGrid({ userPlan = 'starter' }) {
           <div className="p-6">
             {!output ? (
               <div className="space-y-4">
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">Configure Your Tool</h3>
+                <h3 className="text-lg font-semibold mb-4" style={{ color: 'var(--text-primary)' }}>Configure Your Tool</h3>
                 {tool.inputFields.map(field => (
                   <div key={field.name} className="space-y-2">
-                    <label className="block text-sm font-medium text-gray-700 capitalize">
-                      {field.name} {field.required && <span className="text-red-500">*</span>}
+                    <label className="block text-sm font-medium capitalize" style={{ color: 'var(--text-secondary)' }}>
+                      {field.name} {field.required && <span style={{ color: '#F87171' }}>*</span>}
                     </label>
                     {field.type === 'text' && (
                       <input
@@ -365,7 +372,8 @@ export default function AIToolsGrid({ userPlan = 'starter' }) {
                         value={inputs[field.name] || ''}
                         onChange={(e) => handleToolInput(tool.id, field.name, e.target.value)}
                         placeholder={field.placeholder}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                        className="w-full px-3 py-2 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                        style={{ background: 'var(--bg-surface)', color: 'var(--text-primary)', border: '1px solid var(--border-color)' }}
                       />
                     )}
                     {field.type === 'textarea' && (
@@ -374,14 +382,16 @@ export default function AIToolsGrid({ userPlan = 'starter' }) {
                         onChange={(e) => handleToolInput(tool.id, field.name, e.target.value)}
                         placeholder={field.placeholder}
                         rows={4}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                        className="w-full px-3 py-2 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                        style={{ background: 'var(--bg-surface)', color: 'var(--text-primary)', border: '1px solid var(--border-color)' }}
                       />
                     )}
                     {field.type === 'select' && (
                       <select
                         value={inputs[field.name] || ''}
                         onChange={(e) => handleToolInput(tool.id, field.name, e.target.value)}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                        className="w-full px-3 py-2 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                        style={{ background: 'var(--bg-surface)', color: 'var(--text-primary)', border: '1px solid var(--border-color)' }}
                       >
                         <option value="">Select {field.name}</option>
                         {field.options.map(option => (
@@ -396,7 +406,8 @@ export default function AIToolsGrid({ userPlan = 'starter' }) {
                   <button
                     onClick={() => handleGenerateContent(tool)}
                     disabled={processing}
-                    className="w-full py-3 px-4 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-lg font-medium hover:from-purple-700 hover:to-pink-700 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                    className="w-full py-3 px-4 rounded-lg font-medium flex items-center justify-center gap-2"
+                    style={{ background: 'linear-gradient(90deg, #7F5AF0 0%, #00FFC2 100%)', color: '#fff', opacity: processing ? 0.7 : 1 }}
                   >
                     {processing ? (
                       <>
@@ -415,18 +426,20 @@ export default function AIToolsGrid({ userPlan = 'starter' }) {
             ) : (
               <div className="space-y-6">
                 <div className="flex items-center justify-between">
-                  <h3 className="text-lg font-semibold text-gray-900">Generated Content</h3>
+                  <h3 className="text-lg font-semibold" style={{ color: 'var(--text-primary)' }}>Generated Content</h3>
                   <div className="flex gap-2">
                     <button
                       onClick={() => copyToClipboard(typeof output === 'object' ? JSON.stringify(output, null, 2) : output)}
-                      className="flex items-center gap-2 px-3 py-1 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors"
+                      className="flex items-center gap-2 px-3 py-1 rounded-lg"
+                      style={{ background: 'var(--bg-surface)', color: 'var(--text-primary)' }}
                     >
                       <Copy className="w-4 h-4" />
                       Copy
                     </button>
                     <button
                       onClick={() => setToolOutputs(prev => ({ ...prev, [tool.id]: null }))}
-                      className="flex items-center gap-2 px-3 py-1 bg-purple-100 text-purple-700 rounded-lg hover:bg-purple-200 transition-colors"
+                      className="flex items-center gap-2 px-3 py-1 rounded-lg"
+                      style={{ background: 'var(--accent)', color: '#fff' }}
                     >
                       <Sparkles className="w-4 h-4" />
                       Generate New
@@ -434,31 +447,31 @@ export default function AIToolsGrid({ userPlan = 'starter' }) {
                   </div>
                 </div>
 
-                <div className="bg-gray-50 rounded-lg p-4">
+                <div className="rounded-lg p-4" style={{ background: 'var(--bg-surface)' }}>
                   {typeof output === 'object' ? (
                     <div className="space-y-4">
                       {Object.entries(output).map(([key, value]) => (
                         <div key={key} className="space-y-2">
-                          <h4 className="font-medium text-gray-900 capitalize">{key.replace(/([A-Z])/g, ' $1').trim()}</h4>
+                          <h4 className="font-medium capitalize" style={{ color: 'var(--text-primary)' }}>{key.replace(/([A-Z])/g, ' $1').trim()}</h4>
                           {Array.isArray(value) ? (
                             <ul className="list-disc list-inside space-y-1">
                               {value.map((item, index) => (
-                                <li key={index} className="text-gray-700">{item}</li>
+                                <li key={index} style={{ color: 'var(--text-secondary)' }}>{item}</li>
                               ))}
                             </ul>
                           ) : (
-                            <div className="text-gray-700 whitespace-pre-wrap">{value}</div>
+                            <div className="whitespace-pre-wrap" style={{ color: 'var(--text-secondary)' }}>{value}</div>
                           )}
                         </div>
                       ))}
                     </div>
                   ) : (
-                    <div className="text-gray-700 whitespace-pre-wrap">{output}</div>
+                    <div className="whitespace-pre-wrap" style={{ color: 'var(--text-secondary)' }}>{output}</div>
                   )}
                 </div>
 
-                <div className="flex items-center gap-2 text-sm text-gray-500">
-                  <CheckCircle className="w-4 h-4 text-green-500" />
+                <div className="flex items-center gap-2 text-sm" style={{ color: 'var(--text-secondary)' }}>
+                  <CheckCircle className="w-4 h-4" style={{ color: '#00FFC2' }} />
                   Content generated successfully
                 </div>
               </div>
@@ -473,10 +486,10 @@ export default function AIToolsGrid({ userPlan = 'starter' }) {
     <div className="space-y-8">
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-3xl font-bold text-gray-900 mb-2">🤖 AI Tools</h2>
-          <p className="text-gray-600">Powerful AI tools to boost your productivity</p>
+          <h2 className="text-3xl font-bold mb-2" style={{ color: 'var(--text-primary)' }}>🤖 AI Tools</h2>
+          <p style={{ color: 'var(--text-secondary)' }}>Powerful AI tools to boost your productivity</p>
         </div>
-        <div className="text-sm text-gray-500">
+        <div className="text-sm" style={{ color: 'var(--text-secondary)' }}>
           Plan: <span className="font-medium capitalize">{userPlan}</span>
         </div>
       </div>
