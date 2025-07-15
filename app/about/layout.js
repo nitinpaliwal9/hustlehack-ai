@@ -1,21 +1,30 @@
 export const metadata = {
-  title: 'About Us - HustleHack AI | Empowering the Next Generation',
-  description: 'Learn about HustleHack AI\'s mission to empower young Indian students, creators, and entrepreneurs with cutting-edge AI tools and resources.',
-  keywords: 'HustleHack AI, about us, AI education, Indian entrepreneurs, students, creators, mission, vision',
+  title: "About HustleHack AI: Gen Z AI Tools & Templates",
+  description: "Meet the team behind HustleHack AI. Our mission: empower Gen Z students, creators, and founders in India with free AI tools and Notion templates.",
   openGraph: {
-    title: 'About HustleHack AI - Empowering India\'s Future Innovators',
-    description: 'We\'re on a mission to democratize AI education and tools for the next generation of Indian students, creators, and entrepreneurs.',
-    type: 'website',
-    images: ['/assets/images/logo (2).png'],
+    title: "About HustleHack AI: Gen Z AI Tools & Templates",
+    description: "Meet the team behind HustleHack AI. Our mission: empower Gen Z students, creators, and founders in India with free AI tools and Notion templates.",
+    url: "https://yourdomain.com/about",
+    siteName: "HustleHack AI",
+    images: [
+      {
+        url: "/assets/images/logo.png",
+        width: 800,
+        height: 600,
+        alt: "HustleHack AI Logo - Gen Z AI Tools",
+      },
+    ],
+    locale: "en_IN",
+    type: "website",
   },
   twitter: {
-    card: 'summary_large_image',
-    title: 'About HustleHack AI - Empowering India\'s Future Innovators',
-    description: 'We\'re on a mission to democratize AI education and tools for the next generation of Indian students, creators, and entrepreneurs.',
-    images: ['/assets/images/logo (2).png'],
+    card: "summary_large_image",
+    title: "About HustleHack AI: Gen Z AI Tools & Templates",
+    description: "Meet the team behind HustleHack AI. Our mission: empower Gen Z students, creators, and founders in India with free AI tools and Notion templates.",
+    images: ["/assets/images/logo.png"],
   },
-}
+};
 
 export default function AboutLayout({ children }) {
-  return children
+  return <>{children}</>;
 }
