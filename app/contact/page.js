@@ -26,8 +26,11 @@ export const metadata = {
   },
 };
 
-import ContactClient from './ContactClient';
-
 export default function ContactPage() {
-  return <ContactClient />;
+  return (
+    <main className="contact-main">
+      <h1>Contact HustleHack AI</h1>
+      <p>For support, collaborations, or feedback, email us at <a href="mailto:support@hustlehackai.in">support@hustlehackai.in</a> or use the form coming soon.</p>
+    </main>
+  );
 }

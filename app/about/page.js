@@ -1,5 +1,5 @@
-import './about.css'
-import AboutClient from './AboutClient'
+import './about.css';
+import Image from 'next/image';
 
 // --- SEO Metadata for About Page ---
 export const metadata = {
@@ -58,5 +58,26 @@ export const metadata = {
 // Add internal links to /resources and /contact.
 
 export default function AboutPage() {
-  return <AboutClient />;
+  return (
+    <main className="about-main">
+      <section>
+        <h1>About HustleHack AI</h1>
+        <p>Our mission: empower Gen Z students, creators, and founders in India with free AI tools and Notion templates.</p>
+        <Image src="/assets/images/logo.png" alt="HustleHack AI Logo - Gen Z AI Tools" width={200} height={150} />
+      </section>
+      <section>
+        <h2>Meet the Team</h2>
+        <article>Coming soon...</article>
+      </section>
+      <section>
+        <h2>Our Story</h2>
+        <article>Coming soon...</article>
+      </section>
+      <section>
+        <h2>Join the Hustle</h2>
+        <a href="/resources" className="cta">Explore Free AI Tools</a>
+        <a href="/contact" className="cta">Contact Us</a>
+      </section>
+    </main>
+  );
 }
