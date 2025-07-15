@@ -1,25 +1,7 @@
 'use client'
 
 import { useState, useEffect, useCallback } from 'react'
-import { createClient } from '@supabase/supabase-js'
-
-// Supabase client configuration
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
-const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-
-let supabase = null
-
-// Initialize Supabase client only on client side
-if (typeof window !== 'undefined' && supabaseUrl && supabaseKey) {
-  try {
-    supabase = createClient(supabaseUrl, supabaseKey)
-    console.log('✅ Supabase client initialized successfully')
-  } catch (error) {
-    console.error('❌ Failed to initialize Supabase client:', error)
-  }
-} else if (typeof window !== 'undefined') {
-  console.warn('⚠️ Supabase environment variables not found. Please configure .env.local file.')
-}
+import { supabase } from '../../lib/supabaseClient'
 
 // Custom hook for authentication
 export function useAuth() {
@@ -275,7 +257,7 @@ export function useAuth() {
       // Debug information for production troubleshooting
       console.log('🔍 Debug Info:')
       console.log('- Current origin:', window.location.origin)
-      console.log('- Supabase URL:', supabaseUrl)
+      console.log('- Supabase URL:', supabase.auth.signInWithOAuth)
       console.log('- Environment:', process.env.NODE_ENV)
       
       // Check if we're on production and show specific guidance
@@ -831,9 +813,6 @@ export function useAuth() {
     supabase
   }
 }
-
-// Export Supabase client for direct use in components
-export { supabase }
 
 // Higher-order component for protected routes
 export function withAuth(WrappedComponent) {

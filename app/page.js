@@ -250,7 +250,7 @@ export default function HomePage() {
                 <li>Priority support</li>
                 <li>Weekly live sessions</li>
               </ul>
-              <a href="https://rzp.io/rzp/atTfuqqZ" className="btn btn-primary" target="_blank" rel="noopener noreferrer" aria-label="Level Up with Creator Mode">Level Up Now</a>
+              <a href="https://rzp.io/rzp/WnoiZtJH" className="btn btn-primary" target="_blank" rel="noopener noreferrer" aria-label="Level Up with Creator Mode">Level Up Now</a>
               <p className="pricing-note">One-month access, renew anytime manually</p>
             </div>
             <div className="pricing-card" role="listitem" tabIndex="0">

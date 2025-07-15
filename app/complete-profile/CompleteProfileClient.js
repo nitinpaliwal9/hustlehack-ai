@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import { useAuth } from '../hooks/useAuth'
 import { useRouter } from 'next/navigation'
 import { User, Mail, Phone, Briefcase, CheckCircle, AlertCircle, ArrowRight, Loader, UserPlus, Shield, Zap } from 'lucide-react'
+import { supabase } from '../../lib/supabaseClient';
 
 export default function CompleteProfileClient() {
   const { user, isLoading, isAuthenticated, completeProfile, checkUserProfile } = useAuth()
@@ -19,6 +20,7 @@ export default function CompleteProfileClient() {
   const [focusedField, setFocusedField] = useState(null)
   const [isSuccess, setIsSuccess] = useState(false)
   const [profileCheckError, setProfileCheckError] = useState(false);
+  const [showCongrats, setShowCongrats] = useState(false);
 
   useEffect(() => {
     // Check if user is authenticated
@@ -102,43 +104,47 @@ export default function CompleteProfileClient() {
     setIsSubmitting(true)
 
     try {
-      console.log('Submitting profile data:', formData)
-      
-      // Set a timeout to prevent infinite loading
-      const timeoutPromise = new Promise((_, reject) => {
-        setTimeout(() => reject(new Error('Request timed out')), 30000) // 30 seconds timeout
-      })
-      
-      const profilePromise = completeProfile({
-        name: formData.name,
-        phone: formData.phone,
-        role: formData.role
-      })
-      
-      await Promise.race([profilePromise, timeoutPromise])
-
-      console.log('Profile completed successfully')
-      
-      // Show success state briefly before redirect
-      setIsSuccess(true)
-      
-      // Redirect to contact form after successful completion
-      setTimeout(() => {
-        router.push('/contact')
-      }, 1500)
-    } catch (error) {
-      console.error('Profile completion failed:', error)
-      
-      // Show user-friendly error message
-      if (typeof window !== 'undefined' && window.showNotification) {
-        const errorMessage = error.message.includes('timed out') 
-          ? 'Request timed out. Please check your internet connection and try again.'
-          : 'Failed to complete profile. Please try again.'
-        window.showNotification(`❌ ${errorMessage}`, 'error', 5000)
+      // Count total users
+      const { count, error: countError } = await supabase
+        .from('users')
+        .select('*', { count: 'exact', head: true });
+      if (countError) throw countError;
+      // Decide plan and expiry
+      let plan = 'No active plan';
+      let plan_expiry = null;
+      if (count <= 100) {
+        plan = 'creator';
+        plan_expiry = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString();
       }
-      
-      // Reset form state
-      setIsSubmitting(false)
+      // Upsert user profile
+      const { error: upsertError } = await supabase
+        .from('users')
+        .upsert({
+          id: user.id,
+          name: formData.name,
+          email: formData.email,
+          phone: formData.phone,
+          role: formData.role,
+          plan,
+          plan_expiry,
+          profile_completed: true,
+          updated_at: new Date().toISOString(),
+        });
+      if (upsertError) throw upsertError;
+      if (plan === 'creator') setShowCongrats(true);
+      setIsSuccess(true);
+      setTimeout(() => {
+        router.push('/contact');
+      }, 1500);
+    } catch (error) {
+      console.error('Profile completion failed:', error);
+      if (typeof window !== 'undefined' && window.showNotification) {
+        const errorMessage = error.message.includes('timed out')
+          ? 'Request timed out. Please check your internet connection and try again.'
+          : 'Failed to complete profile. Please try again.';
+        window.showNotification(`❌ ${errorMessage}`, 'error', 5000);
+      }
+      setIsSubmitting(false);
     }
   }
 
@@ -546,6 +552,16 @@ export default function CompleteProfileClient() {
           </div>
         </div>
       </div>
+      {showCongrats && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-70">
+          <div className="bg-white rounded-2xl shadow-2xl p-8 max-w-md text-center animate-fade-in">
+            <h2 className="text-2xl font-bold text-[#7F5AF0] mb-4">🎉 Congratulations!</h2>
+            <p className="text-lg text-gray-800 mb-2">You’re one of the first 100 users!</p>
+            <p className="text-base text-gray-700 mb-4">You’ve unlocked <span className="font-bold text-[#00FFC2]">1 month of the Creator Plan</span> for free.</p>
+            <button onClick={() => setShowCongrats(false)} className="mt-4 px-6 py-2 bg-[#7F5AF0] text-white rounded-lg hover:bg-[#6D4DC6] transition-colors">Close</button>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
