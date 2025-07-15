@@ -365,6 +365,11 @@ export function useAuth() {
   const completeProfile = useCallback(async (profileData) => {
     if (!supabase || !user) throw new Error('User not authenticated')
 
+    // Add this check to ensure user.id is present
+    if (!user.id) {
+      throw new Error('User ID is missing. Please sign in again before completing your profile.');
+    }
+
     setIsLoading(true)
     setError(null)
 
