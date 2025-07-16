@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, createContext, useContext } from 'react'
 import { supabase } from '../../lib/supabaseClient'
 
 // Custom hook for authentication
@@ -911,13 +911,20 @@ export function withAuth(WrappedComponent) {
   }
 }
 
+// Create AuthContext
+export const AuthContext = createContext(null)
+
 // Auth context provider component
 export function AuthProvider({ children }) {
   const auth = useAuth()
-
   return (
-    <div>
+    <AuthContext.Provider value={auth}>
       {children}
-    </div>
+    </AuthContext.Provider>
   )
+}
+
+// Optional: helper hook for consuming context
+export function useAuthContext() {
+  return useContext(AuthContext)
 }

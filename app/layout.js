@@ -3,6 +3,7 @@
 import { Inter, Poppins } from 'next/font/google'
 import './globals.css'
 import './legacy-styles.css'
+import { AuthProvider } from './hooks/useAuth'
 
 const inter = Inter({
   subsets: ['latin'],
@@ -60,7 +61,9 @@ export default function RootLayout({ children }) {
         <meta name="revisit-after" content="7 days" />
       </head>
       <body className={`${inter.variable} ${poppins.variable} font-inter font-poppins`}>
-        {children}
+        <AuthProvider>
+          {children}
+        </AuthProvider>
       </body>
     </html>
   )

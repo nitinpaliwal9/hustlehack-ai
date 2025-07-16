@@ -102,10 +102,12 @@ export default function CompleteProfileClient() {
     }
 
     setIsSubmitting(true)
+    setIsSuccess(false)
+    setFormErrors({})
 
     try {
       // Upsert user profile (no plan logic here)
-      const { error: upsertError } = await supabase
+      const { data, error: upsertError } = await supabase
         .from('users')
         .upsert({
           id: user.id,
@@ -118,8 +120,9 @@ export default function CompleteProfileClient() {
           profile_completed: true,
           updated_at: new Date().toISOString(),
         })
-        .select(); // Add this to get the updated user row in the response
+        .select();
       if (upsertError) throw upsertError;
+      if (!data || data.length === 0) throw new Error('Profile update failed. No data returned.');
 
       // First-100 check and upsert subscription
       const eligible = await isUserInFirst100(user.id);
@@ -129,17 +132,18 @@ export default function CompleteProfileClient() {
       }
       setIsSuccess(true);
       setTimeout(() => {
-        router.push('/contact');
-      }, 1500);
+        router.push('/dashboard'); // Redirect to dashboard after success
+      }, 1200);
     } catch (error) {
       console.error('Profile completion failed:', error);
       if (typeof window !== 'undefined' && window.showNotification) {
         const errorMessage = error.message && error.message.includes('timed out')
           ? 'Request timed out. Please check your connection.'
-          : 'Failed to complete profile. Please try again.';
+          : error.message || 'Failed to complete profile. Please try again.';
         window.showNotification(`❌ ${errorMessage}`, 'error', 5000);
       }
       setIsSubmitting(false);
+      setIsSuccess(false);
     }
   }
 
@@ -273,20 +277,20 @@ export default function CompleteProfileClient() {
 
         {/* Progress Indicators */}
         <div className="flex justify-center mb-8">
-          <div className="flex items-center space-x-4">
-            <div className="flex items-center">
+          <div className="flex items-center space-x-4 flex-wrap w-full max-w-xs sm:max-w-none">
+            <div className="flex items-center min-w-0">
               <div className="w-8 h-8 bg-[#7F5AF0] rounded-full flex items-center justify-center text-white text-sm font-bold">1</div>
-              <span className="ml-2 text-sm text-gray-300">Sign Up</span>
+              <span className="ml-2 text-sm text-gray-300 truncate">Sign Up</span>
             </div>
-            <div className="w-12 h-0.5 bg-[#7F5AF0]"></div>
-            <div className="flex items-center">
+            <div className="w-12 h-0.5 bg-[#7F5AF0] flex-shrink-0"></div>
+            <div className="flex items-center min-w-0">
               <div className="w-8 h-8 bg-[#7F5AF0] rounded-full flex items-center justify-center text-white text-sm font-bold">2</div>
-              <span className="ml-2 text-sm text-[#7F5AF0] font-medium">Complete Profile</span>
+              <span className="ml-2 text-sm text-[#7F5AF0] font-medium truncate">Complete Profile</span>
             </div>
-            <div className="w-12 h-0.5 bg-gray-600"></div>
-            <div className="flex items-center">
+            <div className="w-12 h-0.5 bg-gray-600 flex-shrink-0"></div>
+            <div className="flex items-center min-w-0">
               <div className="w-8 h-8 bg-gray-600 rounded-full flex items-center justify-center text-gray-400 text-sm font-bold">3</div>
-              <span className="ml-2 text-sm text-gray-400">Get Started</span>
+              <span className="ml-2 text-sm text-gray-400 truncate">Get Started</span>
             </div>
           </div>
         </div>
