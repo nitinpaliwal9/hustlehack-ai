@@ -7,9 +7,12 @@ import { useUserPlan } from '../../hooks/useAuth';
 import { getPlanDisplayName, isPlanAtLeast } from '../../planUtils';
 
 export default function AIContentGenerator() {
+  const { user, isLoading } = useAuth();
+
   return (
     <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 24 }}>
-      All imports present. If you see this, the error is NOT in the import statements themselves.
+      Step 3: useAuth hook used. If you see this, useAuth is safe.<br/>
+      user: {user ? JSON.stringify(user) : 'null'}, isLoading: {String(isLoading)}
     </div>
   );
 }
