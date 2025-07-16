@@ -56,10 +56,6 @@ if (typeof window !== 'undefined' && window.ClientUtils) {
     animatedElements.forEach(el => observer.observe(el));
     
     // Typing animation for hero title
-    const heroTitle = document.querySelector('.hero-title');
-    if (heroTitle) {
-      this.typeWriter(heroTitle, heroTitle.textContent, 50);
-    }
   }
   
   animateElement(element) {

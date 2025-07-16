@@ -564,9 +564,6 @@ export default function AIToolsGrid({ userPlan = 'starter' }) {
           <h2 className="text-3xl font-bold mb-2" style={{ color: 'var(--text-primary)' }}>🤖 AI Tools</h2>
           <p style={{ color: '#B0B0B0' }}>Powerful AI tools to boost your productivity</p>
         </div>
-        <div className="text-sm" style={{ color: '#B0B0B0' }}>
-          Plan: <span className="font-medium capitalize">{getPlanDisplayName(userPlan)}</span>
-        </div>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">

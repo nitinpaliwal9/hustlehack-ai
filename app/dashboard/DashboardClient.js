@@ -570,15 +570,6 @@ export default function DashboardClient() {
               <div className="rounded-xl shadow-lg p-6 border border-[var(--border-color)]" style={{ background: 'rgba(36,41,46,0.96)' }}>
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm text-gray-200">Current Plan</p>
-                    <p className="text-2xl font-bold text-purple-600 capitalize">{getPlanDisplayName(userPlan)}</p>
-                  </div>
-                  <Zap className="w-8 h-8 text-purple-500" />
-                </div>
-              </div>
-              <div className="rounded-xl shadow-lg p-6 border border-[var(--border-color)]" style={{ background: 'rgba(36,41,46,0.96)' }}>
-                <div className="flex items-center justify-between">
-                  <div>
                     <p className="text-sm text-gray-200">Tools Used</p>
                     <p className="text-2xl font-bold text-blue-600">{toolsUsed}</p>
                   </div>
@@ -617,11 +608,11 @@ export default function DashboardClient() {
               {recentActivity.length > 0 ? (
                 <ul className="space-y-3">
                   {recentActivity.map((activity, index) => (
-                    <li key={index} className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
-                      <span className="font-medium text-white">
+                    <li key={index} className="flex justify-between items-center p-3 bg-gray-800 rounded-lg text-white">
+                      <span className="font-medium">
                         <span className="capitalize">{activity.action}</span> {activity.resource_name}
                       </span>
-                      <span className="text-sm text-gray-100">
+                      <span className="text-sm">
                         {new Date(activity.created_at).toLocaleDateString()}
                       </span>
                     </li>
@@ -754,7 +745,7 @@ export default function DashboardClient() {
           </div>
 
           {/* Plan Info Card */}
-          <PlanInfoCard plan={userData.plan} expiry={userData.expiry} />
+          {/* Removed Plan Info Card */}
 
           {/* Plan Expiry Warning */}
           {userData.expiry !== 'Data not available' && new Date(userData.expiry) - new Date() < 5 * 24 * 60 * 60 * 1000 && (

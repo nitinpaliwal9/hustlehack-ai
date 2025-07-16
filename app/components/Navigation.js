@@ -5,6 +5,8 @@ import Image from 'next/image'
 import { useState, useEffect, useRef } from 'react'
 import { useAuth } from '../hooks/useAuth'
 import { Sparkles } from 'lucide-react';
+import { useUserPlan } from '../hooks/useAuth';
+import { getPlanDisplayName } from '../planUtils';
 
 // Focus trap utility
 function useFocusTrap(isOpen, modalRef) {
@@ -50,6 +52,8 @@ export default function Navigation() {
   
   // Use authentication hook
   const { user, isAuthenticated, signIn, signUp, signInWithGoogle, signOut, resetPassword, checkNetworkStatus, error: authError } = useAuth()
+  const userId = user?.id;
+  const { plan, loading: planLoading } = useUserPlan(userId);
   
   // Show warning if Supabase is not configured
   useEffect(() => {
@@ -308,6 +312,21 @@ export default function Navigation() {
     return user.user_metadata?.name || user.email?.split('@')[0] || 'User'
   }
 
+  // Plan badge styling logic
+  const planDisplay = getPlanDisplayName(plan);
+  let planBadgeClass = '';
+  let planIcon = null;
+  if (plan === 'pro') {
+    planBadgeClass = 'bg-gradient-to-r from-yellow-400 via-purple-500 to-yellow-300 text-white shadow-lg animate-glow border-2 border-yellow-400';
+    planIcon = <span className="mr-2">👑</span>;
+  } else if (plan === 'creator') {
+    planBadgeClass = 'bg-gradient-to-r from-blue-400 via-pink-500 to-purple-400 text-white shadow-md animate-sparkle border-2 border-pink-400';
+    planIcon = <span className="mr-2">✨</span>;
+  } else if (plan === 'starter') {
+    planBadgeClass = 'bg-gradient-to-r from-teal-400 via-gray-700 to-gray-900 text-white shadow border-2 border-teal-400';
+    planIcon = <span className="mr-2">🚀</span>;
+  }
+
   const loginModalRef = useRef(null);
   const signupModalRef = useRef(null);
   useFocusTrap(isMobileMenuOpen, loginModalRef);
@@ -347,6 +366,14 @@ export default function Navigation() {
             <li><Link href="/contact" className="nav-link">Contact</Link></li>
           </ul>
           
+          {/* Plan Badge - always visible, premium styling */}
+          {isAuthenticated && !planLoading && (
+            <div className={`hidden md:flex items-center ml-6 mr-2 px-5 py-2 rounded-full font-extrabold text-lg tracking-wide uppercase ${planBadgeClass}`} style={{ minWidth: 170, letterSpacing: 2, position: 'relative', zIndex: 20, boxShadow: '0 0 16px 2px rgba(127,90,240,0.25)' }}>
+              {planIcon}
+              <span className="shine-text" style={{ WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>{planDisplay}</span>
+            </div>
+          )}
+
           <div className="nav-actions">
             <button className="theme-toggle btn btn-ghost" onClick={() => window.toggleTheme && window.toggleTheme()}>
               🌙
@@ -402,72 +429,80 @@ export default function Navigation() {
         {isMobileMenuOpen && (
           <div style={{
             position: 'fixed',
-            top: '0',
-            left: '0',
+            top: 0,
+            left: 0,
             width: '100vw',
             height: '100vh',
-            backgroundColor: '#000000',
-            zIndex: '99999',
+            background: 'rgba(20,20,30,0.95)',
+            backdropFilter: 'blur(8px)',
+            zIndex: 99999,
             color: 'white',
-            padding: '20px',
+            padding: 0,
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
-            justifyContent: 'center',
-            fontSize: '24px'
+            justifyContent: 'flex-start',
+            fontSize: '20px',
+            overflowY: 'auto',
           }}>
-            <h1 style={{ color: 'white', marginBottom: '40px' }}>MOBILE MENU TEST</h1>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-              <Link href="/" style={{ color: 'white', textDecoration: 'none', fontSize: '18px' }}>🏠 Home</Link>
-              <Link href="/#features" style={{ color: 'white', textDecoration: 'none', fontSize: '18px' }}>✨ Features</Link>
-              <Link href="/#pricing" style={{ color: 'white', textDecoration: 'none', fontSize: '18px' }}>💰 Pricing</Link>
-              <Link href="/resources" style={{ color: 'white', textDecoration: 'none', fontSize: '18px' }}>📚 Resources</Link>
-              <Link href="/about" style={{ color: 'white', textDecoration: 'none', fontSize: '18px' }}>ℹ️ About</Link>
-              <Link href="/contact" style={{ color: 'white', textDecoration: 'none', fontSize: '18px' }}>📞 Contact</Link>
+            {/* Mobile Menu Header */}
+            <div style={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '28px 24px 12px 24px', borderBottom: '1px solid rgba(127,90,240,0.15)', background: 'rgba(36,41,46,0.7)' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                <Image src="/assets/images/logo (2).png" alt="HustleHack AI Logo" width={36} height={36} style={{ borderRadius: 12, boxShadow: '0 2px 8px #7F5AF0' }} />
+                <span style={{ fontWeight: 800, fontSize: 22, letterSpacing: 1, color: '#7F5AF0', textShadow: '0 2px 8px #7F5AF0' }}>HustleHack AI</span>
+              </div>
+              <button onClick={closeMobileMenu} style={{ background: 'none', border: 'none', color: '#fff', fontSize: 28, borderRadius: 8, padding: 4, transition: 'background 0.2s', cursor: 'pointer' }} aria-label="Close Menu">
+                <span style={{ display: 'inline-block', transform: 'rotate(45deg)', fontSize: 32, fontWeight: 700 }}>+</span>
+              </button>
             </div>
-            {isAuthenticated && (
-              <div style={{ marginTop: '40px', width: '100%' }}>
-                <div style={{ color: '#7F5AF0', fontWeight: 'bold', marginBottom: '10px', fontSize: '16px' }}>
-                  <span role="img" aria-label="profile">👤</span> Account
-                </div>
-                <Link href="/dashboard" style={mobileMenuLinkStyle}>🎯 Dashboard</Link>
-                <Link href="/contact" style={mobileMenuLinkStyle}>👤 Profile Settings</Link>
-                <Link href="/billing" style={mobileMenuLinkStyle}>💳 Billing</Link>
-                <Link href="/help" style={mobileMenuLinkStyle}>❓ Help & Support</Link>
-                <button
-                  onClick={handleSignOut}
-                  style={{
-                    ...mobileMenuLinkStyle,
-                    background: 'none',
-                    border: 'none',
-                    color: '#FF5A5F',
-                    textAlign: 'left',
-                    width: '100%',
-                    padding: 0,
-                    marginTop: '10px',
-                    fontSize: '18px',
-                    cursor: 'pointer'
-                  }}
-                >
-                  🚪 Sign Out
-                </button>
+            {/* Plan Badge (mobile) */}
+            {isAuthenticated && !planLoading && (
+              <div className={`flex items-center mt-6 mb-2 px-6 py-2 rounded-full font-extrabold text-lg tracking-wide uppercase ${planBadgeClass}`} style={{ minWidth: 170, letterSpacing: 2, boxShadow: '0 0 16px 2px rgba(127,90,240,0.25)' }}>
+                {planIcon}
+                <span className="shine-text" style={{ WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>{planDisplay}</span>
               </div>
             )}
-            <button 
-              onClick={closeMobileMenu} 
-              style={{ 
-                marginTop: '40px', 
-                padding: '10px 20px', 
-                backgroundColor: '#7F5AF0', 
-                color: 'white', 
-                border: 'none', 
-                borderRadius: '5px',
-                fontSize: '16px',
-                cursor: 'pointer'
-              }}
-            >
-              Close Menu
-            </button>
+            {/* Mobile Menu Links */}
+            <div style={{ width: '100%', marginTop: 24, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 0 }}>
+              <Link href="/" style={{ color: 'white', textDecoration: 'none', fontSize: 20, fontWeight: 600, padding: '18px 0', width: '100%', textAlign: 'left', borderBottom: '1px solid rgba(127,90,240,0.08)', display: 'flex', alignItems: 'center', gap: 12, marginLeft: 24 }}>
+                🏠 Home
+              </Link>
+              <Link href="/#features" style={{ color: 'white', textDecoration: 'none', fontSize: 20, fontWeight: 600, padding: '18px 0', width: '100%', textAlign: 'left', borderBottom: '1px solid rgba(127,90,240,0.08)', display: 'flex', alignItems: 'center', gap: 12, marginLeft: 24 }}>
+                ✨ Features
+              </Link>
+              <Link href="/#pricing" style={{ color: 'white', textDecoration: 'none', fontSize: 20, fontWeight: 600, padding: '18px 0', width: '100%', textAlign: 'left', borderBottom: '1px solid rgba(127,90,240,0.08)', display: 'flex', alignItems: 'center', gap: 12, marginLeft: 24 }}>
+                💰 Pricing
+              </Link>
+              <Link href="/resources" style={{ color: 'white', textDecoration: 'none', fontSize: 20, fontWeight: 600, padding: '18px 0', width: '100%', textAlign: 'left', borderBottom: '1px solid rgba(127,90,240,0.08)', display: 'flex', alignItems: 'center', gap: 12, marginLeft: 24 }}>
+                📚 Resources
+              </Link>
+              <Link href="/about" style={{ color: 'white', textDecoration: 'none', fontSize: 20, fontWeight: 600, padding: '18px 0', width: '100%', textAlign: 'left', borderBottom: '1px solid rgba(127,90,240,0.08)', display: 'flex', alignItems: 'center', gap: 12, marginLeft: 24 }}>
+                ℹ️ About
+              </Link>
+              <Link href="/contact" style={{ color: 'white', textDecoration: 'none', fontSize: 20, fontWeight: 600, padding: '18px 0', width: '100%', textAlign: 'left', borderBottom: '1px solid rgba(127,90,240,0.08)', display: 'flex', alignItems: 'center', gap: 12, marginLeft: 24 }}>
+                📞 Contact
+              </Link>
+              {isAuthenticated && (
+                <>
+                  <div style={{ color: '#7F5AF0', fontWeight: 700, fontSize: 18, margin: '32px 0 8px 0', width: '100%', textAlign: 'center', letterSpacing: 1 }}>Account</div>
+                  <Link href="/dashboard" style={{ color: 'white', textDecoration: 'none', fontSize: 20, fontWeight: 600, padding: '16px 0', width: '100%', textAlign: 'center', borderBottom: '1px solid rgba(127,90,240,0.08)', display: 'flex', alignItems: 'center', gap: 12 }}>
+                    🎯 Dashboard
+                  </Link>
+                  <Link href="/contact" style={{ color: 'white', textDecoration: 'none', fontSize: 20, fontWeight: 600, padding: '16px 0', width: '100%', textAlign: 'center', borderBottom: '1px solid rgba(127,90,240,0.08)', display: 'flex', alignItems: 'center', gap: 12 }}>
+                    👤 Profile Settings
+                  </Link>
+                  <Link href="/billing" style={{ color: 'white', textDecoration: 'none', fontSize: 20, fontWeight: 600, padding: '16px 0', width: '100%', textAlign: 'center', borderBottom: '1px solid rgba(127,90,240,0.08)', display: 'flex', alignItems: 'center', gap: 12 }}>
+                    💳 Billing
+                  </Link>
+                  <Link href="/help" style={{ color: 'white', textDecoration: 'none', fontSize: 20, fontWeight: 600, padding: '16px 0', width: '100%', textAlign: 'center', borderBottom: '1px solid rgba(127,90,240,0.08)', display: 'flex', alignItems: 'center', gap: 12 }}>
+                    ❓ Help & Support
+                  </Link>
+                  <button onClick={handleSignOut} style={{ background: 'none', border: 'none', color: '#FF5A5F', fontWeight: 700, fontSize: 20, width: '100%', textAlign: 'center', padding: '16px 0', marginTop: 8, cursor: 'pointer', borderRadius: 8, transition: 'background 0.2s' }}>
+                    🚪 Sign Out
+                  </button>
+                </>
+              )}
+            </div>
           </div>
         )}
       </nav>
@@ -585,6 +620,32 @@ export default function Navigation() {
           </form>
         </div>
       </div>
+      <style jsx>{`
+        .animate-glow {
+          box-shadow: 0 0 16px 4px #ffe27a, 0 0 32px 8px #7f5af0;
+          animation: glowPulse 2.5s infinite alternate;
+        }
+        @keyframes glowPulse {
+          0% { box-shadow: 0 0 16px 4px #ffe27a, 0 0 32px 8px #7f5af0; }
+          100% { box-shadow: 0 0 32px 8px #ffe27a, 0 0 48px 16px #7f5af0; }
+        }
+        .animate-sparkle {
+          animation: sparkle 2s infinite linear;
+        }
+        @keyframes sparkle {
+          0%, 100% { filter: drop-shadow(0 0 8px #fff) brightness(1.1); }
+          50% { filter: drop-shadow(0 0 16px #ffb6f9) brightness(1.3); }
+        }
+        .shine-text {
+          background: linear-gradient(90deg, #fff 20%, #ffe27a 40%, #7f5af0 60%, #fff 80%);
+          background-size: 200% auto;
+          animation: shineMove 2.5s linear infinite;
+        }
+        @keyframes shineMove {
+          0% { background-position: 200% center; }
+          100% { background-position: 0% center; }
+        }
+      `}</style>
     </>
   )
 }

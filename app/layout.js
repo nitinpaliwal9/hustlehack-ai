@@ -52,19 +52,13 @@ export const viewport = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" className={`${inter.variable} ${poppins.variable}`}>
+    <html lang="en">
       <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="true" />
-        <link rel="dns-prefetch" href="https://bmgvtzwesdkitdjfszsh.supabase.co" />
-        <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
-        <meta name="revisit-after" content="7 days" />
+        <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;800&family=Inter:wght@400;700&display=swap" rel="stylesheet" />
       </head>
-      <body className={`${inter.variable} ${poppins.variable} font-inter font-poppins`}>
-        <AuthProvider>
-          {children}
-        </AuthProvider>
+      <body className="premium-bg font-sora min-h-screen">
+        {children}
       </body>
     </html>
-  )
+  );
 }

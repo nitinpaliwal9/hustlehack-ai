@@ -94,120 +94,187 @@ export default function HomePage() {
       <Navigation />
 
       {/* Hero Section */}
-      <section id="home" className="hero" role="region" aria-label="Homepage hero">
-        <div className="container">
-          <div className="hero-content">
-            <h1 className="hero-title" tabIndex="0">Unleash AI. Build Faster. Learn Smarter.</h1>
-            <p className="hero-subtitle" tabIndex="0">AI tools, templates, prompts & guides to help you grow faster — all in one toolkit designed for young Indian students, creators, and solopreneurs.</p>
-            <div className="hero-actions" role="group" aria-label="Primary actions">
-            {user ? (
-              <button className="btn btn-google btn-lg" onClick={() => router.push('/dashboard')} aria-label="Go to Dashboard">
-                <span>Go to Dashboard</span>
+      <section id="home" className="hero-section relative w-full min-h-screen flex items-center justify-center overflow-hidden pt-44" style={{ position: 'relative', paddingTop: '10rem' }}>
+        {/* Background Image with Slow Zoom */}
+        <div className="absolute inset-0 w-full h-full z-0 hero-bg-zoom" style={{ backgroundImage: 'url(/hero_section.jpg)', backgroundSize: 'cover', backgroundPosition: 'center', backgroundRepeat: 'no-repeat' }} />
+        {/* Dark Overlay for Depth and Text Clarity */}
+        <div className="absolute inset-0 w-full h-full z-10 pointer-events-none" style={{ background: 'rgba(0,0,0,0.48)' }} />
+        {/* Golden Badge */}
+        <div className="absolute right-10 z-30 flex items-center gap-2 animate-badge-fade-in" style={{ top: '7.5rem' }}>
+          <span className="hero-badge px-3 py-1 rounded-full font-semibold text-sm tracking-wide uppercase" style={{ background: 'linear-gradient(90deg, #FFD700 0%, #FFB300 100%)', color: '#232946', boxShadow: '0 1px 6px #FFD70044', letterSpacing: 1, border: '1px solid #FFD700' }}>
+            <span style={{ fontSize: 13, marginRight: 5 }}>🏆</span>India’s #1 AI Learning Platform
+          </span>
+        </div>
+        {/* Hero Content */}
+        <div className="relative z-40 w-full flex flex-col items-center justify-center text-center px-4" style={{ marginTop: '0' }}>
+          <div className="max-w-5xl mx-auto">
+            {/* Headline with fast swipe animations */}
+            <div className="overflow-hidden">
+              <h1 className="hero-title premium-heading mb-2" style={{ fontSize: 'clamp(3.5rem, 8vw, 6rem)', fontWeight: 900, lineHeight: 1.05, letterSpacing: '0.04em', color: '#fff', marginBottom: 0, background: 'none', WebkitTextFillColor: '#fff', WebkitBackgroundClip: 'unset', backgroundClip: 'unset' }}>
+                <span className="block hero-line hero-line-1 animate-hero-swipe-left">AI Isn’t the Future.</span>
+                <span className="block hero-line hero-line-2 animate-hero-swipe-right" style={{ marginTop: 0 }}>It’s Your Shortcut.</span>
+              </h1>
+            </div>
+            <p className="hero-subtitle text-xl text-gray-200 mb-10 max-w-2xl mx-auto font-medium" tabIndex="0" style={{ textShadow: '0 2px 8px #23294688' }}>
+              Access ready-to-use blueprints, prompt packs, and automation stacks built for people who actually build.
+            </p>
+            {/* CTA Buttons */}
+            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mt-2">
+              <button className="btn btn-lg premium-btn glow-cta rounded-full font-bold flex items-center gap-2" style={{ fontSize: '1.15rem', minWidth: 220 }} onClick={handleGoogleSignIn}>
+                🚀 Start Your AI Journey
               </button>
-            ) : ( <>
-              <button id="google-login-btn-hero" className="btn btn-google btn-lg" onClick={handleGoogleSignIn} aria-label="Continue with Google">
-                <svg className="google-icon" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
-                  <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
-                  <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
-                  <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
-                  <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
-                </svg>
-                <span>🚀 Continue with Google</span>
-                <div className="btn-loading" style={{display: 'none'}}>
-                  <div className="spinner"></div>
-                </div>
+              <button className="btn btn-lg premium-btn glow-cta rounded-full font-bold flex items-center gap-2" style={{ fontSize: '1.15rem', minWidth: 220 }} onClick={() => {
+                const el = document.getElementById('features');
+                if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+              }}>
+                📁 Explore the Toolkit
               </button>
-              <a href="#" className="btn btn-primary btn-lg" data-modal="signup-modal" tabIndex="0" aria-label="Sign Up with Email">📧 Sign Up with Email</a>
-              </>)
-            }
-              <a href="#features" className="btn btn-ghost btn-lg" tabIndex="0" aria-label="Explore Features">✨ Explore Features</a>
+              <button className="btn btn-lg premium-btn glow-cta rounded-full font-bold flex items-center gap-2" style={{ fontSize: '1.15rem', minWidth: 220 }} onClick={() => {
+                const el = document.getElementById('pricing');
+                if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+              }}>
+                ⚡ Unlock Resources Now
+              </button>
             </div>
           </div>
+        </div>
+        {/* Animations and styles for hero */}
+        <style jsx>{`
+          .hero-bg-zoom {
+            animation: heroZoom 18s ease-in-out infinite alternate;
+          }
+          @keyframes heroZoom {
+            0% { transform: scale(1); }
+            100% { transform: scale(1.08); }
+          }
+          .animate-badge-fade-in {
+            animation: badgeFadeIn 1.2s cubic-bezier(0.7,0,0.3,1) 0.2s both;
+          }
+          @keyframes badgeFadeIn {
+            0% { opacity: 0; transform: translateY(-40px) scale(0.9); }
+            100% { opacity: 1; transform: translateY(0) scale(1); }
+          }
+          .hero-line {
+            opacity: 0;
+            transform: translateX(-80vw);
+            will-change: transform, opacity;
+          }
+          .hero-line-2 {
+            transform: translateX(80vw);
+          }
+          .animate-hero-swipe-left {
+            animation: heroSwipeLeft 0.55s cubic-bezier(0.7,0,0.3,1) 0.2s forwards;
+          }
+          .animate-hero-swipe-right {
+            animation: heroSwipeRight 0.55s cubic-bezier(0.7,0,0.3,1) 0.8s forwards;
+          }
+          @keyframes heroSwipeLeft {
+            0% { opacity: 0; transform: translateX(-80vw); }
+            80% { opacity: 1; transform: translateX(2vw); }
+            100% { opacity: 1; transform: translateX(0); }
+          }
+          @keyframes heroSwipeRight {
+            0% { opacity: 0; transform: translateX(80vw); }
+            80% { opacity: 1; transform: translateX(-2vw); }
+            100% { opacity: 1; transform: translateX(0); }
+          }
+        `}</style>
+        {/* Gradient Fade Overlay for smooth transition */}
+        <div style={{ position: 'absolute', left: 0, right: 0, bottom: '70px', width: '100%', height: '80px', zIndex: 19, pointerEvents: 'none' }} aria-hidden="true">
+          <div style={{ width: '100%', height: '100%', background: 'linear-gradient(to bottom, rgba(35,36,58,0) 0%, #23243a 100%)' }} />
+        </div>
+        {/* Wave SVG Divider for smooth transition */}
+        <div style={{ position: 'absolute', left: 0, right: 0, bottom: '-1px', width: '100%', zIndex: 20, pointerEvents: 'none', lineHeight: 0 }} aria-hidden="true">
+          <svg viewBox="0 0 1440 120" width="100%" height="80" preserveAspectRatio="none" style={{ display: 'block', width: '100%', height: '80px' }}>
+            <path fill="#23243a" d="M0,32 C360,120 1080,0 1440,80 L1440,120 L0,120 Z" />
+          </svg>
         </div>
       </section>
 
       {/* How It Works Section */}
-      <section id="how-it-works" className="section" style={{ padding: '6rem 0' }} role="region" aria-label="How HustleHack AI works">
-        <div className="container" style={{ paddingLeft: '2.5rem', paddingRight: '2.5rem', maxWidth: '1400px' }}>
-          <h2 className="section-title" tabIndex="0">How It Works</h2>
-          <p className="section-subtitle" tabIndex="0">Get started with HustleHack AI in three simple steps</p>
-          <div className="grid grid-3" role="list" style={{ gap: '2.5rem' }}>
-            <div className="card" role="listitem" tabIndex="0" style={{ marginBottom: '2.5rem' }}>
-              <span className="card-icon" aria-hidden="true">🔍</span>
-              <h3 className="card-title">Pick Your Plan</h3>
-              <p className="card-description">Choose from our flexible plans designed for different needs and budgets. Start with basics or go pro.</p>
+      <section id="how-it-works" className="section py-24" role="region" aria-label="How HustleHack AI works">
+        <div className="container max-w-6xl mx-auto px-6">
+          <h2 className="section-title premium-heading mb-2" tabIndex="0">How It Works</h2>
+          <p className="section-subtitle text-lg text-gray-300 mb-10" tabIndex="0">Get started with HustleHack AI in three simple steps</p>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
+            <div className="glass-card p-8 rounded-2xl shadow-xl text-center">
+              <span className="card-icon text-3xl mb-4 block">🔍</span>
+              <h3 className="card-title premium-heading mb-2">Pick Your Plan</h3>
+              <p className="card-description text-gray-200">Choose from our flexible plans designed for different needs and budgets. Start with basics or go pro.</p>
             </div>
-            <div className="card" role="listitem" tabIndex="0" style={{ marginBottom: '2.5rem' }}>
-              <span className="card-icon" aria-hidden="true">🎁</span>
-              <h3 className="card-title">Unlock Tools & Resources</h3>
-              <p className="card-description">Access AI tools, templates, prompts, and exclusive content to supercharge your productivity.</p>
+            <div className="glass-card p-8 rounded-2xl shadow-xl text-center">
+              <span className="card-icon text-3xl mb-4 block">🎁</span>
+              <h3 className="card-title premium-heading mb-2">Unlock Tools & Resources</h3>
+              <p className="card-description text-gray-200">Access AI tools, templates, prompts, and exclusive content to supercharge your productivity.</p>
             </div>
-            <div className="card" role="listitem" tabIndex="0" style={{ marginBottom: '2.5rem' }}>
-              <span className="card-icon" aria-hidden="true">🚀</span>
-              <h3 className="card-title">Grow & Scale</h3>
-              <p className="card-description">Apply your newfound skills to grow your studies, side hustles, and creative projects faster than ever.</p>
+            <div className="glass-card p-8 rounded-2xl shadow-xl text-center">
+              <span className="card-icon text-3xl mb-4 block">🚀</span>
+              <h3 className="card-title premium-heading mb-2">Grow & Scale</h3>
+              <p className="card-description text-gray-200">Apply your newfound skills to grow your studies, side hustles, and creative projects faster than ever.</p>
             </div>
           </div>
         </div>
       </section>
 
       {/* Features Section */}
-      <section id="features" className="section" role="region" aria-label="Platform features">
-        <div className="container">
-          <h2 className="section-title" tabIndex="0">Why Choose HustleHack AI?</h2>
-          <p className="section-subtitle" tabIndex="0">Everything you need to succeed in the AI-driven world</p>
-          <div className="grid grid-4" role="list" style={{ gap: '2.5rem' }}>
-            <div className="card" role="listitem" tabIndex="0">
-              <span className="card-icon" aria-hidden="true">✨</span>
-              <h3 className="card-title">Weekly AI Drops</h3>
-              <p className="card-description">Fresh AI tools, prompts, and resources delivered weekly to keep you ahead of the curve.</p>
+      <section id="features" className="section py-24" role="region" aria-label="Platform features">
+        <div className="container max-w-7xl mx-auto px-6">
+          <h2 className="section-title premium-heading mb-2" tabIndex="0">Why Choose HustleHack AI?</h2>
+          <p className="section-subtitle text-lg text-gray-300 mb-10" tabIndex="0">Everything you need to succeed in the AI-driven world</p>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
+            <div className="glass-card p-8 rounded-2xl shadow-xl text-center">
+              <span className="card-icon text-3xl mb-4 block">✨</span>
+              <h3 className="card-title premium-heading mb-2">Weekly AI Drops</h3>
+              <p className="card-description text-gray-200">Fresh AI tools, prompts, and resources delivered weekly to keep you ahead of the curve.</p>
             </div>
-            <div className="card" role="listitem" tabIndex="0">
-              <span className="card-icon" aria-hidden="true">🛠️</span>
-              <h3 className="card-title">Tools & Templates</h3>
-              <p className="card-description">Ready-to-use templates, blueprints, and automation tools for instant productivity boost.</p>
+            <div className="glass-card p-8 rounded-2xl shadow-xl text-center">
+              <span className="card-icon text-3xl mb-4 block">🛠️</span>
+              <h3 className="card-title premium-heading mb-2">Tools & Templates</h3>
+              <p className="card-description text-gray-200">Ready-to-use templates, blueprints, and automation tools for instant productivity boost.</p>
             </div>
-            <div className="card" role="listitem" tabIndex="0">
-              <span className="card-icon" aria-hidden="true">📚</span>
-              <h3 className="card-title">Study & Creator Resources</h3>
-              <p className="card-description">Comprehensive guides, tutorials, and resources for students and content creators.</p>
+            <div className="glass-card p-8 rounded-2xl shadow-xl text-center">
+              <span className="card-icon text-3xl mb-4 block">📚</span>
+              <h3 className="card-title premium-heading mb-2">Study & Creator Resources</h3>
+              <p className="card-description text-gray-200">Comprehensive guides, tutorials, and resources for students and content creators.</p>
             </div>
-            <div className="card" role="listitem" tabIndex="0">
-              <span className="card-icon" aria-hidden="true">🧠</span>
-              <h3 className="card-title">Learn AI on the Go</h3>
-              <p className="card-description">Mobile-friendly platform with bite-sized learning modules that fit your schedule.</p>
+            <div className="glass-card p-8 rounded-2xl shadow-xl text-center">
+              <span className="card-icon text-3xl mb-4 block">🧠</span>
+              <h3 className="card-title premium-heading mb-2">Learn AI on the Go</h3>
+              <p className="card-description text-gray-200">Mobile-friendly platform with bite-sized learning modules that fit your schedule.</p>
             </div>
-            <div className="card" role="listitem" tabIndex="0">
-              <span className="card-icon" aria-hidden="true">🎯</span>
-              <h3 className="card-title">Personalized Learning</h3>
-              <p className="card-description">AI-powered recommendations based on your interests and learning goals.</p>
+            <div className="glass-card p-8 rounded-2xl shadow-xl text-center">
+              <span className="card-icon text-3xl mb-4 block">🎯</span>
+              <h3 className="card-title premium-heading mb-2">Personalized Learning</h3>
+              <p className="card-description text-gray-200">AI-powered recommendations based on your interests and learning goals.</p>
             </div>
-            <div className="card" role="listitem" tabIndex="0">
-              <span className="card-icon" aria-hidden="true">🌟</span>
-              <h3 className="card-title">Community Access</h3>
-              <p className="card-description">Connect with like-minded hustlers, get feedback, and collaborate on projects.</p>
+            <div className="glass-card p-8 rounded-2xl shadow-xl text-center">
+              <span className="card-icon text-3xl mb-4 block">🌟</span>
+              <h3 className="card-title premium-heading mb-2">Community Access</h3>
+              <p className="card-description text-gray-200">Connect with like-minded hustlers, get feedback, and collaborate on projects.</p>
             </div>
-            <div className="card" role="listitem" tabIndex="0">
-              <span className="card-icon" aria-hidden="true">💡</span>
-              <h3 className="card-title">Innovation Hub</h3>
-              <p className="card-description">Access to cutting-edge AI tools and beta features before they go mainstream.</p>
+            <div className="glass-card p-8 rounded-2xl shadow-xl text-center">
+              <span className="card-icon text-3xl mb-4 block">💡</span>
+              <h3 className="card-title premium-heading mb-2">Innovation Hub</h3>
+              <p className="card-description text-gray-200">Access to cutting-edge AI tools and beta features before they go mainstream.</p>
             </div>
-            <div className="card" role="listitem" tabIndex="0">
-              <span className="card-icon" aria-hidden="true">🏆</span>
-              <h3 className="card-title">Success Tracking</h3>
-              <p className="card-description">Track your progress, achievements, and growth with detailed analytics.</p>
+            <div className="glass-card p-8 rounded-2xl shadow-xl text-center">
+              <span className="card-icon text-3xl mb-4 block">🏆</span>
+              <h3 className="card-title premium-heading mb-2">Success Tracking</h3>
+              <p className="card-description text-gray-200">Track your progress, achievements, and growth with detailed analytics.</p>
             </div>
           </div>
         </div>
       </section>
 
       {/* Pricing Section */}
-      <section id="pricing" className="section" role="region" aria-label="Pricing plans">
-        <div className="container">
-          <h2 className="section-title" tabIndex="0">Choose Your Plan</h2>
-          <p className="section-subtitle" tabIndex="0">Flexible pricing that grows with your ambitions</p>
-          <div className="grid grid-3" role="list" style={{ gap: '2.5rem' }}>
-            <div className="pricing-card" role="listitem" tabIndex="0" style={{ marginBottom: '2.5rem' }}>
+      <section id="pricing" className="section py-24 relative" role="region" aria-label="Pricing plans">
+        {/* Animated Gradient Overlay */}
+        <div className="absolute inset-0 z-0 animate-bg-gradient" style={{ pointerEvents: 'none', opacity: 0.5 }} />
+        <div className="container max-w-5xl mx-auto px-6 relative z-10">
+          <h2 className="section-title premium-heading mb-2" tabIndex="0">Choose Your Plan</h2>
+          <p className="section-subtitle text-lg text-gray-300 mb-10" tabIndex="0">Flexible pricing that grows with your ambitions</p>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
+            <div className="glass-card p-8 rounded-2xl shadow-xl text-center">
               <div className="pricing-rating">
                 <div className="rating-stars" aria-label="4.2 out of 5 stars">
                   <span className="star filled" aria-hidden="true">★</span>
@@ -218,8 +285,8 @@ export default function HomePage() {
                 </div>
                 <span className="rating-text">4.2/5 (2,847 reviews)</span>
               </div>
-              <h3 className="pricing-title">Starter Hustle</h3>
-              <p className="pricing-subtitle">Perfect for getting started</p>
+              <h3 className="pricing-title premium-plan-name">Starter Hustle</h3>
+              <p className="pricing-subtitle text-gray-200">Perfect for getting started</p>
               <div className="pricing-container">
                 <div className="pricing-original">₹499</div>
                 <div className="pricing-current">₹99<span className="pricing-period">/month</span></div>
@@ -231,10 +298,10 @@ export default function HomePage() {
                 <li>Community access</li>
                 <li>Email support</li>
               </ul>
-              <a href="https://rzp.io/rzp/ppw09ED" className="btn btn-outline" target="_blank" rel="noopener noreferrer" aria-label="Get Started with Starter Hustle">Get Started Now</a>
+              <a href="https://rzp.io/rzp/ppw09ED" className="btn btn-outline premium-btn glow-cta" target="_blank" rel="noopener noreferrer" aria-label="Get Started with Starter Hustle">Get Started Now</a>
               <p className="pricing-note">One-month access, renew anytime manually</p>
             </div>
-            <div className="pricing-card featured" role="listitem" tabIndex="0">
+            <div className="glass-card p-8 rounded-2xl shadow-xl text-center featured">
               <div className="pricing-badge">Most Popular</div>
               <div className="pricing-rating">
                 <div className="rating-stars" aria-label="4.8 out of 5 stars">
@@ -246,8 +313,8 @@ export default function HomePage() {
                 </div>
                 <span className="rating-text">4.8/5 (5,632 reviews)</span>
               </div>
-              <h3 className="pricing-title">Creator Mode</h3>
-              <p className="pricing-subtitle">For serious creators</p>
+              <h3 className="pricing-title premium-plan-name">Creator Mode</h3>
+              <p className="pricing-subtitle text-gray-200">For serious creators</p>
               <div className="pricing-container">
                 <div className="pricing-original">₹799</div>
                 <div className="pricing-current">₹199<span className="pricing-period">/month</span></div>
@@ -260,10 +327,10 @@ export default function HomePage() {
                 <li>Priority support</li>
                 <li>Weekly live sessions</li>
               </ul>
-              <a href="https://rzp.io/rzp/WnoiZtJH" className="btn btn-primary" target="_blank" rel="noopener noreferrer" aria-label="Level Up with Creator Mode">Level Up Now</a>
+              <a href="https://rzp.io/rzp/WnoiZtJH" className="btn btn-primary premium-btn glow-cta" target="_blank" rel="noopener noreferrer" aria-label="Level Up with Creator Mode">Level Up Now</a>
               <p className="pricing-note">One-month access, renew anytime manually</p>
             </div>
-            <div className="pricing-card" role="listitem" tabIndex="0">
+            <div className="glass-card p-8 rounded-2xl shadow-xl text-center">
               <div className="pricing-rating">
                 <div className="rating-stars" aria-label="4.5 out of 5 stars">
                   <span className="star filled" aria-hidden="true">★</span>
@@ -274,8 +341,8 @@ export default function HomePage() {
                 </div>
                 <span className="rating-text">4.5/5 (1,923 reviews)</span>
               </div>
-              <h3 className="pricing-title">Pro Hacker</h3>
-              <p className="pricing-subtitle">Maximum firepower</p>
+              <h3 className="pricing-title premium-plan-name">Pro Hacker</h3>
+              <p className="pricing-subtitle text-gray-200">Maximum firepower</p>
               <div className="pricing-container">
                 <div className="pricing-original">₹1,199</div>
                 <div className="pricing-current">₹299<span className="pricing-period">/month</span></div>
@@ -288,7 +355,7 @@ export default function HomePage() {
                 <li>1-on-1 strategy calls</li>
                 <li>VIP community access</li>
               </ul>
-              <a href="https://rzp.io/rzp/nraUuNBx" className="btn btn-outline" target="_blank" rel="noopener noreferrer" aria-label="Go Pro with Pro Hacker">Go Pro Now</a>
+              <a href="https://rzp.io/rzp/nraUuNBx" className="btn btn-outline premium-btn glow-cta" target="_blank" rel="noopener noreferrer" aria-label="Go Pro with Pro Hacker">Go Pro Now</a>
               <p className="pricing-note">One-month access, renew anytime manually</p>
             </div>
           </div>
@@ -296,27 +363,27 @@ export default function HomePage() {
       </section>
 
       {/* Testimonials Section */}
-      <section id="testimonials" className="section" role="region" aria-label="User testimonials">
-        <div className="container">
-          <h2 className="section-title" tabIndex="0">What Our Users Say</h2>
-          <p className="section-subtitle" tabIndex="0">Join thousands of students and creators who are already winning with AI</p>
-          <div className="grid grid-3" role="list">
-            <div className="card" role="listitem" tabIndex="0">
-              <p className="card-description">&quot;HustleHack AI transformed my content creation workflow. I&apos;m now producing 3x more content with better quality!&quot;</p>
+      <section id="testimonials" className="section py-24" role="region" aria-label="User testimonials">
+        <div className="container max-w-6xl mx-auto px-6">
+          <h2 className="section-title premium-heading mb-2" tabIndex="0">What Our Users Say</h2>
+          <p className="section-subtitle text-lg text-gray-300 mb-10" tabIndex="0">Join thousands of students and creators who are already winning with AI</p>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
+            <div className="glass-card p-8 rounded-2xl shadow-xl text-center">
+              <p className="card-description text-gray-200">&quot;HustleHack AI transformed my content creation workflow. I&apos;m now producing 3x more content with better quality!&quot;</p>
               <div style={{marginTop: '1rem'}}>
                 <strong style={{color: 'var(--accent)'}}>Priya Sharma</strong>
                 <p style={{color: 'var(--gray-400)', fontSize: '0.9rem', margin: 0}}>Content Creator, Mumbai</p>
               </div>
             </div>
-            <div className="card" role="listitem" tabIndex="0">
-              <p className="card-description">&quot;The AI study tools helped me crack my engineering entrance exam. The personalized learning path was a game-changer!&quot;</p>
+            <div className="glass-card p-8 rounded-2xl shadow-xl text-center">
+              <p className="card-description text-gray-200">&quot;The AI study tools helped me crack my engineering entrance exam. The personalized learning path was a game-changer!&quot;</p>
               <div style={{marginTop: '1rem'}}>
                 <strong style={{color: 'var(--accent)'}}>Arjun Patel</strong>
                 <p style={{color: 'var(--gray-400)', fontSize: '0.9rem', margin: 0}}>Student, Delhi</p>
               </div>
             </div>
-            <div className="card" role="listitem" tabIndex="0">
-              <p className="card-description">&quot;My freelance business grew 5x after using HustleHack&apos;s automation tools. The ROI was incredible!&quot;</p>
+            <div className="glass-card p-8 rounded-2xl shadow-xl text-center">
+              <p className="card-description text-gray-200">&quot;My freelance business grew 5x after using HustleHack&apos;s automation tools. The ROI was incredible!&quot;</p>
               <div style={{marginTop: '1rem'}}>
                 <strong style={{color: 'var(--accent)'}}>Sneha Reddy</strong>
                 <p style={{color: 'var(--gray-400)', fontSize: '0.9rem', margin: 0}}>Freelancer, Bangalore</p>
@@ -327,10 +394,10 @@ export default function HomePage() {
       </section>
 
       {/* FAQ Section */}
-      <section id="faq" className="section" role="region" aria-label="Frequently asked questions">
-        <div className="container">
-          <h2 className="section-title" tabIndex="0">Frequently Asked Questions</h2>
-          <p className="section-subtitle" tabIndex="0">Everything you need to know about HustleHack AI</p>
+      <section id="faq" className="section py-24" role="region" aria-label="Frequently asked questions">
+        <div className="container max-w-6xl mx-auto px-6">
+          <h2 className="section-title premium-heading mb-2" tabIndex="0">Frequently Asked Questions</h2>
+          <p className="section-subtitle text-lg text-gray-300 mb-10" tabIndex="0">Everything you need to know about HustleHack AI</p>
           <div className="faq-container" role="list">
             {/* FAQ items with React state for open/close */}
             {[
@@ -383,19 +450,20 @@ export default function HomePage() {
       </section>
 
       {/* Final CTA Section */}
-      <section className="section" style={{background: 'linear-gradient(135deg, #7F5AF0, #00FFC2)', color: 'white'}} role="region" aria-label="Final call to action">
-        <div className="container text-center">
-          <h2 className="section-title" style={{color: 'white'}} tabIndex="0">Ready to Unlock Your AI Superpowers?</h2>
-          <p className="section-subtitle" style={{color: 'white', opacity: 0.9}} tabIndex="0">Join thousands of students and creators who are already building their future with AI</p>
-          <div className="hero-actions" role="group" aria-label="Final actions">
-            <a href="https://rzp.io/rzp/ppw09ED" className="btn btn-lg" style={{background: 'white', color: '#7F5AF0'}} target="_blank" rel="noopener noreferrer" aria-label="Start with Starter Hustle - ₹99">🚀 Start with Starter Hustle - ₹99</a>
-            <a href="#pricing" className="btn btn-lg" style={{background: 'rgba(255,255,255,0.2)', color: 'white', border: '2px solid white'}} aria-label="Compare Plans">Compare Plans</a>
+      <section className="section py-24" style={{background: 'linear-gradient(135deg, #7F5AF0, #00FFC2)', color: 'white'}} role="region" aria-label="Final call to action">
+        <div className="container max-w-6xl mx-auto px-6 text-center">
+          <h2 className="section-title premium-heading mb-2" style={{color: 'white'}} tabIndex="0">Ready to Unlock Your AI Superpowers?</h2>
+          <p className="section-subtitle text-lg text-gray-200 mb-10" style={{color: 'white', opacity: 0.9}} tabIndex="0">Join thousands of students and creators who are already building their future with AI</p>
+          <div className="hero-actions flex flex-col md:flex-row gap-4 justify-center items-center" role="group" aria-label="Final actions">
+            <a href="https://rzp.io/rzp/ppw09ED" className="btn btn-lg premium-btn" style={{background: 'white', color: '#7F5AF0'}} target="_blank" rel="noopener noreferrer" aria-label="Start with Starter Hustle - ₹99">🚀 Start with Starter Hustle - ₹99</a>
+            <a href="#pricing" className="btn btn-lg premium-btn" style={{background: 'rgba(255,255,255,0.2)', color: 'white', border: '2px solid white'}} aria-label="Compare Plans">Compare Plans</a>
           </div>
         </div>
       </section>
 
       {/* Footer */}
       <Footer />
+      {/* Animations for gradient and confetti */}
     </div>
   )
 }
