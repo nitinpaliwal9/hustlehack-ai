@@ -1,8 +1,10 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Loader, Copy, CheckCircle, AlertCircle, Sparkles } from 'lucide-react';
 import { useAuth } from '../../hooks/useAuth';
+import { supabase } from '../../../lib/supabaseClient';
+import { useUserPlan } from '../../hooks/useAuth';
 
 const outputTypes = [
   { value: 'caption', label: 'Caption' },
@@ -12,11 +14,10 @@ const outputTypes = [
 
 export default function AIContentGenerator() {
   const { user, isLoading } = useAuth();
-  // For demo, get plan from user object; in real use, fetch from user profile or subscription
-  const userPlan = user?.plan || 'starter';
-  const allowed = userPlan === 'creator' || userPlan === 'pro';
+  const { plan, loading: planLoading } = useUserPlan(user?.id);
+  const allowed = plan === 'creator' || plan === 'pro';
 
-  if (isLoading) {
+  if (isLoading || planLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 via-gray-800 to-black">
         <div className="text-center animate-fade-in">

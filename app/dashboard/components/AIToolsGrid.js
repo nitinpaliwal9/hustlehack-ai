@@ -31,7 +31,25 @@ export default function AIToolsGrid({ userPlan = 'starter' }) {
   const [toolInputs, setToolInputs] = useState({})
   const [toolOutputs, setToolOutputs] = useState({})
   const [isProcessing, setIsProcessing] = useState({})
+  const [toolsUsedIds, setToolsUsedIds] = useState([])
   const { user } = useAuth();
+
+  // Fetch tools_used_ids on mount
+  useEffect(() => {
+    async function fetchToolsUsed() {
+      if (user?.id) {
+        const { data, error } = await supabase
+          .from('user_analytics')
+          .select('tools_used_ids')
+          .eq('user_id', user.id)
+          .single();
+        if (!error && data?.tools_used_ids) {
+          setToolsUsedIds(data.tools_used_ids);
+        }
+      }
+    }
+    fetchToolsUsed();
+  }, [user?.id]);
 
   // Logging utility for unique tool usage
   async function logToolUsage(userId, resourceName) {
@@ -268,9 +286,10 @@ export default function AIToolsGrid({ userPlan = 'starter' }) {
     setToolOutputs(prev => ({ ...prev, [tool.id]: output }))
     setIsProcessing(prev => ({ ...prev, [tool.id]: false }))
     
-    // Log unique tool usage after content is generated
-    if (user?.id && tool?.name) {
-      logToolUsage(user.id, tool.name); // Use tool.name as the resource identifier
+    // Only log unique tool usage
+    if (user?.id && tool?.name && !toolsUsedIds.includes(tool.name)) {
+      await logToolUsage(user.id, tool.name);
+      setToolsUsedIds(prev => [...prev, tool.name]);
     }
   }
 

@@ -11,6 +11,7 @@ import ResourceLibrary from './components/ResourceLibrary';
 import PromptLibrary from './components/PromptLibrary';
 import QuickActions from './components/QuickActions';
 import { BarChart3, Brain, BookOpen, Trophy, Settings, Bell, User, TrendingUp, Zap, FileText } from 'lucide-react';
+import { useUserPlan } from '../hooks/useAuth';
 
 // --- New: Reusable Section Components ---
 function PlanInfoCard({ plan, expiry }) {
@@ -99,6 +100,7 @@ function RecentActivitySection({ recentActivity }) {
 
 export default function DashboardClient() {
   const { user, isAuthenticated, isLoading, supabase, checkUserProfile, criticalError, clearCriticalError } = useAuth();
+  const { plan: userPlan, loading: planLoading } = useUserPlan(user?.id);
   const router = useRouter();
   const [userData, setUserData] = useState({ 
     name: 'Hustler', 
@@ -390,21 +392,20 @@ export default function DashboardClient() {
     );
   }
 
-  if (loading) return (
-    <div className="min-h-screen flex items-center justify-center" style={{ background: 'var(--bg-primary)' }}>
-      <div className="text-center animate-fade-in">
-        <div className="relative mb-8">
-          <div className="animate-spin rounded-full h-20 w-20 border-4 border-[var(--primary)] border-t-transparent mx-auto"></div>
-          <div className="absolute inset-0 rounded-full bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] opacity-20 animate-pulse"></div>
-        </div>
-        <p className="text-2xl font-bold mb-2" style={{ color: 'var(--text-primary)' }}>Loading your dashboard...</p>
-        <p className="text-lg" style={{ color: 'var(--text-secondary)' }}>Preparing your personalized experience</p>
-        <div className="mt-6 w-64 mx-auto rounded-full h-2 overflow-hidden" style={{ background: 'var(--bg-surface)' }}>
-          <div className="h-full bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] animate-shimmer"></div>
+  if (isLoading || planLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center" style={{ background: 'var(--bg-primary)' }}>
+        <div className="text-center animate-fade-in">
+          <div className="relative mb-8">
+            <div className="animate-spin rounded-full h-20 w-20 border-4 border-[var(--primary)] border-t-transparent mx-auto"></div>
+            <div className="absolute inset-0 rounded-full bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] opacity-20 animate-pulse"></div>
+          </div>
+          <p className="text-2xl font-bold mb-2" style={{ color: 'var(--text-primary)' }}>Loading your dashboard...</p>
+          <p className="text-lg" style={{ color: 'var(--text-secondary)' }}>Preparing your personalized experience</p>
         </div>
       </div>
-    </div>
-  );
+    );
+  }
 
   if (profileCheckError) {
     return (
@@ -477,7 +478,7 @@ export default function DashboardClient() {
 
             {/* Resources Section */}
             <div className="space-y-6">
-              <h2 className="text-2xl font-bold text-white">�� Your Resources</h2>
+              <h2 className="text-2xl font-bold text-white">🚀 Your Resources</h2>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {resources.map((resource, index) => (
                   <div key={resource.id} className="animate-fade-in-up" style={{animationDelay: `${index * 0.1}s`}}>
@@ -492,7 +493,7 @@ export default function DashboardClient() {
 
             {/* Recent Activity */}
             <div className="rounded-xl shadow-lg border border-[var(--border-color)] p-6" style={{ background: 'rgba(36,41,46,0.96)' }}>
-              <h3 className="text-xl font-bold text-white mb-4">�� Recent Activity</h3>
+              <h3 className="text-xl font-bold text-white mb-4">📊 Recent Activity</h3>
               {recentActivity.length > 0 ? (
                 <ul className="space-y-3">
                   {recentActivity.map((activity, index) => (
@@ -516,15 +517,15 @@ export default function DashboardClient() {
           </div>
         );
       case 'quick-actions':
-        return <QuickActions userPlan={userData.plan} onActionClick={handleQuickAction} />;
+        return <QuickActions userPlan={userPlan} onActionClick={handleQuickAction} />;
       case 'analytics':
         return <UserAnalytics user={user} userProfile={userData} />;
       case 'ai-tools':
-        return <AIToolsGrid userPlan={userData.plan} />;
+        return <AIToolsGrid userPlan={userPlan} />;
       case 'prompts':
-        return <PromptLibrary userPlan={userData.plan} />;
+        return <PromptLibrary userPlan={userPlan} />;
       case 'resources':
-        return <ResourceLibrary />;
+        return <ResourceLibrary userPlan={userPlan} />;
       case 'achievements':
         return (
           <div className="space-y-8">
@@ -654,12 +655,6 @@ export default function DashboardClient() {
               </div>
             </div>
           )}
-
-          {/* Resources Section */}
-          <ResourcesSection resources={resources} onAccess={logUserActivity} />
-
-          {/* Recent Activity */}
-          <RecentActivitySection recentActivity={recentActivity} />
 
           {/* Call to Action */}
           <div className="bg-gradient-to-r from-[#7F5AF0] to-[#00FFC2] rounded-2xl shadow-lg hover:shadow-xl transform hover:scale-[1.02] transition-all duration-300" style={{ background: 'var(--bg-surface)' }}>

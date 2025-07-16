@@ -886,6 +886,41 @@ export function useAuth() {
   }
 }
 
+// Custom hook to get the user's current plan from subscriptions (with fallback)
+export function useUserPlan(userId) {
+  const [plan, setPlan] = useState('starter');
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchPlan() {
+      setLoading(true);
+      if (userId) {
+        // Try subscriptions table first
+        let { data, error } = await supabase
+          .from('subscriptions')
+          .select('plan_name')
+          .eq('user_id', userId)
+          .single();
+        if (!error && data?.plan_name) {
+          setPlan(data.plan_name);
+        } else {
+          // fallback to users table
+          let { data: userData } = await supabase
+            .from('users')
+            .select('plan')
+            .eq('id', userId)
+            .single();
+          if (userData?.plan) setPlan(userData.plan);
+        }
+      }
+      setLoading(false);
+    }
+    fetchPlan();
+  }, [userId]);
+
+  return { plan, loading };
+}
+
 // Higher-order component for protected routes
 export function withAuth(WrappedComponent) {
   return function AuthenticatedComponent(props) {
