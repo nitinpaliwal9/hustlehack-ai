@@ -317,8 +317,8 @@ export default function Navigation() {
   let planBadgeClass = '';
   let planIcon = null;
   if (plan === 'pro') {
-    planBadgeClass = 'bg-gradient-to-r from-yellow-400 via-purple-500 to-yellow-300 text-white shadow-lg animate-glow border-2 border-yellow-400';
-    planIcon = <span className="mr-2">👑</span>;
+    planBadgeClass = 'bg-gradient-to-r from-yellow-400 via-purple-500 to-yellow-300 text-black shadow-lg animate-glow border border-yellow-400';
+    planIcon = <span className="mr-1 text-base">👑</span>;
   } else if (plan === 'creator') {
     planBadgeClass = 'bg-gradient-to-r from-blue-400 via-pink-500 to-purple-400 text-white shadow-md animate-sparkle border-2 border-pink-400';
     planIcon = <span className="mr-2">✨</span>;
@@ -368,9 +368,10 @@ export default function Navigation() {
           
           {/* Plan Badge - always visible, premium styling */}
           {isAuthenticated && !planLoading && (
-            <div className={`hidden md:flex items-center ml-6 mr-2 px-5 py-2 rounded-full font-extrabold text-lg tracking-wide uppercase ${planBadgeClass}`} style={{ minWidth: 170, letterSpacing: 2, position: 'relative', zIndex: 20, boxShadow: '0 0 16px 2px rgba(127,90,240,0.25)' }}>
+            <div className={`hidden md:flex items-center ml-6 mr-2 px-3 py-1 rounded-full font-bold tracking-wide uppercase ${planBadgeClass}`}
+              style={{ minWidth: 100, letterSpacing: 1, position: 'relative', zIndex: 20, boxShadow: '0 2px 8px 0 rgba(127,90,240,0.10)', whiteSpace: 'nowrap', color: '#181818', textShadow: 'none', borderRadius: '18px', fontSize: '0.95rem', maxWidth: 160, overflow: 'hidden', textOverflow: 'ellipsis' }}>
               {planIcon}
-              <span className="shine-text" style={{ WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>{planDisplay}</span>
+              <span className="shine-text" style={{ background: 'none', WebkitBackgroundClip: 'unset', WebkitTextFillColor: 'unset', backgroundClip: 'unset', fontSize: 'inherit', whiteSpace: 'nowrap' }}>{planDisplay}</span>
             </div>
           )}
 
@@ -457,9 +458,10 @@ export default function Navigation() {
             </div>
             {/* Plan Badge (mobile) */}
             {isAuthenticated && !planLoading && (
-              <div className={`flex items-center mt-6 mb-2 px-6 py-2 rounded-full font-extrabold text-lg tracking-wide uppercase ${planBadgeClass}`} style={{ minWidth: 170, letterSpacing: 2, boxShadow: '0 0 16px 2px rgba(127,90,240,0.25)' }}>
+              <div className={`flex items-center mt-6 mb-2 px-3 py-1 rounded-full font-bold tracking-wide uppercase ${planBadgeClass}`}
+                style={{ minWidth: 100, letterSpacing: 1, boxShadow: '0 2px 8px 0 rgba(127,90,240,0.10)', whiteSpace: 'nowrap', color: '#181818', textShadow: 'none', borderRadius: '18px', fontSize: '0.95rem', maxWidth: 160, overflow: 'hidden', textOverflow: 'ellipsis' }}>
                 {planIcon}
-                <span className="shine-text" style={{ WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>{planDisplay}</span>
+                <span className="shine-text" style={{ background: 'none', WebkitBackgroundClip: 'unset', WebkitTextFillColor: 'unset', backgroundClip: 'unset', fontSize: 'inherit', whiteSpace: 'nowrap' }}>{planDisplay}</span>
               </div>
             )}
             {/* Mobile Menu Links */}

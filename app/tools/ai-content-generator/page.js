@@ -17,11 +17,21 @@ export default function AIContentGenerator() {
   console.log('[AIContentGenerator] Render start');
   const { user, isLoading } = useAuth();
   console.log('[AIContentGenerator] After useAuth', { user, isLoading });
-  const planHook = user?.id ? useUserPlan(user.id) : { plan: 'starter', loading: true };
-  console.log('[AIContentGenerator] After useUserPlan hook setup', { planHook });
-  const { plan, loading: planLoading } = planHook;
+  // Always call useUserPlan unconditionally
+  const { plan, loading: planLoading } = useUserPlan(user?.id);
   const allowed = isPlanAtLeast(plan, 'creator');
   console.log('[AIContentGenerator] After plan/allowed calc', { plan, planLoading, allowed });
+
+  if (!isLoading && !user) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 via-gray-800 to-black">
+        <div className="text-center animate-fade-in">
+          <p className="text-2xl text-white font-bold mb-4">Please log in to use the AI Content Generator.</p>
+          <a href="/auth/callback" className="inline-block bg-gradient-to-r from-[#7F5AF0] to-[#00FFC2] text-white font-bold px-8 py-4 rounded-2xl text-lg shadow-xl hover:from-[#6D4DC6] hover:to-[#00E6B3] transition-all duration-300 hover:scale-105">Log In</a>
+        </div>
+      </div>
+    );
+  }
 
   if (isLoading || planLoading || !user) {
     console.log('[AIContentGenerator] Loading state', { isLoading, planLoading, user });

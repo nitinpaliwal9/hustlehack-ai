@@ -48,25 +48,43 @@ import LoadingSpinner from '../components/LoadingSpinner'
 // Add internal links to /pricing, /, and between toolkits.
 
 export default function ResourcesPage() {
-  const { user, isLoading, checkUserProfile } = useAuth()
-  const router = useRouter()
-  const [profileChecked, setProfileChecked] = useState(false)
-
+  // Skeleton loading state for perceived performance
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
-    if (!isLoading && user) {
-      checkUserProfile(user).then(status => {
-        if (status !== 'complete') {
-          router.push('/complete-profile')
-        } else {
-          setProfileChecked(true)
-        }
-      })
-    }
-  }, [isLoading, user, checkUserProfile, router])
+    const timer = setTimeout(() => setLoading(false), 1000); // Simulate 1s load
+    return () => clearTimeout(timer);
+  }, []);
 
-  if (isLoading || !user || !profileChecked) {
-    return <LoadingSpinner message="Loading..." />
-  }
+  // Skeleton card component
+  const SkeletonCard = () => (
+    <div className="resource-card skeleton-card" style={{padding: '2.5rem', minHeight: 220, borderRadius: 18, background: 'rgba(255,255,255,0.04)', display: 'flex', flexDirection: 'column', gap: 16}}>
+      <div style={{width: 60, height: 60, borderRadius: '50%', background: 'rgba(127,90,240,0.10)', marginBottom: 16}}></div>
+      <div style={{width: '60%', height: 24, borderRadius: 6, background: 'rgba(127,90,240,0.15)', marginBottom: 10}}></div>
+      <div style={{width: '90%', height: 16, borderRadius: 6, background: 'rgba(127,90,240,0.10)', marginBottom: 8}}></div>
+      <div style={{width: '80%', height: 16, borderRadius: 6, background: 'rgba(127,90,240,0.10)', marginBottom: 8}}></div>
+      <div style={{width: 120, height: 36, borderRadius: 8, background: 'rgba(127,90,240,0.12)', marginTop: 'auto'}}></div>
+    </div>
+  );
+
+  // const { user, isLoading, checkUserProfile } = useAuth()
+  // const router = useRouter()
+  // const [profileChecked, setProfileChecked] = useState(false)
+
+  // useEffect(() => {
+  //   if (!isLoading && user) {
+  //     checkUserProfile(user).then(status => {
+  //       if (status !== 'complete') {
+  //         router.push('/complete-profile')
+  //       } else {
+  //         setProfileChecked(true)
+  //       }
+  //     })
+  //   }
+  // }, [isLoading, user, checkUserProfile, router])
+
+  // if (isLoading || !user || !profileChecked) {
+  //   return <LoadingSpinner message="Loading..." />
+  // }
 
   return (
     <div>
@@ -89,49 +107,61 @@ export default function ResourcesPage() {
               <p tabIndex="0">Handpicked AI-ready templates for creators, students, and solopreneurs</p>
             </div>
             <div className="resource-cards" role="list" style={{gap: '2rem'}}>
-              <div className="resource-card featured-card" role="listitem" tabIndex="0" style={{padding: '2.5rem'}}>
-                <div className="card-badge">Popular</div>
-                <span className="card-icon" aria-hidden="true">📱</span>
-                <h3 className="card-title">Social Media Prompt Pack</h3>
-                <p className="card-description">50+ AI-ready prompts to automate your content calendar. Generate viral posts, engaging captions, trending hashtags, and strategic content plans across all platforms effortlessly.</p>
-                <Link href="/resources/toolkits-and-templates/social-media-prompt-pack" className="btn btn-primary" aria-label="Explore Social Media Prompt Pack">Explore Pack →</Link>
-              </div>
-              
-              <div className="resource-card" role="listitem" tabIndex="0" style={{padding: '2.5rem'}}>
-                <span className="card-icon" aria-hidden="true">💼</span>
-                <h3 className="card-title">Student Productivity Suite</h3>
-                <p className="card-description">Complete toolkit for academic success. Note-taking templates, study planners, and AI study assistants.</p>
-                <Link href="/resources/toolkits-and-templates/student-productivity-suite" className="card-link" aria-label="Explore Student Productivity Suite">Explore Suite →</Link>
-              </div>
-              
-              <div className="resource-card" role="listitem" tabIndex="0" style={{padding: '2.5rem'}}>
-                <span className="card-icon" aria-hidden="true">🎨</span>
-                <h3 className="card-title">Creator's AI Toolkit</h3>
-                <p className="card-description">Everything creators need: video scripts, thumbnail ideas, content calendars, and engagement strategies.</p>
-                <Link href="/resources/toolkits-and-templates/creators-ai-toolkit" className="card-link" aria-label="Explore Creator's AI Toolkit">Explore Toolkit →</Link>
-              </div>
-              
-              <div className="resource-card" role="listitem" tabIndex="0" style={{padding: '2.5rem'}}>
-                <span className="card-icon" aria-hidden="true">🚀</span>
-                <h3 className="card-title">Startup Launch Kit</h3>
-                <p className="card-description">From idea to launch: business plan templates, pitch decks, marketing strategies, and growth hacks.</p>
-                <Link href="/resources/toolkits-and-templates/startup-launch-kit" className="card-link" aria-label="Launch Startup Launch Kit">Launch Now →</Link>
-              </div>
-              
-              <div className="resource-card" role="listitem" tabIndex="0" style={{padding: '2.5rem'}}>
-                <span className="card-icon" aria-hidden="true">💰</span>
-                <h3 className="card-title">Freelancer's Arsenal</h3>
-                <p className="card-description">Client proposals, project templates, pricing calculators, and automated workflow setups.</p>
-                <Link href="#" className="card-link" aria-label="Boost Income with Freelancer's Arsenal">Boost Income →</Link>
-              </div>
-              
-              <div className="resource-card coming-soon-card" role="listitem" tabIndex="0" style={{padding: '2.5rem'}}>
-                <div className="card-badge">Coming Soon</div>
-                <span className="card-icon" aria-hidden="true">🤖</span>
-                <h3 className="card-title">AI Automation Scripts</h3>
-                <p className="card-description">Ready-to-use automation scripts for common tasks. No coding required, just copy and customize.</p>
-                <Link href="#" className="card-link" style={{color: 'var(--gray-500)'}} aria-label="Notify me when AI Automation Scripts are available">Notify Me →</Link>
-              </div>
+              {loading ? (
+                // Show 4 skeleton cards while loading
+                <>
+                  <SkeletonCard />
+                  <SkeletonCard />
+                  <SkeletonCard />
+                  <SkeletonCard />
+                </>
+              ) : (
+                <>
+                  <div className="resource-card featured-card" role="listitem" tabIndex="0" style={{padding: '2.5rem'}}>
+                    <div className="card-badge">Popular</div>
+                    <span className="card-icon" aria-hidden="true">📱</span>
+                    <h3 className="card-title">Social Media Prompt Pack</h3>
+                    <p className="card-description">50+ AI-ready prompts to automate your content calendar. Generate viral posts, engaging captions, trending hashtags, and strategic content plans across all platforms effortlessly.</p>
+                    <Link href="/resources/toolkits-and-templates/social-media-prompt-pack" className="btn btn-primary" aria-label="Explore Social Media Prompt Pack">Explore Pack →</Link>
+                  </div>
+                  
+                  <div className="resource-card" role="listitem" tabIndex="0" style={{padding: '2.5rem'}}>
+                    <span className="card-icon" aria-hidden="true">💼</span>
+                    <h3 className="card-title">Student Productivity Suite</h3>
+                    <p className="card-description">Complete toolkit for academic success. Note-taking templates, study planners, and AI study assistants.</p>
+                    <Link href="/resources/toolkits-and-templates/student-productivity-suite" className="card-link" aria-label="Explore Student Productivity Suite">Explore Suite →</Link>
+                  </div>
+                  
+                  <div className="resource-card" role="listitem" tabIndex="0" style={{padding: '2.5rem'}}>
+                    <span className="card-icon" aria-hidden="true">🎨</span>
+                    <h3 className="card-title">Creator's AI Toolkit</h3>
+                    <p className="card-description">Everything creators need: video scripts, thumbnail ideas, content calendars, and engagement strategies.</p>
+                    <Link href="/resources/toolkits-and-templates/creators-ai-toolkit" className="card-link" aria-label="Explore Creator's AI Toolkit">Explore Toolkit →</Link>
+                  </div>
+                  
+                  <div className="resource-card" role="listitem" tabIndex="0" style={{padding: '2.5rem'}}>
+                    <span className="card-icon" aria-hidden="true">🚀</span>
+                    <h3 className="card-title">Startup Launch Kit</h3>
+                    <p className="card-description">From idea to launch: business plan templates, pitch decks, marketing strategies, and growth hacks.</p>
+                    <Link href="/resources/toolkits-and-templates/startup-launch-kit" className="card-link" aria-label="Launch Startup Launch Kit">Launch Now →</Link>
+                  </div>
+                  
+                  <div className="resource-card" role="listitem" tabIndex="0" style={{padding: '2.5rem'}}>
+                    <span className="card-icon" aria-hidden="true">💰</span>
+                    <h3 className="card-title">Freelancer's Arsenal</h3>
+                    <p className="card-description">Client proposals, project templates, pricing calculators, and automated workflow setups.</p>
+                    <Link href="#" className="card-link" aria-label="Boost Income with Freelancer's Arsenal">Boost Income →</Link>
+                  </div>
+                  
+                  <div className="resource-card coming-soon-card" role="listitem" tabIndex="0" style={{padding: '2.5rem'}}>
+                    <div className="card-badge">Coming Soon</div>
+                    <span className="card-icon" aria-hidden="true">🤖</span>
+                    <h3 className="card-title">AI Automation Scripts</h3>
+                    <p className="card-description">Ready-to-use automation scripts for common tasks. No coding required, just copy and customize.</p>
+                    <Link href="#" className="card-link" style={{color: 'var(--gray-500)'}} aria-label="Notify me when AI Automation Scripts are available">Notify Me →</Link>
+                  </div>
+                </>
+              )}
             </div>
           </section>
 
