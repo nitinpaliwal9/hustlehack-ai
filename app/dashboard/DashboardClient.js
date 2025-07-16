@@ -12,7 +12,121 @@ import PromptLibrary from './components/PromptLibrary';
 import QuickActions from './components/QuickActions';
 import { BarChart3, Brain, BookOpen, Trophy, Settings, Bell, User, TrendingUp, Zap, FileText } from 'lucide-react';
 import { useUserPlan } from '../hooks/useAuth';
-import { getPlanDisplayName } from '../planUtils';
+import { getPlanDisplayName, isPlanAtLeast } from '../planUtils';
+
+function PlanActivatedModal({ plan, onClose }) {
+  const planDisplay = plan === 'pro' ? 'Pro Hacker' : plan === 'creator' ? 'Creator Mode' : 'Starter Hustler';
+  const planMsg = plan === 'pro'
+    ? 'You’ve unlocked all premium features. Enjoy the full power of HustleHack AI.'
+    : plan === 'creator'
+      ? 'Welcome to Creator Mode! Enjoy exclusive tools and features.'
+      : 'Welcome to Starter Hustler! Explore essential AI tools and templates.';
+  const benefits = plan === 'pro' ? [
+    'Unlimited access to all AI tools',
+    'Premium templates & resources',
+    'Priority support',
+    'Early access to new features',
+    'Exclusive Pro badge',
+  ] : plan === 'creator' ? [
+    'Access to Creator tools',
+    'Premium templates',
+    'Priority support',
+    'Creator badge',
+  ] : [
+    'Essential AI tools',
+    'Basic templates',
+    'Community access',
+  ];
+  const shareText = `I just unlocked the ${planDisplay} plan on HustleHack AI! 🚀 #HustleHackAI`;
+  const shareUrl = 'https://hustlehackai.in';
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-80 animate-fade-in">
+      {/* Shimmer background */}
+      <div className="absolute inset-0 pointer-events-none animate-shimmer" style={{ background: 'linear-gradient(120deg, rgba(127,90,240,0.08) 0%, rgba(0,255,194,0.08) 100%)' }} />
+      <div className="relative bg-gradient-to-br from-[#1a1333] via-[#232946] to-[#0f172a] rounded-3xl shadow-2xl p-10 max-w-lg w-full text-center border-4 border-[#7F5AF0] animate-pop-in animate-glow-border overflow-hidden">
+        {/* Confetti Animation */}
+        <ConfettiBurst />
+        <div className="relative z-10 flex flex-col items-center">
+          <div className="w-24 h-24 bg-gradient-to-r from-[#7F5AF0] to-[#00FFC2] rounded-full flex items-center justify-center mb-6 animate-bounce shadow-xl border-4 border-[#FFE27A] animate-glow">
+            <svg width="48" height="48" viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="24" fill="#fff" fillOpacity="0.1"/><path d="M24 8l4.24 12.97h13.63l-11.02 8.01 4.24 12.97L24 33.94l-11.09 8.01 4.24-12.97-11.02-8.01h13.63L24 8z" fill="#FFE27A"/></svg>
+          </div>
+          <h2 className="text-3xl md:text-4xl font-extrabold text-white mb-4 drop-shadow-lg animate-fade-in-up">{planDisplay} Plan Activated!</h2>
+          <p className="text-lg text-gray-200 mb-6 animate-fade-in-up delay-100">{planMsg}</p>
+          <ul className="text-left mx-auto mb-6 max-w-xs space-y-2 animate-fade-in-up delay-200">
+            {benefits.map((b, i) => (
+              <li key={i} className="flex items-center gap-2 text-base text-[#00FFC2] font-medium">
+                <svg width="20" height="20" fill="none"><circle cx="10" cy="10" r="10" fill="#00FFC2" fillOpacity="0.15"/><path d="M6 10.5l2.5 2.5L14 8.5" stroke="#00FFC2" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                {b}
+              </li>
+            ))}
+          </ul>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center animate-fade-in-up delay-300">
+            <button onClick={onClose} className="px-8 py-3 rounded-xl bg-gradient-to-r from-[#7F5AF0] to-[#00FFC2] text-white font-bold text-lg shadow-xl hover:from-[#6D4DC6] hover:to-[#00E6B3] transition-all duration-300">Go to Dashboard</button>
+            <a href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(shareUrl)}`} target="_blank" rel="noopener noreferrer" className="px-8 py-3 rounded-xl bg-[#1DA1F2] text-white font-bold text-lg shadow-xl hover:bg-[#0d8ddb] transition-all duration-300 flex items-center gap-2 justify-center">
+              <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M23 3a10.9 10.9 0 01-3.14 1.53A4.48 4.48 0 0022.4.36a9.09 9.09 0 01-2.88 1.1A4.52 4.52 0 0016.11 0c-2.5 0-4.52 2.02-4.52 4.52 0 .35.04.7.11 1.03C7.69 5.4 4.07 3.67 1.64.95c-.38.65-.6 1.4-.6 2.2 0 1.52.77 2.86 1.94 3.65A4.48 4.48 0 01.96 6v.06c0 2.13 1.52 3.91 3.54 4.31-.37.1-.76.16-1.16.16-.28 0-.55-.03-.81-.08.55 1.72 2.16 2.97 4.07 3A9.05 9.05 0 010 19.54a12.8 12.8 0 006.92 2.03c8.3 0 12.85-6.88 12.85-12.85 0-.2 0-.39-.01-.58A9.22 9.22 0 0023 3z"/></svg>
+              Share
+            </a>
+            <a href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(shareUrl)}`} target="_blank" rel="noopener noreferrer" className="px-8 py-3 rounded-xl bg-[#0077b5] text-white font-bold text-lg shadow-xl hover:bg-[#005983] transition-all duration-300 flex items-center gap-2 justify-center">
+              <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14c-2.76 0-5 2.24-5 5v14c0 2.76 2.24 5 5 5h14c2.76 0 5-2.24 5-5v-14c0-2.76-2.24-5-5-5zm-11 19h-3v-9h3v9zm-1.5-10.28c-.97 0-1.75-.79-1.75-1.75s.78-1.75 1.75-1.75 1.75.79 1.75 1.75-.78 1.75-1.75 1.75zm15.5 10.28h-3v-4.5c0-1.08-.02-2.47-1.5-2.47-1.5 0-1.73 1.17-1.73 2.39v4.58h-3v-9h2.89v1.23h.04c.4-.75 1.38-1.54 2.84-1.54 3.04 0 3.6 2 3.6 4.59v4.72z"/></svg>
+              Share
+            </a>
+          </div>
+        </div>
+      </div>
+      <style jsx global>{`
+        @keyframes confetti-fall {
+          0% { transform: translateY(-100px) scale(1); opacity: 1; }
+          100% { transform: translateY(600px) scale(1.2); opacity: 0.7; }
+        }
+        .animate-confetti-burst circle, .animate-confetti-burst rect {
+          animation: confetti-fall 1.8s cubic-bezier(0.23, 1, 0.32, 1) infinite;
+        }
+        .animate-glow-border {
+          box-shadow: 0 0 32px 8px #7F5AF0, 0 0 64px 16px #00FFC2;
+          animation: glow-border 2.5s ease-in-out infinite alternate;
+        }
+        @keyframes glow-border {
+          0% { box-shadow: 0 0 32px 8px #7F5AF0, 0 0 64px 16px #00FFC2; }
+          100% { box-shadow: 0 0 48px 16px #00FFC2, 0 0 96px 32px #7F5AF0; }
+        }
+        .animate-glow {
+          filter: drop-shadow(0 0 16px #FFE27A) drop-shadow(0 0 32px #00FFC2);
+          animation: glow 2s ease-in-out infinite alternate;
+        }
+        @keyframes glow {
+          0% { filter: drop-shadow(0 0 16px #FFE27A) drop-shadow(0 0 32px #00FFC2); }
+          100% { filter: drop-shadow(0 0 32px #FFE27A) drop-shadow(0 0 48px #7F5AF0); }
+        }
+        .animate-shimmer {
+          background-size: 200% 200%;
+          animation: shimmer 3s linear infinite;
+        }
+        @keyframes shimmer {
+          0% { background-position: 0% 50%; }
+          100% { background-position: 100% 50%; }
+        }
+      `}</style>
+    </div>
+  );
+}
+
+function ConfettiBurst() {
+  // More dynamic confetti burst with falling animation
+  return (
+    <svg width="100%" height="100%" viewBox="0 0 400 400" className="absolute inset-0 w-full h-full animate-confetti-burst pointer-events-none">
+      <circle cx="60" cy="60" r="8" fill="#7F5AF0" style={{ animationDelay: '0s' }} />
+      <circle cx="340" cy="80" r="6" fill="#00FFC2" style={{ animationDelay: '0.2s' }} />
+      <circle cx="200" cy="40" r="7" fill="#FFE27A" style={{ animationDelay: '0.4s' }} />
+      <rect x="100" y="300" width="10" height="10" fill="#F87171" rx="2" style={{ animationDelay: '0.1s' }} />
+      <rect x="320" y="320" width="12" height="12" fill="#7F5AF0" rx="3" style={{ animationDelay: '0.3s' }} />
+      <circle cx="220" cy="200" r="6" fill="#00FFC2" style={{ animationDelay: '0.5s' }} />
+      <rect x="300" y="150" width="8" height="8" fill="#FFE27A" rx="2" style={{ animationDelay: '0.6s' }} />
+      <circle cx="80" cy="200" r="7" fill="#F87171" style={{ animationDelay: '0.7s' }} />
+      <rect x="180" y="350" width="10" height="10" fill="#00FFC2" rx="2" style={{ animationDelay: '0.8s' }} />
+      <circle cx="250" cy="100" r="5" fill="#FFE27A" style={{ animationDelay: '0.9s' }} />
+    </svg>
+  );
+}
 
 // Add helper function at the top or near imports
 function PlanInfoCard({ plan, expiry }) {
@@ -119,6 +233,7 @@ export default function DashboardClient() {
   const [toolsUsed, setToolsUsed] = useState(0);
   const [achievementsCount, setAchievementsCount] = useState(0);
   const [achievementsData, setAchievementsData] = useState([]);
+  const [showPlanModal, setShowPlanModal] = useState(false);
 
   useEffect(() => {
     // Only fetch data if conditions are met and we haven't already fetched for this user
@@ -249,7 +364,7 @@ export default function DashboardClient() {
             name: resource.title, // Map title to name for compatibility
             category: resource.type, // Map type to category for compatibility
             min_plan: resource.plan_required, // Map plan_required to min_plan for compatibility
-            unlocked: subscription?.plan_name && subscription.plan_name.localeCompare(resource.plan_required) >= 0
+            unlocked: isPlanAtLeast(subscription?.plan_name, resource.plan_required)
           }));
 
           setResources(unlockedResources);
@@ -280,8 +395,12 @@ export default function DashboardClient() {
     }
   }, [user?.id, isLoading, isAuthenticated, profileCheckError, dataFetched, currentUserId]);
 
+  useEffect(() => {
+    if (!isLoading && userPlan && userPlan !== 'Not active') {
+      setShowPlanModal(true);
+    }
+  }, [isLoading, userPlan]);
 
-  
 
   const logUserActivity = async (resourceName) => {
     try {
@@ -576,7 +695,8 @@ export default function DashboardClient() {
   };
 
   return (
-    <div className="min-h-screen" style={{ background: 'var(--bg-primary)', color: 'var(--text-primary)' }}>
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black pt-20">
+      {showPlanModal && <PlanActivatedModal plan={userPlan} onClose={() => setShowPlanModal(false)} />}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Main Content Container */}
         <div className="pt-12 sm:pt-20 pb-20 sm:pb-28 space-y-12 sm:space-y-16">

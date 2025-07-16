@@ -14,14 +14,17 @@ const outputTypes = [
 ];
 
 export default function AIContentGenerator() {
+  console.log('[AIContentGenerator] Render start');
   const { user, isLoading } = useAuth();
-
-  // Only call useUserPlan if user is defined
+  console.log('[AIContentGenerator] After useAuth', { user, isLoading });
   const planHook = user?.id ? useUserPlan(user.id) : { plan: 'starter', loading: true };
+  console.log('[AIContentGenerator] After useUserPlan hook setup', { planHook });
   const { plan, loading: planLoading } = planHook;
   const allowed = isPlanAtLeast(plan, 'creator');
+  console.log('[AIContentGenerator] After plan/allowed calc', { plan, planLoading, allowed });
 
   if (isLoading || planLoading || !user) {
+    console.log('[AIContentGenerator] Loading state', { isLoading, planLoading, user });
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 via-gray-800 to-black">
         <div className="text-center animate-fade-in">
@@ -33,6 +36,7 @@ export default function AIContentGenerator() {
   }
 
   if (!allowed) {
+    console.log('[AIContentGenerator] Not allowed', { plan });
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 via-gray-800 to-black">
         <div className="bg-gray-800 rounded-3xl shadow-2xl border border-gray-700 p-12 max-w-lg mx-auto text-center animate-fade-in">
@@ -54,6 +58,7 @@ export default function AIContentGenerator() {
   const [error, setError] = useState('');
   const [result, setResult] = useState('');
   const [copied, setCopied] = useState(false);
+  console.log('[AIContentGenerator] State initialized', { topic, outputType, loading, error, result, copied });
 
   const handleGenerate = async (e) => {
     e.preventDefault();
@@ -62,9 +67,11 @@ export default function AIContentGenerator() {
     setCopied(false);
     if (!topic.trim()) {
       setError('Please enter a topic or idea.');
+      console.log('[AIContentGenerator] handleGenerate: empty topic');
       return;
     }
     setLoading(true);
+    console.log('[AIContentGenerator] handleGenerate: sending request', { topic, outputType });
     try {
       const res = await fetch('/api/generate-content', {
         method: 'POST',
@@ -74,10 +81,13 @@ export default function AIContentGenerator() {
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || 'Failed to generate content.');
       setResult(data.content);
+      console.log('[AIContentGenerator] handleGenerate: success', { content: data.content });
     } catch (err) {
       setError(err.message || 'Something went wrong.');
+      console.log('[AIContentGenerator] handleGenerate: error', err);
     } finally {
       setLoading(false);
+      console.log('[AIContentGenerator] handleGenerate: done');
     }
   };
 
@@ -86,6 +96,7 @@ export default function AIContentGenerator() {
       navigator.clipboard.writeText(result);
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
+      console.log('[AIContentGenerator] handleCopy: copied', { result });
     }
   };
 
@@ -117,7 +128,7 @@ export default function AIContentGenerator() {
                 id="topic"
                 type="text"
                 value={topic}
-                onChange={e => setTopic(e.target.value)}
+                onChange={e => { setTopic(e.target.value); console.log('[AIContentGenerator] topic changed', e.target.value); }}
                 className="w-full px-5 py-4 rounded-xl text-lg bg-gray-700 text-white border-2 border-gray-600 focus:border-[#7F5AF0] focus:ring-0 focus:outline-none placeholder-gray-400 transition-all duration-300 shadow-sm"
                 placeholder="e.g. How to stay productive as a student"
                 required
@@ -132,7 +143,7 @@ export default function AIContentGenerator() {
               <select
                 id="outputType"
                 value={outputType}
-                onChange={e => setOutputType(e.target.value)}
+                onChange={e => { setOutputType(e.target.value); console.log('[AIContentGenerator] outputType changed', e.target.value); }}
                 className="w-full px-5 py-4 rounded-xl text-lg bg-gray-700 text-white border-2 border-gray-600 focus:border-[#00FFC2] focus:ring-0 focus:outline-none transition-all duration-300 shadow-sm cursor-pointer"
               >
                 {outputTypes.map(opt => (
