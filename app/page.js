@@ -101,8 +101,8 @@ export default function HomePage() {
         <div className="absolute inset-0 w-full h-full z-10 pointer-events-none" style={{ background: 'rgba(0,0,0,0.48)' }} />
         {/* Golden Badge */}
         <div className="absolute right-10 z-30 flex items-center gap-2 animate-badge-fade-in" style={{ top: '7.5rem' }}>
-          <span className="hero-badge px-4 py-1.5 rounded-full font-semibold text-base tracking-wide uppercase" style={{ background: 'linear-gradient(90deg, #FFD700 0%, #FFB300 100%)', color: '#232946', boxShadow: '0 1px 6px #FFD70044', letterSpacing: 1, border: '1px solid #FFD700', whiteSpace: 'nowrap', fontSize: '1.05rem', textShadow: '0 1px 2px #fff8, 0 0.5px 0.5px #FFD700' }}>
-            <span style={{ fontSize: 15, marginRight: 6 }}>🏆</span>Pro Hacker – India’s #1 AI Learning Platform
+          <span className="hero-badge px-4 py-1.5 rounded-full font-semibold text-base tracking-wide uppercase" style={{ background: 'linear-gradient(90deg, #FFD700 0%, #FFB300 100%)', color: '#232946', boxShadow: '0 1px 6px #FFD70044, 0 0 16px 4px #FFD70055', letterSpacing: 1, border: '1px solid #FFD700', whiteSpace: 'nowrap', fontSize: '1.05rem', textShadow: '0 1px 2px #fff8, 0 0.5px 0.5px #FFD700' }}>
+            HustleHack AI – India’s #1 AI Learning Platform 🔥
           </span>
         </div>
         {/* Hero Content */}
