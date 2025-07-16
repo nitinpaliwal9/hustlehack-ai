@@ -22,7 +22,7 @@ import {
   CheckCircle,
   AlertCircle
 } from 'lucide-react'
-import { supabase } from '../../lib/supabaseClient';
+import { supabase } from '../../../lib/supabaseClient';
 import { useAuth } from '../../hooks/useAuth';
 import Link from 'next/link';
 
