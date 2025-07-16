@@ -52,29 +52,29 @@ export default function AboutPage() {
     <PageLayout>
       <main className="about-main bg-gradient-to-br from-gray-900 via-gray-800 to-black min-h-screen pb-10">
         {/* Hero Section */}
-        <section className="relative pt-32 pb-20 px-4 flex justify-center">
+        <section className="relative pt-36 pb-28 px-4 flex justify-center">
           {/* Animated Gradient Blob */}
           <div className="absolute -top-24 left-1/2 -translate-x-1/2 w-[480px] h-[320px] bg-gradient-to-br from-[#7F5AF0]/40 via-[#00FFC2]/30 to-[#232946]/0 rounded-full blur-3xl opacity-70 animate-pulse z-0" />
           <AbstractAI className="hidden md:block" />
-          <div className="hero-content w-full max-w-3xl mx-auto rounded-3xl shadow-[0_8px_40px_0_rgba(127,90,240,0.25)] bg-[rgba(30,32,44,0.75)] backdrop-blur-xl border-4 border-[#7F5AF0] relative overflow-hidden p-10 md:p-16">
-            <div className="flex flex-col items-center relative z-10">
+          <div className="hero-content w-full max-w-3xl mx-auto rounded-3xl shadow-[0_8px_40px_0_rgba(127,90,240,0.25)] bg-[rgba(30,32,44,0.75)] backdrop-blur-xl border-4 border-[#7F5AF0] relative overflow-hidden p-12 md:p-20 flex flex-col items-center">
+            <div className="flex flex-col items-center relative z-10 w-full">
               <IconBadge color="#7F5AF0">
                 <Image src="/assets/images/logo (2).png" alt="HustleHack AI Logo" width={40} height={40} className="rounded-xl" />
               </IconBadge>
-              <h1 className="text-4xl md:text-5xl font-extrabold text-white mb-4 tracking-tight text-center">🔷 HustleHack AI — About Us</h1>
-              <p className="text-xl text-gray-200 mb-6 font-medium text-center">Make AI practical, accessible, and empowering — for every young Indian who’s ready to hustle smarter.</p>
-              <div className="hero-stats flex justify-center gap-8 mt-4">
-                <div className="stat bg-gradient-to-br from-[#7F5AF0]/20 to-[#00FFC2]/10 rounded-xl px-6 py-4 shadow-md">
-                  <span className="stat-number text-3xl font-bold text-[#7F5AF0]">1000+</span>
-                  <span className="stat-label block text-xs text-gray-300 mt-1 uppercase tracking-wider">Early Users</span>
+              <h1 className="text-4xl md:text-5xl font-extrabold text-white mb-6 mt-2 tracking-tight text-center">🔷 HustleHack AI — About Us</h1>
+              <p className="text-xl text-gray-200 mb-10 font-medium text-center max-w-2xl">Make AI practical, accessible, and empowering — for every young Indian who’s ready to hustle smarter.</p>
+              <div className="hero-stats flex flex-col md:flex-row justify-center gap-8 md:gap-16 mt-2 w-full">
+                <div className="stat bg-gradient-to-br from-[#7F5AF0]/20 to-[#00FFC2]/10 rounded-xl px-8 py-6 shadow-md flex flex-col items-center min-w-[160px] mb-4 md:mb-0">
+                  <span className="stat-number text-3xl font-bold text-[#7F5AF0] mb-2">1000+</span>
+                  <span className="stat-label block text-base text-gray-300 mt-1 uppercase tracking-wider">Early Users</span>
                 </div>
-                <div className="stat bg-gradient-to-br from-[#00FFC2]/20 to-[#7F5AF0]/10 rounded-xl px-6 py-4 shadow-md">
-                  <span className="stat-number text-3xl font-bold text-[#00FFC2]">20+</span>
-                  <span className="stat-label block text-xs text-gray-300 mt-1 uppercase tracking-wider">AI Toolkits</span>
+                <div className="stat bg-gradient-to-br from-[#00FFC2]/20 to-[#7F5AF0]/10 rounded-xl px-8 py-6 shadow-md flex flex-col items-center min-w-[160px] mb-4 md:mb-0">
+                  <span className="stat-number text-3xl font-bold text-[#00FFC2] mb-2">20+</span>
+                  <span className="stat-label block text-base text-gray-300 mt-1 uppercase tracking-wider">AI Toolkits</span>
                 </div>
-                <div className="stat bg-gradient-to-br from-[#7F5AF0]/20 to-[#00FFC2]/10 rounded-xl px-6 py-4 shadow-md">
-                  <span className="stat-number text-3xl font-bold text-[#7F5AF0]">Weekly</span>
-                  <span className="stat-label block text-xs text-gray-300 mt-1 uppercase tracking-wider">AI Drops</span>
+                <div className="stat bg-gradient-to-br from-[#7F5AF0]/20 to-[#00FFC2]/10 rounded-xl px-8 py-6 shadow-md flex flex-col items-center min-w-[160px]">
+                  <span className="stat-number text-3xl font-bold text-[#7F5AF0] mb-2">Weekly</span>
+                  <span className="stat-label block text-base text-gray-300 mt-1 uppercase tracking-wider">AI Drops</span>
                 </div>
               </div>
             </div>

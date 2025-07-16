@@ -412,319 +412,222 @@ export default function ProfileSettingsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black">
+    <div className="min-h-screen" style={{ background: 'var(--bg-primary)', color: 'var(--text-primary)' }}>
       <Navigation />
       
-      <div className="pt-24 pb-12 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-6xl mx-auto">
-          {/* Header */}
-          <div className="text-center mb-12">
-            <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-primary to-accent rounded-full mb-6">
-              <Settings className="w-8 h-8 text-white" />
-            </div>
-            <h1 className="text-4xl font-bold text-white mb-4">Profile Settings</h1>
-            <p className="text-xl text-gray-300">Manage your account and preferences</p>
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 mt-28">
+        {/* Header */}
+        <div className="text-center mb-20">
+          <h1 className="text-4xl md:text-5xl font-bold mb-6" style={{ color: 'var(--text-primary)' }}>
+            👤 Profile Settings
+          </h1>
+          <p className="text-xl" style={{ color: 'var(--text-secondary)' }}>
+            Manage your account, security, and preferences
+          </p>
+        </div>
+
+        {/* Success Message */}
+        {successMessage && (
+          <div className="mb-8 p-4 bg-green-100 border border-green-400 text-green-700 rounded-lg flex items-center">
+            <CheckCircle className="w-5 h-5 mr-2" />
+            {successMessage}
           </div>
+        )}
 
-          {/* Success Message */}
-          {successMessage && (
-            <div className="mb-6 p-4 bg-green-500/10 border border-green-500/20 rounded-lg flex items-center gap-3">
-              <CheckCircle className="w-5 h-5 text-green-500" />
-              <span className="text-green-400">{successMessage}</span>
-            </div>
-          )}
+        {/* Error Message */}
+        {errors.general && (
+          <div className="mb-8 p-4 bg-red-100 border border-red-400 text-red-700 rounded-lg flex items-center">
+            <AlertCircle className="w-5 h-5 mr-2" />
+            {errors.general}
+          </div>
+        )}
 
-          {/* Error Message */}
-          {errors.general && (
-            <div className="mb-6 p-4 bg-red-500/10 border border-red-500/20 rounded-lg flex items-center gap-3">
-              <AlertCircle className="w-5 h-5 text-red-500" />
-              <span className="text-red-400">{errors.general}</span>
-            </div>
-          )}
+        {/* Navigation Tabs */}
+        <div className="flex flex-wrap gap-4 mb-12">
+          {[
+            { id: 'profile', name: 'Profile', icon: User },
+            { id: 'security', name: 'Security', icon: Shield },
+            { id: 'preferences', name: 'Preferences', icon: Settings }
+          ].map((tab) => (
+            <button
+              key={tab.id}
+              onClick={() => setActiveTab(tab.id)}
+              className={`flex items-center gap-2 px-6 py-3 rounded-lg font-medium transition-all duration-200 ${
+                activeTab === tab.id
+                  ? 'bg-[#7F5AF0] text-white shadow-lg'
+                  : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
+              }`}
+            >
+              <tab.icon className="w-4 h-4" />
+              {tab.name}
+            </button>
+          ))}
+        </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
-            {/* Sidebar Navigation */}
-            <div className="lg:col-span-1">
-              <div className="bg-gray-800 rounded-2xl p-6 border border-gray-700">
-                <nav className="space-y-2">
-                  {[
-                    { id: 'profile', label: 'Profile Information', icon: User },
-                    { id: 'security', label: 'Security', icon: Shield },
-                    { id: 'preferences', label: 'Preferences', icon: Settings },
-                    { id: 'notifications', label: 'Notifications', icon: Bell },
-                    { id: 'billing', label: 'Billing', icon: CreditCard },
-                    { id: 'data', label: 'Data & Privacy', icon: Download }
-                  ].map((item) => (
-                    <button
-                      key={item.id}
-                      onClick={() => setActiveTab(item.id)}
-                      className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left transition-all ${
-                        activeTab === item.id
-                          ? 'bg-primary/20 text-primary border-l-4 border-primary'
-                          : 'text-gray-300 hover:bg-gray-700 hover:text-white'
-                      }`}
-                    >
-                      <item.icon className="w-5 h-5" />
-                      <span className="font-medium">{item.label}</span>
-                    </button>
-                  ))}
-                </nav>
-              </div>
-            </div>
-
-            {/* Main Content */}
-            <div className="lg:col-span-3">
-              <div className="bg-gray-800 rounded-2xl p-8 border border-gray-700">
-                {/* Profile Information Tab */}
-                {activeTab === 'profile' && (
-                  <div className="space-y-6">
-                    <div className="flex items-center justify-between">
-                      <h2 className="text-2xl font-bold text-white">Profile Information</h2>
-                      <button
-                        onClick={() => setIsEditing(!isEditing)}
-                        className="flex items-center gap-2 px-4 py-2 bg-primary/20 hover:bg-primary/30 text-primary rounded-lg transition-colors"
-                      >
-                        <Edit3 className="w-4 h-4" />
-                        {isEditing ? 'Cancel' : 'Edit'}
-                      </button>
-                    </div>
-
-                    {/* Profile Picture */}
-                    <div className="flex items-center gap-6">
-                      <div className="relative">
-                        {profilePicturePreview ? (
-                          <img
-                            src={profilePicturePreview}
-                            alt="Profile picture"
-                            className="w-24 h-24 rounded-full object-cover border-2 border-gray-600"
-                          />
-                        ) : (
-                          <div className="w-24 h-24 bg-gradient-to-r from-primary to-accent rounded-full flex items-center justify-center text-2xl font-bold text-white">
-                            {profileData.name?.charAt(0)?.toUpperCase() || 'U'}
-                          </div>
-                        )}
-                        {isUploadingPicture && (
-                          <div className="absolute inset-0 bg-black/50 rounded-full flex items-center justify-center">
-                            <Loader className="w-6 h-6 animate-spin text-white" />
-                          </div>
-                        )}
-                      </div>
-                      {isEditing && (
-                        <div className="flex flex-col gap-2">
-                          <input
-                            type="file"
-                            accept="image/*"
-                            onChange={handleProfilePictureUpload}
-                            className="hidden"
-                            id="profile-picture-upload"
-                            disabled={isUploadingPicture}
-                          />
-                          <label
-                            htmlFor="profile-picture-upload"
-                            className={`flex items-center gap-2 px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-lg transition-colors cursor-pointer ${
-                              isUploadingPicture ? 'opacity-50 cursor-not-allowed' : ''
-                            }`}
-                          >
-                            <Upload className="w-4 h-4" />
-                            {isUploadingPicture ? 'Uploading...' : 'Upload Photo'}
-                          </label>
-                          {profilePicturePreview && (
-                            <button
-                              onClick={handleProfilePictureRemove}
-                              disabled={isUploadingPicture}
-                              className="flex items-center gap-2 px-4 py-2 bg-red-500/20 hover:bg-red-500/30 text-red-400 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                            >
-                              <Trash2 className="w-4 h-4" />
-                              Remove
-                            </button>
-                          )}
-                        </div>
+        {/* Tab Content */}
+        <div className="space-y-20">
+          {/* Profile Tab */}
+          {activeTab === 'profile' && (
+            <div className="space-y-12">
+              {/* Profile Picture Section */}
+              <div className="bg-gray-800 rounded-2xl p-10 border border-gray-700">
+                <h2 className="text-2xl font-bold mb-8 flex items-center">
+                  <User className="w-6 h-6 mr-3" />
+                  Profile Picture
+                </h2>
+                <div className="flex items-center space-x-8">
+                  <div className="relative">
+                    <div className="w-24 h-24 rounded-full bg-gray-600 flex items-center justify-center overflow-hidden">
+                      {profilePicturePreview ? (
+                        <img
+                          src={profilePicturePreview}
+                          alt="Profile"
+                          className="w-full h-full object-cover"
+                        />
+                      ) : (
+                        <User className="w-12 h-12 text-gray-400" />
                       )}
                     </div>
-                    {errors.profilePicture && (
-                      <p className="text-sm text-red-400 mt-2">{errors.profilePicture}</p>
-                    )}
-
-                    {/* Profile Form */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      <div>
-                        <label className="block text-sm font-medium text-gray-200 mb-2">Full Name *</label>
-                        <input
-                          type="text"
-                          name="name"
-                          value={profileData.name}
-                          onChange={handleProfileChange}
-                          disabled={!isEditing}
-                          className={`w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:ring-2 focus:ring-primary focus:border-transparent ${
-                            !isEditing ? 'opacity-60 cursor-not-allowed' : ''
-                          }`}
-                          placeholder="Enter your full name"
-                        />
-                        {errors.name && (
-                          <p className="mt-1 text-sm text-red-400">{errors.name}</p>
-                        )}
-                      </div>
-
-                      <div>
-                        <label className="block text-sm font-medium text-gray-200 mb-2">Email Address *</label>
-                        <input
-                          type="email"
-                          name="email"
-                          value={profileData.email}
-                          onChange={handleProfileChange}
-                          disabled={!isEditing}
-                          className={`w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:ring-2 focus:ring-primary focus:border-transparent ${
-                            !isEditing ? 'opacity-60 cursor-not-allowed' : ''
-                          }`}
-                          placeholder="Enter your email"
-                        />
-                        {errors.email && (
-                          <p className="mt-1 text-sm text-red-400">{errors.email}</p>
-                        )}
-                      </div>
-
-                      <div>
-                        <label className="block text-sm font-medium text-gray-200 mb-2">Phone Number</label>
-                        <input
-                          type="tel"
-                          name="phone"
-                          value={profileData.phone}
-                          onChange={handleProfileChange}
-                          disabled={!isEditing}
-                          className={`w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:ring-2 focus:ring-primary focus:border-transparent ${
-                            !isEditing ? 'opacity-60 cursor-not-allowed' : ''
-                          }`}
-                          placeholder="Enter your phone number"
-                        />
-                        {errors.phone && (
-                          <p className="mt-1 text-sm text-red-400">{errors.phone}</p>
-                        )}
-                      </div>
-
-                      <div>
-                        <label className="block text-sm font-medium text-gray-200 mb-2">Role</label>
-                        <select
-                          name="role"
-                          value={profileData.role}
-                          onChange={handleProfileChange}
-                          disabled={!isEditing}
-                          className={`w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white focus:ring-2 focus:ring-primary focus:border-transparent ${
-                            !isEditing ? 'opacity-60 cursor-not-allowed' : ''
-                          }`}
-                        >
-                          <option value="">Select your role</option>
-                          <option value="Student">Student</option>
-                          <option value="Creator">Creator</option>
-                          <option value="Entrepreneur">Entrepreneur</option>
-                          <option value="Other">Other</option>
-                        </select>
-                      </div>
-
-                      <div>
-                        <label className="block text-sm font-medium text-gray-200 mb-2">Location</label>
-                        <input
-                          type="text"
-                          name="location"
-                          value={profileData.location}
-                          onChange={handleProfileChange}
-                          disabled={!isEditing}
-                          className={`w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:ring-2 focus:ring-primary focus:border-transparent ${
-                            !isEditing ? 'opacity-60 cursor-not-allowed' : ''
-                          }`}
-                          placeholder="Enter your location"
-                        />
-                      </div>
-
-                      <div>
-                        <label className="block text-sm font-medium text-gray-200 mb-2">Website</label>
-                        <input
-                          type="url"
-                          name="website"
-                          value={profileData.website}
-                          onChange={handleProfileChange}
-                          disabled={!isEditing}
-                          className={`w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:ring-2 focus:ring-primary focus:border-transparent ${
-                            !isEditing ? 'opacity-60 cursor-not-allowed' : ''
-                          }`}
-                          placeholder="https://your-website.com"
-                        />
-                        {errors.website && (
-                          <p className="mt-1 text-sm text-red-400">{errors.website}</p>
-                        )}
-                      </div>
-                    </div>
-
-                    <div>
-                      <label className="block text-sm font-medium text-gray-200 mb-2">Bio</label>
-                      <textarea
-                        name="bio"
-                        value={profileData.bio}
-                        onChange={handleProfileChange}
-                        disabled={!isEditing}
-                        rows={4}
-                        className={`w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:ring-2 focus:ring-primary focus:border-transparent resize-none ${
-                          !isEditing ? 'opacity-60 cursor-not-allowed' : ''
-                        }`}
-                        placeholder="Tell us about yourself..."
-                      />
-                    </div>
-
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      <div>
-                        <label className="block text-sm font-medium text-gray-200 mb-2">Twitter</label>
-                        <input
-                          type="text"
-                          name="twitter"
-                          value={profileData.twitter}
-                          onChange={handleProfileChange}
-                          disabled={!isEditing}
-                          className={`w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:ring-2 focus:ring-primary focus:border-transparent ${
-                            !isEditing ? 'opacity-60 cursor-not-allowed' : ''
-                          }`}
-                          placeholder="@username"
-                        />
-                      </div>
-
-                      <div>
-                        <label className="block text-sm font-medium text-gray-200 mb-2">LinkedIn</label>
-                        <input
-                          type="url"
-                          name="linkedin"
-                          value={profileData.linkedin}
-                          onChange={handleProfileChange}
-                          disabled={!isEditing}
-                          className={`w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:ring-2 focus:ring-primary focus:border-transparent ${
-                            !isEditing ? 'opacity-60 cursor-not-allowed' : ''
-                          }`}
-                          placeholder="https://linkedin.com/in/username"
-                        />
-                      </div>
-                    </div>
-
-                    {isEditing && (
-                      <div className="flex gap-4">
-                        <button
-                          onClick={handleSaveProfile}
-                          disabled={isSaving}
-                          className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-primary to-accent text-white rounded-lg hover:from-primary/80 hover:to-accent/80 transition-all disabled:opacity-50"
-                        >
-                          {isSaving ? (
-                            <Loader className="w-4 h-4 animate-spin" />
-                          ) : (
-                            <Save className="w-4 h-4" />
-                          )}
-                          {isSaving ? 'Saving...' : 'Save Changes'}
-                        </button>
-                        <button
-                          onClick={() => setIsEditing(false)}
-                          className="px-6 py-3 bg-gray-700 text-white rounded-lg hover:bg-gray-600 transition-colors"
-                        >
-                          Cancel
-                        </button>
+                    {isUploadingPicture && (
+                      <div className="absolute inset-0 bg-black bg-opacity-50 rounded-full flex items-center justify-center">
+                        <Loader className="w-6 h-6 text-white animate-spin" />
                       </div>
                     )}
                   </div>
-                )}
+                  <div className="flex-1 space-y-4">
+                    <div className="flex gap-4">
+                      <label className="cursor-pointer bg-[#7F5AF0] text-white px-6 py-3 rounded-lg hover:bg-[#6D4DC6] transition-colors">
+                        <Upload className="w-4 h-4 inline mr-2" />
+                        Upload Photo
+                        <input
+                          type="file"
+                          accept="image/*"
+                          onChange={handleProfilePictureUpload}
+                          className="hidden"
+                        />
+                      </label>
+                      {profilePicturePreview && (
+                        <button
+                          onClick={handleProfilePictureRemove}
+                          className="bg-red-600 text-white px-6 py-3 rounded-lg hover:bg-red-700 transition-colors"
+                        >
+                          <Trash2 className="w-4 h-4 inline mr-2" />
+                          Remove
+                        </button>
+                      )}
+                    </div>
+                    {errors.profilePicture && (
+                      <p className="text-red-500 text-sm">{errors.profilePicture}</p>
+                    )}
+                  </div>
+                </div>
+              </div>
+
+              {/* Profile Information Section */}
+              <div className="bg-gray-800 rounded-2xl p-10 border border-gray-700">
+                <div className="flex items-center justify-between mb-8">
+                  <h2 className="text-2xl font-bold flex items-center">
+                    <User className="w-6 h-6 mr-3" />
+                    Profile Information
+                  </h2>
+                  <button
+                    onClick={() => setIsEditing(!isEditing)}
+                    className="flex items-center gap-2 bg-gray-700 text-white px-4 py-2 rounded-lg hover:bg-gray-600 transition-colors"
+                  >
+                    {isEditing ? <Eye className="w-4 h-4" /> : <Edit3 className="w-4 h-4" />}
+                    {isEditing ? 'Cancel' : 'Edit'}
+                  </button>
+                </div>
+
+                <form onSubmit={handleSaveProfile} className="space-y-8">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div>
+                      <label className="block text-sm font-medium mb-4">Full Name</label>
+                      <input
+                        type="text"
+                        name="name"
+                        value={profileData.name}
+                        onChange={handleProfileChange}
+                        disabled={!isEditing}
+                        className="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white disabled:opacity-50"
+                      />
+                      {errors.name && <p className="text-red-500 text-sm mt-2">{errors.name}</p>}
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium mb-4">Email</label>
+                      <input
+                        type="email"
+                        name="email"
+                        value={profileData.email}
+                        disabled
+                        className="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white opacity-50"
+                      />
+                      <p className="text-gray-400 text-sm mt-2">Email cannot be changed</p>
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium mb-4">Phone</label>
+                      <input
+                        type="tel"
+                        name="phone"
+                        value={profileData.phone}
+                        onChange={handleProfileChange}
+                        disabled={!isEditing}
+                        className="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white disabled:opacity-50"
+                      />
+                      {errors.phone && <p className="text-red-500 text-sm mt-2">{errors.phone}</p>}
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium mb-4">Role</label>
+                      <select
+                        name="role"
+                        value={profileData.role}
+                        onChange={handleProfileChange}
+                        disabled={!isEditing}
+                        className="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white disabled:opacity-50"
+                      >
+                        <option value="">Select your role</option>
+                        <option value="Student">Student</option>
+                        <option value="Creator">Creator</option>
+                        <option value="Entrepreneur">Entrepreneur</option>
+                        <option value="Other">Other</option>
+                      </select>
+                      {errors.role && <p className="text-red-500 text-sm mt-2">{errors.role}</p>}
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium mb-4">Bio</label>
+                    <textarea
+                      name="bio"
+                      value={profileData.bio}
+                      onChange={handleProfileChange}
+                      disabled={!isEditing}
+                      rows={4}
+                      className="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white disabled:opacity-50"
+                      placeholder="Tell us about yourself..."
+                    />
+                    {errors.bio && <p className="text-red-500 text-sm mt-2">{errors.bio}</p>}
+                  </div>
+
+                  {isEditing && (
+                    <div className="flex gap-4">
+                      <button
+                        type="submit"
+                        disabled={isSaving}
+                        className="flex items-center gap-2 bg-[#7F5AF0] text-white px-8 py-3 rounded-lg hover:bg-[#6D4DC6] transition-colors disabled:opacity-50"
+                      >
+                        {isSaving ? <Loader className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
+                        {isSaving ? 'Saving...' : 'Save Changes'}
+                      </button>
+                    </div>
+                  )}
+                </form>
+              </div>
+            </div>
+          )}
 
                 {/* Security Tab */}
                 {activeTab === 'security' && (
@@ -1123,10 +1026,7 @@ export default function ProfileSettingsPage() {
                   </div>
                 )}
               </div>
-            </div>
-          </div>
-        </div>
-      </div>
+            </main>
 
       <Footer />
     </div>

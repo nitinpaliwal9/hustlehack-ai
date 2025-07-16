@@ -11,14 +11,14 @@ export default function CookiePolicy() {
       <Navigation />
       
       <main style={{ 
-        paddingTop: '140px', 
-        paddingBottom: '80px',
+        paddingTop: '8rem',
+        paddingBottom: '8rem',
         minHeight: '100vh',
         backgroundColor: 'var(--bg-primary)'
       }}>
         <div className="container">
           {/* Header Section */}
-          <div className="text-center" style={{ marginBottom: '4rem' }}>
+          <div className="text-center" style={{ marginBottom: '6rem' }}>
             <h1 style={{ 
               background: 'var(--gradient)',
               WebkitBackgroundClip: 'text',
@@ -47,7 +47,7 @@ export default function CookiePolicy() {
             background: 'var(--bg-surface)',
             border: '1px solid var(--border-color)',
             borderRadius: 'var(--radius-2xl)',
-            padding: '3rem',
+            padding: '4rem',
             maxWidth: '900px',
             margin: '0 auto',
             boxShadow: 'var(--shadow-xl)',

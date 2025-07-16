@@ -16,7 +16,7 @@ import { BarChart3, Brain, BookOpen, Trophy, Settings, Bell, User, TrendingUp, Z
 function PlanInfoCard({ plan, expiry }) {
   return (
     <div className="rounded-2xl shadow-lg border border-[var(--border-color)] hover:shadow-xl transition-all duration-300 transform hover:scale-[1.02] animate-slide-up" style={{ background: 'var(--bg-surface)' }}>
-      <div className="p-6 sm:p-8 lg:p-10">
+      <div className="p-10 sm:p-12">
         <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
           <div className="flex-1 space-y-4">
             <div className="flex items-center gap-3">
@@ -49,7 +49,7 @@ function ResourcesSection({ resources, onAccess }) {
           Access your tools, templates, and premium content based on your subscription plan
         </p>
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 lg:gap-14">
         {resources.map((resource, index) => (
           <div key={resource.id} className="animate-fade-in-up" style={{ animationDelay: `${index * 0.1}s` }}>
             <DashboardCard resource={resource} onAccess={onAccess} />
@@ -70,7 +70,7 @@ function RecentActivitySection({ recentActivity }) {
         </p>
       </div>
       <div className="rounded-2xl shadow-lg border border-[var(--border-color)] hover:shadow-xl transition-all duration-300" style={{ background: 'var(--bg-surface)' }}>
-        <div className="p-6 sm:p-8">
+        <div className="p-10 sm:p-12">
           {recentActivity.length > 0 ? (
             <ul className="space-y-3">
               {recentActivity.map((activity, index) => (
@@ -113,6 +113,9 @@ export default function DashboardClient() {
   const [profileCheckError, setProfileCheckError] = useState(false);
   const [dataFetched, setDataFetched] = useState(false);
   const [currentUserId, setCurrentUserId] = useState(null);
+  const [toolsUsed, setToolsUsed] = useState(0);
+  const [achievementsCount, setAchievementsCount] = useState(0);
+  const [achievementsData, setAchievementsData] = useState([]);
 
   useEffect(() => {
     // Only fetch data if conditions are met and we haven't already fetched for this user
@@ -173,6 +176,46 @@ export default function DashboardClient() {
           if (actError) {
             console.warn('Activity error:', actError);
             // Continue with empty activity array
+          }
+
+          // Get user analytics data for tools used
+          const { data: userAnalytics, error: analyticsError } = await supabase
+            .from('user_analytics')
+            .select('tools_used, total_usage, streak_days, completed_tasks, learning_progress, weekly_activity, category_usage, progress_data, achievements, learning_path')
+            .eq('user_id', user.id)
+            .single();
+          
+          if (analyticsError) {
+            console.warn('Analytics error:', analyticsError);
+            // Initialize user analytics if not exists
+            const { error: insertError } = await supabase
+              .from('user_analytics')
+              .insert({
+                user_id: user.id,
+                tools_used: 0,
+                total_usage: 0,
+                streak_days: 0,
+                completed_tasks: 0,
+                learning_progress: 0,
+                weekly_activity: [],
+                category_usage: [],
+                progress_data: [],
+                achievements: [],
+                learning_path: []
+              });
+            if (insertError) {
+              console.warn('Failed to initialize user analytics:', insertError);
+            }
+            setToolsUsed(0);
+            setAchievementsCount(0);
+            setAchievementsData([]);
+          } else {
+            setToolsUsed(userAnalytics?.tools_used || 0);
+            // Calculate achievements count from achievements array
+            const achievements = userAnalytics?.achievements || [];
+            const unlockedAchievements = achievements.filter(achievement => achievement.unlocked);
+            setAchievementsCount(unlockedAchievements.length);
+            setAchievementsData(achievements);
           }
 
           // Get user profile data
@@ -252,6 +295,76 @@ export default function DashboardClient() {
         });
 
       if (error) throw error;
+
+      // Get current analytics data
+      const { data: currentAnalytics } = await supabase
+        .from('user_analytics')
+        .select('tools_used, total_usage, achievements')
+        .eq('user_id', user.id)
+        .single();
+
+      const newToolsUsed = (currentAnalytics?.tools_used || 0) + 1;
+      const newTotalUsage = (currentAnalytics?.total_usage || 0) + 1;
+      
+      // Update achievements based on usage
+      let updatedAchievements = currentAnalytics?.achievements || [];
+      
+      // Check for new achievements based on tools used
+      if (newToolsUsed === 1 && !updatedAchievements.find(a => a.id === 'first_tool')) {
+        updatedAchievements.push({
+          id: 'first_tool',
+          title: 'First Tool Used',
+          description: 'Used your first AI tool',
+          icon: '🎯',
+          unlocked: true,
+          date: new Date().toISOString(),
+          progress: 100
+        });
+      }
+      
+      if (newToolsUsed === 5 && !updatedAchievements.find(a => a.id === 'tool_explorer')) {
+        updatedAchievements.push({
+          id: 'tool_explorer',
+          title: 'Tool Explorer',
+          description: 'Used 5 different AI tools',
+          icon: '🔍',
+          unlocked: true,
+          date: new Date().toISOString(),
+          progress: 100
+        });
+      }
+      
+      if (newToolsUsed === 10 && !updatedAchievements.find(a => a.id === 'ai_master')) {
+        updatedAchievements.push({
+          id: 'ai_master',
+          title: 'AI Master',
+          description: 'Used 10 different AI tools',
+          icon: '🧠',
+          unlocked: true,
+          date: new Date().toISOString(),
+          progress: 100
+        });
+      }
+
+      // Increment tools used count and update achievements
+      const { error: updateError } = await supabase
+        .from('user_analytics')
+        .update({ 
+          tools_used: newToolsUsed,
+          total_usage: newTotalUsage,
+          achievements: updatedAchievements
+        })
+        .eq('user_id', user.id);
+
+      if (updateError) {
+        console.warn('Failed to update tools used:', updateError);
+      } else {
+        setToolsUsed(newToolsUsed);
+        // Update achievements count
+        const unlockedAchievements = updatedAchievements.filter(achievement => achievement.unlocked);
+        setAchievementsCount(unlockedAchievements.length);
+        setAchievementsData(updatedAchievements);
+      }
 
       setRecentActivity(prev => [
         {
@@ -346,7 +459,7 @@ export default function DashboardClient() {
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-sm text-gray-600">Tools Used</p>
-                    <p className="text-2xl font-bold text-blue-600">12</p>
+                    <p className="text-2xl font-bold text-blue-600">{toolsUsed}</p>
                   </div>
                   <Brain className="w-8 h-8 text-blue-500" />
                 </div>
@@ -355,7 +468,7 @@ export default function DashboardClient() {
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-sm text-gray-600">Achievements</p>
-                    <p className="text-2xl font-bold text-green-600">8</p>
+                    <p className="text-2xl font-bold text-green-600">{achievementsCount}</p>
                   </div>
                   <Trophy className="w-8 h-8 text-green-500" />
                 </div>
@@ -417,17 +530,41 @@ export default function DashboardClient() {
           <div className="space-y-8">
             <h2 className="text-3xl font-bold text-gray-900">🏆 Your Achievements</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {/* Achievement cards will be here */}
-              <div className="rounded-xl shadow-lg p-6 border border-[var(--border-color)]" style={{ background: 'rgba(36,41,46,0.96)' }}>
-                <div className="text-center">
-                  <div className="text-4xl mb-4">🎯</div>
-                  <h3 className="text-lg font-semibold text-gray-900">First Steps</h3>
-                  <p className="text-sm text-gray-600 mt-2">Complete your first task</p>
-                  <div className="mt-4 px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm font-medium">
-                    Unlocked
+              {achievementsData.length > 0 ? (
+                achievementsData.map((achievement, index) => (
+                  <div key={achievement.id || index} className="rounded-xl shadow-lg p-6 border border-[var(--border-color)]" style={{ background: 'rgba(36,41,46,0.96)' }}>
+                    <div className="text-center">
+                      <div className="text-4xl mb-4">{achievement.icon || '🏆'}</div>
+                      <h3 className="text-lg font-semibold text-gray-900">{achievement.title || 'Achievement'}</h3>
+                      <p className="text-sm text-gray-600 mt-2">{achievement.description || 'Complete tasks to unlock achievements'}</p>
+                      <div className={`mt-4 px-3 py-1 rounded-full text-sm font-medium ${
+                        achievement.unlocked 
+                          ? 'bg-green-100 text-green-800' 
+                          : 'bg-gray-100 text-gray-800'
+                      }`}>
+                        {achievement.unlocked ? 'Unlocked' : 'Locked'}
+                      </div>
+                      {achievement.progress !== undefined && (
+                        <div className="mt-2">
+                          <div className="w-full bg-gray-200 rounded-full h-2">
+                            <div 
+                              className="bg-blue-600 h-2 rounded-full" 
+                              style={{ width: `${achievement.progress}%` }}
+                            ></div>
+                          </div>
+                          <p className="text-xs text-gray-500 mt-1">{achievement.progress}% complete</p>
+                        </div>
+                      )}
+                    </div>
                   </div>
+                ))
+              ) : (
+                <div className="col-span-full text-center py-12">
+                  <div className="text-6xl mb-4 opacity-50">🏆</div>
+                  <h3 className="text-xl font-semibold text-gray-900 mb-2">No Achievements Yet</h3>
+                  <p className="text-gray-600">Start using the platform to unlock achievements!</p>
                 </div>
-              </div>
+              )}
             </div>
           </div>
         );
@@ -440,7 +577,7 @@ export default function DashboardClient() {
     <div className="min-h-screen" style={{ background: 'var(--bg-primary)', color: 'var(--text-primary)' }}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Main Content Container */}
-        <div className="pt-4 sm:pt-8 pb-8 sm:pb-16 space-y-6 sm:space-y-8">
+        <div className="pt-12 sm:pt-20 pb-20 sm:pb-28 space-y-12 sm:space-y-16">
           {/* Header Section */}
           <div className="text-center space-y-4 animate-fade-in">
             <h1 className="text-2xl sm:text-4xl lg:text-5xl font-bold text-gray-900 transition-all duration-300 transform hover:scale-105 hover:text-[#7F5AF0]">

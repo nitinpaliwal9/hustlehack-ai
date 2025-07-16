@@ -260,14 +260,14 @@ export default function CompleteProfileClient() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black py-8">
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black py-16">
       <div className="max-w-4xl mx-auto px-4">
         {/* Header Section */}
-        <div className="text-center mb-12 pt-24">
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-[#7F5AF0] to-[#00FFC2] rounded-full mb-6">
+        <div className="text-center mb-16 pt-28">
+          <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-[#7F5AF0] to-[#00FFC2] rounded-full mb-8">
             <UserPlus className="w-8 h-8 text-white" />
           </div>
-          <h1 className="text-4xl md:text-5xl font-bold text-white mb-4 leading-tight">
+          <h1 className="text-4xl md:text-5xl font-bold text-white mb-6 leading-tight">
             Complete Your Profile
           </h1>
           <p className="text-xl text-gray-300 max-w-2xl mx-auto leading-relaxed">
@@ -276,8 +276,8 @@ export default function CompleteProfileClient() {
         </div>
 
         {/* Progress Indicators */}
-        <div className="flex justify-center mb-8">
-          <div className="flex items-center space-x-4 flex-wrap w-full max-w-xs sm:max-w-none">
+        <div className="flex justify-center mb-12">
+          <div className="flex items-center space-x-6 flex-wrap w-full max-w-xs sm:max-w-none">
             <div className="flex items-center min-w-0">
               <div className="w-8 h-8 bg-[#7F5AF0] rounded-full flex items-center justify-center text-white text-sm font-bold">1</div>
               <span className="ml-2 text-sm text-gray-300 truncate">Sign Up</span>
@@ -305,10 +305,10 @@ export default function CompleteProfileClient() {
 
           {/* Form Content */}
           <div className="p-8 md:p-12">
-            <form onSubmit={handleSubmit} className="space-y-8">
+            <form onSubmit={handleSubmit} className="space-y-10">
               {/* Name Field */}
               <div className="relative">
-                <label htmlFor="name" className="block text-sm font-semibold text-gray-200 mb-3">
+                <label htmlFor="name" className="block text-sm font-semibold text-gray-200 mb-4">
                   Full Name *
                 </label>
                 <div className="relative">
@@ -339,7 +339,7 @@ export default function CompleteProfileClient() {
                   />
                 </div>
                 {formErrors.name && (
-                  <div className="mt-2 flex items-center text-red-600" id="name-error">
+                  <div className="mt-3 flex items-center text-red-600" id="name-error">
                     <AlertCircle className="w-4 h-4 mr-1" />
                     <span className="text-sm">{formErrors.name}</span>
                   </div>
@@ -348,7 +348,7 @@ export default function CompleteProfileClient() {
 
               {/* Email Field */}
               <div className="relative">
-                <label htmlFor="email" className="block text-sm font-semibold text-gray-200 mb-3">
+                <label htmlFor="email" className="block text-sm font-semibold text-gray-200 mb-4">
                   Email Address *
                 </label>
                 <div className="relative">
@@ -379,7 +379,7 @@ export default function CompleteProfileClient() {
                     <Shield className="w-5 h-5 text-green-500" />
                   </div>
                 </div>
-                <p className="mt-2 text-sm text-gray-400 flex items-center">
+                <p className="mt-3 text-sm text-gray-400 flex items-center">
                   <CheckCircle className="w-4 h-4 mr-1 text-green-500" />
                   Email verified
                 </p>
@@ -387,7 +387,7 @@ export default function CompleteProfileClient() {
 
               {/* Phone Field */}
               <div className="relative">
-                <label htmlFor="phone" className="block text-sm font-semibold text-gray-200 mb-3">
+                <label htmlFor="phone" className="block text-sm font-semibold text-gray-200 mb-4">
                   Phone Number *
                 </label>
                 <div className="relative">
@@ -418,7 +418,7 @@ export default function CompleteProfileClient() {
                   />
                 </div>
                 {formErrors.phone && (
-                  <div className="mt-2 flex items-center text-red-600" id="phone-error">
+                  <div className="mt-3 flex items-center text-red-600" id="phone-error">
                     <AlertCircle className="w-4 h-4 mr-1" />
                     <span className="text-sm">{formErrors.phone}</span>
                   </div>
@@ -427,7 +427,7 @@ export default function CompleteProfileClient() {
 
               {/* Role Field */}
               <div className="relative">
-                <label htmlFor="role" className="block text-sm font-semibold text-gray-200 mb-3">
+                <label htmlFor="role" className="block text-sm font-semibold text-gray-200 mb-4">
                   Your Role *
                 </label>
                 <div className="relative">
@@ -467,7 +467,7 @@ export default function CompleteProfileClient() {
                   </div>
                 </div>
                 {formErrors.role && (
-                  <div className="mt-2 flex items-center text-red-600" id="role-error">
+                  <div className="mt-3 flex items-center text-red-600" id="role-error">
                     <AlertCircle className="w-4 h-4 mr-1" />
                     <span className="text-sm">{formErrors.role}</span>
                   </div>
@@ -475,7 +475,7 @@ export default function CompleteProfileClient() {
               </div>
 
               {/* Form Benefits */}
-              <div className="bg-gradient-to-r from-gray-700 to-gray-600 rounded-2xl p-6 my-8">
+              <div className="bg-gradient-to-r from-gray-700 to-gray-600 rounded-2xl p-8 my-12">
                 <h3 className="text-lg font-semibold text-white mb-4 flex items-center">
                   <Zap className="w-5 h-5 mr-2 text-[#7F5AF0]" />
                   What you'll get:
@@ -531,8 +531,8 @@ export default function CompleteProfileClient() {
         </div>
 
         {/* Security & Privacy Note */}
-        <div className="text-center mt-12 max-w-2xl mx-auto">
-          <div className="bg-gray-800 rounded-2xl shadow-lg p-6 border border-gray-700">
+        <div className="text-center mt-16 max-w-2xl mx-auto">
+          <div className="bg-gray-800 rounded-2xl shadow-lg p-8 border border-gray-700">
             <div className="flex items-center justify-center mb-4">
               <Shield className="w-6 h-6 text-green-500 mr-2" />
               <span className="text-lg font-semibold text-white">Your data is secure</span>

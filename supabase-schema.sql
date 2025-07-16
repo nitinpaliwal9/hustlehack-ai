@@ -72,11 +72,60 @@ CREATE TABLE IF NOT EXISTS public.user_activity (
     created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
 );
 
+-- Create user_analytics table for dashboard metrics
+CREATE TABLE IF NOT EXISTS public.user_analytics (
+    id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+    user_id UUID REFERENCES public.users(id) ON DELETE CASCADE NOT NULL,
+    tools_used INTEGER DEFAULT 0,
+    total_usage INTEGER DEFAULT 0,
+    streak_days INTEGER DEFAULT 0,
+    completed_tasks INTEGER DEFAULT 0,
+    learning_progress INTEGER DEFAULT 0,
+    weekly_activity JSONB DEFAULT '[]'::jsonb,
+    category_usage JSONB DEFAULT '[]'::jsonb,
+    progress_data JSONB DEFAULT '[]'::jsonb,
+    achievements JSONB DEFAULT '[]'::jsonb,
+    learning_path JSONB DEFAULT '[]'::jsonb,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL,
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL,
+    UNIQUE(user_id)
+);
+
+-- Create usage_logs table
+CREATE TABLE IF NOT EXISTS public.usage_logs (
+    id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+    user_id UUID REFERENCES public.users(id) ON DELETE CASCADE NOT NULL,
+    resource_name TEXT NOT NULL,
+    action TEXT NOT NULL,
+    duration INTEGER DEFAULT 0,
+    metadata JSONB DEFAULT '{}'::jsonb,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
+);
+
+-- Create prompts table
+CREATE TABLE IF NOT EXISTS public.prompts (
+    id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+    user_id UUID REFERENCES public.users(id) ON DELETE CASCADE NOT NULL,
+    title TEXT NOT NULL,
+    description TEXT,
+    content TEXT NOT NULL,
+    category TEXT DEFAULT 'General',
+    tags TEXT[] DEFAULT '{}',
+    is_public BOOLEAN DEFAULT false,
+    is_favorite BOOLEAN DEFAULT false,
+    usage_count INTEGER DEFAULT 0,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL,
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
+);
+
 -- Enable Row Level Security
 ALTER TABLE public.users ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.subscriptions ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.resources ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.user_activity ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.user_analytics ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.usage_logs ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.prompts ENABLE ROW LEVEL SECURITY;
 
 -- Create policies for users table
 DROP POLICY IF EXISTS "Users can view their own profile" ON public.users;
@@ -118,6 +167,49 @@ DROP POLICY IF EXISTS "Users can insert their own activity" ON public.user_activ
 CREATE POLICY "Users can insert their own activity" ON public.user_activity
     FOR INSERT WITH CHECK (auth.uid() = user_id);
 
+-- Create policies for user_analytics table
+DROP POLICY IF EXISTS "Users can view their own analytics" ON public.user_analytics;
+CREATE POLICY "Users can view their own analytics" ON public.user_analytics
+    FOR SELECT USING (auth.uid() = user_id);
+
+DROP POLICY IF EXISTS "Users can insert their own analytics" ON public.user_analytics;
+CREATE POLICY "Users can insert their own analytics" ON public.user_analytics
+    FOR INSERT WITH CHECK (auth.uid() = user_id);
+
+DROP POLICY IF EXISTS "Users can update their own analytics" ON public.user_analytics;
+CREATE POLICY "Users can update their own analytics" ON public.user_analytics
+    FOR UPDATE USING (auth.uid() = user_id);
+
+-- Create policies for usage_logs table
+DROP POLICY IF EXISTS "Users can view their own usage logs" ON public.usage_logs;
+CREATE POLICY "Users can view their own usage logs" ON public.usage_logs
+    FOR SELECT USING (auth.uid() = user_id);
+
+DROP POLICY IF EXISTS "Users can insert their own usage logs" ON public.usage_logs;
+CREATE POLICY "Users can insert their own usage logs" ON public.usage_logs
+    FOR INSERT WITH CHECK (auth.uid() = user_id);
+
+DROP POLICY IF EXISTS "Users can update their own usage logs" ON public.usage_logs;
+CREATE POLICY "Users can update their own usage logs" ON public.usage_logs
+    FOR UPDATE USING (auth.uid() = user_id);
+
+-- Create policies for prompts table
+DROP POLICY IF EXISTS "Users can view their own prompts" ON public.prompts;
+CREATE POLICY "Users can view their own prompts" ON public.prompts
+    FOR SELECT USING (auth.uid() = user_id OR is_public = true);
+
+DROP POLICY IF EXISTS "Users can insert their own prompts" ON public.prompts;
+CREATE POLICY "Users can insert their own prompts" ON public.prompts
+    FOR INSERT WITH CHECK (auth.uid() = user_id);
+
+DROP POLICY IF EXISTS "Users can update their own prompts" ON public.prompts;
+CREATE POLICY "Users can update their own prompts" ON public.prompts
+    FOR UPDATE USING (auth.uid() = user_id);
+
+DROP POLICY IF EXISTS "Users can delete their own prompts" ON public.prompts;
+CREATE POLICY "Users can delete their own prompts" ON public.prompts
+    FOR DELETE USING (auth.uid() = user_id);
+
 -- Create function to handle user creation
 CREATE OR REPLACE FUNCTION public.handle_new_user()
 RETURNS TRIGGER AS $$
@@ -141,6 +233,16 @@ BEGIN
     VALUES (
         NEW.id,
         'starter',
+        NOW(),
+        NOW()
+    ) ON CONFLICT DO NOTHING;
+    
+    -- Insert default user analytics
+    INSERT INTO public.user_analytics (user_id, tools_used, total_usage, created_at, updated_at)
+    VALUES (
+        NEW.id,
+        0,
+        0,
         NOW(),
         NOW()
     ) ON CONFLICT DO NOTHING;

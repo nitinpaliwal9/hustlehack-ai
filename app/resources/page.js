@@ -74,7 +74,7 @@ export default function ResourcesPage() {
       <Navigation />
 
       {/* Resources Content */}
-      <main id="main-content" className="section" style={{paddingTop: '120px'}} role="main" aria-label="Resources main content">
+      <main id="main-content" className="section" style={{paddingTop: '140px'}} role="main" aria-label="Resources main content">
         <div className="resources-content">
           {/* Hero Section */}
           <div className="resources-hero" role="region" aria-label="Premium Resources">
@@ -83,13 +83,13 @@ export default function ResourcesPage() {
           </div>
 
           {/* Toolkits & Templates Section */}
-          <section className="resources-section" role="region" aria-label="Toolkits and Templates">
+          <section className="resources-section" role="region" aria-label="Toolkits and Templates" style={{marginTop: '5rem'}}>
             <div className="section-header">
               <h2 tabIndex="0">🧰 Toolkits & Templates</h2>
               <p tabIndex="0">Handpicked AI-ready templates for creators, students, and solopreneurs</p>
             </div>
-            <div className="resource-cards" role="list">
-              <div className="resource-card featured-card" role="listitem" tabIndex="0">
+            <div className="resource-cards" role="list" style={{gap: '2rem'}}>
+              <div className="resource-card featured-card" role="listitem" tabIndex="0" style={{padding: '2.5rem'}}>
                 <div className="card-badge">Popular</div>
                 <span className="card-icon" aria-hidden="true">📱</span>
                 <h3 className="card-title">Social Media Prompt Pack</h3>
@@ -97,35 +97,35 @@ export default function ResourcesPage() {
                 <Link href="/resources/toolkits-and-templates/social-media-prompt-pack" className="btn btn-primary" aria-label="Explore Social Media Prompt Pack">Explore Pack →</Link>
               </div>
               
-              <div className="resource-card" role="listitem" tabIndex="0">
+              <div className="resource-card" role="listitem" tabIndex="0" style={{padding: '2.5rem'}}>
                 <span className="card-icon" aria-hidden="true">💼</span>
                 <h3 className="card-title">Student Productivity Suite</h3>
                 <p className="card-description">Complete toolkit for academic success. Note-taking templates, study planners, and AI study assistants.</p>
                 <Link href="/resources/toolkits-and-templates/student-productivity-suite" className="card-link" aria-label="Explore Student Productivity Suite">Explore Suite →</Link>
               </div>
               
-              <div className="resource-card" role="listitem" tabIndex="0">
+              <div className="resource-card" role="listitem" tabIndex="0" style={{padding: '2.5rem'}}>
                 <span className="card-icon" aria-hidden="true">🎨</span>
                 <h3 className="card-title">Creator's AI Toolkit</h3>
                 <p className="card-description">Everything creators need: video scripts, thumbnail ideas, content calendars, and engagement strategies.</p>
                 <Link href="/resources/toolkits-and-templates/creators-ai-toolkit" className="card-link" aria-label="Explore Creator's AI Toolkit">Explore Toolkit →</Link>
               </div>
               
-              <div className="resource-card" role="listitem" tabIndex="0">
+              <div className="resource-card" role="listitem" tabIndex="0" style={{padding: '2.5rem'}}>
                 <span className="card-icon" aria-hidden="true">🚀</span>
                 <h3 className="card-title">Startup Launch Kit</h3>
                 <p className="card-description">From idea to launch: business plan templates, pitch decks, marketing strategies, and growth hacks.</p>
                 <Link href="/resources/toolkits-and-templates/startup-launch-kit" className="card-link" aria-label="Launch Startup Launch Kit">Launch Now →</Link>
               </div>
               
-              <div className="resource-card" role="listitem" tabIndex="0">
+              <div className="resource-card" role="listitem" tabIndex="0" style={{padding: '2.5rem'}}>
                 <span className="card-icon" aria-hidden="true">💰</span>
                 <h3 className="card-title">Freelancer's Arsenal</h3>
                 <p className="card-description">Client proposals, project templates, pricing calculators, and automated workflow setups.</p>
                 <Link href="#" className="card-link" aria-label="Boost Income with Freelancer's Arsenal">Boost Income →</Link>
               </div>
               
-              <div className="resource-card coming-soon-card" role="listitem" tabIndex="0">
+              <div className="resource-card coming-soon-card" role="listitem" tabIndex="0" style={{padding: '2.5rem'}}>
                 <div className="card-badge">Coming Soon</div>
                 <span className="card-icon" aria-hidden="true">🤖</span>
                 <h3 className="card-title">AI Automation Scripts</h3>
@@ -136,20 +136,20 @@ export default function ResourcesPage() {
           </section>
 
           {/* Free Guides & Blueprints Section */}
-          <section className="resources-section" role="region" aria-label="Free Guides and Blueprints">
+          <section className="resources-section" role="region" aria-label="Free Guides and Blueprints" style={{marginTop: '5rem'}}>
             <div className="section-header">
               <h2 tabIndex="0">📘 Free Guides & Blueprints</h2>
               <p tabIndex="0">Step-by-step guides to master AI tools and grow your skills</p>
             </div>
-            <div className="resource-cards" role="list">
-              <div className="resource-card" role="listitem" tabIndex="0">
+            <div className="resource-cards" role="list" style={{gap: '2rem'}}>
+              <div className="resource-card" role="listitem" tabIndex="0" style={{padding: '2.5rem'}}>
                 <span className="card-icon" aria-hidden="true">🎯</span>
                 <h3 className="card-title">AI for Beginners</h3>
                 <p className="card-description">Complete beginner's guide to AI. From ChatGPT basics to advanced prompting techniques in 30 days.</p>
                 <Link href="#" className="card-link" aria-label="Start Learning AI for Beginners">Start Learning →</Link>
               </div>
               
-              <div className="resource-card featured-card" role="listitem" tabIndex="0">
+              <div className="resource-card featured-card" role="listitem" tabIndex="0" style={{padding: '2.5rem'}}>
                 <div className="card-badge">Most Downloaded</div>
                 <span className="card-icon" aria-hidden="true">📈</span>
                 <h3 className="card-title">Growth Hacking with AI</h3>
@@ -157,14 +157,14 @@ export default function ResourcesPage() {
                 <Link href="#" className="card-link" aria-label="Download Growth Hacking with AI Guide">Download Guide →</Link>
               </div>
               
-              <div className="resource-card" role="listitem" tabIndex="0">
+              <div className="resource-card" role="listitem" tabIndex="0" style={{padding: '2.5rem'}}>
                 <span className="card-icon" aria-hidden="true">🎓</span>
                 <h3 className="card-title">Student Success Blueprint</h3>
                 <p className="card-description">How to use AI for studying, research, assignments, and career preparation. Academic edge unlocked.</p>
                 <Link href="#" className="card-link" aria-label="Get Student Success Blueprint">Get Blueprint →</Link>
               </div>
               
-              <div className="resource-card" role="listitem" tabIndex="0">
+              <div className="resource-card" role="listitem" tabIndex="0" style={{padding: '2.5rem'}}>
                 <span className="card-icon" aria-hidden="true">💡</span>
                 <h3 className="card-title">AI Side Hustle Ideas</h3>
                 <p className="card-description">50+ profitable side hustle ideas using AI. Start earning while learning, step-by-step execution guide.</p>
@@ -174,48 +174,48 @@ export default function ResourcesPage() {
           </section>
 
           {/* Weekly Drop Archive Section */}
-          <section className="resources-section" role="region" aria-label="Weekly Drop Archive">
+          <section className="resources-section" role="region" aria-label="Weekly Drop Archive" style={{marginTop: '5rem'}}>
             <div className="section-header">
               <h2 tabIndex="0">📅 Weekly Drop Archive</h2>
               <p tabIndex="0">Access our previous weekly drops - fresh AI resources delivered every week</p>
             </div>
-            <div className="weekly-drops" role="list">
-              <div className="drop-card" role="listitem" tabIndex="0">
+            <div className="weekly-drops" role="list" style={{gap: '2rem'}}>
+              <div className="drop-card" role="listitem" tabIndex="0" style={{padding: '2rem'}}>
                 <div className="drop-week">Week 15 • Jan 2025</div>
                 <h3 className="drop-title">AI Content Calendar Mastery</h3>
                 <p className="drop-description">Complete system to plan, create, and schedule content using AI. Includes 30-day content ideas and automation workflows.</p>
                 <Link href="#" className="drop-link" aria-label="View AI Content Calendar Mastery Drop">View Drop →</Link>
               </div>
               
-              <div className="drop-card" role="listitem" tabIndex="0">
+              <div className="drop-card" role="listitem" tabIndex="0" style={{padding: '2rem'}}>
                 <div className="drop-week">Week 14 • Jan 2025</div>
                 <h3 className="drop-title">Student Research Assistant</h3>
                 <p className="drop-description">AI prompts and tools for academic research. Find sources, summarize papers, and generate citations automatically.</p>
                 <Link href="#" className="drop-link" aria-label="Access Student Research Assistant Drop">Access Drop →</Link>
               </div>
               
-              <div className="drop-card" role="listitem" tabIndex="0">
+              <div className="drop-card" role="listitem" tabIndex="0" style={{padding: '2rem'}}>
                 <div className="drop-week">Week 13 • Jan 2025</div>
                 <h3 className="drop-title">Viral Video Scripts Pack</h3>
                 <p className="drop-description">25 proven video script templates for social media. Hooks, storytelling frameworks, and CTAs that convert.</p>
                 <Link href="#" className="drop-link" aria-label="Get Viral Video Scripts Pack">Get Scripts →</Link>
               </div>
               
-              <div className="drop-card" role="listitem" tabIndex="0">
+              <div className="drop-card" role="listitem" tabIndex="0" style={{padding: '2rem'}}>
                 <div className="drop-week">Week 12 • Dec 2024</div>
                 <h3 className="drop-title">AI Email Marketing Suite</h3>
                 <p className="drop-description">Subject lines, email sequences, and newsletter templates powered by AI. Boost open rates and conversions.</p>
                 <Link href="#" className="drop-link" aria-label="Download AI Email Marketing Suite">Download Suite →</Link>
               </div>
               
-              <div className="drop-card" role="listitem" tabIndex="0">
+              <div className="drop-card" role="listitem" tabIndex="0" style={{padding: '2rem'}}>
                 <div className="drop-week">Week 11 • Dec 2024</div>
                 <h3 className="drop-title">Freelancer Proposal Generator</h3>
                 <p className="drop-description">AI-powered proposal templates that win clients. Pricing strategies and negotiation tactics included.</p>
                 <Link href="#" className="drop-link" aria-label="View Freelancer Proposal Generator Drop">View Drop →</Link>
               </div>
               
-              <div className="drop-card" role="listitem" tabIndex="0">
+              <div className="drop-card" role="listitem" tabIndex="0" style={{padding: '2rem'}}>
                 <div className="drop-week">Week 10 • Dec 2024</div>
                 <h3 className="drop-title">Social Media Automation</h3>
                 <p className="drop-description">Set up automated posting, engagement, and growth systems. Complete setup guide and tool recommendations.</p>
@@ -225,55 +225,55 @@ export default function ResourcesPage() {
           </section>
 
           {/* AI Tools Stack Section */}
-          <section className="resources-section" role="region" aria-label="AI Tools Stack">
+          <section className="resources-section" role="region" aria-label="AI Tools Stack" style={{marginTop: '5rem'}}>
             <div className="section-header">
               <h2 tabIndex="0">🛠️ AI Tools Stack</h2>
               <p tabIndex="0">Curated collection of the best AI tools for productivity and creativity</p>
             </div>
-            <div className="tools-grid" role="list">
-              <div className="tool-card" role="listitem" tabIndex="0">
+            <div className="tools-grid" role="list" style={{gap: '2rem'}}>
+              <div className="tool-card" role="listitem" tabIndex="0" style={{padding: '2rem'}}>
                 <span className="tool-icon" aria-hidden="true">🤖</span>
                 <h3 className="tool-name">ChatGPT</h3>
                 <p className="tool-description">Conversational AI for writing, coding, and problem-solving</p>
               </div>
               
-              <div className="tool-card" role="listitem" tabIndex="0">
+              <div className="tool-card" role="listitem" tabIndex="0" style={{padding: '2rem'}}>
                 <span className="tool-icon" aria-hidden="true">🎨</span>
                 <h3 className="tool-name">Midjourney</h3>
                 <p className="tool-description">AI image generation for creative projects and content</p>
               </div>
               
-              <div className="tool-card" role="listitem" tabIndex="0">
+              <div className="tool-card" role="listitem" tabIndex="0" style={{padding: '2rem'}}>
                 <span className="tool-icon" aria-hidden="true">✍️</span>
                 <h3 className="tool-name">Notion AI</h3>
                 <p className="tool-description">AI-powered workspace for notes, docs, and project management</p>
               </div>
               
-              <div className="tool-card" role="listitem" tabIndex="0">
+              <div className="tool-card" role="listitem" tabIndex="0" style={{padding: '2rem'}}>
                 <span className="tool-icon" aria-hidden="true">🎥</span>
                 <h3 className="tool-name">Runway ML</h3>
                 <p className="tool-description">AI video editing and generation for content creators</p>
               </div>
               
-              <div className="tool-card" role="listitem" tabIndex="0">
+              <div className="tool-card" role="listitem" tabIndex="0" style={{padding: '2rem'}}>
                 <span className="tool-icon" aria-hidden="true">📊</span>
                 <h3 className="tool-name">Beautiful.AI</h3>
                 <p className="tool-description">AI presentation maker for stunning slides and pitches</p>
               </div>
               
-              <div className="tool-card" role="listitem" tabIndex="0">
+              <div className="tool-card" role="listitem" tabIndex="0" style={{padding: '2rem'}}>
                 <span className="tool-icon" aria-hidden="true">🔍</span>
                 <h3 className="tool-name">Perplexity AI</h3>
                 <p className="tool-description">AI search engine for research and information gathering</p>
               </div>
               
-              <div className="tool-card" role="listitem" tabIndex="0">
+              <div className="tool-card" role="listitem" tabIndex="0" style={{padding: '2rem'}}>
                 <span className="tool-icon" aria-hidden="true">🎵</span>
                 <h3 className="tool-name">Mubert</h3>
                 <p className="tool-description">AI music generation for videos and content</p>
               </div>
               
-              <div className="tool-card" role="listitem" tabIndex="0">
+              <div className="tool-card" role="listitem" tabIndex="0" style={{padding: '2rem'}}>
                 <span className="tool-icon" aria-hidden="true">💬</span>
                 <h3 className="tool-name">Copy.ai</h3>
                 <p className="tool-description">AI copywriting for marketing and sales content</p>

@@ -145,8 +145,8 @@ export default function StudentProductivitySuite() {
     <Navigation />
     <div className="min-h-screen bg-black">
   	{/* Header Section */}
-  	<div className="bg-zinc-900 shadow-sm border-b border-zinc-800 pt-40">
-    	<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+  	<div className="bg-zinc-900 shadow-sm border-b border-zinc-800 pt-48">
+    	<div className="max-w-7xl mx-auto px-8 sm:px-12 lg:px-20 py-20">
       		<div className="text-center">
         <h1 className="text-4xl md:text-5xl font-bold text-[color:var(--primary)] mb-4">
           Student Productivity Suite ✨
@@ -175,8 +175,8 @@ export default function StudentProductivitySuite() {
       </div>
 
       {/* Resources Grid */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="max-w-7xl mx-auto px-8 sm:px-12 lg:px-20 py-20">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
           {resources.map((resource) => {
             const IconComponent = resource.icon;
             return (

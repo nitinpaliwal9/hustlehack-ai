@@ -127,22 +127,22 @@ export default function HomePage() {
       </section>
 
       {/* How It Works Section */}
-      <section id="how-it-works" className="section" role="region" aria-label="How HustleHack AI works">
-        <div className="container">
+      <section id="how-it-works" className="section" style={{ padding: '6rem 0' }} role="region" aria-label="How HustleHack AI works">
+        <div className="container" style={{ paddingLeft: '2.5rem', paddingRight: '2.5rem', maxWidth: '1400px' }}>
           <h2 className="section-title" tabIndex="0">How It Works</h2>
           <p className="section-subtitle" tabIndex="0">Get started with HustleHack AI in three simple steps</p>
-          <div className="grid grid-3" role="list">
-            <div className="card" role="listitem" tabIndex="0">
+          <div className="grid grid-3" role="list" style={{ gap: '2.5rem' }}>
+            <div className="card" role="listitem" tabIndex="0" style={{ marginBottom: '2.5rem' }}>
               <span className="card-icon" aria-hidden="true">🔍</span>
               <h3 className="card-title">Pick Your Plan</h3>
               <p className="card-description">Choose from our flexible plans designed for different needs and budgets. Start with basics or go pro.</p>
             </div>
-            <div className="card" role="listitem" tabIndex="0">
+            <div className="card" role="listitem" tabIndex="0" style={{ marginBottom: '2.5rem' }}>
               <span className="card-icon" aria-hidden="true">🎁</span>
               <h3 className="card-title">Unlock Tools & Resources</h3>
               <p className="card-description">Access AI tools, templates, prompts, and exclusive content to supercharge your productivity.</p>
             </div>
-            <div className="card" role="listitem" tabIndex="0">
+            <div className="card" role="listitem" tabIndex="0" style={{ marginBottom: '2.5rem' }}>
               <span className="card-icon" aria-hidden="true">🚀</span>
               <h3 className="card-title">Grow & Scale</h3>
               <p className="card-description">Apply your newfound skills to grow your studies, side hustles, and creative projects faster than ever.</p>
@@ -156,7 +156,7 @@ export default function HomePage() {
         <div className="container">
           <h2 className="section-title" tabIndex="0">Why Choose HustleHack AI?</h2>
           <p className="section-subtitle" tabIndex="0">Everything you need to succeed in the AI-driven world</p>
-          <div className="grid grid-4" role="list">
+          <div className="grid grid-4" role="list" style={{ gap: '2.5rem' }}>
             <div className="card" role="listitem" tabIndex="0">
               <span className="card-icon" aria-hidden="true">✨</span>
               <h3 className="card-title">Weekly AI Drops</h3>
@@ -206,8 +206,8 @@ export default function HomePage() {
         <div className="container">
           <h2 className="section-title" tabIndex="0">Choose Your Plan</h2>
           <p className="section-subtitle" tabIndex="0">Flexible pricing that grows with your ambitions</p>
-          <div className="grid grid-3" role="list">
-            <div className="pricing-card" role="listitem" tabIndex="0">
+          <div className="grid grid-3" role="list" style={{ gap: '2.5rem' }}>
+            <div className="pricing-card" role="listitem" tabIndex="0" style={{ marginBottom: '2.5rem' }}>
               <div className="pricing-rating">
                 <div className="rating-stars" aria-label="4.2 out of 5 stars">
                   <span className="star filled" aria-hidden="true">★</span>

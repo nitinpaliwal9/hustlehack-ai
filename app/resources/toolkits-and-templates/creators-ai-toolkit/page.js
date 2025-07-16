@@ -94,8 +94,8 @@ export default function CreatorsAIToolkit() {
       <Navigation />
       <div className="min-h-screen" style={{ background: 'var(--bg-primary)', color: 'var(--text-primary)' }}>
         {/* Header Section */}
-        <div className="bg-zinc-900 shadow-sm border-b border-zinc-800 pt-40">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div className="bg-zinc-900 shadow-sm border-b border-zinc-800 pt-48">
+          <div className="max-w-7xl mx-auto px-8 sm:px-12 lg:px-20 py-20">
             <div className="text-center">
               <h1 className="text-4xl md:text-5xl font-bold text-[color:var(--primary)] mb-4">
                 Creator’s AI Toolkit 🎯
@@ -108,7 +108,7 @@ export default function CreatorsAIToolkit() {
         </div>
 
         {/* Value Proposition */}
-        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8 text-center">
+        <div className="max-w-3xl mx-auto px-8 sm:px-12 lg:px-20 py-16 text-center">
           <div className="inline-flex items-center gap-2 bg-gradient-to-r from-[#7F5AF0] to-[#00FFC2] text-black px-4 py-2 rounded-full font-semibold mb-4">
             <LightBulbIcon className="w-5 h-5" /> What’s Inside the Toolkit
           </div>
@@ -121,14 +121,14 @@ export default function CreatorsAIToolkit() {
         </div>
 
         {/* Toolkit Cards */}
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="max-w-7xl mx-auto px-8 sm:px-12 lg:px-20 py-20">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
             {toolkitItems.map((item) => {
               const IconComponent = item.icon;
               return (
                 <div
                   key={item.id}
-                  className={`rounded-xl shadow-md hover:shadow-xl transition-all duration-300 p-6 cursor-pointer transform hover:-translate-y-1 ${
+                  className={`rounded-xl shadow-md hover:shadow-xl transition-all duration-300 p-10 cursor-pointer transform hover:-translate-y-1 ${
                     hoveredCard === item.id ? 'ring-2 ring-[#7F5AF0] ring-opacity-50' : ''
                   }`}
                   style={{ background: 'rgba(36,41,46,0.96)', border: '1px solid var(--border-color)' }}
@@ -156,8 +156,8 @@ export default function CreatorsAIToolkit() {
         </div>
 
         {/* CTA Section */}
-        <div className="bg-gradient-to-r from-[#7F5AF0] to-[#00FFC2] text-black py-16">
-          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <div className="bg-gradient-to-r from-[#7F5AF0] to-[#00FFC2] text-black py-24 mt-20">
+          <div className="max-w-4xl mx-auto px-8 sm:px-12 lg:px-20 text-center">
             <h2 className="text-3xl md:text-4xl font-bold mb-4">
               Unlock your creator flow.
             </h2>
