@@ -449,7 +449,7 @@ export default function DashboardClient() {
               <div className="rounded-xl shadow-lg p-6 border border-[var(--border-color)]" style={{ background: 'rgba(36,41,46,0.96)' }}>
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm text-gray-600">Current Plan</p>
+                    <p className="text-sm text-gray-200">Current Plan</p>
                     <p className="text-2xl font-bold text-purple-600 capitalize">{userData.plan}</p>
                   </div>
                   <Zap className="w-8 h-8 text-purple-500" />
@@ -458,7 +458,7 @@ export default function DashboardClient() {
               <div className="rounded-xl shadow-lg p-6 border border-[var(--border-color)]" style={{ background: 'rgba(36,41,46,0.96)' }}>
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm text-gray-600">Tools Used</p>
+                    <p className="text-sm text-gray-200">Tools Used</p>
                     <p className="text-2xl font-bold text-blue-600">{toolsUsed}</p>
                   </div>
                   <Brain className="w-8 h-8 text-blue-500" />
@@ -467,7 +467,7 @@ export default function DashboardClient() {
               <div className="rounded-xl shadow-lg p-6 border border-[var(--border-color)]" style={{ background: 'rgba(36,41,46,0.96)' }}>
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm text-gray-600">Achievements</p>
+                    <p className="text-sm text-gray-200">Achievements</p>
                     <p className="text-2xl font-bold text-green-600">{achievementsCount}</p>
                   </div>
                   <Trophy className="w-8 h-8 text-green-500" />
@@ -477,7 +477,7 @@ export default function DashboardClient() {
 
             {/* Resources Section */}
             <div className="space-y-6">
-              <h2 className="text-2xl font-bold text-gray-900">🚀 Your Resources</h2>
+              <h2 className="text-2xl font-bold text-white">�� Your Resources</h2>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {resources.map((resource, index) => (
                   <div key={resource.id} className="animate-fade-in-up" style={{animationDelay: `${index * 0.1}s`}}>
@@ -492,15 +492,15 @@ export default function DashboardClient() {
 
             {/* Recent Activity */}
             <div className="rounded-xl shadow-lg border border-[var(--border-color)] p-6" style={{ background: 'rgba(36,41,46,0.96)' }}>
-              <h3 className="text-xl font-bold text-gray-900 mb-4">📊 Recent Activity</h3>
+              <h3 className="text-xl font-bold text-white mb-4">�� Recent Activity</h3>
               {recentActivity.length > 0 ? (
                 <ul className="space-y-3">
                   {recentActivity.map((activity, index) => (
                     <li key={index} className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
-                      <span className="font-medium text-gray-900">
+                      <span className="font-medium text-white">
                         <span className="capitalize">{activity.action}</span> {activity.resource_name}
                       </span>
-                      <span className="text-sm text-gray-500">
+                      <span className="text-sm text-gray-100">
                         {new Date(activity.created_at).toLocaleDateString()}
                       </span>
                     </li>
@@ -509,7 +509,7 @@ export default function DashboardClient() {
               ) : (
                 <div className="text-center py-8">
                   <div className="text-6xl mb-4 opacity-50">📊</div>
-                  <p className="text-gray-400 text-lg">No recent activity logged yet</p>
+                  <p className="text-lg" style={{ color: 'var(--text-secondary)' }}>No recent activity logged yet</p>
                 </div>
               )}
             </div>
@@ -528,15 +528,15 @@ export default function DashboardClient() {
       case 'achievements':
         return (
           <div className="space-y-8">
-            <h2 className="text-3xl font-bold text-gray-900">🏆 Your Achievements</h2>
+            <h2 className="text-3xl font-bold text-white">🏆 Your Achievements</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {achievementsData.length > 0 ? (
                 achievementsData.map((achievement, index) => (
                   <div key={achievement.id || index} className="rounded-xl shadow-lg p-6 border border-[var(--border-color)]" style={{ background: 'rgba(36,41,46,0.96)' }}>
                     <div className="text-center">
                       <div className="text-4xl mb-4">{achievement.icon || '🏆'}</div>
-                      <h3 className="text-lg font-semibold text-gray-900">{achievement.title || 'Achievement'}</h3>
-                      <p className="text-sm text-gray-600 mt-2">{achievement.description || 'Complete tasks to unlock achievements'}</p>
+                      <h3 className="text-lg font-semibold text-white">{achievement.title || 'Achievement'}</h3>
+                      <p className="text-sm text-gray-200 mt-2">{achievement.description || 'Complete tasks to unlock achievements'}</p>
                       <div className={`mt-4 px-3 py-1 rounded-full text-sm font-medium ${
                         achievement.unlocked 
                           ? 'bg-green-100 text-green-800' 
@@ -552,7 +552,7 @@ export default function DashboardClient() {
                               style={{ width: `${achievement.progress}%` }}
                             ></div>
                           </div>
-                          <p className="text-xs text-gray-500 mt-1">{achievement.progress}% complete</p>
+                          <p className="text-xs text-gray-100 mt-1">{achievement.progress}% complete</p>
                         </div>
                       )}
                     </div>
@@ -561,8 +561,8 @@ export default function DashboardClient() {
               ) : (
                 <div className="col-span-full text-center py-12">
                   <div className="text-6xl mb-4 opacity-50">🏆</div>
-                  <h3 className="text-xl font-semibold text-gray-900 mb-2">No Achievements Yet</h3>
-                  <p className="text-gray-600">Start using the platform to unlock achievements!</p>
+                  <h3 className="text-xl font-semibold text-white mb-2">No Achievements Yet</h3>
+                  <p className="text-gray-200">Start using the platform to unlock achievements!</p>
                 </div>
               )}
             </div>
@@ -580,12 +580,12 @@ export default function DashboardClient() {
         <div className="pt-12 sm:pt-20 pb-20 sm:pb-28 space-y-12 sm:space-y-16">
           {/* Header Section */}
           <div className="text-center space-y-4 animate-fade-in">
-            <h1 className="text-2xl sm:text-4xl lg:text-5xl font-bold text-gray-900 transition-all duration-300 transform hover:scale-105 hover:text-[#7F5AF0]">
+            <h1 className="text-2xl sm:text-4xl lg:text-5xl font-bold text-white transition-all duration-300 transform hover:scale-105 hover:text-[#7F5AF0]">
               👋 {userData.name === 'Hustler' ? 'Hello, Hustler!' : `Hello, ${userData.name}!`}
             </h1>
-            <p className="text-base sm:text-lg text-gray-600 max-w-3xl mx-auto">
+            <p className="text-base sm:text-lg text-gray-200 max-w-3xl mx-auto">
               ✉️ {userData.email === 'Email: Not available' ? 
-                <span className="text-gray-400 italic">Email: Not available</span> : 
+                <span className="text-gray-100 italic">Email: Not available</span> : 
                 userData.email
               }
             </p>

@@ -4,6 +4,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { useState, useEffect, useRef } from 'react'
 import { useAuth } from '../hooks/useAuth'
+import { Sparkles } from 'lucide-react';
 
 // Focus trap utility
 function useFocusTrap(isOpen, modalRef) {

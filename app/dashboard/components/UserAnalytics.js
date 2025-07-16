@@ -143,8 +143,8 @@ export default function UserAnalytics({ user, userProfile }) {
       </div>
       <div className="space-y-1">
         <p className="text-2xl font-bold" style={{ color: 'var(--text-primary)' }}>{value}</p>
-        <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>{title}</p>
-        {subtitle && <p className="text-xs" style={{ color: 'var(--text-secondary)' }}>{subtitle}</p>}
+        <p className="text-sm" style={{ color: '#B0B0B0' }}>{title}</p>
+        {subtitle && <p className="text-xs" style={{ color: '#B0B0B0' }}>{subtitle}</p>}
       </div>
     </div>
   )
@@ -163,7 +163,7 @@ export default function UserAnalytics({ user, userProfile }) {
       <div className="space-y-6">
         <div className="text-center py-12">
           <div className="animate-spin rounded-full h-12 w-12 border-4 border-purple-500 border-t-transparent mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading your analytics...</p>
+          <p className="text-gray-200">Loading your analytics...</p>
         </div>
       </div>
     )
@@ -192,7 +192,7 @@ export default function UserAnalytics({ user, userProfile }) {
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-3xl font-bold mb-2" style={{ color: 'var(--text-primary)' }}>📊 Your Analytics</h2>
-          <p style={{ color: 'var(--text-secondary)' }}>Track your progress and achievements</p>
+          <p style={{ color: '#B0B0B0' }}>Track your progress and achievements</p>
         </div>
         <div className="flex gap-2">
           {['week', 'month', 'year'].map((period) => (
@@ -203,7 +203,7 @@ export default function UserAnalytics({ user, userProfile }) {
               style={
                 selectedTimeframe === period
                   ? { background: 'var(--accent)', color: '#000' }
-                  : { background: 'var(--bg-surface)', color: 'var(--text-secondary)' }
+                  : { background: 'var(--bg-surface)', color: '#B0B0B0' }
               }
             >
               {period.charAt(0).toUpperCase() + period.slice(1)}
@@ -308,7 +308,7 @@ export default function UserAnalytics({ user, userProfile }) {
       <div className="rounded-xl shadow-lg border p-6" style={{ background: 'var(--bg-surface)', borderColor: 'var(--border-color)' }}>
         <div className="flex items-center justify-between mb-6">
           <h3 className="text-xl font-bold" style={{ color: 'var(--text-primary)' }}>🎓 Learning Path Progress</h3>
-          <div className="text-sm" style={{ color: 'var(--text-secondary)' }}>
+          <div className="text-sm" style={{ color: '#B0B0B0' }}>
             Overall Progress: {analytics.learningProgress}%
           </div>
         </div>
@@ -318,8 +318,8 @@ export default function UserAnalytics({ user, userProfile }) {
               <div className="flex items-center justify-between mb-2">
                 <h4 className="font-semibold" style={{ color: 'var(--text-primary)' }}>{path.title}</h4>
                 <div className="flex items-center gap-2">
-                  <Clock className="w-4 h-4" style={{ color: 'var(--text-secondary)' }} />
-                  <span className="text-sm" style={{ color: 'var(--text-secondary)' }}>{path.timeSpent}m</span>
+                  <Clock className="w-4 h-4" style={{ color: '#B0B0B0' }} />
+                  <span className="text-sm" style={{ color: '#B0B0B0' }}>{path.timeSpent}m</span>
                   {path.completed && <Trophy className="w-4 h-4" style={{ color: '#FFE27A' }} />}
                 </div>
               </div>
@@ -330,7 +330,7 @@ export default function UserAnalytics({ user, userProfile }) {
                     color={path.completed ? 'bg-green-500' : 'bg-purple-500'}
                   />
                 </div>
-                <span className="text-sm" style={{ color: 'var(--text-secondary)' }}>
+                <span className="text-sm" style={{ color: '#B0B0B0' }}>
                   {path.progress}% ({path.modules} modules)
                 </span>
               </div>
@@ -358,7 +358,7 @@ export default function UserAnalytics({ user, userProfile }) {
                   <h4 className="font-semibold" style={{ color: achievement.unlocked ? '#00FFC2' : 'var(--text-primary)' }}>
                     {achievement.title}
                   </h4>
-                  <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>{achievement.description}</p>
+                  <p className="text-sm" style={{ color: '#B0B0B0' }}>{achievement.description}</p>
                 </div>
               </div>
               {achievement.unlocked ? (
@@ -372,7 +372,7 @@ export default function UserAnalytics({ user, userProfile }) {
               ) : (
                 <div className="space-y-1">
                   <ProgressBar percentage={achievement.progress} color="bg-purple-500" />
-                  <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>{achievement.progress}% complete</p>
+                  <p className="text-sm" style={{ color: '#B0B0B0' }}>{achievement.progress}% complete</p>
                 </div>
               )}
             </div>

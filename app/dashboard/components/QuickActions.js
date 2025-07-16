@@ -165,22 +165,22 @@ export default function QuickActions({ userPlan = 'starter', onActionClick }) {
                   className="px-2 py-1 text-xs rounded-full"
                   style={{
                     background: unlocked ? 'var(--warning)' : 'var(--bg-surface)',
-                    color: unlocked ? '#7F5AF0' : 'var(--text-secondary)'
+                    color: unlocked ? '#7F5AF0' : '#B0B0B0'
                   }}
                 >
                   Pro
                 </span>
               )}
-              <ExternalLink className="w-4 h-4" style={{ color: 'var(--text-secondary)', opacity: hoveredAction === action.id ? 1 : 0, transition: 'opacity 0.2s' }} />
+              <ExternalLink className="w-4 h-4" style={{ color: '#B0B0B0', opacity: hoveredAction === action.id ? 1 : 0, transition: 'opacity 0.2s' }} />
             </div>
           </div>
 
           {/* Content */}
           <div className="space-y-2">
-            <h3 className="font-semibold" style={{ color: unlocked ? 'var(--text-primary)' : 'var(--text-secondary)' }}>
+            <h3 className="font-semibold" style={{ color: unlocked ? 'var(--text-primary)' : '#B0B0B0' }}>
               {action.title}
             </h3>
-            <p className="text-sm" style={{ color: unlocked ? 'var(--text-secondary)' : 'var(--text-secondary)' }}>
+            <p className="text-sm" style={{ color: unlocked ? '#B0B0B0' : '#B0B0B0' }}>
               {action.description}
             </p>
           </div>
@@ -189,8 +189,8 @@ export default function QuickActions({ userPlan = 'starter', onActionClick }) {
           {unlocked && (
             <div className="mt-3 pt-3" style={{ borderTop: '1px solid var(--border-color)' }}>
               <div className="flex items-center justify-between">
-                <span className="text-xs" style={{ color: 'var(--text-secondary)' }}>Shortcut</span>
-                <code className="px-2 py-1 rounded text-xs font-mono" style={{ background: 'rgba(127,90,240,0.08)', color: 'var(--text-secondary)' }}>
+                <span className="text-xs" style={{ color: '#B0B0B0' }}>Shortcut</span>
+                <code className="px-2 py-1 rounded text-xs font-mono" style={{ background: 'rgba(127,90,240,0.08)', color: '#B0B0B0' }}>
                   {action.shortcut}
                 </code>
               </div>
@@ -212,9 +212,9 @@ export default function QuickActions({ userPlan = 'starter', onActionClick }) {
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-2xl font-bold mb-1" style={{ color: 'var(--text-primary)' }}>⚡ Quick Actions</h2>
-          <p style={{ color: 'var(--text-secondary)' }}>Access your most used features instantly</p>
+          <p style={{ color: '#B0B0B0' }}>Access your most used features instantly</p>
         </div>
-        <div className="text-sm" style={{ color: 'var(--text-secondary)' }}>
+        <div className="text-sm" style={{ color: '#B0B0B0' }}>
           Use keyboard shortcuts for faster access
         </div>
       </div>
@@ -264,7 +264,7 @@ export default function QuickActions({ userPlan = 'starter', onActionClick }) {
           {quickActions.filter(action => isActionUnlocked(action)).map(action => (
             <div key={action.id} className="flex items-center justify-between p-2 rounded-lg" style={{ background: 'var(--bg-surface)' }}>
               <span className="text-sm" style={{ color: 'var(--text-primary)' }}>{action.title}</span>
-              <code className="px-2 py-1 rounded text-xs font-mono" style={{ background: 'rgba(127,90,240,0.08)', color: 'var(--text-secondary)' }}>
+              <code className="px-2 py-1 rounded text-xs font-mono" style={{ background: 'rgba(127,90,240,0.08)', color: '#B0B0B0' }}>
                 {action.shortcut}
               </code>
             </div>

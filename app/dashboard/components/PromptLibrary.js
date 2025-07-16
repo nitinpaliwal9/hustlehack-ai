@@ -18,8 +18,9 @@ import {
   Brain
 } from 'lucide-react'
 import { supabase } from '../../../lib/supabaseClient';
+import { useAuth } from '../../hooks/useAuth';
 
-export default function PromptLibrary({ userPlan = 'starter' }) {
+export default function PromptLibrary({ userPlan: propUserPlan = 'starter' }) {
   const [prompts, setPrompts] = useState([])
   const [filteredPrompts, setFilteredPrompts] = useState([])
   const [searchTerm, setSearchTerm] = useState('')
@@ -36,6 +37,11 @@ export default function PromptLibrary({ userPlan = 'starter' }) {
     isPublic: false
   })
   const [loading, setLoading] = useState(true)
+
+  const { user } = useAuth();
+  // For demo, mock user plan. In real use, fetch from user profile or subscription.
+  const userPlan = user?.plan || propUserPlan || 'starter';
+  const planHierarchy = { starter: 1, creator: 2, pro: 3 };
 
   const categories = [
     { id: 'all', name: 'All Categories', icon: BookOpen },
@@ -60,8 +66,13 @@ export default function PromptLibrary({ userPlan = 'starter' }) {
           setPrompts([]);
           setFilteredPrompts([]);
         } else {
-          setPrompts(data);
-          setFilteredPrompts(data);
+          // Add minPlan for demo: alternate plans for variety
+          const promptsWithPlan = data.map((p, i) => ({
+            ...p,
+            minPlan: i % 3 === 0 ? 'starter' : i % 3 === 1 ? 'creator' : 'pro'
+          }));
+          setPrompts(promptsWithPlan);
+          setFilteredPrompts(promptsWithPlan);
         }
       } catch (e) {
         setPrompts([]);
@@ -159,110 +170,121 @@ export default function PromptLibrary({ userPlan = 'starter' }) {
     ))
   }
 
-  const PromptCard = ({ prompt }) => (
-    <div className="rounded-xl shadow-lg border p-6 hover:shadow-xl transition-all duration-300 transform hover:scale-[1.02]"
-      style={{ background: 'var(--bg-surface)', borderColor: 'var(--border-color)' }}>
-      {/* Header */}
-      <div className="flex items-start justify-between mb-4">
-        <div className="flex-1">
-          <h3 className="text-lg font-bold mb-1" style={{ color: 'var(--text-primary)' }}>{prompt.title}</h3>
-          <p className="text-sm mb-2" style={{ color: 'var(--text-secondary)' }}>{prompt.description}</p>
-          <div className="flex items-center gap-2 text-xs" style={{ color: 'var(--text-secondary)' }}>
-            <User className="w-3 h-3" />
-            <span>{prompt.author}</span>
-            <Calendar className="w-3 h-3 ml-2" />
-            <span>{new Date(prompt.createdAt).toLocaleDateString()}</span>
+  const PromptCard = ({ prompt }) => {
+    const unlocked = planHierarchy[userPlan] >= planHierarchy[prompt.minPlan];
+    return (
+      <div className="rounded-xl shadow-lg border p-6 hover:shadow-xl transition-all duration-300 transform hover:scale-[1.02]" style={{ background: 'var(--bg-surface)', borderColor: 'var(--border-color)' }}>
+        {/* Header */}
+        <div className="flex items-start justify-between mb-4">
+          <div className="flex-1">
+            <h3 className="text-lg font-bold mb-1" style={{ color: 'var(--text-primary)' }}>{prompt.title}</h3>
+            <p className="text-sm mb-2" style={{ color: 'var(--text-secondary)' }}>{prompt.description}</p>
+            <div className="flex items-center gap-2 text-xs" style={{ color: 'var(--text-secondary)' }}>
+              <User className="w-3 h-3" />
+              <span>{prompt.author}</span>
+              <Calendar className="w-3 h-3 ml-2" />
+              <span>{new Date(prompt.createdAt).toLocaleDateString()}</span>
+            </div>
+          </div>
+          <div className="flex items-center gap-2">
+            <span className="px-2 py-1 text-xs rounded-full" style={{ background: prompt.isPublic ? 'rgba(0,255,194,0.12)' : 'var(--bg-surface)', color: prompt.isPublic ? '#00FFC2' : 'var(--text-primary)' }}>
+              {prompt.isPublic ? 'Public' : 'Private'}
+            </span>
+            <span className="px-2 py-1 text-xs rounded-full" style={{ background: 'rgba(127,90,240,0.12)', color: '#7F5AF0' }}>
+              {categories.find(cat => cat.id === prompt.category)?.name}
+            </span>
           </div>
         </div>
-        <div className="flex items-center gap-2">
-          <span className="px-2 py-1 text-xs rounded-full" style={{ background: prompt.isPublic ? 'rgba(0,255,194,0.12)' : 'var(--bg-surface)', color: prompt.isPublic ? '#00FFC2' : 'var(--text-primary)' }}>
-            {prompt.isPublic ? 'Public' : 'Private'}
-          </span>
-          <span className="px-2 py-1 text-xs rounded-full" style={{ background: 'rgba(127,90,240,0.12)', color: '#7F5AF0' }}>
-            {categories.find(cat => cat.id === prompt.category)?.name}
-          </span>
-        </div>
-      </div>
 
-      {/* Content Preview */}
-      <div className="mb-4">
-        <div className="rounded-lg p-3 max-h-32 overflow-y-auto" style={{ background: 'var(--bg-surface)' }}>
-          <p className="text-sm font-mono leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
-            {prompt.content.substring(0, 200)}
-            {prompt.content.length > 200 && '...'}
-          </p>
+        {/* Content Preview */}
+        <div className="mb-4">
+          <div className="rounded-lg p-3 max-h-32 overflow-y-auto" style={{ background: 'var(--bg-surface)' }}>
+            <p className="text-sm font-mono leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
+              {prompt.content.substring(0, 200)}
+              {prompt.content.length > 200 && '...'}
+            </p>
+          </div>
         </div>
-      </div>
 
-      {/* Tags */}
-      <div className="flex flex-wrap gap-2 mb-4">
-        {prompt.tags.map((tag, index) => (
-          <span key={index} className="inline-flex items-center gap-1 px-2 py-1 text-xs rounded-full" style={{ background: 'rgba(127,90,240,0.12)', color: '#7F5AF0' }}>
-            <Tag className="w-3 h-3" />
-            {tag}
-          </span>
-        ))}
-      </div>
-
-      {/* Stats */}
-      <div className="flex items-center gap-4 mb-4 text-sm" style={{ color: 'var(--text-secondary)' }}>
-        <div className="flex items-center gap-1">
-          <Heart className="w-4 h-4" />
-          <span>{prompt.likes} likes</span>
+        {/* Tags */}
+        <div className="flex flex-wrap gap-2 mb-4">
+          {prompt.tags.map((tag, index) => (
+            <span key={index} className="inline-flex items-center gap-1 px-2 py-1 text-xs rounded-full" style={{ background: 'rgba(127,90,240,0.12)', color: '#7F5AF0' }}>
+              <Tag className="w-3 h-3" />
+              {tag}
+            </span>
+          ))}
         </div>
-        <div className="flex items-center gap-1">
-          <Brain className="w-4 h-4" />
-          <span>{prompt.uses} uses</span>
-        </div>
-      </div>
 
-      {/* Actions */}
-      <div className="flex items-center gap-2 flex-wrap">
-        <button
-          onClick={() => {
-            handleCopyPrompt(prompt.content)
-            handleUsePrompt(prompt.id)
-          }}
-          className="flex items-center gap-1 px-3 py-1 rounded-lg text-sm"
-          style={{ background: 'var(--accent)', color: '#000' }}
-        >
-          <Copy className="w-4 h-4" />
-          Use
-        </button>
-        <button
-          onClick={() => handleLikePrompt(prompt.id)}
-          className="flex items-center gap-1 px-3 py-1 rounded-lg text-sm"
-          style={{ background: 'rgba(255,0,0,0.12)', color: '#F87171' }}
-        >
-          <Heart className="w-4 h-4" />
-          Like
-        </button>
-        {prompt.isOwner && (
-          <>
+        {/* Stats */}
+        <div className="flex items-center gap-4 mb-4 text-sm" style={{ color: 'var(--text-secondary)' }}>
+          <div className="flex items-center gap-1">
+            <Heart className="w-4 h-4" />
+            <span>{prompt.likes} likes</span>
+          </div>
+          <div className="flex items-center gap-1">
+            <Brain className="w-4 h-4" />
+            <span>{prompt.uses} uses</span>
+          </div>
+        </div>
+
+        {/* Actions */}
+        {unlocked ? (
+          <div className="flex items-center gap-2 flex-wrap">
             <button
               onClick={() => {
-                setEditingPrompt(prompt)
-                setShowEditModal(true)
+                handleCopyPrompt(prompt.content)
+                handleUsePrompt(prompt.id)
               }}
               className="flex items-center gap-1 px-3 py-1 rounded-lg text-sm"
-              style={{ background: 'rgba(127,90,240,0.12)', color: '#7F5AF0' }}
+              style={{ background: 'var(--accent)', color: '#000' }}
             >
-              <Edit className="w-4 h-4" />
-              Edit
+              <Copy className="w-4 h-4" />
+              Use
             </button>
             <button
-              onClick={() => handleDeletePrompt(prompt.id)}
+              onClick={() => handleLikePrompt(prompt.id)}
               className="flex items-center gap-1 px-3 py-1 rounded-lg text-sm"
-              style={{ background: 'var(--bg-surface)', color: 'var(--text-secondary)' }}
+              style={{ background: 'rgba(255,0,0,0.12)', color: '#F87171' }}
             >
-              <Trash2 className="w-4 h-4" />
-              Delete
+              <Heart className="w-4 h-4" />
+              Like
             </button>
-          </>
+            {prompt.isOwner && (
+              <>
+                <button
+                  onClick={() => {
+                    setEditingPrompt(prompt)
+                    setShowEditModal(true)
+                  }}
+                  className="flex items-center gap-1 px-3 py-1 rounded-lg text-sm"
+                  style={{ background: 'rgba(127,90,240,0.12)', color: '#7F5AF0' }}
+                >
+                  <Edit className="w-4 h-4" />
+                  Edit
+                </button>
+                <button
+                  onClick={() => handleDeletePrompt(prompt.id)}
+                  className="flex items-center gap-1 px-3 py-1 rounded-lg text-sm"
+                  style={{ background: 'var(--bg-surface)', color: 'var(--text-secondary)' }}
+                >
+                  <Trash2 className="w-4 h-4" />
+                  Delete
+                </button>
+              </>
+            )}
+          </div>
+        ) : (
+          <div className="flex flex-col items-start gap-2 mt-2">
+            <button className="bg-yellow-400 text-white px-4 py-2 rounded font-semibold shadow hover:bg-yellow-500 transition">
+              Upgrade to unlock this prompt
+            </button>
+            <div className="text-xs text-red-500 font-medium">Locked for your current plan</div>
+          </div>
         )}
       </div>
-    </div>
-  )
+    );
+  };
 
   const CreatePromptModal = ({ show, onClose, prompt, onSave, isEditing = false }) => {
     if (!show) return null
