@@ -12,8 +12,9 @@ import PromptLibrary from './components/PromptLibrary';
 import QuickActions from './components/QuickActions';
 import { BarChart3, Brain, BookOpen, Trophy, Settings, Bell, User, TrendingUp, Zap, FileText } from 'lucide-react';
 import { useUserPlan } from '../hooks/useAuth';
+import { getPlanDisplayName } from '../planUtils';
 
-// --- New: Reusable Section Components ---
+// Add helper function at the top or near imports
 function PlanInfoCard({ plan, expiry }) {
   return (
     <div className="rounded-2xl shadow-lg border border-[var(--border-color)] hover:shadow-xl transition-all duration-300 transform hover:scale-[1.02] animate-slide-up" style={{ background: 'var(--bg-surface)' }}>
@@ -451,7 +452,7 @@ export default function DashboardClient() {
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-sm text-gray-200">Current Plan</p>
-                    <p className="text-2xl font-bold text-purple-600 capitalize">{userData.plan}</p>
+                    <p className="text-2xl font-bold text-purple-600 capitalize">{getPlanDisplayName(userPlan)}</p>
                   </div>
                   <Zap className="w-8 h-8 text-purple-500" />
                 </div>

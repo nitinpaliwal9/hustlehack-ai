@@ -25,6 +25,7 @@ import {
 import { supabase } from '../../../lib/supabaseClient';
 import { useAuth } from '../../hooks/useAuth';
 import Link from 'next/link';
+import { PLAN_HIERARCHY, isPlanAtLeast, getPlanDisplayName } from '../../planUtils';
 
 export default function AIToolsGrid({ userPlan = 'starter' }) {
   const [activeTool, setActiveTool] = useState(null)
@@ -177,8 +178,7 @@ export default function AIToolsGrid({ userPlan = 'starter' }) {
   ]
 
   const isToolUnlocked = (tool) => {
-    const planHierarchy = { starter: 1, creator: 2, pro: 3 }
-    return planHierarchy[userPlan] >= planHierarchy[tool.minPlan]
+    return isPlanAtLeast(userPlan, tool.minPlan)
   }
 
   const handleToolInput = (toolId, fieldName, value) => {
@@ -565,7 +565,7 @@ export default function AIToolsGrid({ userPlan = 'starter' }) {
           <p style={{ color: '#B0B0B0' }}>Powerful AI tools to boost your productivity</p>
         </div>
         <div className="text-sm" style={{ color: '#B0B0B0' }}>
-          Plan: <span className="font-medium capitalize">{userPlan}</span>
+          Plan: <span className="font-medium capitalize">{getPlanDisplayName(userPlan)}</span>
         </div>
       </div>
 

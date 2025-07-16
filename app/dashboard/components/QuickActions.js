@@ -16,6 +16,7 @@ import {
   Settings,
   ExternalLink
 } from 'lucide-react'
+import { PLAN_HIERARCHY, isPlanAtLeast, getPlanDisplayName } from '../../planUtils';
 
 export default function QuickActions({ userPlan = 'starter', onActionClick }) {
   const [hoveredAction, setHoveredAction] = useState(null)
@@ -113,13 +114,12 @@ export default function QuickActions({ userPlan = 'starter', onActionClick }) {
 
   const isActionUnlocked = (action) => {
     if (!action.premium) return true
-    const planHierarchy = { starter: 1, creator: 2, pro: 3 }
-    return planHierarchy[userPlan] >= 3 // Pro plan required for premium actions
+    return isPlanAtLeast(userPlan, 'pro') // Pro plan required for premium actions
   }
 
   const handleActionClick = (action) => {
     if (!isActionUnlocked(action)) {
-      alert(`This feature requires a Pro plan. Current plan: ${userPlan}`)
+      alert(`This feature requires a Pro plan. Current plan: ${getPlanDisplayName(userPlan)}`)
       return
     }
     action.action()

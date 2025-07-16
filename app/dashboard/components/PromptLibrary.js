@@ -19,6 +19,7 @@ import {
 } from 'lucide-react'
 import { supabase } from '../../../lib/supabaseClient';
 import { useAuth } from '../../hooks/useAuth';
+import { PLAN_HIERARCHY, isPlanAtLeast, getPlanDisplayName } from '../../planUtils';
 
 export default function PromptLibrary({ userPlan: propUserPlan = 'starter' }) {
   const [prompts, setPrompts] = useState([])
@@ -41,7 +42,6 @@ export default function PromptLibrary({ userPlan: propUserPlan = 'starter' }) {
   const { user } = useAuth();
   // For demo, mock user plan. In real use, fetch from user profile or subscription.
   const userPlan = user?.plan || propUserPlan || 'starter';
-  const planHierarchy = { starter: 1, creator: 2, pro: 3 };
 
   const categories = [
     { id: 'all', name: 'All Categories', icon: BookOpen },
@@ -171,7 +171,7 @@ export default function PromptLibrary({ userPlan: propUserPlan = 'starter' }) {
   }
 
   const PromptCard = ({ prompt }) => {
-    const unlocked = planHierarchy[userPlan] >= planHierarchy[prompt.minPlan];
+    const unlocked = isPlanAtLeast(userPlan, prompt.minPlan);
     return (
       <div className="rounded-xl shadow-lg border p-6 hover:shadow-xl transition-all duration-300 transform hover:scale-[1.02]" style={{ background: 'var(--bg-surface)', borderColor: 'var(--border-color)' }}>
         {/* Header */}

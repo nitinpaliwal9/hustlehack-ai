@@ -14,13 +14,24 @@ let isLoading = true;
 // Initialize Supabase client
 const supabase = window.supabase;
 
-// Plan hierarchy for resource filtering
-const PLAN_HIERARCHY = {
-    'free': 1,
-    'starter': 2,
-    'pro': 3,
-    'premium': 4
+// Plan display and hierarchy logic (keep in sync with app/planUtils.js)
+const PLAN_DISPLAY_NAMES = {
+  pro: 'Pro Hacker',
+  creator: 'Creator Mode',
+  starter: 'Starter Hustler',
 };
+const PLAN_HIERARCHY = {
+  starter: 1,
+  creator: 2,
+  pro: 3,
+};
+function getPlanDisplayName(plan) {
+  if (!plan) return 'Not active';
+  return PLAN_DISPLAY_NAMES[plan] || (plan.charAt(0).toUpperCase() + plan.slice(1));
+}
+function isPlanAtLeast(userPlan, requiredPlan) {
+  return (PLAN_HIERARCHY[userPlan] || 0) >= (PLAN_HIERARCHY[requiredPlan] || 0);
+}
 
 // Loading timeout (15 seconds)
 const LOADING_TIMEOUT = 15000;

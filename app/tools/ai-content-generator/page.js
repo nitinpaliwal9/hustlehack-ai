@@ -5,6 +5,7 @@ import { Loader, Copy, CheckCircle, AlertCircle, Sparkles } from 'lucide-react';
 import { useAuth } from '../../hooks/useAuth';
 import { supabase } from '../../../lib/supabaseClient';
 import { useUserPlan } from '../../hooks/useAuth';
+import { getPlanDisplayName, isPlanAtLeast } from '../../planUtils';
 
 const outputTypes = [
   { value: 'caption', label: 'Caption' },
@@ -14,10 +15,13 @@ const outputTypes = [
 
 export default function AIContentGenerator() {
   const { user, isLoading } = useAuth();
-  const { plan, loading: planLoading } = useUserPlan(user?.id);
-  const allowed = plan === 'creator' || plan === 'pro';
 
-  if (isLoading || planLoading) {
+  // Only call useUserPlan if user is defined
+  const planHook = user?.id ? useUserPlan(user.id) : { plan: 'starter', loading: true };
+  const { plan, loading: planLoading } = planHook;
+  const allowed = isPlanAtLeast(plan, 'creator');
+
+  if (isLoading || planLoading || !user) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 via-gray-800 to-black">
         <div className="text-center animate-fade-in">
@@ -28,7 +32,7 @@ export default function AIContentGenerator() {
     );
   }
 
-  if (!user || !allowed) {
+  if (!allowed) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 via-gray-800 to-black">
         <div className="bg-gray-800 rounded-3xl shadow-2xl border border-gray-700 p-12 max-w-lg mx-auto text-center animate-fade-in">
@@ -36,7 +40,7 @@ export default function AIContentGenerator() {
             <Sparkles className="w-8 h-8 text-white" />
           </div>
           <h2 className="text-3xl font-bold text-white mb-4">Upgrade Required</h2>
-          <p className="text-lg text-gray-300 mb-6">The AI Content Generator is available for <span className="text-[#00FFC2] font-semibold">Creator</span> and <span className="text-[#00FFC2] font-semibold">Pro</span> plan members only.</p>
+          <p className="text-lg text-gray-300 mb-6">The AI Content Generator is available for <span className="text-[#00FFC2] font-semibold">{getPlanDisplayName(plan)}</span> plan members only.</p>
           <a href="/upgrade" className="inline-block bg-gradient-to-r from-[#7F5AF0] to-[#00FFC2] text-white font-bold px-8 py-4 rounded-2xl text-lg shadow-xl hover:from-[#6D4DC6] hover:to-[#00E6B3] transition-all duration-300 hover:scale-105">Upgrade Now</a>
           <p className="mt-6 text-gray-400 text-sm">Already upgraded? <a href="/dashboard" className="text-[#7F5AF0] hover:underline">Go to Dashboard</a></p>
         </div>

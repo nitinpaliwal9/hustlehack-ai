@@ -5,6 +5,7 @@ import { useAuth } from '../hooks/useAuth'
 import { useRouter } from 'next/navigation'
 import { User, Mail, Phone, Briefcase, CheckCircle, AlertCircle, ArrowRight, Loader, UserPlus, Shield, Zap } from 'lucide-react'
 import { supabase } from '../../lib/supabaseClient';
+import { getPlanDisplayName } from '../planUtils';
 
 export default function CompleteProfileClient() {
   const { user, isLoading, isAuthenticated, completeProfile, checkUserProfile, isUserInFirst100, upsertSubscriptionForFirst100 } = useAuth()
@@ -115,7 +116,7 @@ export default function CompleteProfileClient() {
           email: formData.email,
           phone: formData.phone,
           role: formData.role,
-          plan: 'No active plan',
+          plan: 'starter',
           plan_expiry: null,
           profile_completed: true,
           updated_at: new Date().toISOString(),

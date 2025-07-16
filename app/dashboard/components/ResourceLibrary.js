@@ -3,15 +3,11 @@
 import { useState, useEffect } from 'react';
 import { Book, Code, FileText, Brain, CheckCircle, Download } from 'lucide-react';
 import Link from 'next/link';
-import { useAuth } from '../../hooks/useAuth';
+import { PLAN_HIERARCHY, isPlanAtLeast, getPlanDisplayName } from '../../planUtils';
 
-export default function ResourceLibrary() {
+export default function ResourceLibrary({ userPlan = 'starter' }) {
   const [resources, setResources] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const { user } = useAuth();
-  // For demo, mock user plan. In real use, fetch from user profile or subscription.
-  const userPlan = user?.plan || 'starter';
-  const planHierarchy = { starter: 1, creator: 2, pro: 3 };
 
   useEffect(() => {
     const fetchResources = async () => {
@@ -38,7 +34,7 @@ export default function ResourceLibrary() {
   }
 
   const ResourceCard = ({ resource }) => {
-    const unlocked = planHierarchy[userPlan] >= planHierarchy[resource.minPlan];
+    const unlocked = isPlanAtLeast(userPlan, resource.minPlan);
     return (
       <div className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition duration-300">
         <div className="flex items-center mb-4">
