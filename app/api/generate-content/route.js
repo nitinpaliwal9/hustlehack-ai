@@ -51,7 +51,7 @@ export async function POST(req) {
       { role: 'user', content: userPrompt }
     ];
 
-    const apiKey = process.env.OPENROUTER_API_KEY;
+    const apiKey = process.env.NEXT_PUBLIC_OPENROUTER_API_KEY;
     if (!apiKey) {
       return new Response(JSON.stringify({ error: 'OpenRouter API key not set.' }), { status: 500 });
     }
