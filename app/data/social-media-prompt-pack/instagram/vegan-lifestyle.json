@@ -1,0 +1,170 @@
+{
+  "category": "Vegan Lifestyle",
+  "prompts": [
+    {
+      "title": "What I Eat in a Day Reel",
+      "content": "POV: A day in the life of a vegan 🌱",
+      "caption": "Breakfast to dinner — plant-powered meals only! Would you try this menu? YES or NO?",
+      "hashtags": "#VeganLife #PlantBased"
+    },
+    {
+      "title": "Easy Vegan Swap Carousel",
+      "content": "Swap THIS for THAT: 🥛 Milk → Almond/Oat Milk 🍯 Honey → Maple Syrup 🍗 Chicken → Jackfruit Save for later!",
+      "hashtags": "#VeganHacks #PlantBasedEating"
+    },
+    {
+      "title": "Grocery Haul Post",
+      "content": "My weekly vegan grocery haul 🛒 What’s your MUST-HAVE?",
+      "hashtags": "#VeganGroceries #PlantBasedLifestyle"
+    },
+    {
+      "title": "Quick Recipe Reel",
+      "content": "3-Ingredient Vegan Pancakes in 15 mins! Would you try these?",
+      "hashtags": "#EasyVeganRecipes #PlantBasedBreakfast"
+    },
+    {
+      "title": "Vegan Myth-Busting Post",
+      "content": "Myth: Vegans don’t get enough protein. Fact: Lentils, tofu, and quinoa say HI 👋 Save this for when someone asks!",
+      "hashtags": "#VeganFacts #PlantBasedPower"
+    },
+    {
+      "title": "Transformation Reel",
+      "content": "POV: From junk food to clean vegan eats 🌱 Rate this transformation!",
+      "hashtags": "#HealthyVegan #GlowUp"
+    },
+    {
+      "title": "Meal Prep Sunday Carousel",
+      "content": "5 Vegan Meals for the Week: ✔ Chickpea Curry ✔ Buddha Bowls ✔ Smoothie Packs Want the full prep guide? Drop a 🌱",
+      "hashtags": "#VeganMealPrep #BatchCooking"
+    },
+    {
+      "title": "Kitchen Essentials Post",
+      "content": "Top 5 Kitchen Tools EVERY vegan needs: 1️⃣ Blender 2️⃣ Air fryer 3️⃣ Spiralizer Do you use these?",
+      "hashtags": "#VeganKitchen #PlantBasedEssentials"
+    },
+    {
+      "title": "Before vs After Reel",
+      "content": "From empty fridge ➡ Vegan feast 🌱",
+      "caption": "Which dish would you eat first?",
+      "hashtags": "#VeganEats #CookingTransformation"
+    },
+    {
+      "title": "Vegan Challenge Post",
+      "content": "30 Days Vegan Challenge starts NOW! Who’s joining? Comment YES!",
+      "hashtags": "#VeganChallenge #PlantBasedGoals"
+    },
+    {
+      "title": "Budget-Friendly Vegan Tips Carousel",
+      "content": "Vegan on ₹150/day? YES! Here’s how: ✔ Bulk buy lentils ✔ Frozen veggies ✔ Homemade snacks Save this guide!",
+      "hashtags": "#AffordableVegan #BudgetMeals"
+    },
+    {
+      "title": "Plant-Based Protein Guide Post",
+      "content": "Top 10 Vegan Protein Sources: ✔ Lentils ✔ Tofu ✔ Seitan Which is your fave?",
+      "hashtags": "#VeganProtein #HealthyEating"
+    },
+    {
+      "title": "Pantry Tour Reel",
+      "content": "My vegan pantry MUST-HAVES 🌱 Do you want a detailed shopping list?",
+      "hashtags": "#VeganPantry #HealthyLifestyle"
+    },
+    {
+      "title": "Why I Went Vegan Story",
+      "content": "Ask me why I went vegan! Ethics? Health? Sustainability?",
+      "hashtags": "#VeganJourney #PlantPower"
+    },
+    {
+      "title": "Morning Smoothie Reel",
+      "content": "POV: Starting my day with this green powerhouse 💚 Would you try this?",
+      "hashtags": "#VeganSmoothie #HealthyMorning"
+    },
+    {
+      "title": "Reaction Reel",
+      "content": "Trying a trending vegan recipe 👀",
+      "caption": "Viral or overhyped?",
+      "hashtags": "#VeganTrends #RecipeTest"
+    },
+    {
+      "title": "Cheat Meal Post",
+      "content": "YES, vegans can have cheat meals 🍕 What’s your go-to cheat food?",
+      "hashtags": "#VeganComfortFood #CheatDay"
+    },
+    {
+      "title": "Kitchen Hack Reel",
+      "content": "Vegan cheese that melts PERFECTLY 🔥 Save this for later!",
+      "hashtags": "#VeganHacks #PlantBasedCooking"
+    },
+    {
+      "title": "Travel Eats Post",
+      "content": "How to stay vegan while traveling 🌍 Want my top tips? Drop a ✈",
+      "hashtags": "#VeganTravel #OnTheGoEats"
+    },
+    {
+      "title": "Q&A Post",
+      "content": "Ask me ANYTHING about vegan living 🌱 Protein? Cravings? Easy meals?",
+      "hashtags": "#VeganFAQ #PlantPower"
+    },
+    {
+      "title": "Behind-the-Scenes Cooking Reel",
+      "content": "POV: Cooking for the family as the only vegan 😅 Relatable?",
+      "hashtags": "#VeganFamily #CookingVibes"
+    },
+    {
+      "title": "Cost Breakdown Post",
+      "content": "This entire vegan meal = ₹150! Expensive or affordable?",
+      "hashtags": "#BudgetVegan #HealthyEating"
+    },
+    {
+      "title": "Community Spotlight Post",
+      "content": "Tag your vegan bestie 🌱 Let’s grow this plant-powered fam!",
+      "hashtags": "#VeganCommunity #PlantBasedTribe"
+    },
+    {
+      "title": "Seasonal Produce Post",
+      "content": "Fruits & veggies in season this month 🍎 Eat local, eat fresh!",
+      "hashtags": "#SeasonalEating #VeganTips"
+    },
+    {
+      "title": "Favorite Snack Post",
+      "content": "My top 3 vegan snacks for busy days: ✔ Trail mix ✔ Hummus & veggies ✔ Energy bars What’s yours?",
+      "hashtags": "#VeganSnacks #HealthyLifestyle"
+    },
+    {
+      "title": "Sustainable Living Tip Post",
+      "content": "Vegan AND zero-waste 🌱 Today’s tip: Store snacks in glass jars Would you try this?",
+      "hashtags": "#EcoFriendlyVegan #GreenLiving"
+    },
+    {
+      "title": "Trend Audio Reel",
+      "content": "Jump on the “Day in My Life” trend — vegan edition 🌱 Show meals, workouts, and vibes",
+      "hashtags": "#VeganVibes #DayInLife"
+    },
+    {
+      "title": "Progress Photo Post",
+      "content": "1 year vegan 🌱 Energy ✅ Skin ✅ Mood ✅ Would you try this lifestyle?",
+      "hashtags": "#VeganTransformation #HealthyLife"
+    },
+    {
+      "title": "Hidden Animal Products Post",
+      "content": "Surprising NON-vegan foods: ✔ Gummy candies ✔ Worcestershire sauce ✔ Some wines Save this!",
+      "hashtags": "#VeganTips #StayAware"
+    },
+    {
+      "title": "Call-to-Action Post",
+      "content": "Want easy vegan recipes? Follow @yourhandle for DAILY inspo 🌱",
+      "hashtags": "#VeganInspo #PlantBasedJourney"
+    },
+    {
+      "title": "BONUS: Vegan Breakfast Ideas Carousel",
+      "content": "Carousel: Vegan breakfast ideas for busy mornings"
+    },
+    {
+      "title": "BONUS: Tofu Story Poll",
+      "content": "Story Poll: Would you try tofu? YES or NO?"
+    },
+    {
+      "title": "BONUS: Hook for Reel",
+      "content": "Hook for Reel: Stop scrolling if you love plant-based meals!"
+    }
+  ]
+} 

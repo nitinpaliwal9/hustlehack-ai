@@ -1,0 +1,169 @@
+{
+  "category": "Weight Loss",
+  "prompts": [
+    {
+      "title": "Transformation Reel",
+      "content": "POV: From {starting weight} ➡ {goal weight} 💪",
+      "caption": "Small steps every day. Are you on this journey too?",
+      "hashtags": "#WeightLossJourney #TransformationTuesday"
+    },
+    {
+      "title": "Calorie Hack Post",
+      "content": "3 EASY ways to cut 300 calories today:\n✔ Swap soda for sparkling water\n✔ Cook at home\n✔ Eat protein first\nSave this for later!",
+      "hashtags": "#WeightLossTips #HealthyChoices"
+    },
+    {
+      "title": "Meal Prep Reel",
+      "content": "Meal prepping for the week 🔥\nDo you want my full grocery list? Drop a 🍎",
+      "hashtags": "#WeightLossMealPrep #HealthyEating"
+    },
+    {
+      "title": "Snack Swaps Carousel",
+      "content": "Swap THIS for THAT:\n🍟 Chips → Popcorn\n🍫 Chocolate → Dark chocolate\n🍹 Soda → Lemon water\nSave for next time!",
+      "hashtags": "#SnackSmart #WeightLossHacks"
+    },
+    {
+      "title": "Workout of the Day Post",
+      "content": "15-Min HIIT 🔥\n✔ Jump squats\n✔ Mountain climbers\n✔ Burpees\nNo excuses! Who’s in?",
+      "hashtags": "#QuickWorkout #FatLoss"
+    },
+    {
+      "title": "Motivation Monday Quote",
+      "content": "Discipline > Motivation\nStay consistent. It works.\nWhat’s your favorite quote?",
+      "hashtags": "#FitnessMotivation #WeightLossGoals"
+    },
+    {
+      "title": "My Grocery Haul Post",
+      "content": "My 5 staples for weight loss:\n✔ Chicken breast\n✔ Broccoli\n✔ Greek yogurt\n✔ Oats\n✔ Eggs\nWhat’s your must-have?",
+      "hashtags": "#HealthyGroceries #FitnessLifestyle"
+    },
+    {
+      "title": "Before vs After Reel",
+      "content": "POV: Same person, different habits",
+      "caption": "Which version do you choose?",
+      "hashtags": "#TransformationJourney #WeightLoss"
+    },
+    {
+      "title": "Portion Control Hack Post",
+      "content": "Your hand = Perfect portion guide:\n✋ Protein = Palm\n🥗 Veggies = Two fists\n🍚 Carbs = Cupped hand\nSave this tip!",
+      "hashtags": "#PortionControl #HealthyEating"
+    },
+    {
+      "title": "Story Poll",
+      "content": "Are you team:\n🍗 High protein\n🥦 Low carb\nVote now!",
+      "hashtags": "#FitnessPoll #WeightLossTips"
+    },
+    {
+      "title": "My Fitness Routine Reel",
+      "content": "3 things I do EVERY morning for fat loss:\n✔ Hydrate\n✔ Move 10 mins\n✔ High-protein breakfast\nWhat’s your routine?",
+      "hashtags": "#MorningHabits #WeightLossJourney"
+    },
+    {
+      "title": "Weekly Check-In Post",
+      "content": "Lost {number} kg this week ✅\nConsistency > Perfection.\nHow’s your progress?",
+      "hashtags": "#WeightLossCommunity #Accountability"
+    },
+    {
+      "title": "Hidden Calories Alert Post",
+      "content": "These 3 drinks can ruin your progress:\n❌ Sugary coffee\n❌ Smoothies\n❌ Alcoholic cocktails\nChoose wisely!",
+      "hashtags": "#WeightLossTips #SmartChoices"
+    },
+    {
+      "title": "Daily Affirmation Story",
+      "content": "Repeat after me:\nI am strong.\nI am consistent.\nI will achieve my goals.\nDo you want more affirmations? YES or NO",
+      "hashtags": "#MindsetMatters #FitnessMindset"
+    },
+    {
+      "title": "10K Steps Challenge Post",
+      "content": "Walk 10K steps daily for 30 days. Who’s in? Drop a 👣",
+      "hashtags": "#StepChallenge #WeightLossGoals"
+    },
+    {
+      "title": "High Protein Snack Reel",
+      "content": "3 Protein Snacks Under 150 Calories:\n✔ Greek yogurt\n✔ Boiled eggs\n✔ Protein shake\nSave this!",
+      "hashtags": "#HealthySnacks #WeightLossTips"
+    },
+    {
+      "title": "Cheat Meal Balance Post",
+      "content": "Yes, I eat pizza 🍕\nBecause balance = sustainability.\nWhat’s your fave cheat meal?",
+      "hashtags": "#BalanceOverPerfection #HealthyLifestyle"
+    },
+    {
+      "title": "Myth Busting Post",
+      "content": "MYTH: Carbs make you fat\nFACT: Overeating makes you fat, not carbs.\nSave this for later!",
+      "hashtags": "#FitnessFacts #WeightLossMyths"
+    },
+    {
+      "title": "Quick Workout Reel",
+      "content": "POV: 10-min full body fat burner 🔥\nNO excuses. Do this NOW!",
+      "hashtags": "#HomeWorkout #WeightLoss"
+    },
+    {
+      "title": "Progress Photo",
+      "content": "Down {number} kg in {timeframe} ✅\nComment 💪 if you’re proud of your progress too!",
+      "hashtags": "#WeightLossProgress #TransformationJourney"
+    },
+    {
+      "title": "Morning vs Night Meal Post",
+      "content": "Which looks better?\nA: Breakfast bowl\nB: Dinner plate\nVote below!",
+      "hashtags": "#HealthyMeals #WeightLossJourney"
+    },
+    {
+      "title": "Hydration Reminder Post",
+      "content": "Drinking water like it’s my job 💧\nAre you hydrated?",
+      "hashtags": "#StayHydrated #WeightLossTip"
+    },
+    {
+      "title": "Mindful Eating Tip",
+      "content": "Slow down. Chew. Enjoy.\nYour brain needs 20 mins to feel full.",
+      "hashtags": "#MindfulEating #FitnessTips"
+    },
+    {
+      "title": "Meal Idea Carousel",
+      "content": "3 Quick Weight Loss Meals:\n✔ Egg white omelet\n✔ Chicken salad\n✔ Veggie stir fry\nSave for later!",
+      "hashtags": "#HealthyRecipes #FatLossMeals"
+    },
+    {
+      "title": "Scale vs Non-Scale Victories Post",
+      "content": "Lost 2kg ✅\nBut ALSO:\n✔ Better sleep\n✔ More energy\n✔ Clothes fit better\nCelebrate ALL wins!",
+      "hashtags": "#NSV #WeightLossJourney"
+    },
+    {
+      "title": "Weekend Reminder Post",
+      "content": "Weekends count too! Stay consistent 💪\nDouble tap if you agree.",
+      "hashtags": "#FitnessLifestyle #WeightLoss"
+    },
+    {
+      "title": "Healthy Dessert Swap",
+      "content": "Craving something sweet?\nTry THIS: Greek yogurt + honey + berries\nInstead of ice cream 🍨",
+      "hashtags": "#HealthyDesserts #WeightLossTips"
+    },
+    {
+      "title": "Viral Reel Hook",
+      "content": "STOP scrolling if you want to lose belly fat ⏸\nHere’s the REAL secret…",
+      "hashtags": "#FitnessTips #WeightLossReels"
+    },
+    {
+      "title": "My Top Apps Post",
+      "content": "Apps that helped me lose 10kg:\n✔ MyFitnessPal\n✔ Fitbit\n✔ Water Reminder\nDo you want a full list?",
+      "hashtags": "#WeightLossTools #FitnessJourney"
+    },
+    {
+      "title": "Call-to-Action Post",
+      "content": "Want more weight loss hacks?\nFollow @yourhandle for daily tips ✅",
+      "hashtags": "#WeightLossCommunity #HealthyLiving"
+    },
+    {
+      "title": "BONUS: Fat Loss Mistakes Carousel",
+      "content": "Carousel: Mistakes stopping your fat loss"
+    },
+    {
+      "title": "BONUS: Calorie Tracking Story Poll",
+      "content": "Story poll: Do you track calories? YES or NO?"
+    },
+    {
+      "title": "BONUS: Engagement Booster",
+      "content": "Engagement booster: Tag a friend who needs this motivation!"
+    }
+  ]
+} 

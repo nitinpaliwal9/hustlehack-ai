@@ -1,0 +1,19 @@
+{
+  "hooks": [
+    "The truth about {topic} nobody talks about...",
+    "You're wasting time on {task}. Here's why:",
+    "Want to {goal} in {time}? Start here:",
+    "This simple trick changed my {task} forever."
+  ],
+  "ctas": [
+    "Double-tap if this helped!",
+    "Save this post for later!",
+    "Tag someone who needs this.",
+    "Comment YES if you agree."
+  ],
+  "caption_hacks": [
+    "Start with a question → Share 3 tips → CTA at end.",
+    "Use emojis to break up text.",
+    "Add curiosity: 'Nobody talks about this…'"
+  ]
+} 

@@ -48,43 +48,66 @@ export async function POST(req) {
 
     userPrompt = `Topic: ${topic}`;
 
-    const messages = [
-      { role: 'system', content: systemPrompt },
-      { role: 'user', content: userPrompt }
-    ];
-
-    const apiKey = process.env.NEXT_PUBLIC_OPENROUTER_API_KEY;
+    // Prepare the Hugging Face API payload
+    const prompt = `${systemPrompt}\n${userPrompt}`;
+    const apiKey = process.env.HF_API_TOKEN;
     if (!apiKey) {
-      return new Response(JSON.stringify({ error: 'OpenRouter API key not set.' }), { status: 500 });
+      console.error('Hugging Face API key not set.');
+      return new Response(JSON.stringify({ error: 'AI service unavailable. Please try again later.' }), { status: 500 });
     }
 
-    const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${apiKey}`,
-        'Content-Type': 'application/json',
-        'HTTP-Referer': 'https://yourdomain.com', // Optional: set your domain
-        'X-Title': 'HustleHack AI Content Generator'
-      },
-      body: JSON.stringify({
-        model: 'mistralai/mistral-7b-instruct',
-        messages,
-        max_tokens: length === 'long' ? 800 : length === 'medium' ? 400 : 200,
-        temperature: 0.7
-      })
-    });
+    // Model selection (default to mistralai/Mistral-7B-Instruct-v0.1)
+    const model = 'mistralai/Mistral-7B-Instruct-v0.1';
+    const apiUrl = `https://api-inference.huggingface.co/models/${model}`;
 
-    if (!response.ok) {
-      const error = await response.text();
-      console.error('OpenRouter API error:', error);
-      return new Response(JSON.stringify({ error: 'Failed to generate content. Please try again.' }), { status: 500 });
+    // Set max tokens based on length
+    const maxTokens = length === 'long' ? 800 : length === 'medium' ? 400 : 200;
+
+    let hfResponse, data, aiContent;
+    try {
+      console.log('Sending request to Hugging Face Inference API...');
+      hfResponse = await fetch(apiUrl, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${apiKey}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          inputs: prompt,
+          parameters: {
+            max_new_tokens: maxTokens,
+            temperature: 0.7
+          }
+        })
+      });
+    } catch (apiErr) {
+      console.error('Hugging Face API fetch error:', apiErr);
+      return new Response(JSON.stringify({ error: "\u26A0\uFE0F Couldn’t generate content right now. Please try again later." }), { status: 500 });
     }
 
-    const data = await response.json();
-    const aiContent = data.choices?.[0]?.message?.content || '';
+    if (!hfResponse.ok) {
+      const error = await hfResponse.text();
+      console.error('Hugging Face API error:', error);
+      return new Response(JSON.stringify({ error: "\u26A0\uFE0F Couldn’t generate content right now. Please try again later." }), { status: 500 });
+    }
+
+    try {
+      data = await hfResponse.json();
+      // Hugging Face returns an array of generated texts
+      if (Array.isArray(data)) {
+        aiContent = data[0]?.generated_text || '';
+      } else if (typeof data === 'object' && data.generated_text) {
+        aiContent = data.generated_text;
+      } else {
+        aiContent = '';
+      }
+    } catch (parseErr) {
+      console.error('Failed to parse Hugging Face response:', parseErr);
+      return new Response(JSON.stringify({ error: "\u26A0\uFE0F Couldn’t generate content right now. Please try again later." }), { status: 500 });
+    }
 
     if (!aiContent) {
-      return new Response(JSON.stringify({ error: 'No content generated. Please try again.' }), { status: 500 });
+      return new Response(JSON.stringify({ error: "\u26A0\uFE0F Couldn’t generate content right now. Please try again later." }), { status: 500 });
     }
 
     // Usage logging (if userId is provided)
@@ -106,7 +129,7 @@ export async function POST(req) {
     return new Response(JSON.stringify({ content: aiContent }), { status: 200 });
   } catch (err) {
     console.error('Content generation error:', err);
-    return new Response(JSON.stringify({ error: 'Internal server error. Please try again.' }), { status: 500 });
+    return new Response(JSON.stringify({ error: "\u26A0\uFE0F Couldn’t generate content right now. Please try again later." }), { status: 500 });
   }
 }
 
