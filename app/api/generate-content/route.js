@@ -67,7 +67,7 @@ export async function POST(req) {
         'X-Title': 'HustleHack AI Content Generator'
       },
       body: JSON.stringify({
-        model: 'meta-llama/llama-3-8b-instruct',
+        model: 'mistral-7b-instruct',
         messages,
         max_tokens: length === 'long' ? 800 : length === 'medium' ? 400 : 200,
         temperature: 0.7
