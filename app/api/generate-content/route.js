@@ -4,30 +4,51 @@ import { createClient } from '@supabase/supabase-js';
 
 export async function POST(req) {
   try {
-    const { prompt, outputType, userId } = await req.json();
-    if (!prompt) {
-      return new Response(JSON.stringify({ error: 'Prompt is required.' }), { status: 400 });
+    const { contentType, topic, tone, length, userId } = await req.json();
+    
+    if (!topic) {
+      return new Response(JSON.stringify({ error: 'Topic is required.' }), { status: 400 });
     }
 
-    // Compose the system prompt based on outputType
+    // Build the prompt based on the parameters
     let systemPrompt = '';
-    switch (outputType) {
-      case 'caption':
-        systemPrompt = 'Write a catchy social media caption for:';
+    let userPrompt = '';
+
+    // Content type specific prompts
+    switch (contentType) {
+      case 'social-media':
+        systemPrompt = `You are a social media expert. Create a ${tone} ${length} social media post about the given topic. Make it engaging, shareable, and include relevant hashtags.`;
         break;
-      case 'blog-intro':
-        systemPrompt = 'Write a compelling blog introduction for:';
+      case 'blog':
+        systemPrompt = `You are a professional blogger. Write a ${tone} ${length} blog post introduction about the given topic. Make it compelling and hook the reader.`;
         break;
-      case 'tweet':
-        systemPrompt = 'Write a tweet for:';
+      case 'email':
+        systemPrompt = `You are an email marketing expert. Write a ${tone} ${length} email about the given topic. Make it professional and engaging.`;
+        break;
+      case 'ad-copy':
+        systemPrompt = `You are a copywriting expert. Create ${tone} ${length} ad copy about the given topic. Make it persuasive and action-oriented.`;
+        break;
+      case 'product-description':
+        systemPrompt = `You are a product marketing expert. Write a ${tone} ${length} product description about the given topic. Highlight benefits and features.`;
         break;
       default:
-        systemPrompt = 'Write a helpful, creative response for:';
+        systemPrompt = `You are a content creator. Write ${tone} ${length} content about the given topic.`;
     }
+
+    // Add length specifications
+    const lengthSpecs = {
+      short: 'Keep it concise (50-100 words)',
+      medium: 'Make it detailed but not too long (150-300 words)',
+      long: 'Provide comprehensive coverage (400-600 words)'
+    };
+
+    systemPrompt += ` ${lengthSpecs[length] || lengthSpecs.medium}`;
+
+    userPrompt = `Topic: ${topic}`;
 
     const messages = [
       { role: 'system', content: systemPrompt },
-      { role: 'user', content: prompt }
+      { role: 'user', content: userPrompt }
     ];
 
     const apiKey = process.env.OPENROUTER_API_KEY;
@@ -46,33 +67,44 @@ export async function POST(req) {
       body: JSON.stringify({
         model: 'meta-llama/llama-3-8b-instruct',
         messages,
-        max_tokens: 512,
+        max_tokens: length === 'long' ? 800 : length === 'medium' ? 400 : 200,
         temperature: 0.7
       })
     });
 
     if (!response.ok) {
       const error = await response.text();
-      return new Response(JSON.stringify({ error: error || 'Failed to generate content.' }), { status: 500 });
+      console.error('OpenRouter API error:', error);
+      return new Response(JSON.stringify({ error: 'Failed to generate content. Please try again.' }), { status: 500 });
     }
 
     const data = await response.json();
     const aiContent = data.choices?.[0]?.message?.content || '';
 
+    if (!aiContent) {
+      return new Response(JSON.stringify({ error: 'No content generated. Please try again.' }), { status: 500 });
+    }
+
     // Usage logging (if userId is provided)
     if (userId) {
-      const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL, process.env.SUPABASE_SERVICE_ROLE_KEY);
-      await supabase.from('usage_logs').insert({
-        user_id: userId,
-        action_type: 'generated',
-        tool_used: 'content-generator',
-        timestamp: new Date().toISOString()
-      });
+      try {
+        const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL, process.env.SUPABASE_SERVICE_ROLE_KEY);
+        await supabase.from('usage_logs').insert({
+          user_id: userId,
+          action_type: 'generated',
+          tool_used: 'content-generator',
+          timestamp: new Date().toISOString()
+        });
+      } catch (logError) {
+        console.error('Failed to log usage:', logError);
+        // Don't fail the request if logging fails
+      }
     }
 
     return new Response(JSON.stringify({ content: aiContent }), { status: 200 });
   } catch (err) {
-    return new Response(JSON.stringify({ error: err.message || 'Internal server error.' }), { status: 500 });
+    console.error('Content generation error:', err);
+    return new Response(JSON.stringify({ error: 'Internal server error. Please try again.' }), { status: 500 });
   }
 }
 
