@@ -1,3 +1,5 @@
+console.log('API route hit. OPENROUTER KEY:', process.env.NEXT_PUBLIC_OPENROUTER_API_KEY);
+
 export const runtime = 'edge';
 
 import { createClient } from '@supabase/supabase-js';
