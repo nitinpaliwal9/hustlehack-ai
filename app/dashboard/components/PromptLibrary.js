@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { 
   Plus, 
   Search, 
@@ -17,7 +17,6 @@ import {
   BookOpen,
   Brain
 } from 'lucide-react'
-import { useRef, useEffect, useState } from 'react';
 
 export default function PromptLibrary({ platformData, bonusVault, userPlan: propUserPlan = 'starter' }) {
   const [searchTerm, setSearchTerm] = useState('');
