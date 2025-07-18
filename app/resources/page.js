@@ -8,6 +8,7 @@ import { useAuth } from '../hooks/useAuth'
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import LoadingSpinner from '../components/LoadingSpinner'
+import Image from 'next/image'
 
 // --- Semantic Structure & Headings Suggestion ---
 // Use this as a template for your main content:
@@ -150,7 +151,7 @@ export default function ResourcesPage() {
                     <span className="card-icon" aria-hidden="true">💰</span>
                     <h3 className="card-title">Freelancer's Arsenal</h3>
                     <p className="card-description">Client proposals, project templates, pricing calculators, and automated workflow setups.</p>
-                    <Link href="#" className="card-link" aria-label="Boost Income with Freelancer's Arsenal">Boost Income →</Link>
+                    <Link href="/resources/toolkits-and-templates/freelancers-arsenal" className="card-link" aria-label="Boost Income with Freelancer's Arsenal">Boost Income →</Link>
                   </div>
                   
                   <div className="resource-card coming-soon-card" role="listitem" tabIndex="0" style={{padding: '2.5rem'}}>
@@ -158,7 +159,7 @@ export default function ResourcesPage() {
                     <span className="card-icon" aria-hidden="true">🤖</span>
                     <h3 className="card-title">AI Automation Scripts</h3>
                     <p className="card-description">Ready-to-use automation scripts for common tasks. No coding required, just copy and customize.</p>
-                    <Link href="#" className="card-link" style={{color: 'var(--gray-500)'}} aria-label="Notify me when AI Automation Scripts are available">Notify Me →</Link>
+                    <Link href="/resources/toolkits-and-templates/ai-automation-scripts" className="card-link" style={{color: 'var(--gray-500)'}} aria-label="Notify me when AI Automation Scripts are available">Notify Me →</Link>
                   </div>
                 </>
               )}
@@ -176,7 +177,7 @@ export default function ResourcesPage() {
                 <span className="card-icon" aria-hidden="true">🎯</span>
                 <h3 className="card-title">AI for Beginners</h3>
                 <p className="card-description">Complete beginner's guide to AI. From ChatGPT basics to advanced prompting techniques in 30 days.</p>
-                <Link href="#" className="card-link" aria-label="Start Learning AI for Beginners">Start Learning →</Link>
+                <Link href="/resources/free-guides-and-blueprints/ai-for-beginners" className="card-link" aria-label="Start Learning AI for Beginners">Start Learning →</Link>
               </div>
               
               <div className="resource-card featured-card" role="listitem" tabIndex="0" style={{padding: '2.5rem'}}>
@@ -184,21 +185,21 @@ export default function ResourcesPage() {
                 <span className="card-icon" aria-hidden="true">📈</span>
                 <h3 className="card-title">Growth Hacking with AI</h3>
                 <p className="card-description">10 proven strategies to grow your audience using AI tools. Real case studies and actionable tactics.</p>
-                <Link href="#" className="card-link" aria-label="Download Growth Hacking with AI Guide">Download Guide →</Link>
+                <Link href="/resources/free-guides-and-blueprints/growth-hacking-with-ai" className="card-link" aria-label="Download Growth Hacking with AI Guide">Download Guide →</Link>
               </div>
               
               <div className="resource-card" role="listitem" tabIndex="0" style={{padding: '2.5rem'}}>
                 <span className="card-icon" aria-hidden="true">🎓</span>
                 <h3 className="card-title">Student Success Blueprint</h3>
                 <p className="card-description">How to use AI for studying, research, assignments, and career preparation. Academic edge unlocked.</p>
-                <Link href="#" className="card-link" aria-label="Get Student Success Blueprint">Get Blueprint →</Link>
+                <Link href="/resources/free-guides-and-blueprints/student-success-blueprint" className="card-link" aria-label="Get Student Success Blueprint">Get Blueprint →</Link>
               </div>
               
               <div className="resource-card" role="listitem" tabIndex="0" style={{padding: '2.5rem'}}>
                 <span className="card-icon" aria-hidden="true">💡</span>
                 <h3 className="card-title">AI Side Hustle Ideas</h3>
                 <p className="card-description">50+ profitable side hustle ideas using AI. Start earning while learning, step-by-step execution guide.</p>
-                <Link href="#" className="card-link" aria-label="Explore AI Side Hustle Ideas">Explore Ideas →</Link>
+                <Link href="/resources/free-guides-and-blueprints/ai-side-hustle-ideas" className="card-link" aria-label="Explore AI Side Hustle Ideas">Explore Ideas →</Link>
               </div>
             </div>
           </section>
@@ -211,45 +212,40 @@ export default function ResourcesPage() {
             </div>
             <div className="weekly-drops" role="list" style={{gap: '2rem'}}>
               <div className="drop-card" role="listitem" tabIndex="0" style={{padding: '2rem'}}>
-                <div className="drop-week">Week 15 • Jan 2025</div>
+                <div className="drop-week">Week 1 • July 2025</div>
                 <h3 className="drop-title">AI Content Calendar Mastery</h3>
                 <p className="drop-description">Complete system to plan, create, and schedule content using AI. Includes 30-day content ideas and automation workflows.</p>
-                <Link href="#" className="drop-link" aria-label="View AI Content Calendar Mastery Drop">View Drop →</Link>
+                <Link href="/resources/weekly-drop-archive/week-1-july-2025" className="drop-link" aria-label="View AI Content Calendar Mastery Drop">View Drop →</Link>
               </div>
-              
               <div className="drop-card" role="listitem" tabIndex="0" style={{padding: '2rem'}}>
-                <div className="drop-week">Week 14 • Jan 2025</div>
+                <div className="drop-week">Week 2 • July 2025</div>
                 <h3 className="drop-title">Student Research Assistant</h3>
                 <p className="drop-description">AI prompts and tools for academic research. Find sources, summarize papers, and generate citations automatically.</p>
-                <Link href="#" className="drop-link" aria-label="Access Student Research Assistant Drop">Access Drop →</Link>
+                <Link href="/resources/weekly-drop-archive/week-2-july-2025" className="drop-link" aria-label="Access Student Research Assistant Drop">Access Drop →</Link>
               </div>
-              
               <div className="drop-card" role="listitem" tabIndex="0" style={{padding: '2rem'}}>
-                <div className="drop-week">Week 13 • Jan 2025</div>
+                <div className="drop-week">Week 3 • July 2025</div>
                 <h3 className="drop-title">Viral Video Scripts Pack</h3>
                 <p className="drop-description">25 proven video script templates for social media. Hooks, storytelling frameworks, and CTAs that convert.</p>
-                <Link href="#" className="drop-link" aria-label="Get Viral Video Scripts Pack">Get Scripts →</Link>
+                <Link href="/resources/weekly-drop-archive/week-3-july-2025" className="drop-link" aria-label="Get Viral Video Scripts Pack">Get Scripts →</Link>
               </div>
-              
               <div className="drop-card" role="listitem" tabIndex="0" style={{padding: '2rem'}}>
-                <div className="drop-week">Week 12 • Dec 2024</div>
+                <div className="drop-week">Week 4 • July 2025</div>
                 <h3 className="drop-title">AI Email Marketing Suite</h3>
                 <p className="drop-description">Subject lines, email sequences, and newsletter templates powered by AI. Boost open rates and conversions.</p>
-                <Link href="#" className="drop-link" aria-label="Download AI Email Marketing Suite">Download Suite →</Link>
+                <Link href="/resources/weekly-drop-archive/week-4-july-2025" className="drop-link" aria-label="Download AI Email Marketing Suite">Download Suite →</Link>
               </div>
-              
               <div className="drop-card" role="listitem" tabIndex="0" style={{padding: '2rem'}}>
-                <div className="drop-week">Week 11 • Dec 2024</div>
+                <div className="drop-week">Week 5 • July 2025</div>
                 <h3 className="drop-title">Freelancer Proposal Generator</h3>
                 <p className="drop-description">AI-powered proposal templates that win clients. Pricing strategies and negotiation tactics included.</p>
-                <Link href="#" className="drop-link" aria-label="View Freelancer Proposal Generator Drop">View Drop →</Link>
+                <Link href="/resources/weekly-drop-archive/week-5-july-2025" className="drop-link" aria-label="View Freelancer Proposal Generator Drop">View Drop →</Link>
               </div>
-              
               <div className="drop-card" role="listitem" tabIndex="0" style={{padding: '2rem'}}>
-                <div className="drop-week">Week 10 • Dec 2024</div>
+                <div className="drop-week">Week 6 • July 2025</div>
                 <h3 className="drop-title">Social Media Automation</h3>
                 <p className="drop-description">Set up automated posting, engagement, and growth systems. Complete setup guide and tool recommendations.</p>
-                <Link href="#" className="drop-link" aria-label="Automate Social Media with AI">Automate Now →</Link>
+                <Link href="/resources/weekly-drop-archive/week-6-july-2025" className="drop-link" aria-label="Automate Social Media with AI">Automate Now →</Link>
               </div>
             </div>
           </section>
@@ -260,50 +256,58 @@ export default function ResourcesPage() {
               <h2 tabIndex="0">🛠️ AI Tools Stack</h2>
               <p tabIndex="0">Curated collection of the best AI tools for productivity and creativity</p>
             </div>
-            <div className="tools-grid" role="list" style={{gap: '2rem'}}>
-              <div className="tool-card" role="listitem" tabIndex="0" style={{padding: '2rem'}}>
+            <div className="tools-grid" role="list" style={{gap: '2rem', position: 'relative'}}>
+              <div className="tool-card" role="listitem" tabIndex="0" style={{padding: '2rem', position: 'relative'}}>
+                <span className="tool-badge absolute top-3 right-3 bg-gradient-to-r from-yellow-400 via-yellow-300 to-yellow-500 text-white shadow-lg px-3 py-1 rounded-full text-xs font-bold tracking-wide border border-yellow-200/60 uppercase z-10" style={{letterSpacing: '0.08em', boxShadow: '0 2px 8px 0 rgba(255, 215, 0, 0.18)'}}>Coming Soon</span>
                 <span className="tool-icon" aria-hidden="true">🤖</span>
                 <h3 className="tool-name">ChatGPT</h3>
                 <p className="tool-description">Conversational AI for writing, coding, and problem-solving</p>
               </div>
               
-              <div className="tool-card" role="listitem" tabIndex="0" style={{padding: '2rem'}}>
+              <div className="tool-card" role="listitem" tabIndex="0" style={{padding: '2rem', position: 'relative'}}>
+                <span className="tool-badge absolute top-3 right-3 bg-gradient-to-r from-yellow-400 via-yellow-300 to-yellow-500 text-white shadow-lg px-3 py-1 rounded-full text-xs font-bold tracking-wide border border-yellow-200/60 uppercase z-10" style={{letterSpacing: '0.08em', boxShadow: '0 2px 8px 0 rgba(255, 215, 0, 0.18)'}}>Coming Soon</span>
                 <span className="tool-icon" aria-hidden="true">🎨</span>
                 <h3 className="tool-name">Midjourney</h3>
                 <p className="tool-description">AI image generation for creative projects and content</p>
               </div>
               
-              <div className="tool-card" role="listitem" tabIndex="0" style={{padding: '2rem'}}>
+              <div className="tool-card" role="listitem" tabIndex="0" style={{padding: '2rem', position: 'relative'}}>
+                <span className="tool-badge absolute top-3 right-3 bg-gradient-to-r from-yellow-400 via-yellow-300 to-yellow-500 text-white shadow-lg px-3 py-1 rounded-full text-xs font-bold tracking-wide border border-yellow-200/60 uppercase z-10" style={{letterSpacing: '0.08em', boxShadow: '0 2px 8px 0 rgba(255, 215, 0, 0.18)'}}>Coming Soon</span>
                 <span className="tool-icon" aria-hidden="true">✍️</span>
                 <h3 className="tool-name">Notion AI</h3>
                 <p className="tool-description">AI-powered workspace for notes, docs, and project management</p>
               </div>
               
-              <div className="tool-card" role="listitem" tabIndex="0" style={{padding: '2rem'}}>
+              <div className="tool-card" role="listitem" tabIndex="0" style={{padding: '2rem', position: 'relative'}}>
+                <span className="tool-badge absolute top-3 right-3 bg-gradient-to-r from-yellow-400 via-yellow-300 to-yellow-500 text-white shadow-lg px-3 py-1 rounded-full text-xs font-bold tracking-wide border border-yellow-200/60 uppercase z-10" style={{letterSpacing: '0.08em', boxShadow: '0 2px 8px 0 rgba(255, 215, 0, 0.18)'}}>Coming Soon</span>
                 <span className="tool-icon" aria-hidden="true">🎥</span>
                 <h3 className="tool-name">Runway ML</h3>
                 <p className="tool-description">AI video editing and generation for content creators</p>
               </div>
               
-              <div className="tool-card" role="listitem" tabIndex="0" style={{padding: '2rem'}}>
+              <div className="tool-card" role="listitem" tabIndex="0" style={{padding: '2rem', position: 'relative'}}>
+                <span className="tool-badge absolute top-3 right-3 bg-gradient-to-r from-yellow-400 via-yellow-300 to-yellow-500 text-white shadow-lg px-3 py-1 rounded-full text-xs font-bold tracking-wide border border-yellow-200/60 uppercase z-10" style={{letterSpacing: '0.08em', boxShadow: '0 2px 8px 0 rgba(255, 215, 0, 0.18)'}}>Coming Soon</span>
                 <span className="tool-icon" aria-hidden="true">📊</span>
                 <h3 className="tool-name">Beautiful.AI</h3>
                 <p className="tool-description">AI presentation maker for stunning slides and pitches</p>
               </div>
               
-              <div className="tool-card" role="listitem" tabIndex="0" style={{padding: '2rem'}}>
+              <div className="tool-card" role="listitem" tabIndex="0" style={{padding: '2rem', position: 'relative'}}>
+                <span className="tool-badge absolute top-3 right-3 bg-gradient-to-r from-yellow-400 via-yellow-300 to-yellow-500 text-white shadow-lg px-3 py-1 rounded-full text-xs font-bold tracking-wide border border-yellow-200/60 uppercase z-10" style={{letterSpacing: '0.08em', boxShadow: '0 2px 8px 0 rgba(255, 215, 0, 0.18)'}}>Coming Soon</span>
                 <span className="tool-icon" aria-hidden="true">🔍</span>
                 <h3 className="tool-name">Perplexity AI</h3>
                 <p className="tool-description">AI search engine for research and information gathering</p>
               </div>
               
-              <div className="tool-card" role="listitem" tabIndex="0" style={{padding: '2rem'}}>
+              <div className="tool-card" role="listitem" tabIndex="0" style={{padding: '2rem', position: 'relative'}}>
+                <span className="tool-badge absolute top-3 right-3 bg-gradient-to-r from-yellow-400 via-yellow-300 to-yellow-500 text-white shadow-lg px-3 py-1 rounded-full text-xs font-bold tracking-wide border border-yellow-200/60 uppercase z-10" style={{letterSpacing: '0.08em', boxShadow: '0 2px 8px 0 rgba(255, 215, 0, 0.18)'}}>Coming Soon</span>
                 <span className="tool-icon" aria-hidden="true">🎵</span>
                 <h3 className="tool-name">Mubert</h3>
                 <p className="tool-description">AI music generation for videos and content</p>
               </div>
               
-              <div className="tool-card" role="listitem" tabIndex="0" style={{padding: '2rem'}}>
+              <div className="tool-card" role="listitem" tabIndex="0" style={{padding: '2rem', position: 'relative'}}>
+                <span className="tool-badge absolute top-3 right-3 bg-gradient-to-r from-yellow-400 via-yellow-300 to-yellow-500 text-white shadow-lg px-3 py-1 rounded-full text-xs font-bold tracking-wide border border-yellow-200/60 uppercase z-10" style={{letterSpacing: '0.08em', boxShadow: '0 2px 8px 0 rgba(255, 215, 0, 0.18)'}}>Coming Soon</span>
                 <span className="tool-icon" aria-hidden="true">💬</span>
                 <h3 className="tool-name">Copy.ai</h3>
                 <p className="tool-description">AI copywriting for marketing and sales content</p>
@@ -318,25 +322,28 @@ export default function ResourcesPage() {
               <p tabIndex="0">Quick video tutorials and tips to master AI tools on the go</p>
             </div>
             <div className="resource-cards" role="list">
-              <div className="resource-card" role="listitem" tabIndex="0">
+              <div className="resource-card" role="listitem" tabIndex="0" style={{position: 'relative'}}>
+                <span className="card-badge absolute top-3 right-3 bg-gradient-to-r from-yellow-400 via-yellow-300 to-yellow-500 text-white shadow-lg px-3 py-1 rounded-full text-xs font-bold tracking-wide border border-yellow-200/60 uppercase z-10" style={{letterSpacing: '0.08em', boxShadow: '0 2px 8px 0 rgba(255, 215, 0, 0.18)'}}>Coming Soon</span>
                 <span className="card-icon" aria-hidden="true">⚡</span>
                 <h3 className="card-title">60-Second AI Tips</h3>
                 <p className="card-description">Quick daily tips to improve your AI workflow. Bite-sized knowledge for busy hustlers.</p>
-                <Link href="#" className="card-link" aria-label="Watch 60-Second AI Tips Series">Watch Series →</Link>
+                <Link href="/resources/reels-and-video-shorts/60-second-ai-tips" className="card-link" aria-label="Watch 60-Second AI Tips Series">Watch Series →</Link>
               </div>
               
-              <div className="resource-card" role="listitem" tabIndex="0">
+              <div className="resource-card" role="listitem" tabIndex="0" style={{position: 'relative'}}>
+                <span className="card-badge absolute top-3 right-3 bg-gradient-to-r from-yellow-400 via-yellow-300 to-yellow-500 text-white shadow-lg px-3 py-1 rounded-full text-xs font-bold tracking-wide border border-yellow-200/60 uppercase z-10" style={{letterSpacing: '0.08em', boxShadow: '0 2px 8px 0 rgba(255, 215, 0, 0.18)'}}>Coming Soon</span>
                 <span className="card-icon" aria-hidden="true">🎬</span>
                 <h3 className="card-title">Tool Tutorials</h3>
                 <p className="card-description">Step-by-step video guides for popular AI tools. Learn by watching, practice by doing.</p>
-                <Link href="#" className="card-link" aria-label="Start Watching Tool Tutorials">Start Watching →</Link>
+                <Link href="/resources/reels-and-video-shorts/tool-tutorials" className="card-link" aria-label="Start Watching Tool Tutorials">Start Watching →</Link>
               </div>
               
-              <div className="resource-card" role="listitem" tabIndex="0">
+              <div className="resource-card" role="listitem" tabIndex="0" style={{position: 'relative'}}>
+                <span className="card-badge absolute top-3 right-3 bg-gradient-to-r from-yellow-400 via-yellow-300 to-yellow-500 text-white shadow-lg px-3 py-1 rounded-full text-xs font-bold tracking-wide border border-yellow-200/60 uppercase z-10" style={{letterSpacing: '0.08em', boxShadow: '0 2px 8px 0 rgba(255, 215, 0, 0.18)'}}>Coming Soon</span>
                 <span className="card-icon" aria-hidden="true">🔥</span>
                 <h3 className="card-title">Success Stories</h3>
                 <p className="card-description">Real stories from our community. See how others are using AI to transform their work and life.</p>
-                <Link href="#" className="card-link" aria-label="Get Inspired by Success Stories">Get Inspired →</Link>
+                <Link href="/resources/reels-and-video-shorts/success-stories" className="card-link" aria-label="Get Inspired by Success Stories">Get Inspired →</Link>
               </div>
             </div>
           </section>

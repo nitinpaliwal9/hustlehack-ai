@@ -5,6 +5,7 @@ import Navigation from '../../../components/Navigation';
 import Footer from '../../../components/Footer';
 import { useState } from 'react';
 import { LightBulbIcon, DocumentTextIcon, CameraIcon, ChartBarIcon, UserGroupIcon, CalendarIcon, ChevronRightIcon } from '@heroicons/react/24/outline';
+import { LockClosedIcon } from '@heroicons/react/24/solid';
 
 const kitItems = [
   {
@@ -125,15 +126,22 @@ export default function StartupLaunchKit() {
               return (
                 <div
                   key={item.id}
-                  className={`rounded-xl shadow-md hover:shadow-xl transition-all duration-300 p-10 cursor-pointer transform hover:-translate-y-1 ${
+                  className={`relative rounded-xl shadow-md hover:shadow-xl transition-all duration-300 p-10 cursor-pointer transform hover:-translate-y-1 ${
                     hoveredCard === item.id ? 'ring-2 ring-[#7F5AF0] ring-opacity-50' : ''
                   }`}
                   style={{ background: 'rgba(36,41,46,0.96)', border: '1px solid var(--border-color)' }}
                   onMouseEnter={() => setHoveredCard(item.id)}
                   onMouseLeave={() => setHoveredCard(null)}
                 >
+                  {/* Darkness Overlay */}
+                  <div className="absolute inset-0 bg-black/20 backdrop-blur-[1.5px] rounded-xl z-0 pointer-events-none"></div>
+                  {/* Coming Soon Badge with Lock Icon */}
+                  <div className="absolute top-4 right-4 z-20 flex items-center gap-1">
+                    <LockClosedIcon className="w-4 h-4 text-yellow-400 drop-shadow" style={{filter: 'drop-shadow(0 1px 2px #bfa100)'}} />
+                    <span className="bg-gradient-to-r from-yellow-400 via-yellow-300 to-yellow-500 text-white shadow-lg px-3 py-1 rounded-full text-xs font-bold tracking-wide border border-yellow-200/60 uppercase" style={{letterSpacing: '0.08em', boxShadow: '0 2px 8px 0 rgba(255, 215, 0, 0.18)'}}>Coming Soon</span>
+                  </div>
                   {/* Badge */}
-                  <div className="flex justify-between items-start mb-4">
+                  <div className="flex justify-between items-start mb-4 z-10 relative">
                     <div className={`${item.badgeColor} px-3 py-1 rounded-full text-sm font-semibold`}>{item.badge}</div>
                     <div className="flex items-center gap-1 text-gray-500">
                       <IconComponent className="w-6 h-6" />

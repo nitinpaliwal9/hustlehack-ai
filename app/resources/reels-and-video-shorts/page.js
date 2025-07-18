@@ -1,13 +1,19 @@
-export const metadata = {
-        title: 'Reels And Video Shorts - HustleHack AI',
-        description: 'Auto-generated page for Reels And Video Shorts'
-      }
+'use client';
 
-      export default function Page() {
-        return (
-          <div className="min-h-screen p-10">
-            <h1 className="text-4xl font-bold">Reels And Video Shorts</h1>
-            <p className="mt-4 text-gray-600">This is the Reels And Video Shorts page. Content coming soon.</p>
-          </div>
-        )
-      }
+import { useMemo } from 'react';
+import ComingSoon from '../../components/ComingSoon.js';
+
+export default function Page() {
+  const expectedDate = useMemo(() => {
+    return new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString();
+  }, []);
+  return (
+    <ComingSoon 
+      title="Reels And Video Shorts"
+      description="We're crafting amazing video content content just for you. Get ready for exclusive templates, tools, and strategies that will supercharge your productivity!"
+      category="Video Content"
+      expectedDate={expectedDate}
+      showNotificationSignup={true}
+    />
+  );
+}

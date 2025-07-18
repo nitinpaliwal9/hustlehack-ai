@@ -52,21 +52,21 @@ export default function AboutPage() {
     <PageLayout>
       <main className="about-main bg-gradient-to-br from-gray-900 via-gray-800 to-black min-h-screen pb-10">
         {/* Hero Section */}
-        <section className="relative pt-36 pb-28 px-4 flex justify-center">
+        <section className="relative pt-24 sm:pt-36 pb-16 sm:pb-28 px-4 flex justify-center">
           {/* Animated Gradient Blob */}
           <div className="absolute -top-24 left-1/2 -translate-x-1/2 w-[480px] h-[320px] bg-gradient-to-br from-[#7F5AF0]/40 via-[#00FFC2]/30 to-[#232946]/0 rounded-full blur-3xl opacity-70 animate-pulse z-0" />
           <AbstractAI className="hidden md:block" />
-          <div className="hero-content w-full max-w-3xl mx-auto rounded-3xl shadow-[0_8px_40px_0_rgba(127,90,240,0.25)] bg-[rgba(30,32,44,0.75)] backdrop-blur-xl border-4 border-[#7F5AF0] relative overflow-hidden p-12 md:p-20 flex flex-col items-center">
+          <div className="hero-content w-full max-w-3xl mx-auto rounded-2xl sm:rounded-3xl shadow-[0_8px_40px_0_rgba(127,90,240,0.25)] bg-[rgba(30,32,44,0.75)] backdrop-blur-xl border-2 sm:border-4 border-[#7F5AF0] relative overflow-hidden p-4 sm:p-12 md:p-20 flex flex-col items-center">
             <div className="flex flex-col items-center relative z-10 w-full">
               <IconBadge color="#7F5AF0">
                 <Image src="/assets/images/logo (2).png" alt="HustleHack AI Logo" width={40} height={40} className="rounded-xl" />
               </IconBadge>
-              <h1 className="text-4xl md:text-5xl font-extrabold text-white mb-6 mt-2 tracking-tight text-center">🔷 HustleHack AI — About Us</h1>
-              <p className="text-xl text-gray-200 mb-10 font-medium text-center max-w-2xl">Make AI practical, accessible, and empowering — for every young Indian who’s ready to hustle smarter.</p>
-              <div className="hero-stats flex flex-col md:flex-row justify-center gap-8 md:gap-16 mt-2 w-full">
-                <div className="stat bg-gradient-to-br from-[#7F5AF0]/20 to-[#00FFC2]/10 rounded-xl px-8 py-6 shadow-md flex flex-col items-center min-w-[160px] mb-4 md:mb-0">
-                  <span className="stat-number text-3xl font-bold text-[#7F5AF0] mb-2">1000+</span>
-                  <span className="stat-label block text-base text-gray-300 mt-1 uppercase tracking-wider">Early Users</span>
+              <h1 className="text-2xl sm:text-4xl md:text-5xl font-extrabold text-white mb-4 sm:mb-6 mt-2 tracking-tight text-center">🔷 HustleHack AI — About Us</h1>
+              <p className="text-base sm:text-xl text-gray-200 mb-6 sm:mb-10 font-medium text-center max-w-full sm:max-w-2xl">Make AI practical, accessible, and empowering — for every young Indian who’s ready to hustle smarter.</p>
+              <div className="hero-stats flex flex-col md:flex-row justify-center gap-4 md:gap-8 lg:gap-16 mt-2 w-full">
+                <div className="stat bg-gradient-to-br from-[#7F5AF0]/20 to-[#00FFC2]/10 rounded-xl px-4 py-4 sm:px-8 sm:py-6 shadow-md flex flex-col items-center min-w-[120px] sm:min-w-[160px] mb-4 md:mb-0">
+                  <span className="stat-number text-2xl sm:text-3xl font-bold text-[#7F5AF0] mb-2">1000+</span>
+                  <span className="stat-label block text-xs sm:text-base text-gray-300 mt-1 uppercase tracking-wider">Early Users</span>
                 </div>
                 <div className="stat bg-gradient-to-br from-[#00FFC2]/20 to-[#7F5AF0]/10 rounded-xl px-8 py-6 shadow-md flex flex-col items-center min-w-[160px] mb-4 md:mb-0">
                   <span className="stat-number text-3xl font-bold text-[#00FFC2] mb-2">20+</span>
@@ -82,8 +82,27 @@ export default function AboutPage() {
         </section>
         <WaveDivider />
 
+        {/* Founder Section */}
+        <section className="flex flex-col items-center justify-center mt-10 px-4">
+          <div className="w-full max-w-xs sm:max-w-2xl bg-[rgba(36,37,50,0.7)] backdrop-blur-xl rounded-2xl sm:rounded-3xl shadow-2xl border-2 sm:border-4 border-[#7F5AF0] p-4 sm:p-10 flex flex-col items-center transition-transform duration-300 hover:scale-[1.025] hover:shadow-[0_8px_40px_0_rgba(127,90,240,0.18)] relative overflow-hidden">
+            <Image
+              src="/founder_img.png"
+              alt="Nitin Paliwal, Founder of HustleHack AI (uncropped hair, 1:1 aspect ratio)"
+              width={120}
+              height={120}
+              className="rounded-full border-2 sm:border-4 border-[#7F5AF0] shadow-xl mb-4"
+              style={{aspectRatio: '1/1', objectFit: 'cover', objectPosition: 'center'}}
+              priority
+            />
+            <h3 className="font-bold text-lg sm:text-2xl text-[#7F5AF0] mb-2">Nitin Paliwal</h3>
+            <p className="text-gray-200 text-base sm:text-lg italic mb-2 text-center max-w-full sm:max-w-md">"Building HustleHack AI to empower the next generation of creators, students, and solopreneurs with the best AI tools and resources. Let’s build, learn, and grow together!"</p>
+            <span className="text-gray-400 text-sm sm:text-base">Founder, HustleHack AI</span>
+          </div>
+        </section>
+        <WaveDivider />
+
         {/* Mission Section */}
-        <section className="flex justify-center mt-16">
+        <section className="flex flex-col items-center justify-center mt-16 px-4">
           <div className="w-full max-w-4xl bg-[rgba(36,37,50,0.7)] backdrop-blur-xl rounded-3xl shadow-2xl border-l-4 border-[#00FFC2] p-8 md:p-14 flex flex-col md:flex-row gap-10 items-center transition-transform duration-300 hover:scale-[1.025] hover:shadow-[0_8px_40px_0_rgba(0,255,194,0.18)] relative overflow-hidden">
             <div className="absolute -top-10 -left-10 w-40 h-40 bg-gradient-to-br from-[#00FFC2]/30 to-[#7F5AF0]/10 rounded-full blur-2xl opacity-40 z-0" />
             <div className="flex-1 relative z-10">
@@ -103,7 +122,7 @@ export default function AboutPage() {
         <WaveDivider flip />
 
         {/* Who We Are Section */}
-        <section className="flex justify-center mt-16">
+        <section className="flex flex-col items-center justify-center mt-16 px-4">
           <div className="w-full max-w-4xl bg-[rgba(24,24,35,0.7)] backdrop-blur-xl rounded-3xl shadow-xl border-t-4 border-[#7F5AF0] p-8 md:p-14 transition-transform duration-300 hover:scale-[1.025] hover:shadow-[0_8px_40px_0_rgba(127,90,240,0.18)] relative overflow-hidden">
             <div className="absolute -bottom-10 -right-10 w-40 h-40 bg-gradient-to-br from-[#7F5AF0]/30 to-[#00FFC2]/10 rounded-full blur-2xl opacity-40 z-0" />
             <div className="relative z-10">
@@ -119,7 +138,7 @@ export default function AboutPage() {
         <WaveDivider />
 
         {/* What We Offer Section */}
-        <section className="flex justify-center mt-16">
+        <section className="flex flex-col items-center justify-center mt-16 px-4">
           <div className="w-full max-w-4xl bg-[rgba(36,37,50,0.7)] backdrop-blur-xl rounded-3xl shadow-2xl border-r-4 border-[#7F5AF0] p-8 md:p-14 flex flex-col md:flex-row gap-10 items-center transition-transform duration-300 hover:scale-[1.025] hover:shadow-[0_8px_40px_0_rgba(127,90,240,0.18)] relative overflow-hidden">
             <div className="absolute -top-10 -right-10 w-40 h-40 bg-gradient-to-br from-[#7F5AF0]/30 to-[#00FFC2]/10 rounded-full blur-2xl opacity-40 z-0" />
             <div className="flex-1 relative z-10">
@@ -147,7 +166,7 @@ export default function AboutPage() {
         <WaveDivider flip />
 
         {/* Who We Built This For Section */}
-        <section className="flex justify-center mt-16">
+        <section className="flex flex-col items-center justify-center mt-16 px-4">
           <div className="w-full max-w-4xl bg-[rgba(24,24,35,0.7)] backdrop-blur-xl rounded-3xl shadow-xl border-b-4 border-[#00FFC2] p-8 md:p-14 transition-transform duration-300 hover:scale-[1.025] hover:shadow-[0_8px_40px_0_rgba(0,255,194,0.18)] relative overflow-hidden">
             <div className="absolute -bottom-10 -left-10 w-40 h-40 bg-gradient-to-br from-[#00FFC2]/30 to-[#7F5AF0]/10 rounded-full blur-2xl opacity-40 z-0" />
             <div className="relative z-10">
@@ -168,7 +187,7 @@ export default function AboutPage() {
         <WaveDivider />
 
         {/* Built With Grit Section */}
-        <section className="flex justify-center mt-16">
+        <section className="flex flex-col items-center justify-center mt-16 px-4">
           <div className="w-full max-w-4xl bg-[rgba(36,37,50,0.7)] backdrop-blur-xl rounded-3xl shadow-2xl border-l-4 border-[#7F5AF0] p-8 md:p-14 flex flex-col md:flex-row gap-10 items-center transition-transform duration-300 hover:scale-[1.025] hover:shadow-[0_8px_40px_0_rgba(127,90,240,0.18)] relative overflow-hidden">
             <div className="absolute -top-10 -left-10 w-40 h-40 bg-gradient-to-br from-[#7F5AF0]/30 to-[#00FFC2]/10 rounded-full blur-2xl opacity-40 z-0" />
             <div className="flex-1 relative z-10">
@@ -196,7 +215,7 @@ export default function AboutPage() {
         <WaveDivider flip />
 
         {/* Still Early Section */}
-        <section className="flex justify-center mt-16">
+        <section className="flex flex-col items-center justify-center mt-16 px-4">
           <div className="w-full max-w-4xl bg-[rgba(24,24,35,0.7)] backdrop-blur-xl rounded-3xl shadow-xl border-t-4 border-[#00FFC2] p-8 md:p-14 transition-transform duration-300 hover:scale-[1.025] hover:shadow-[0_8px_40px_0_rgba(0,255,194,0.18)] relative overflow-hidden">
             <div className="absolute -top-10 -right-10 w-40 h-40 bg-gradient-to-br from-[#00FFC2]/30 to-[#7F5AF0]/10 rounded-full blur-2xl opacity-40 z-0" />
             <div className="relative z-10">
@@ -215,7 +234,7 @@ export default function AboutPage() {
         <WaveDivider />
 
         {/* Join Us Section */}
-        <section className="relative flex justify-center mt-16 mb-10">
+        <section className="relative flex justify-center mt-16 mb-10 px-4">
           {/* Animated Gradient Blob */}
           <div className="absolute -bottom-16 left-1/2 -translate-x-1/2 w-[420px] h-[220px] bg-gradient-to-br from-[#00FFC2]/30 via-[#7F5AF0]/20 to-[#232946]/0 rounded-full blur-3xl opacity-70 animate-pulse z-0" />
           <AbstractAI className="hidden md:block left-0 top-0" />

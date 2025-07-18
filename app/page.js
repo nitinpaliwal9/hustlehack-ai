@@ -89,47 +89,50 @@ export default function HomePage() {
   }
   
   return (
-    <div>
+    <div className="overflow-x-hidden w-full">
       <Link href="#home" className="skip-link" tabIndex="0">Skip to main content</Link>
       <Navigation />
 
       {/* Hero Section */}
-      <section id="home" className="hero-section relative w-full min-h-screen flex items-center justify-center overflow-hidden pt-44" style={{ position: 'relative', paddingTop: '10rem' }}>
+      <section id="home" className="hero-section relative w-full min-h-screen flex items-center justify-center overflow-hidden pt-44 px-4 sm:px-8" style={{ position: 'relative', paddingTop: '10rem' }}>
         {/* Background Image with Slow Zoom */}
         <div className="absolute inset-0 w-full h-full z-0 hero-bg-zoom" style={{ backgroundImage: 'url(/hero_section.jpg)', backgroundSize: 'cover', backgroundPosition: 'center', backgroundRepeat: 'no-repeat' }} />
         {/* Dark Overlay for Depth and Text Clarity */}
         <div className="absolute inset-0 w-full h-full z-10 pointer-events-none" style={{ background: 'rgba(0,0,0,0.48)' }} />
         {/* Golden Badge */}
-        <div className="absolute right-10 z-30 flex items-center gap-2 animate-badge-fade-in" style={{ top: '7.5rem' }}>
-          <span className="hero-badge px-4 py-1.5 rounded-full font-semibold text-base tracking-wide uppercase" style={{ background: 'linear-gradient(90deg, #FFD700 0%, #FFB300 100%)', color: '#232946', boxShadow: '0 1px 6px #FFD70044, 0 0 16px 4px #FFD70055', letterSpacing: 1, border: '1px solid #FFD700', whiteSpace: 'nowrap', fontSize: '1.05rem', textShadow: '0 1px 2px #fff8, 0 0.5px 0.5px #FFD700' }}>
-            HustleHack AI – India’s #1 AI Learning Platform 🔥
-          </span>
+        <div className="absolute left-0 right-0 z-30 flex justify-center animate-badge-fade-in w-full" style={{ top: '7.5rem', pointerEvents: 'none' }}>
+          <div className="relative w-full max-w-xl flex justify-center" style={{ pointerEvents: 'auto' }}>
+            <span className="absolute left-0 right-0 top-0 bottom-0 w-full h-full rounded-full" style={{ background: 'linear-gradient(90deg, #FFD700 0%, #FFB300 100%)', zIndex: 1 }} aria-hidden="true"></span>
+            <span className="relative z-10 font-semibold text-xs sm:text-sm md:text-base tracking-wide uppercase whitespace-normal px-4 py-1.5 rounded-full block text-center" style={{ color: '#232946', boxShadow: '0 1px 6px #FFD70044, 0 0 16px 4px #FFD70055', letterSpacing: 1, border: '1px solid #FFD700', textShadow: '0 1px 2px #fff8, 0 0.5px 0.5px #FFD700', wordBreak: 'break-word', maxWidth: '100%', background: 'transparent' }}>
+              India’s #1 AI Learning Platform 🔥
+            </span>
+          </div>
         </div>
         {/* Hero Content */}
-        <div className="relative z-40 w-full flex flex-col items-center justify-center text-center px-4" style={{ marginTop: '0' }}>
-          <div className="max-w-5xl mx-auto">
+        <div className="relative z-40 w-full flex flex-col items-center justify-center text-center px-2 sm:px-4" style={{ marginTop: '0', minWidth: 0 }}>
+          <div className="max-w-5xl mx-auto w-full min-w-0">
             {/* Headline with fast swipe animations */}
-            <div className="overflow-hidden">
-              <h1 className="hero-title premium-heading mb-2" style={{ fontSize: 'clamp(3.5rem, 8vw, 6rem)', fontWeight: 900, lineHeight: 1.05, letterSpacing: '0.04em', color: '#fff', marginBottom: 0, background: 'none', WebkitTextFillColor: '#fff', WebkitBackgroundClip: 'unset', backgroundClip: 'unset' }}>
+            <div className="overflow-hidden min-w-0 break-words">
+              <h1 className="hero-title premium-heading mb-2 text-3xl xs:text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold" style={{ fontWeight: 900, lineHeight: 1.05, letterSpacing: '0.04em', color: '#fff', marginBottom: 0, background: 'none', WebkitTextFillColor: '#fff', WebkitBackgroundClip: 'unset', backgroundClip: 'unset', wordBreak: 'break-word' }}>
                 <span className="block hero-line hero-line-1 animate-hero-swipe-left">AI Isn’t the Future.</span>
                 <span className="block hero-line hero-line-2 animate-hero-swipe-right" style={{ marginTop: 0 }}>It’s Your Shortcut.</span>
               </h1>
             </div>
-            <p className="hero-subtitle text-xl text-gray-200 mb-10 max-w-2xl mx-auto font-medium" tabIndex="0" style={{ textShadow: '0 2px 8px #23294688' }}>
+            <p className="hero-subtitle text-base sm:text-lg md:text-xl text-gray-200 mb-10 max-w-2xl mx-auto font-medium break-words" tabIndex="0" style={{ textShadow: '0 2px 8px #23294688', wordBreak: 'break-word' }}>
               Access ready-to-use blueprints, prompt packs, and automation stacks built for people who actually build.
             </p>
             {/* CTA Buttons */}
-            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mt-2">
-              <button className="btn btn-lg premium-btn glow-cta rounded-full font-bold flex items-center gap-2" style={{ fontSize: '1.15rem', minWidth: 220 }} onClick={handleGoogleSignIn}>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mt-2 flex-wrap w-full">
+              <button className="btn btn-lg premium-btn glow-cta rounded-full font-bold flex items-center gap-2 w-full sm:w-auto text-base sm:text-lg" style={{ fontSize: '1.05rem', minWidth: 0, wordBreak: 'break-word' }} onClick={handleGoogleSignIn}>
                 🚀 Start Your AI Journey
               </button>
-              <button className="btn btn-lg premium-btn glow-cta rounded-full font-bold flex items-center gap-2" style={{ fontSize: '1.15rem', minWidth: 220 }} onClick={() => {
+              <button className="btn btn-lg premium-btn glow-cta rounded-full font-bold flex items-center gap-2 w-full sm:w-auto text-base sm:text-lg" style={{ fontSize: '1.05rem', minWidth: 0, wordBreak: 'break-word' }} onClick={() => {
                 const el = document.getElementById('features');
                 if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
               }}>
                 📁 Explore the Toolkit
               </button>
-              <button className="btn btn-lg premium-btn glow-cta rounded-full font-bold flex items-center gap-2" style={{ fontSize: '1.15rem', minWidth: 220 }} onClick={() => {
+              <button className="btn btn-lg premium-btn glow-cta rounded-full font-bold flex items-center gap-2 w-full sm:w-auto text-base sm:text-lg" style={{ fontSize: '1.05rem', minWidth: 0, wordBreak: 'break-word' }} onClick={() => {
                 const el = document.getElementById('pricing');
                 if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
               }}>
@@ -203,14 +206,14 @@ export default function HomePage() {
               <p className="card-description text-gray-200">Choose from our flexible plans designed for different needs and budgets. Start with basics or go pro.</p>
             </div>
             <div className="glass-card p-8 rounded-2xl shadow-xl text-center">
-              <span className="card-icon text-3xl mb-4 block">🎁</span>
-              <h3 className="card-title premium-heading mb-2">Unlock Tools & Resources</h3>
-              <p className="card-description text-gray-200">Access AI tools, templates, prompts, and exclusive content to supercharge your productivity.</p>
+              <span className="card-icon text-2xl sm:text-3xl mb-2 sm:mb-4 block">🎁</span>
+              <h3 className="card-title premium-heading mb-1 sm:mb-2 text-base sm:text-lg md:text-xl">Unlock Tools & Resources</h3>
+              <p className="card-description text-gray-200 text-sm sm:text-base">Access AI tools, templates, prompts, and exclusive content to supercharge your productivity.</p>
             </div>
             <div className="glass-card p-8 rounded-2xl shadow-xl text-center">
-              <span className="card-icon text-3xl mb-4 block">🚀</span>
-              <h3 className="card-title premium-heading mb-2">Grow & Scale</h3>
-              <p className="card-description text-gray-200">Apply your newfound skills to grow your studies, side hustles, and creative projects faster than ever.</p>
+              <span className="card-icon text-2xl sm:text-3xl mb-2 sm:mb-4 block">🚀</span>
+              <h3 className="card-title premium-heading mb-1 sm:mb-2 text-base sm:text-lg md:text-xl">Grow & Scale</h3>
+              <p className="card-description text-gray-200 text-sm sm:text-base">Apply your newfound skills to grow your studies, side hustles, and creative projects faster than ever.</p>
             </div>
           </div>
         </div>
@@ -223,44 +226,44 @@ export default function HomePage() {
           <p className="section-subtitle text-lg text-gray-300 mb-10" tabIndex="0">Everything you need to succeed in the AI-driven world</p>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
             <div className="glass-card p-8 rounded-2xl shadow-xl text-center">
-              <span className="card-icon text-3xl mb-4 block">✨</span>
-              <h3 className="card-title premium-heading mb-2">Weekly AI Drops</h3>
-              <p className="card-description text-gray-200">Fresh AI tools, prompts, and resources delivered weekly to keep you ahead of the curve.</p>
+              <span className="card-icon text-xl sm:text-2xl mb-1 sm:mb-2 block">✨</span>
+              <h3 className="card-title premium-heading mb-1 sm:mb-2 text-sm sm:text-base md:text-lg break-words min-w-0 max-w-full">Weekly AI Drops</h3>
+              <p className="card-description text-gray-200 text-sm sm:text-base">Fresh AI tools, prompts, and resources delivered weekly to keep you ahead of the curve.</p>
             </div>
             <div className="glass-card p-8 rounded-2xl shadow-xl text-center">
-              <span className="card-icon text-3xl mb-4 block">🛠️</span>
-              <h3 className="card-title premium-heading mb-2">Tools & Templates</h3>
-              <p className="card-description text-gray-200">Ready-to-use templates, blueprints, and automation tools for instant productivity boost.</p>
+              <span className="card-icon text-2xl sm:text-3xl mb-2 sm:mb-4 block">🛠️</span>
+              <h3 className="card-title premium-heading mb-1 sm:mb-2 text-base sm:text-lg md:text-xl">Tools & Templates</h3>
+              <p className="card-description text-gray-200 text-sm sm:text-base">Ready-to-use templates, blueprints, and automation tools for instant productivity boost.</p>
             </div>
             <div className="glass-card p-8 rounded-2xl shadow-xl text-center">
-              <span className="card-icon text-3xl mb-4 block">📚</span>
-              <h3 className="card-title premium-heading mb-2">Study & Creator Resources</h3>
-              <p className="card-description text-gray-200">Comprehensive guides, tutorials, and resources for students and content creators.</p>
+              <span className="card-icon text-2xl sm:text-3xl mb-2 sm:mb-4 block">📚</span>
+              <h3 className="card-title premium-heading mb-1 sm:mb-2 text-base sm:text-lg md:text-xl">Study & Creator Resources</h3>
+              <p className="card-description text-gray-200 text-sm sm:text-base">Comprehensive guides, tutorials, and resources for students and content creators.</p>
             </div>
             <div className="glass-card p-8 rounded-2xl shadow-xl text-center">
-              <span className="card-icon text-3xl mb-4 block">🧠</span>
-              <h3 className="card-title premium-heading mb-2">Learn AI on the Go</h3>
-              <p className="card-description text-gray-200">Mobile-friendly platform with bite-sized learning modules that fit your schedule.</p>
+              <span className="card-icon text-2xl sm:text-3xl mb-2 sm:mb-4 block">🧠</span>
+              <h3 className="card-title premium-heading mb-1 sm:mb-2 text-base sm:text-lg md:text-xl">Learn AI on the Go</h3>
+              <p className="card-description text-gray-200 text-sm sm:text-base">Mobile-friendly platform with bite-sized learning modules that fit your schedule.</p>
             </div>
             <div className="glass-card p-8 rounded-2xl shadow-xl text-center">
-              <span className="card-icon text-3xl mb-4 block">🎯</span>
-              <h3 className="card-title premium-heading mb-2">Personalized Learning</h3>
-              <p className="card-description text-gray-200">AI-powered recommendations based on your interests and learning goals.</p>
+              <span className="card-icon text-2xl sm:text-3xl mb-2 sm:mb-4 block">🎯</span>
+              <h3 className="card-title premium-heading mb-1 sm:mb-2 text-base sm:text-lg md:text-xl">Personalized Learning</h3>
+              <p className="card-description text-gray-200 text-sm sm:text-base">AI-powered recommendations based on your interests and learning goals.</p>
             </div>
             <div className="glass-card p-8 rounded-2xl shadow-xl text-center">
-              <span className="card-icon text-3xl mb-4 block">🌟</span>
-              <h3 className="card-title premium-heading mb-2">Community Access</h3>
-              <p className="card-description text-gray-200">Connect with like-minded hustlers, get feedback, and collaborate on projects.</p>
+              <span className="card-icon text-2xl sm:text-3xl mb-2 sm:mb-4 block">🌟</span>
+              <h3 className="card-title premium-heading mb-1 sm:mb-2 text-base sm:text-lg md:text-xl">Community Access</h3>
+              <p className="card-description text-gray-200 text-sm sm:text-base">Connect with like-minded hustlers, get feedback, and collaborate on projects.</p>
             </div>
             <div className="glass-card p-8 rounded-2xl shadow-xl text-center">
-              <span className="card-icon text-3xl mb-4 block">💡</span>
-              <h3 className="card-title premium-heading mb-2">Innovation Hub</h3>
-              <p className="card-description text-gray-200">Access to cutting-edge AI tools and beta features before they go mainstream.</p>
+              <span className="card-icon text-2xl sm:text-3xl mb-2 sm:mb-4 block">💡</span>
+              <h3 className="card-title premium-heading mb-1 sm:mb-2 text-base sm:text-lg md:text-xl">Innovation Hub</h3>
+              <p className="card-description text-gray-200 text-sm sm:text-base">Access to cutting-edge AI tools and beta features before they go mainstream.</p>
             </div>
             <div className="glass-card p-8 rounded-2xl shadow-xl text-center">
-              <span className="card-icon text-3xl mb-4 block">🏆</span>
-              <h3 className="card-title premium-heading mb-2">Success Tracking</h3>
-              <p className="card-description text-gray-200">Track your progress, achievements, and growth with detailed analytics.</p>
+              <span className="card-icon text-2xl sm:text-3xl mb-2 sm:mb-4 block">🏆</span>
+              <h3 className="card-title premium-heading mb-1 sm:mb-2 text-base sm:text-lg md:text-xl">Success Tracking</h3>
+              <p className="card-description text-gray-200 text-sm sm:text-base">Track your progress, achievements, and growth with detailed analytics.</p>
             </div>
           </div>
         </div>

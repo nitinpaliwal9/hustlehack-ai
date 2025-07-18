@@ -260,6 +260,29 @@ export default function CompleteProfileClient() {
     );
   }
 
+  if (showCongrats) {
+    return (
+      <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 px-2">
+        <div className="bg-gradient-to-br from-[#7F5AF0] via-[#232946] to-[#00FFC2] rounded-3xl shadow-2xl p-4 sm:p-8 max-w-xs sm:max-w-md w-full text-center animate-fade-in">
+          <div className="flex flex-col items-center mb-4 sm:mb-6">
+            <div className="w-16 h-16 sm:w-20 sm:h-20 bg-gradient-to-r from-yellow-400 to-orange-400 rounded-full flex items-center justify-center mb-3 sm:mb-4 animate-bounce">
+              <UserPlus size={32} className="sm:w-10 sm:h-10 text-white" />
+            </div>
+            <h2 className="text-lg sm:text-2xl font-bold text-white mb-2">Congratulations!</h2>
+            <p className="text-base sm:text-lg text-[#FFD700] font-semibold mb-2">You are among the first 100 users!</p>
+            <p className="text-gray-200 mb-4 text-sm sm:text-base">You’re getting <span className="font-bold text-[#00FFC2]">Creator Mode</span> access for your first month. Enjoy all premium features and let’s build something amazing together!</p>
+            <button
+              className="mt-2 sm:mt-4 bg-[#7F5AF0] hover:bg-[#6D4DC6] text-white px-6 sm:px-8 py-3 rounded-lg font-semibold transition-colors text-base sm:text-lg shadow-lg w-full"
+              onClick={() => { setShowCongrats(false); router.push('/dashboard'); }}
+            >
+              Continue to Dashboard
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black py-16">
       <div className="max-w-4xl mx-auto px-4">
@@ -552,16 +575,6 @@ export default function CompleteProfileClient() {
           </div>
         </div>
       </div>
-      {showCongrats && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-70">
-          <div className="bg-white rounded-2xl shadow-2xl p-8 max-w-md text-center animate-fade-in">
-            <h2 className="text-2xl font-bold text-[#7F5AF0] mb-4">🎉 Congratulations!</h2>
-            <p className="text-lg text-gray-800 mb-2">You’re one of the first 100 users!</p>
-            <p className="text-base text-gray-700 mb-4">You’ve unlocked <span className="font-bold text-[#00FFC2]">1 month of the Creator Plan</span> for free.</p>
-            <button onClick={() => setShowCongrats(false)} className="mt-4 px-6 py-2 bg-[#7F5AF0] text-white rounded-lg hover:bg-[#6D4DC6] transition-colors">Close</button>
-          </div>
-        </div>
-      )}
     </div>
   )
 }

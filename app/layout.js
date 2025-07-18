@@ -3,7 +3,6 @@
 import { Inter, Poppins } from 'next/font/google'
 import './globals.css'
 import './legacy-styles.css'
-import { AuthProvider } from './hooks/useAuth'
 
 const inter = Inter({
   subsets: ['latin'],
@@ -52,11 +51,8 @@ export const viewport = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
-      <head>
-        <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;800&family=Inter:wght@400;700&display=swap" rel="stylesheet" />
-      </head>
-      <body className="premium-bg font-sora min-h-screen">
+    <html lang="en" className={`${inter.variable} ${poppins.variable}`}>
+      <body className={`${inter.className} premium-bg min-h-screen`}>
         {children}
       </body>
     </html>

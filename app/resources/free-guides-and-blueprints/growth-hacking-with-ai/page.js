@@ -1,13 +1,19 @@
-export const metadata = {
-        title: 'Growth Hacking With Ai - HustleHack AI',
-        description: 'Auto-generated page for Growth Hacking With Ai'
-      }
+'use client';
 
-      export default function Page() {
-        return (
-          <div className="min-h-screen p-10">
-            <h1 className="text-4xl font-bold">Growth Hacking With Ai</h1>
-            <p className="mt-4 text-gray-600">This is the Growth Hacking With Ai page. Content coming soon.</p>
-          </div>
-        )
-      }
+import { useMemo } from 'react';
+import ComingSoon from '../../../components/ComingSoon.js';
+
+export default function Page() {
+  const expectedDate = useMemo(() => {
+    return new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString();
+  }, []);
+  return (
+    <ComingSoon 
+      title="Growth Hacking With Ai"
+      description="We're crafting amazing guide content just for you. Get ready for exclusive templates, tools, and strategies that will supercharge your productivity!"
+      category="Guide"
+      expectedDate={expectedDate}
+      showNotificationSignup={true}
+    />
+  );
+}

@@ -110,6 +110,10 @@ body {
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
+main, .section, .about-main, .resources-content {
+  -webkit-overflow-scrolling: touch;
+}
+
 /* Typography */
 h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-display);
@@ -1097,7 +1101,14 @@ html, body {
   background-blend-mode: screen, normal;
   min-height: 100vh;
   color: #fff;
+  scroll-behavior: smooth;
+  overflow-x: hidden;
 }
+
+main, .section, .about-main, .resources-content {
+  -webkit-overflow-scrolling: touch;
+}
+
 .premium-bg {
   background: linear-gradient(120deg, #18122B 0%, #232946 50%, #0f172a 100%);
   background-size: 200% 200%;

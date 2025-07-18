@@ -1,13 +1,19 @@
-export const metadata = {
-        title: '30 Day Ai Content Calendar Generator - HustleHack AI',
-        description: 'Auto-generated page for 30 Day Ai Content Calendar Generator'
-      }
+'use client';
 
-      export default function Page() {
-        return (
-          <div className="min-h-screen p-10">
-            <h1 className="text-4xl font-bold">30 Day Ai Content Calendar Generator</h1>
-            <p className="mt-4 text-gray-600">This is the 30 Day Ai Content Calendar Generator page. Content coming soon.</p>
-          </div>
-        )
-      }
+import { useMemo } from 'react';
+import ComingSoon from '../../../../components/ComingSoon.js';
+
+export default function Page() {
+  const expectedDate = useMemo(() => {
+    return new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString();
+  }, []);
+  return (
+    <ComingSoon 
+      title="30 Day Ai Content Calendar Generator"
+      description="We're crafting amazing toolkit content just for you. Get ready for exclusive templates, tools, and strategies that will supercharge your productivity!"
+      category="Toolkit"
+      expectedDate={expectedDate}
+      showNotificationSignup={true}
+    />
+  );
+}
