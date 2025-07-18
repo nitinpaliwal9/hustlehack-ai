@@ -94,11 +94,20 @@ export default function HomePage() {
       <Navigation />
 
       {/* Hero Section */}
-      <section id="home" className="hero-section relative w-full min-h-screen flex items-center justify-center overflow-hidden pt-44 px-4 sm:px-8" style={{ position: 'relative', paddingTop: '10rem' }}>
+      <section id="home" className="hero-section relative w-full min-h-screen flex items-center justify-center overflow-hidden pt-44 px-2 sm:px-8" style={{ position: 'relative', paddingTop: '10rem' }}>
         {/* Background Image with Slow Zoom */}
-        <div className="absolute inset-0 w-full h-full z-0 hero-bg-zoom" style={{ backgroundImage: 'url(/hero_section.jpg)', backgroundSize: 'cover', backgroundPosition: 'center', backgroundRepeat: 'no-repeat' }} />
+        <div
+          className="absolute inset-0 w-full h-full z-0 bg-cover bg-center bg-no-repeat sm:hero-bg-zoom"
+          style={{
+            backgroundImage: `url(${typeof window !== 'undefined' && window.innerWidth < 640 ? '/hero_section_mobile.jpg' : '/hero_section.jpg'})`,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            backgroundRepeat: 'no-repeat',
+            transition: 'background-image 0.3s',
+          }}
+        />
         {/* Dark Overlay for Depth and Text Clarity */}
-        <div className="absolute inset-0 w-full h-full z-10 pointer-events-none" style={{ background: 'rgba(0,0,0,0.48)' }} />
+        <div className="absolute inset-0 w-full h-full z-10 pointer-events-none" style={{ background: 'rgba(0,0,0,0.32)' }} />
         {/* Golden Badge */}
         <div className="absolute left-0 right-0 z-30 flex justify-center animate-badge-fade-in w-full" style={{ top: '7.5rem', pointerEvents: 'none' }}>
           <div className="relative w-full max-w-xl flex justify-center" style={{ pointerEvents: 'auto' }}>

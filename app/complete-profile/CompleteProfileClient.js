@@ -79,34 +79,42 @@ export default function CompleteProfileClient() {
   }
 
   const validateForm = () => {
-    const errors = {}
+    const errors = {};
     Object.keys(formData).forEach(field => {
-      const error = validateField(field, formData[field])
-      if (error) errors[field] = error
-    })
-    setFormErrors(errors)
-    return Object.keys(errors).length === 0
-  }
+      const error = validateField(field, formData[field]);
+      if (error) errors[field] = error;
+    });
+    setFormErrors(errors);
+    return errors;
+  };
 
   const handleSubmit = async (e) => {
-    e.preventDefault()
-    
-    if (!validateForm()) {
+    e.preventDefault();
+    const errors = validateForm();
+    if (Object.keys(errors).length > 0) {
       // Focus on first error field
-      const firstErrorField = Object.keys(formErrors)[0]
-      const element = document.getElementById(firstErrorField)
+      const firstErrorField = Object.keys(errors)[0];
+      const element = document.getElementById(firstErrorField);
       if (element) {
-        element.focus()
-        element.scrollIntoView({ behavior: 'smooth', block: 'center' })
+        element.focus();
+        element.scrollIntoView({ behavior: 'smooth', block: 'center' });
       }
-      return
+      setIsSubmitting(false); // Ensure loading state is cleared
+      return;
     }
 
-    setIsSubmitting(true)
-    setIsSuccess(false)
-    setFormErrors({})
+    setIsSubmitting(true);
+    setIsSuccess(false);
+    setFormErrors({});
 
     try {
+      console.log('Submitting profile upsert to Supabase:', {
+        id: user?.id,
+        name: formData.name,
+        email: formData.email,
+        phone: formData.phone,
+        role: formData.role
+      });
       // Upsert user profile (no plan logic here)
       const { data, error: upsertError } = await supabase
         .from('users')
@@ -122,13 +130,18 @@ export default function CompleteProfileClient() {
           updated_at: new Date().toISOString(),
         })
         .select();
+      console.log('Supabase upsert result:', { data, upsertError });
       if (upsertError) throw upsertError;
       if (!data || data.length === 0) throw new Error('Profile update failed. No data returned.');
 
       // First-100 check and upsert subscription
+      console.log('Checking if user is in first 100:', user.id);
       const eligible = await isUserInFirst100(user.id);
+      console.log('isUserInFirst100 result:', eligible);
       if (eligible) {
+        console.log('Upserting subscription for first 100:', user.id);
         const subSuccess = await upsertSubscriptionForFirst100(user.id);
+        console.log('upsertSubscriptionForFirst100 result:', subSuccess);
         if (subSuccess) setShowCongrats(true);
       }
       setIsSuccess(true);
