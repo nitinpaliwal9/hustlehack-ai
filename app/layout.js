@@ -23,25 +23,37 @@ const poppins = Poppins({
 // ✅ ✅ ONLY ONE export const metadata
 export const metadata = {
   metadataBase: new URL('https://hustlehackai.in'),
-  title: 'HustleHack AI - Unleash AI. Build Faster. Learn Smarter.',
-  description: 'AI-powered platform for young Indian students, creators, and solopreneurs. Tools, templates, prompts & guides to help you grow faster.',
+  title: 'HustleHack AI - Build Faster. Learn Smarter.',
+  description: 'Apply your AI skills to grow studies, side hustles, and creative projects faster with HustleHack AI.',
   keywords: 'AI tools, productivity, students, creators, solopreneurs, India, templates, prompts, automation',
   author: 'HustleHack AI',
   robots: 'index, follow',
   language: 'English',
   openGraph: {
-    title: 'HustleHack AI - Unleash AI. Build Faster. Learn Smarter.',
-    description: 'AI-powered platform for young Indian students, creators, and solopreneurs. Tools, templates, prompts & guides to help you grow faster.',
+    title: 'HustleHack AI - Build Faster. Learn Smarter.',
+    description: 'Discover AI-powered tools and content packs to hustle smarter, build faster, and succeed.',
     type: 'website',
-    url: 'https://hustlehackai.com',
-    images: ['/assets/images/logo (2).png'],
+    url: 'https://hustlehackai.in',
+    images: [
+      {
+        url: '/assets/images/logo (2).png',
+        width: 1200,
+        height: 630,
+        alt: 'HustleHack AI - Build Faster. Learn Smarter.',
+      }
+    ],
     siteName: 'HustleHack AI',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'HustleHack AI - Unleash AI. Build Faster. Learn Smarter.',
-    description: 'AI-powered platform for young Indian students, creators, and solopreneurs.',
-    images: ['/assets/images/logo (2).png'],
+    title: 'HustleHack AI - Build Faster. Learn Smarter.',
+    description: 'Discover AI-powered tools and content packs to hustle smarter, build faster, and succeed.',
+    images: [
+      {
+        url: '/assets/images/logo (2).png',
+        alt: 'HustleHack AI - Build Faster. Learn Smarter.',
+      }
+    ],
   },
   icons: {
     icon: '/assets/images/logo (2).png',
