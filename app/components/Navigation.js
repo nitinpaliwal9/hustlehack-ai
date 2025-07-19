@@ -725,22 +725,22 @@ export default function Navigation() {
             </div>
           ) : (
             <>
-              <h2 style={{ color: 'white', textAlign: 'center', marginBottom: '2rem' }}>🚀 Start Your Journey</h2>
+          <h2 style={{ color: 'white', textAlign: 'center', marginBottom: '2rem' }}>🚀 Start Your Journey</h2>
               {signupSubmitError && <div className="text-red-500 text-sm mb-4 text-center">{signupSubmitError}</div>}
               <form id="signupForm" autoComplete="off" onSubmit={handleSignup}>
-                <div className="form-group">
-                  <label className="form-label">Full Name</label>
+            <div className="form-group">
+              <label className="form-label">Full Name</label>
                   <input type="text" id="name" name="name" className="form-input" placeholder="Your Name" required value={signupFields.name} onChange={handleSignupFieldChange} onBlur={handleSignupFieldBlur} />
                   {signupErrors.name && <div className="text-red-500 text-xs mt-1">{signupErrors.name}</div>}
-                </div>
-                <div className="form-group">
-                  <label className="form-label">Email</label>
+            </div>
+            <div className="form-group">
+              <label className="form-label">Email</label>
                   <input type="email" id="email" name="email" className="form-input" placeholder="Your Email" required value={signupFields.email} onChange={handleSignupFieldChange} onBlur={handleSignupFieldBlur} />
                   {signupErrors.email && <div className="text-red-500 text-xs mt-1">{signupErrors.email}</div>}
-                </div>
-                <div className="form-group">
+            </div>
+            <div className="form-group">
                   <label className="form-label" htmlFor="password">Password</label>
-                  <div className="password-input-container">
+              <div className="password-input-container">
                     <input
                       type="password"
                       id="password"
@@ -779,28 +779,28 @@ export default function Navigation() {
                             : 'Strong password!'
                       )}
                     </div>
-                  </div>
-                </div>
-                <div className="form-group">
-                  <label className="form-label">I am a...</label>
+              </div>
+            </div>
+            <div className="form-group">
+              <label className="form-label">I am a...</label>
                   <select id="role" name="role" className="form-input" required value={signupFields.role} onChange={handleSignupFieldChange} onBlur={handleSignupFieldBlur}>
-                    <option value="">Select your role</option>
-                    <option value="Student">Student</option>
-                    <option value="Content Creator">Content Creator</option>
-                    <option value="Entrepreneur">Entrepreneur</option>
-                    <option value="Freelancer">Freelancer</option>
-                    <option value="Hustler">Hustler</option>
-                  </select>
+                <option value="">Select your role</option>
+                <option value="Student">Student</option>
+                <option value="Content Creator">Content Creator</option>
+                <option value="Entrepreneur">Entrepreneur</option>
+                <option value="Freelancer">Freelancer</option>
+                <option value="Hustler">Hustler</option>
+              </select>
                   {signupErrors.role && <div className="text-red-500 text-xs mt-1">{signupErrors.role}</div>}
-                </div>
-                <button type="submit" className="btn btn-primary" style={{ width: '100%', marginBottom: '1rem' }} id="signupBtn">
-                  <span className="btn-text">Create Account</span>
-                  <span className="btn-loading" style={{ display: 'none' }}>Creating Account...</span>
-                </button>
-                <div style={{ textAlign: 'center', marginTop: '2rem', paddingTop: '2rem', borderTop: '1px solid rgba(255,255,255,0.1)' }}>
-                  <p style={{ color: 'var(--gray-400)' }}>Already have an account? <a href="#" style={{ color: 'var(--primary)', textDecoration: 'none' }} onClick={switchToLogin}>Sign In</a></p>
-                </div>
-              </form>
+            </div>
+            <button type="submit" className="btn btn-primary" style={{ width: '100%', marginBottom: '1rem' }} id="signupBtn">
+              <span className="btn-text">Create Account</span>
+              <span className="btn-loading" style={{ display: 'none' }}>Creating Account...</span>
+            </button>
+            <div style={{ textAlign: 'center', marginTop: '2rem', paddingTop: '2rem', borderTop: '1px solid rgba(255,255,255,0.1)' }}>
+              <p style={{ color: 'var(--gray-400)' }}>Already have an account? <a href="#" style={{ color: 'var(--primary)', textDecoration: 'none' }} onClick={switchToLogin}>Sign In</a></p>
+            </div>
+          </form>
             </>
           )}
         </div>

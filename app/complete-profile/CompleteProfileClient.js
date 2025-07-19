@@ -185,11 +185,11 @@ export default function CompleteProfileClient() {
       
       // Only update the fields that are missing or need to be filled
       const updateData = {
-        name: formData.name,
-        phone: formData.phone,
-        role: formData.role,
-        profile_completed: true,
-        updated_at: new Date().toISOString(),
+          name: formData.name,
+          phone: formData.phone,
+          role: formData.role,
+          profile_completed: true,
+          updated_at: new Date().toISOString(),
       };
       
       console.log('Updating only missing fields:', updateData);
@@ -255,11 +255,11 @@ export default function CompleteProfileClient() {
         console.log('Checking if user is in first 100:', currentUser.id);
         const eligible = await Promise.race([isUserInFirst100(currentUser.id), timeoutPromise]);
         console.log('isUserInFirst100 result:', eligible);
-        if (eligible) {
+      if (eligible) {
           console.log('Upserting subscription for first 100:', currentUser.id);
           const subSuccess = await Promise.race([upsertSubscriptionForFirst100(currentUser.id), timeoutPromise]);
           console.log('upsertSubscriptionForFirst100 result:', subSuccess);
-          if (subSuccess) setShowCongrats(true);
+        if (subSuccess) setShowCongrats(true);
         }
       } catch (first100Error) {
         console.warn('First-100 check failed, continuing without subscription:', first100Error);
@@ -373,14 +373,19 @@ export default function CompleteProfileClient() {
   // Success screen
   if (isSuccess) {
     return (
-      <div className="success-screen">
-        <div className="success-content">
-          <div className="success-icon">
-            <CheckCircle size={48} className="text-white" />
+      <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-80 animate-fade-in p-4">
+        <div className="bg-gradient-to-br from-[#1a1333] via-[#232946] to-[#0f172a] rounded-2xl sm:rounded-3xl shadow-2xl p-6 sm:p-8 md:p-10 max-w-sm sm:max-w-md md:max-w-lg w-full text-center border-2 sm:border-4 border-[#7F5AF0] animate-pop-in animate-glow-border overflow-hidden">
+          <div className="relative z-10 flex flex-col items-center">
+            <div className="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 bg-gradient-to-r from-green-500 to-green-600 rounded-full flex items-center justify-center mb-4 sm:mb-6 animate-bounce shadow-xl border-2 sm:border-4 border-green-400 animate-glow">
+              <CheckCircle className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 text-white" />
+            </div>
+            <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-extrabold text-white mb-3 sm:mb-4 drop-shadow-lg animate-fade-in-up leading-tight">Profile Completed Successfully!</h2>
+            <p className="text-sm sm:text-base md:text-lg text-gray-200 mb-4 sm:mb-6 animate-fade-in-up delay-100 leading-relaxed">Welcome to HustleHack AI! 🚀</p>
+            <p className="text-xs sm:text-sm md:text-base text-gray-400 animate-fade-in-up delay-200">Redirecting you to get started...</p>
+            <div className="mt-6 sm:mt-8">
+              <div className="w-16 h-16 sm:w-20 sm:h-20 border-2 sm:border-4 border-[#7F5AF0] border-t-transparent rounded-full animate-spin"></div>
+            </div>
           </div>
-          <h2 className="success-title">Profile Completed Successfully!</h2>
-          <p className="success-message">Welcome to HustleHack AI! 🚀</p>
-          <p className="success-subtitle">Redirecting you to get started...</p>
         </div>
       </div>
     )
@@ -388,14 +393,15 @@ export default function CompleteProfileClient() {
 
   if (isLoading) {
     return (
-      <div className="loading-screen">
-        <div className="loading-content">
-          <div className="loading-spinner">
-            <div className="loading-spinner-main"></div>
-            <div className="loading-spinner-glow"></div>
+      <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-80 animate-fade-in p-4">
+        <div className="bg-gradient-to-br from-[#1a1333] via-[#232946] to-[#0f172a] rounded-2xl sm:rounded-3xl shadow-2xl p-6 sm:p-8 md:p-10 max-w-sm sm:max-w-md md:max-w-lg w-full text-center border-2 sm:border-4 border-[#7F5AF0] animate-pop-in animate-glow-border overflow-hidden">
+          <div className="relative z-10 flex flex-col items-center">
+            <div className="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 bg-gradient-to-r from-[#7F5AF0] to-[#00FFC2] rounded-full flex items-center justify-center mb-4 sm:mb-6 animate-bounce shadow-xl border-2 sm:border-4 border-[#FFE27A] animate-glow">
+              <div className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 border-2 sm:border-4 border-white border-t-transparent rounded-full animate-spin"></div>
+            </div>
+            <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-extrabold text-white mb-3 sm:mb-4 drop-shadow-lg animate-fade-in-up leading-tight">Loading...</h2>
+            <p className="text-sm sm:text-base md:text-lg text-gray-200 mb-4 sm:mb-6 animate-fade-in-up delay-100 leading-relaxed">Please wait while we prepare your profile</p>
           </div>
-          <p className="loading-title">Loading...</p>
-          <p className="loading-subtitle">Please wait while we prepare your profile</p>
         </div>
       </div>
     )
@@ -403,16 +409,21 @@ export default function CompleteProfileClient() {
 
   if (!isAuthenticated) {
     return (
-      <div className="error-screen">
-        <div className="error-content">
-          <h2 className="error-title">Access Denied</h2>
-          <p className="error-message">You need to be logged in to complete your profile.</p>
-          <button
-            onClick={() => router.push('/')}
-            className="error-retry-button"
-          >
-            Go to Home
-          </button>
+      <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-80 animate-fade-in p-4">
+        <div className="bg-gradient-to-br from-[#1a1333] via-[#232946] to-[#0f172a] rounded-2xl sm:rounded-3xl shadow-2xl p-6 sm:p-8 md:p-10 max-w-sm sm:max-w-md md:max-w-lg w-full text-center border-2 sm:border-4 border-red-500 animate-pop-in animate-glow-border overflow-hidden">
+          <div className="relative z-10 flex flex-col items-center">
+            <div className="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 bg-gradient-to-r from-red-500 to-red-600 rounded-full flex items-center justify-center mb-4 sm:mb-6 animate-bounce shadow-xl border-2 sm:border-4 border-red-400 animate-glow">
+              <AlertCircle className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 text-white" />
+            </div>
+            <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-extrabold text-white mb-3 sm:mb-4 drop-shadow-lg animate-fade-in-up leading-tight">Access Denied</h2>
+            <p className="text-sm sm:text-base md:text-lg text-gray-200 mb-4 sm:mb-6 animate-fade-in-up delay-100 leading-relaxed">You need to be logged in to complete your profile.</p>
+            <button
+              onClick={() => router.push('/')}
+              className="w-full px-4 sm:px-6 md:px-8 py-2.5 sm:py-3 rounded-xl bg-gradient-to-r from-[#7F5AF0] to-[#00FFC2] text-white font-bold text-sm sm:text-base md:text-lg shadow-xl hover:from-[#6D4DC6] hover:to-[#00E6B3] transition-all duration-300 animate-fade-in-up delay-200"
+            >
+              Go to Home
+            </button>
+          </div>
         </div>
       </div>
     )
@@ -420,11 +431,21 @@ export default function CompleteProfileClient() {
 
   if (profileCheckError) {
     return (
-      <div className="error-screen">
-        <div className="error-content">
-          <p className="error-title">We couldn't connect to our database.</p>
-          <p className="error-message">Please check your internet connection or try again later.</p>
-          <button onClick={() => window.location.reload()} className="error-retry-button">Retry</button>
+      <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-80 animate-fade-in p-4">
+        <div className="bg-gradient-to-br from-[#1a1333] via-[#232946] to-[#0f172a] rounded-2xl sm:rounded-3xl shadow-2xl p-6 sm:p-8 md:p-10 max-w-sm sm:max-w-md md:max-w-lg w-full text-center border-2 sm:border-4 border-red-500 animate-pop-in animate-glow-border overflow-hidden">
+          <div className="relative z-10 flex flex-col items-center">
+            <div className="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 bg-gradient-to-r from-red-500 to-red-600 rounded-full flex items-center justify-center mb-4 sm:mb-6 animate-bounce shadow-xl border-2 sm:border-4 border-red-400 animate-glow">
+              <AlertCircle className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 text-white" />
+            </div>
+            <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-extrabold text-white mb-3 sm:mb-4 drop-shadow-lg animate-fade-in-up leading-tight">Connection Error</h2>
+            <p className="text-sm sm:text-base md:text-lg text-gray-200 mb-4 sm:mb-6 animate-fade-in-up delay-100 leading-relaxed">We couldn't connect to our database. Please check your internet connection or try again later.</p>
+            <button 
+              onClick={() => window.location.reload()} 
+              className="w-full px-4 sm:px-6 md:px-8 py-2.5 sm:py-3 rounded-xl bg-gradient-to-r from-[#7F5AF0] to-[#00FFC2] text-white font-bold text-sm sm:text-base md:text-lg shadow-xl hover:from-[#6D4DC6] hover:to-[#00E6B3] transition-all duration-300 animate-fade-in-up delay-200"
+            >
+              Retry
+            </button>
+          </div>
         </div>
       </div>
     );

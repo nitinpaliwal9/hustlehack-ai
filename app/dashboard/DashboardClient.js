@@ -10,7 +10,7 @@ import AIToolsGrid from './components/AIToolsGrid';
 import ResourceLibrary from './components/ResourceLibrary';
 import PromptLibrary from './components/PromptLibrary';
 import QuickActions from './components/QuickActions';
-import First100Stats from './components/First100Stats';
+
 import { BarChart3, Brain, BookOpen, Trophy, Settings, Bell, User, TrendingUp, Zap, FileText } from 'lucide-react';
 import { useUserPlan } from '../hooks/useAuth';
 import { getPlanDisplayName, isPlanAtLeast } from '../planUtils';
@@ -46,13 +46,13 @@ const DASHBOARD_TOUR_STEPS = [
 function OnboardingTour({ steps, onClose }) {
   const [step, setStep] = useState(0);
   return (
-    <div className="fixed inset-0 z-[99999] flex items-center justify-center bg-black/70">
-      <div className="bg-white rounded-2xl shadow-2xl p-8 max-w-md w-full text-center animate-fade-in">
-        <h2 className="text-2xl font-bold mb-4 text-[#7F5AF0]">{steps[step].title}</h2>
-        <p className="text-gray-700 mb-6">{steps[step].content}</p>
-        <div className="flex justify-between items-center mt-6">
+    <div className="fixed inset-0 z-[99999] flex items-center justify-center bg-black/70 p-4">
+      <div className="bg-white rounded-xl sm:rounded-2xl shadow-2xl p-6 sm:p-8 max-w-sm sm:max-w-md w-full text-center animate-fade-in max-h-[90vh] overflow-y-auto">
+        <h2 className="text-lg sm:text-xl md:text-2xl font-bold mb-3 sm:mb-4 text-[#7F5AF0] leading-tight">{steps[step].title}</h2>
+        <p className="text-sm sm:text-base text-gray-700 mb-4 sm:mb-6 leading-relaxed">{steps[step].content}</p>
+        <div className="flex justify-between items-center mt-4 sm:mt-6 gap-2">
           <button
-            className="px-4 py-2 rounded bg-gray-200 text-gray-700 font-semibold"
+            className="px-3 sm:px-4 py-2 rounded bg-gray-200 text-gray-700 font-semibold text-sm sm:text-base"
             onClick={() => setStep(s => Math.max(0, s - 1))}
             disabled={step === 0}
           >
@@ -60,21 +60,21 @@ function OnboardingTour({ steps, onClose }) {
           </button>
           {step < steps.length - 1 ? (
             <button
-              className="px-6 py-2 rounded bg-[#7F5AF0] text-white font-bold"
+              className="px-4 sm:px-6 py-2 rounded bg-[#7F5AF0] text-white font-bold text-sm sm:text-base"
               onClick={() => setStep(s => s + 1)}
             >
               Next
             </button>
           ) : (
             <button
-              className="px-6 py-2 rounded bg-[#00FFC2] text-black font-bold"
+              className="px-4 sm:px-6 py-2 rounded bg-[#00FFC2] text-black font-bold text-sm sm:text-base"
               onClick={onClose}
             >
               Finish
             </button>
           )}
         </div>
-        <div className="mt-4 text-xs text-gray-400">Step {step + 1} of {steps.length}</div>
+        <div className="mt-3 sm:mt-4 text-xs text-gray-400">Step {step + 1} of {steps.length}</div>
       </div>
     </div>
   );
@@ -119,36 +119,38 @@ function PlanActivatedModal({ plan, onClose }) {
     : `I just unlocked the ${planDisplay} plan on HustleHack AI! 🚀 #HustleHackAI`;
   const shareUrl = 'https://hustlehackai.in';
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-80 animate-fade-in">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-80 animate-fade-in p-4">
       {/* Shimmer background */}
       <div className="absolute inset-0 pointer-events-none animate-shimmer" style={{ background: 'linear-gradient(120deg, rgba(127,90,240,0.08) 0%, rgba(0,255,194,0.08) 100%)' }} />
-      <div className="relative bg-gradient-to-br from-[#1a1333] via-[#232946] to-[#0f172a] rounded-3xl shadow-2xl p-10 max-w-lg w-full text-center border-4 border-[#7F5AF0] animate-pop-in animate-glow-border overflow-hidden">
+      <div className="relative bg-gradient-to-br from-[#1a1333] via-[#232946] to-[#0f172a] rounded-2xl sm:rounded-3xl shadow-2xl p-6 sm:p-8 md:p-10 max-w-sm sm:max-w-md md:max-w-lg w-full text-center border-2 sm:border-4 border-[#7F5AF0] animate-pop-in animate-glow-border overflow-hidden max-h-[90vh] overflow-y-auto">
         {/* Confetti Animation */}
         <ConfettiBurst />
         <div className="relative z-10 flex flex-col items-center">
-          <div className="w-24 h-24 bg-gradient-to-r from-[#7F5AF0] to-[#00FFC2] rounded-full flex items-center justify-center mb-6 animate-bounce shadow-xl border-4 border-[#FFE27A] animate-glow">
-            <svg width="48" height="48" viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="24" fill="#fff" fillOpacity="0.1"/><path d="M24 8l4.24 12.97h13.63l-11.02 8.01 4.24 12.97L24 33.94l-11.09 8.01 4.24-12.97-11.02-8.01h13.63L24 8z" fill="#FFE27A"/></svg>
+          <div className="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 bg-gradient-to-r from-[#7F5AF0] to-[#00FFC2] rounded-full flex items-center justify-center mb-4 sm:mb-6 animate-bounce shadow-xl border-2 sm:border-4 border-[#FFE27A] animate-glow">
+            <svg className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12" viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="24" fill="#fff" fillOpacity="0.1"/><path d="M24 8l4.24 12.97h13.63l-11.02 8.01 4.24 12.97L24 33.94l-11.09 8.01 4.24-12.97-11.02-8.01h13.63L24 8z" fill="#FFE27A"/></svg>
           </div>
-          <h2 className="text-3xl md:text-4xl font-extrabold text-white mb-4 drop-shadow-lg animate-fade-in-up">{planDisplay} Plan Activated!</h2>
-          <p className="text-lg text-gray-200 mb-6 animate-fade-in-up delay-100">{planMsg}</p>
-          <ul className="text-left mx-auto mb-6 max-w-xs space-y-2 animate-fade-in-up delay-200">
+          <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-extrabold text-white mb-3 sm:mb-4 drop-shadow-lg animate-fade-in-up leading-tight">{planDisplay} Plan Activated!</h2>
+          <p className="text-sm sm:text-base md:text-lg text-gray-200 mb-4 sm:mb-6 animate-fade-in-up delay-100 leading-relaxed">{planMsg}</p>
+          <ul className="text-left mx-auto mb-4 sm:mb-6 max-w-xs space-y-1.5 sm:space-y-2 animate-fade-in-up delay-200">
             {benefits.map((b, i) => (
-              <li key={i} className="flex items-center gap-2 text-base text-[#00FFC2] font-medium">
-                <svg width="20" height="20" fill="none"><circle cx="10" cy="10" r="10" fill="#00FFC2" fillOpacity="0.15"/><path d="M6 10.5l2.5 2.5L14 8.5" stroke="#00FFC2" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
-                {b}
+              <li key={i} className="flex items-start gap-2 text-xs sm:text-sm md:text-base text-[#00FFC2] font-medium">
+                <svg className="w-4 h-4 sm:w-5 sm:h-5 mt-0.5 flex-shrink-0" fill="none"><circle cx="10" cy="10" r="10" fill="#00FFC2" fillOpacity="0.15"/><path d="M6 10.5l2.5 2.5L14 8.5" stroke="#00FFC2" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                <span className="leading-relaxed">{b}</span>
               </li>
             ))}
           </ul>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center animate-fade-in-up delay-300">
-            <button onClick={onClose} className="px-8 py-3 rounded-xl bg-gradient-to-r from-[#7F5AF0] to-[#00FFC2] text-white font-bold text-lg shadow-xl hover:from-[#6D4DC6] hover:to-[#00E6B3] transition-all duration-300">Go to Dashboard</button>
-            <a href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(shareUrl)}`} target="_blank" rel="noopener noreferrer" className="px-8 py-3 rounded-xl bg-[#1DA1F2] text-white font-bold text-lg shadow-xl hover:bg-[#0d8ddb] transition-all duration-300 flex items-center gap-2 justify-center">
-              <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M23 3a10.9 10.9 0 01-3.14 1.53A4.48 4.48 0 0022.4.36a9.09 9.09 0 01-2.88 1.1A4.52 4.52 0 0016.11 0c-2.5 0-4.52 2.02-4.52 4.52 0 .35.04.7.11 1.03C7.69 5.4 4.07 3.67 1.64.95c-.38.65-.6 1.4-.6 2.2 0 1.52.77 2.86 1.94 3.65A4.48 4.48 0 01.96 6v.06c0 2.13 1.52 3.91 3.54 4.31-.37.1-.76.16-1.16.16-.28 0-.55-.03-.81-.08.55 1.72 2.16 2.97 4.07 3A9.05 9.05 0 010 19.54a12.8 12.8 0 006.92 2.03c8.3 0 12.85-6.88 12.85-12.85 0-.2 0-.39-.01-.58A9.22 9.22 0 0023 3z"/></svg>
-              Share
-            </a>
-            <a href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(shareUrl)}`} target="_blank" rel="noopener noreferrer" className="px-8 py-3 rounded-xl bg-[#0077b5] text-white font-bold text-lg shadow-xl hover:bg-[#005983] transition-all duration-300 flex items-center gap-2 justify-center">
-              <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14c-2.76 0-5 2.24-5 5v14c0 2.76 2.24 5 5 5h14c2.76 0 5-2.24 5-5v-14c0-2.76-2.24-5-5-5zm-11 19h-3v-9h3v9zm-1.5-10.28c-.97 0-1.75-.79-1.75-1.75s.78-1.75 1.75-1.75 1.75.79 1.75 1.75-.78 1.75-1.75 1.75zm15.5 10.28h-3v-4.5c0-1.08-.02-2.47-1.5-2.47-1.5 0-1.73 1.17-1.73 2.39v4.58h-3v-9h2.89v1.23h.04c.4-.75 1.38-1.54 2.84-1.54 3.04 0 3.6 2 3.6 4.59v4.72z"/></svg>
-              Share
-            </a>
+          <div className="flex flex-col gap-3 sm:gap-4 justify-center animate-fade-in-up delay-300 w-full">
+            <button onClick={onClose} className="w-full px-4 sm:px-6 md:px-8 py-2.5 sm:py-3 rounded-xl bg-gradient-to-r from-[#7F5AF0] to-[#00FFC2] text-white font-bold text-sm sm:text-base md:text-lg shadow-xl hover:from-[#6D4DC6] hover:to-[#00E6B3] transition-all duration-300">Go to Dashboard</button>
+            <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
+              <a href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(shareUrl)}`} target="_blank" rel="noopener noreferrer" className="flex-1 px-4 sm:px-6 py-2.5 sm:py-3 rounded-xl bg-[#1DA1F2] text-white font-bold text-sm sm:text-base shadow-xl hover:bg-[#0d8ddb] transition-all duration-300 flex items-center gap-2 justify-center">
+                <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M23 3a10.9 10.9 0 01-3.14 1.53A4.48 4.48 0 0022.4.36a9.09 9.09 0 01-2.88 1.1A4.52 4.52 0 0016.11 0c-2.5 0-4.52 2.02-4.52 4.52 0 .35.04.7.11 1.03C7.69 5.4 4.07 3.67 1.64.95c-.38.65-.6 1.4-.6 2.2 0 1.52.77 2.86 1.94 3.65A4.48 4.48 0 01.96 6v.06c0 2.13 1.52 3.91 3.54 4.31-.37.1-.76.16-1.16.16-.28 0-.55-.03-.81-.08.55 1.72 2.16 2.97 4.07 3A9.05 9.05 0 010 19.54a12.8 12.8 0 006.92 2.03c8.3 0 12.85-6.88 12.85-12.85 0-.2 0-.39-.01-.58A9.22 9.22 0 0023 3z"/></svg>
+                Share
+              </a>
+              <a href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(shareUrl)}`} target="_blank" rel="noopener noreferrer" className="flex-1 px-4 sm:px-6 py-2.5 sm:py-3 rounded-xl bg-[#0077b5] text-white font-bold text-sm sm:text-base shadow-xl hover:bg-[#005983] transition-all duration-300 flex items-center gap-2 justify-center">
+                <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14c-2.76 0-5 2.24-5 5v14c0 2.76 2.24 5 5 5h14c2.76 0 5-2.24 5-5v-14c0-2.76-2.24-5-5-5zm-11 19h-3v-9h3v9zm-1.5-10.28c-.97 0-1.75-.79-1.75-1.75s.78-1.75 1.75-1.75 1.75.79 1.75 1.75-.78 1.75-1.75 1.75zm15.5 10.28h-3v-4.5c0-1.08-.02-2.47-1.5-2.47-1.5 0-1.73 1.17-1.73 2.39v4.58h-3v-9h2.89v1.23h.04c.4-.75 1.38-1.54 2.84-1.54 3.04 0 3.6 2 3.6 4.59v4.72z"/></svg>
+                Share
+              </a>
+            </div>
           </div>
         </div>
       </div>
@@ -694,9 +696,6 @@ export default function DashboardClient() {
       case 'overview':
         return (
           <div className="space-y-8">
-            {/* First 100 Users Stats */}
-            <First100Stats />
-            
             {/* Quick Stats */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <div className="rounded-xl shadow-lg p-6 border border-[var(--border-color)]" style={{ background: 'rgba(36,41,46,0.96)' }}>
@@ -896,18 +895,18 @@ export default function DashboardClient() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black pt-20">
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black pt-16 sm:pt-20">
       {showPlanModal && <PlanActivatedModal plan={userPlan} onClose={() => setShowPlanModal(false)} />}
       {showTour && <OnboardingTour steps={DASHBOARD_TOUR_STEPS} onClose={() => setShowTour(false)} />}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8">
         {/* Main Content Container */}
-        <div className="pt-12 sm:pt-20 pb-20 sm:pb-28 space-y-12 sm:space-y-16">
+        <div className="pt-8 sm:pt-12 md:pt-20 pb-16 sm:pb-20 md:pb-28 space-y-8 sm:space-y-12 md:space-y-16">
           {/* Header Section */}
-          <div className="text-center space-y-4 animate-fade-in">
-            <h1 className="text-2xl sm:text-4xl lg:text-5xl font-bold text-white transition-all duration-300 transform hover:scale-105 hover:text-[#7F5AF0]">
+          <div className="text-center space-y-3 sm:space-y-4 animate-fade-in">
+            <h1 className="text-xl sm:text-2xl md:text-4xl lg:text-5xl font-bold text-white transition-all duration-300 transform hover:scale-105 hover:text-[#7F5AF0] leading-tight">
               👋 {userData.name === 'Hustler' ? 'Hello, Hustler!' : `Hello, ${userData.name}!`}
             </h1>
-            <p className="text-base sm:text-lg text-gray-200 max-w-3xl mx-auto">
+            <p className="text-sm sm:text-base md:text-lg text-gray-200 max-w-3xl mx-auto px-2">
               ✉️ {userData.email === 'Email: Not available' ? 
                 <span className="text-gray-100 italic">Email: Not available</span> : 
                 userData.email
@@ -916,8 +915,8 @@ export default function DashboardClient() {
           </div>
 
           {/* Navigation Tabs */}
-          <div className="rounded-xl shadow-lg border border-[var(--border-color)] p-2" style={{ background: 'var(--bg-surface)' }}>
-            <nav className="flex space-x-2" role="tablist" aria-label="Dashboard navigation tabs">
+          <div className="rounded-xl shadow-lg border border-[var(--border-color)] p-1 sm:p-2" style={{ background: 'var(--bg-surface)' }}>
+            <nav className="flex flex-wrap gap-1 sm:gap-2 overflow-x-auto pb-1" role="tablist" aria-label="Dashboard navigation tabs">
               {tabs.map((tab, idx) => (
                 <button
                   key={tab.id}
@@ -936,15 +935,16 @@ export default function DashboardClient() {
                       e.preventDefault();
                     }
                   }}
-                  className={`flex items-center gap-2 px-4 py-3 rounded-lg font-medium transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)] focus-visible:ring-offset-2 ${
+                  className={`flex items-center gap-1 sm:gap-2 px-2 sm:px-3 md:px-4 py-2 sm:py-3 rounded-lg font-medium transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)] focus-visible:ring-offset-2 text-xs sm:text-sm md:text-base whitespace-nowrap ${
                     activeTab === tab.id
                       ? 'bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] text-black shadow-lg'
                       : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[rgba(255,255,255,0.05)]'
                   }`}
-                  style={{ minWidth: 140 }}
+                  style={{ minWidth: 'auto' }}
                 >
-                  <tab.icon className="w-5 h-5" />
-                  {tab.name}
+                  <tab.icon className="w-4 h-4 sm:w-5 sm:h-5" />
+                  <span className="hidden sm:inline">{tab.name}</span>
+                  <span className="sm:hidden">{tab.name.length > 8 ? tab.name.substring(0, 8) + '...' : tab.name}</span>
                 </button>
               ))}
             </nav>
@@ -960,17 +960,17 @@ export default function DashboardClient() {
 
           {/* Plan Expiry Warning */}
           {userData.expiry !== 'Data not available' && new Date(userData.expiry) - new Date() < 5 * 24 * 60 * 60 * 1000 && (
-            <div className="bg-yellow-50 border border-yellow-200 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300" style={{ background: 'var(--bg-surface)' }}>
-              <div className="p-6 sm:p-8">
-                <div className="flex items-start gap-4">
+            <div className="bg-yellow-50 border border-yellow-200 rounded-xl sm:rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300" style={{ background: 'var(--bg-surface)' }}>
+              <div className="p-4 sm:p-6 md:p-8">
+                <div className="flex items-start gap-3 sm:gap-4">
                   <div className="flex-shrink-0">
-                    <svg className="h-6 w-6 text-yellow-400" viewBox="0 0 20 20" fill="currentColor">
+                    <svg className="h-5 w-5 sm:h-6 sm:w-6 text-yellow-400" viewBox="0 0 20 20" fill="currentColor">
                       <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
                     </svg>
                   </div>
-                  <div className="flex-1 space-y-2">
-                    <h3 className="text-lg font-medium text-yellow-800">Plan Expiring Soon</h3>
-                    <p className="text-yellow-700">
+                  <div className="flex-1 space-y-1 sm:space-y-2">
+                    <h3 className="text-base sm:text-lg font-medium text-yellow-800">Plan Expiring Soon</h3>
+                    <p className="text-sm sm:text-base text-yellow-700">
                       Your plan is about to expire soon. <a href="/#pricing" className="font-medium underline hover:text-yellow-600 transition-colors">Renew now</a> to continue accessing premium features.
                     </p>
                   </div>
@@ -980,20 +980,20 @@ export default function DashboardClient() {
           )}
 
           {/* Call to Action */}
-          <div className="bg-gradient-to-r from-[#7F5AF0] to-[#00FFC2] rounded-2xl shadow-lg hover:shadow-xl transform hover:scale-[1.02] transition-all duration-300" style={{ background: 'var(--bg-surface)' }}>
-            <div className="p-8 sm:p-10 text-center text-white">
-              <div className="space-y-6">
+          <div className="bg-gradient-to-r from-[#7F5AF0] to-[#00FFC2] rounded-xl sm:rounded-2xl shadow-lg hover:shadow-xl transform hover:scale-[1.02] transition-all duration-300" style={{ background: 'var(--bg-surface)' }}>
+            <div className="p-6 sm:p-8 md:p-10 text-center text-white">
+              <div className="space-y-4 sm:space-y-6">
                 <div className="space-y-2">
-                  <h3 className="text-lg sm:text-2xl font-bold">🎯 Ready to Upgrade?</h3>
-                  <p className="text-sm sm:text-lg opacity-90 max-w-2xl mx-auto">
+                  <h3 className="text-base sm:text-lg md:text-2xl font-bold">🎯 Ready to Upgrade?</h3>
+                  <p className="text-xs sm:text-sm md:text-lg opacity-90 max-w-2xl mx-auto">
                     Unlock premium features and boost your productivity
                   </p>
                 </div>
-                <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4">
-                  <Link href="/#pricing" className="bg-white text-[#7F5AF0] px-6 sm:px-8 py-3 sm:py-4 rounded-xl font-bold text-base sm:text-lg hover:bg-gray-50 transition-all duration-300 shadow-md hover:shadow-lg transform hover:scale-105">
+                <div className="flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-3 md:gap-4">
+                  <Link href="/#pricing" className="w-full sm:w-auto bg-white text-[#7F5AF0] px-4 sm:px-6 md:px-8 py-2.5 sm:py-3 md:py-4 rounded-xl font-bold text-sm sm:text-base md:text-lg hover:bg-gray-50 transition-all duration-300 shadow-md hover:shadow-lg transform hover:scale-105">
                     Upgrade / Renew Plan
                   </Link>
-                  <a href="mailto:hustlehackai@gmail.com" className="text-white underline hover:text-gray-100 transition-colors text-base sm:text-lg">
+                  <a href="mailto:hustlehackai@gmail.com" className="text-white underline hover:text-gray-100 transition-colors text-xs sm:text-sm md:text-lg">
                     Need help? Contact support
                   </a>
                 </div>

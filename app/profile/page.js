@@ -325,11 +325,11 @@ export default function ProfileSettingsPage() {
       }
       
       // Sign out the user
-      await signOut()
+        await signOut()
       
       // Redirect to home page
-      router.push('/')
-    } catch (error) {
+        router.push('/')
+      } catch (error) {
       console.error('Error in handleDeleteAccount:', error)
       setErrors({ general: 'Failed to delete account. Please contact support.' })
     }
@@ -356,27 +356,27 @@ export default function ProfileSettingsPage() {
       <Navigation />
       <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black pt-24 sm:pt-28 lg:pt-32">
         <div className="max-w-4xl mx-auto px-3 sm:px-4 lg:px-8 py-8 sm:py-12 lg:py-16">
-          {/* Header */}
+        {/* Header */}
           <div className="text-center mb-10 sm:mb-16">
             <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white mb-3 sm:mb-6">Profile Settings</h1>
             <p className="text-sm sm:text-base text-gray-300">Manage your account information and preferences</p>
-          </div>
+        </div>
 
-          {/* Success Message */}
-          {successMessage && (
+        {/* Success Message */}
+        {successMessage && (
             <div className="bg-green-500/20 border border-green-500/30 rounded-lg p-4 mb-6 flex items-center gap-3">
               <CheckCircle className="w-5 h-5 text-green-400" />
               <span className="text-green-300">{successMessage}</span>
-            </div>
-          )}
+          </div>
+        )}
 
-          {/* Error Message */}
-          {errors.general && (
+        {/* Error Message */}
+        {errors.general && (
             <div className="bg-red-500/20 border border-red-500/30 rounded-lg p-4 mb-6 flex items-center gap-3">
               <AlertCircle className="w-5 h-5 text-red-400" />
               <span className="text-red-300">{errors.general}</span>
-            </div>
-          )}
+          </div>
+        )}
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-8 lg:gap-10">
             {/* Main Profile Section */}
@@ -406,7 +406,7 @@ export default function ProfileSettingsPage() {
                         <Save className="w-4 h-4" />
                         {isSaving ? 'Saving...' : 'Save'}
                       </button>
-                      <button
+                  <button
                         onClick={() => {
                           setIsEditing(false)
                           loadProfileData() // Reset to original data
@@ -415,20 +415,20 @@ export default function ProfileSettingsPage() {
                       >
                         <X className="w-4 h-4" />
                         Cancel
-                      </button>
+                  </button>
                     </div>
                   )}
                 </div>
 
                 <div className="space-y-3 sm:space-y-4">
                   {/* Name */}
-                  <div>
+                    <div>
                     <label className="block text-sm font-medium text-gray-300 mb-2">Full Name</label>
-                    <input
-                      type="text"
-                      value={profileData.name}
+                      <input
+                        type="text"
+                        value={profileData.name}
                       onChange={(e) => handleInputChange('name', e.target.value)}
-                      disabled={!isEditing}
+                        disabled={!isEditing}
                       className={`w-full px-3 sm:px-4 py-2 sm:py-3 rounded-lg border text-sm sm:text-base ${
                         isEditing 
                           ? 'bg-gray-800 border-gray-600 text-white focus:border-[#7F5AF0] focus:ring-1 focus:ring-[#7F5AF0]' 
@@ -436,14 +436,14 @@ export default function ProfileSettingsPage() {
                       } transition-colors`}
                     />
                     {errors.name && <p className="text-red-400 text-xs sm:text-sm mt-1">{errors.name}</p>}
-                  </div>
+                    </div>
 
                   {/* Email */}
-                  <div>
+                    <div>
                     <label className="block text-sm font-medium text-gray-300 mb-2">Email Address</label>
-                    <input
-                      type="email"
-                      value={profileData.email}
+                      <input
+                        type="email"
+                        value={profileData.email}
                       onChange={(e) => handleInputChange('email', e.target.value)}
                       disabled={!isEditing}
                       className={`w-full px-3 sm:px-4 py-2 sm:py-3 rounded-lg border text-sm sm:text-base ${
@@ -453,16 +453,16 @@ export default function ProfileSettingsPage() {
                       } transition-colors`}
                     />
                     {errors.email && <p className="text-red-400 text-xs sm:text-sm mt-1">{errors.email}</p>}
-                  </div>
+                    </div>
 
                   {/* Phone */}
-                  <div>
+                    <div>
                     <label className="block text-sm font-medium text-gray-300 mb-2">Phone Number</label>
-                    <input
-                      type="tel"
-                      value={profileData.phone}
+                      <input
+                        type="tel"
+                        value={profileData.phone}
                       onChange={(e) => handleInputChange('phone', e.target.value)}
-                      disabled={!isEditing}
+                        disabled={!isEditing}
                       placeholder="+91 9876543210"
                       className={`w-full px-3 sm:px-4 py-2 sm:py-3 rounded-lg border text-sm sm:text-base ${
                         isEditing 
@@ -471,32 +471,32 @@ export default function ProfileSettingsPage() {
                       } transition-colors`}
                     />
                     {errors.phone && <p className="text-red-400 text-xs sm:text-sm mt-1">{errors.phone}</p>}
-                  </div>
+                    </div>
 
                   {/* Role */}
-                  <div>
+                    <div>
                     <label className="block text-sm font-medium text-gray-300 mb-2">Role</label>
-                    <select
-                      value={profileData.role}
+                      <select
+                        value={profileData.role}
                       onChange={(e) => handleInputChange('role', e.target.value)}
-                      disabled={!isEditing}
+                        disabled={!isEditing}
                       className={`w-full px-3 sm:px-4 py-2 sm:py-3 rounded-lg border text-sm sm:text-base ${
                         isEditing 
                           ? 'bg-gray-800 border-gray-600 text-white focus:border-[#7F5AF0] focus:ring-1 focus:ring-[#7F5AF0]' 
                           : 'bg-gray-900 border-gray-700 text-gray-400'
                       } transition-colors`}
-                    >
-                      <option value="">Select your role</option>
-                      <option value="Student">Student</option>
+                      >
+                        <option value="">Select your role</option>
+                        <option value="Student">Student</option>
                       <option value="Content Creator">Content Creator</option>
-                      <option value="Entrepreneur">Entrepreneur</option>
+                        <option value="Entrepreneur">Entrepreneur</option>
                       <option value="Freelancer">Freelancer</option>
                       <option value="Hustler">Hustler</option>
-                    </select>
+                      </select>
                     {errors.role && <p className="text-red-400 text-xs sm:text-sm mt-1">{errors.role}</p>}
                   </div>
                 </div>
-              </div>
+                  </div>
 
               {/* Password Change Card */}
               <div className="bg-[rgba(36,41,46,0.96)] rounded-xl shadow-lg border border-[var(--border-color)] p-4 sm:p-6">
@@ -505,68 +505,68 @@ export default function ProfileSettingsPage() {
                     <Key className="w-5 h-5 sm:w-6 sm:h-6 text-[#7F5AF0]" />
                     Change Password
                   </h2>
-                  <button
+                      <button
                     onClick={() => setShowPasswordForm(!showPasswordForm)}
                     className="flex items-center justify-center gap-2 px-3 sm:px-4 py-2 bg-[#7F5AF0] text-white rounded-lg hover:bg-[#6D4DC6] transition-colors text-sm sm:text-base w-full sm:w-auto"
-                  >
+                      >
                     {showPasswordForm ? 'Cancel' : 'Change Password'}
-                  </button>
-                </div>
+                      </button>
+                    </div>
 
                 {showPasswordForm && (
                   <form onSubmit={handlePasswordChange} className="space-y-4">
                     {/* Current Password */}
-                    <div>
+                        <div>
                       <label className="block text-sm font-medium text-gray-300 mb-2">Current Password</label>
-                      <div className="relative">
-                        <input
+                          <div className="relative">
+                            <input
                           type={showPasswords.current ? 'text' : 'password'}
-                          value={passwordData.currentPassword}
+                              value={passwordData.currentPassword}
                           onChange={(e) => setPasswordData(prev => ({ ...prev, currentPassword: e.target.value }))}
                           className="w-full px-4 py-3 rounded-lg border bg-gray-800 border-gray-600 text-white focus:border-[#7F5AF0] focus:ring-1 focus:ring-[#7F5AF0] transition-colors"
-                        />
-                        <button
-                          type="button"
+                            />
+                            <button
+                              type="button"
                           onClick={() => setShowPasswords(prev => ({ ...prev, current: !prev.current }))}
-                          className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white"
-                        >
+                              className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white"
+                            >
                           {showPasswords.current ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
-                        </button>
-                      </div>
+                            </button>
+                          </div>
                       {passwordErrors.currentPassword && <p className="text-red-400 text-sm mt-1">{passwordErrors.currentPassword}</p>}
-                    </div>
+                        </div>
 
                     {/* New Password */}
-                    <div>
+                        <div>
                       <label className="block text-sm font-medium text-gray-300 mb-2">New Password</label>
-                      <div className="relative">
-                        <input
+                          <div className="relative">
+                            <input
                           type={showPasswords.new ? 'text' : 'password'}
-                          value={passwordData.newPassword}
+                              value={passwordData.newPassword}
                           onChange={(e) => setPasswordData(prev => ({ ...prev, newPassword: e.target.value }))}
                           className="w-full px-4 py-3 rounded-lg border bg-gray-800 border-gray-600 text-white focus:border-[#7F5AF0] focus:ring-1 focus:ring-[#7F5AF0] transition-colors"
-                        />
-                        <button
-                          type="button"
+                            />
+                            <button
+                              type="button"
                           onClick={() => setShowPasswords(prev => ({ ...prev, new: !prev.new }))}
-                          className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white"
-                        >
+                              className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white"
+                            >
                           {showPasswords.new ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
-                        </button>
-                      </div>
+                            </button>
+                          </div>
                       {passwordErrors.newPassword && <p className="text-red-400 text-sm mt-1">{passwordErrors.newPassword}</p>}
-                    </div>
+                        </div>
 
                     {/* Confirm Password */}
-                    <div>
+                        <div>
                       <label className="block text-sm font-medium text-gray-300 mb-2">Confirm New Password</label>
                       <div className="relative">
-                        <input
+                          <input
                           type={showPasswords.confirm ? 'text' : 'password'}
-                          value={passwordData.confirmPassword}
+                            value={passwordData.confirmPassword}
                           onChange={(e) => setPasswordData(prev => ({ ...prev, confirmPassword: e.target.value }))}
                           className="w-full px-4 py-3 rounded-lg border bg-gray-800 border-gray-600 text-white focus:border-[#7F5AF0] focus:ring-1 focus:ring-[#7F5AF0] transition-colors"
-                        />
+                          />
                         <button
                           type="button"
                           onClick={() => setShowPasswords(prev => ({ ...prev, confirm: !prev.confirm }))}
@@ -579,21 +579,21 @@ export default function ProfileSettingsPage() {
                     </div>
 
                     {passwordErrors.general && <p className="text-red-400 text-sm">{passwordErrors.general}</p>}
-
-                    <button
+                              
+                              <button
                       type="submit"
                       disabled={isChangingPassword}
                       className="w-full px-4 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
                     >
                       {isChangingPassword ? 'Changing Password...' : 'Change Password'}
-                    </button>
+                              </button>
                   </form>
                 )}
-              </div>
-            </div>
+                          </div>
+                        </div>
 
             {/* Sidebar */}
-            <div className="space-y-6">
+                  <div className="space-y-6">
               {/* Account Actions Card */}
               <div className="bg-[rgba(36,41,46,0.96)] rounded-xl shadow-lg border border-[var(--border-color)] p-6">
                 <h3 className="text-xl font-bold text-white mb-4 flex items-center gap-3">
@@ -602,14 +602,14 @@ export default function ProfileSettingsPage() {
                 </h3>
                 
                 <div className="space-y-3">
-                  <button
+                            <button
                     onClick={exportUserData}
                     disabled={isExporting}
                     className="w-full flex items-center gap-3 px-4 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50"
                   >
                     <Download className="w-4 h-4" />
                     {isExporting ? 'Exporting...' : 'Export My Data'}
-                  </button>
+                            </button>
                   
                   <button
                     onClick={() => signOut()}
@@ -617,9 +617,9 @@ export default function ProfileSettingsPage() {
                   >
                     <Key className="w-4 h-4" />
                     Sign Out
-                  </button>
-                </div>
-              </div>
+                        </button>
+                      </div>
+                    </div>
 
               {/* Danger Zone Card */}
               <div className="bg-[rgba(36,41,46,0.96)] rounded-xl shadow-lg border border-red-500/30 p-6">
@@ -632,18 +632,18 @@ export default function ProfileSettingsPage() {
                   Once you delete your account, there is no going back. Please be certain.
                 </p>
                 
-                <button
-                  onClick={handleDeleteAccount}
+                      <button
+                        onClick={handleDeleteAccount}
                   className="w-full flex items-center gap-3 px-4 py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
-                >
-                  <Trash2 className="w-4 h-4" />
-                  Delete Account
-                </button>
-              </div>
-            </div>
+                      >
+                        <Trash2 className="w-4 h-4" />
+                        Delete Account
+                      </button>
+                    </div>
+                  </div>
           </div>
         </div>
-      </div>
+              </div>
       <Footer />
     </>
   )
