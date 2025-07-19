@@ -39,9 +39,17 @@ export async function POST(request) {
       return new Response(JSON.stringify({ error: validation.error }), { status: 400 })
     }
 
+  const keyId = process.env.RAZORPAY_KEY_ID;
+  const keySecret = process.env.RAZORPAY_KEY_SECRET;
+  
+  if (!keyId || !keySecret) {
+    console.error('Missing Razorpay environment variables');
+    return new Response(JSON.stringify({ error: 'Payment service configuration error' }), { status: 500 });
+  }
+  
   const razorpay = new Razorpay({
-    key_id: process.env.RAZORPAY_KEY_ID,
-    key_secret: process.env.RAZORPAY_KEY_SECRET,
+    key_id: keyId,
+    key_secret: keySecret,
   })
 
   const options = {

@@ -7,10 +7,15 @@ export async function GET(request) {
   const origin = requestUrl.origin
 
   if (code) {
-    const supabase = createClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL,
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-    )
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+    const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+    
+    if (!supabaseUrl || !supabaseAnonKey) {
+      console.error('Missing Supabase environment variables in auth callback');
+      return NextResponse.redirect(`${origin}/?error=config_error`);
+    }
+    
+    const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
     try {
       const { error } = await supabase.auth.exchangeCodeForSession(code)

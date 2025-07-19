@@ -59,6 +59,17 @@ export default function CompleteProfileClient() {
     };
   }, []);
 
+  // Debug: Check environment variables (only in development)
+  useEffect(() => {
+    if (process.env.NODE_ENV === 'development') {
+      console.log('Environment check:', {
+        hasSupabaseUrl: !!process.env.NEXT_PUBLIC_SUPABASE_URL,
+        hasSupabaseKey: !!process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
+        supabaseClient: !!supabase
+      });
+    }
+  }, []);
+
   useEffect(() => {
     // Check if user is authenticated
     if (!isLoading && !isAuthenticated) {
@@ -142,6 +153,11 @@ export default function CompleteProfileClient() {
     setFormErrors({});
 
     try {
+      // Check if Supabase is available
+      if (!supabase) {
+        throw new Error('Supabase client not initialized. Please check your environment variables.');
+      }
+
       console.log('Submitting profile upsert to Supabase:', {
         id: user?.id,
         name: formData.name,
@@ -176,16 +192,22 @@ export default function CompleteProfileClient() {
       if (upsertError) throw upsertError;
       if (!data || data.length === 0) throw new Error('Profile update failed. No data returned.');
 
-      // First-100 check and upsert subscription with timeout
-      console.log('Checking if user is in first 100:', user.id);
-      const eligible = await Promise.race([isUserInFirst100(user.id), timeoutPromise]);
-      console.log('isUserInFirst100 result:', eligible);
-      if (eligible) {
-        console.log('Upserting subscription for first 100:', user.id);
-        const subSuccess = await Promise.race([upsertSubscriptionForFirst100(user.id), timeoutPromise]);
-        console.log('upsertSubscriptionForFirst100 result:', subSuccess);
-        if (subSuccess) setShowCongrats(true);
+      // First-100 check and upsert subscription with timeout (with fallback)
+      try {
+        console.log('Checking if user is in first 100:', user.id);
+        const eligible = await Promise.race([isUserInFirst100(user.id), timeoutPromise]);
+        console.log('isUserInFirst100 result:', eligible);
+        if (eligible) {
+          console.log('Upserting subscription for first 100:', user.id);
+          const subSuccess = await Promise.race([upsertSubscriptionForFirst100(user.id), timeoutPromise]);
+          console.log('upsertSubscriptionForFirst100 result:', subSuccess);
+          if (subSuccess) setShowCongrats(true);
+        }
+      } catch (first100Error) {
+        console.warn('First-100 check failed, continuing without subscription:', first100Error);
+        // Continue without first-100 benefits if it fails
       }
+      
       setIsSubmitting(false); // Clear loading state
       setIsSuccess(true);
       setTimeout(() => {

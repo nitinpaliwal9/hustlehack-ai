@@ -150,13 +150,18 @@ export async function POST(req) {
     // Usage logging (if userId is provided)
     if (userId) {
       try {
-        const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL, process.env.SUPABASE_SERVICE_ROLE_KEY);
-        await supabase.from('usage_logs').insert({
-          user_id: userId,
-          action_type: 'generated',
-          tool_used: 'content-generator',
-          timestamp: new Date().toISOString()
-        });
+        const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+        const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+        
+        if (supabaseUrl && supabaseServiceKey) {
+          const supabase = createClient(supabaseUrl, supabaseServiceKey);
+          await supabase.from('usage_logs').insert({
+            user_id: userId,
+            action_type: 'generated',
+            tool_used: 'content-generator',
+            timestamp: new Date().toISOString()
+          });
+        }
       } catch (logError) {
         console.error('Failed to log usage:', logError);
         // Don't fail the request if logging fails
