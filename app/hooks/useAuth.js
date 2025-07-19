@@ -216,10 +216,7 @@ export function useAuth() {
 
       const userName = userProfile?.name || data.user.user_metadata?.name || data.user.email.split('@')[0]
 
-      // Show success notification
-      if (typeof window !== 'undefined' && window.showNotification) {
-        window.showNotification(`🎉 Welcome back, ${userName}!`, 'success')
-      }
+      // Removed welcome notification to prevent repeated messages
 
       return { user: data.user, session: data.session, profile: userProfile }
     } catch (error) {

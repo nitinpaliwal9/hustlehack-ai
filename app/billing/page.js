@@ -53,79 +53,82 @@ export default function BillingPage() {
       id: 'starter',
       name: 'Starter Hustler',
       price: 0,
-      originalPrice: 999,
+      originalPrice: 99,
       currency: '₹',
       period: 'month',
-      description: 'Perfect for beginners getting started with AI tools',
+      description: 'Perfect for students & beginners exploring AI tools',
       features: [
-        'Access to basic AI tools',
-        '5 content generations per day',
-        'Basic templates library',
-        'Community support',
-        'Email support'
+        'Basic AI prompt tools (limited daily uses)',
+        'Access to Starter Resources Library (templates, study tools)',
+        '5 content generations / day',
+        'Community access (Telegram)',
+        'Email support (48h response)'
       ],
       limitations: [
-        'Limited AI tool access',
-        'No priority support',
-        'Basic analytics'
+        'Limited Weekly Drops archive (last 2)',
+        'Usage dashboard & analytics (coming soon)',
+        'Upgrade for premium prompt packs'
       ],
       color: 'from-gray-500 to-gray-700',
       icon: Zap,
-      popular: false
+      popular: false,
+      launchStatus: 'Free (Beta)',
+      laterPrice: '₹99/mo'
     },
     {
       id: 'creator',
       name: 'Creator Mode',
       price: 0, // Free for first 100 users
-      originalPrice: 2999,
+      originalPrice: 199,
       currency: '₹',
       period: 'month',
-      description: 'Everything you need to create amazing content',
+      description: 'Everything you need to create & grow with AI content',
       features: [
         'All Starter features',
-        'Unlimited content generation',
-        'Advanced AI tools',
-        'Premium templates',
-        'Priority support',
-        'Creator badge',
-        'Advanced analytics',
-        'Custom prompts library',
-        'Video generation tools',
-        'Social media automation'
+        'Creator Resources Library (full prompt packs, content templates)',
+        'Unlimited prompt copy/download (fair‑use)',
+        'Weekly AI Content Drops (PDF + Drive)',
+        'Priority email support (<24h)'
       ],
       limitations: [
-        'No API access',
-        'Limited team features'
+        'Advanced prompt workflows (beta)',
+        'Analytics: top prompts used (beta)',
+        'Video & image generation workflows (coming soon)',
+        'Social scheduling automation (coming soon)'
       ],
       color: 'from-blue-500 to-purple-600',
       icon: Crown,
       popular: true,
-      specialOffer: 'FREE for First 100 Users! 🎉'
+      specialOffer: 'FREE for First 100 Users! 🎉',
+      launchStatus: 'Free for First 100',
+      laterPrice: '₹199/mo'
     },
     {
       id: 'pro',
       name: 'Pro Hacker',
-      price: 4999,
-      originalPrice: 7999,
+      price: 299,
+      originalPrice: 4999,
       currency: '₹',
       period: 'month',
-      description: 'Ultimate power for serious entrepreneurs',
+      description: 'Automation, API access & scaling for serious hustlers / micro teams',
       features: [
         'All Creator features',
-        'Unlimited everything',
-        'API access',
-        'Team collaboration',
-        'White-label solutions',
-        'Dedicated support',
-        'Custom integrations',
-        'Advanced analytics',
-        'Priority feature access',
-        'Exclusive workshops'
+        'Pro Resources Library (premium packs + business systems)',
+        'API access tokens (Apps Script / workflow integrations)',
+        'Team seats (up to 5 users)',
+        'Priority support (chat + email)',
+        'Custom Google Sheets → Drive automations'
       ],
-      limitations: [],
+      limitations: [
+        'White‑label resource packs (beta)',
+        'Advanced analytics & usage export (beta)',
+        'Dedicated onboarding & workshops (coming soon)'
+      ],
       color: 'from-yellow-400 to-orange-500',
       icon: Star,
-      popular: false
+      popular: false,
+      launchStatus: '₹299/mo (Beta Invite)',
+      laterPrice: '₹4999/mo'
     }
   ]
 
@@ -393,11 +396,11 @@ export default function BillingPage() {
   return (
     <>
       <Navigation />
-      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black pt-16 sm:pt-20">
-        <div className="max-w-7xl mx-auto px-3 sm:px-4 lg:px-8 py-6 sm:py-12">
+      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black pt-24 sm:pt-28 lg:pt-32">
+        <div className="max-w-7xl mx-auto px-3 sm:px-4 lg:px-8 py-8 sm:py-12 lg:py-16">
           {/* Header */}
-          <div className="text-center mb-8 sm:mb-12">
-            <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-2 sm:mb-4">
+          <div className="text-center mb-10 sm:mb-16">
+            <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-3 sm:mb-6">
               Billing & Subscriptions
             </h1>
             <p className="text-sm sm:text-base lg:text-xl text-gray-300 max-w-3xl mx-auto">
@@ -446,7 +449,7 @@ export default function BillingPage() {
           )}
 
           {/* Plans Grid */}
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8 mb-8 sm:mb-12">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-8 lg:gap-10 mb-10 sm:mb-16">
             {plans.map((plan) => {
               const isCurrentPlan = billingData?.subscription?.plan_name === plan.id
               const isUpgradeable = !isCurrentPlan && (
@@ -484,16 +487,23 @@ export default function BillingPage() {
                       <plan.icon className="w-6 h-6 sm:w-8 sm:h-8 text-white" />
                     </div>
                     <h3 className="text-lg sm:text-xl lg:text-2xl font-bold text-white mb-2">{plan.name}</h3>
+                    
+                    {/* Launch Status */}
+                    <div className="mb-2">
+                      <span className="text-green-400 text-xs sm:text-sm font-medium bg-green-500/20 px-2 py-1 rounded-full">
+                        {plan.launchStatus}
+                      </span>
+                    </div>
+                    
                     <div className="mb-3 sm:mb-4">
                       <span className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white">
                         {plan.price === 0 ? 'FREE' : `${plan.currency}${plan.price}`}
                       </span>
-                      {plan.originalPrice > plan.price && (
-                        <span className="text-gray-400 line-through ml-2 text-sm sm:text-base">
-                          {plan.currency}{plan.originalPrice}
-                        </span>
+                      {plan.laterPrice && (
+                        <div className="text-gray-400 text-xs sm:text-sm mt-1">
+                          Later: {plan.laterPrice}
+                        </div>
                       )}
-                      <span className="text-gray-400 text-xs sm:text-sm">/{plan.period}</span>
                     </div>
                     <p className="text-gray-300 text-xs sm:text-sm">{plan.description}</p>
                   </div>
@@ -506,12 +516,26 @@ export default function BillingPage() {
                         <span className="text-gray-300 text-xs sm:text-sm">{feature}</span>
                       </div>
                     ))}
-                    {plan.limitations.map((limitation, index) => (
-                      <div key={index} className="flex items-center gap-2 sm:gap-3">
-                        <X className="w-4 h-4 sm:w-5 sm:h-5 text-red-500 flex-shrink-0" />
-                        <span className="text-gray-400 text-xs sm:text-sm">{limitation}</span>
-                      </div>
-                    ))}
+                    {plan.limitations.map((limitation, index) => {
+                      // Determine icon based on limitation text
+                      let icon = <X className="w-4 h-4 sm:w-5 sm:h-5 text-red-500 flex-shrink-0" />
+                      let textColor = "text-gray-400"
+                      
+                      if (limitation.includes('(beta)')) {
+                        icon = <span className="text-yellow-400 text-sm">🧪</span>
+                        textColor = "text-yellow-300"
+                      } else if (limitation.includes('(coming soon)')) {
+                        icon = <span className="text-orange-400 text-sm">🚧</span>
+                        textColor = "text-orange-300"
+                      }
+                      
+                      return (
+                        <div key={index} className="flex items-center gap-2 sm:gap-3">
+                          {icon}
+                          <span className={`text-xs sm:text-sm ${textColor}`}>{limitation}</span>
+                        </div>
+                      )
+                    })}
                   </div>
 
                   {/* Action Button */}
@@ -528,11 +552,33 @@ export default function BillingPage() {
                   >
                     {isCurrentPlan ? 'Current Plan' : 
                      processingPayment ? 'Processing...' : 
-                     isUpgradeable ? 'Upgrade Now' : 'Coming Soon'}
+                     plan.id === 'starter' ? 'Get Started Free' :
+                     plan.id === 'creator' && isFirst100User ? 'Activate Creator Access' :
+                     plan.id === 'creator' ? 'Upgrade to Creator' :
+                     plan.id === 'pro' ? 'Request Pro Invite' : 'Coming Soon'}
                   </button>
                 </div>
               )
             })}
+          </div>
+
+          {/* Icon Legend */}
+          <div className="bg-[rgba(36,41,46,0.96)] rounded-xl shadow-lg border border-[var(--border-color)] p-6 sm:p-8 mb-8 sm:mb-12">
+            <h3 className="text-lg sm:text-xl font-bold text-white mb-3 sm:mb-4">Feature Status Legend</h3>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
+              <div className="flex items-center gap-2">
+                <Check className="w-4 h-4 text-green-500 flex-shrink-0" />
+                <span className="text-gray-300 text-xs sm:text-sm">✅ Live Now</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="text-yellow-400 text-sm">🧪</span>
+                <span className="text-yellow-300 text-xs sm:text-sm">In Beta (early access)</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="text-orange-400 text-sm">🚧</span>
+                <span className="text-orange-300 text-xs sm:text-sm">Coming Soon (roadmap)</span>
+              </div>
+            </div>
           </div>
 
           {/* Payment History */}

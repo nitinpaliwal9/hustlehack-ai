@@ -212,11 +212,11 @@ export default function HelpSupportPage() {
   return (
     <>
       <Navigation />
-      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black pt-16 sm:pt-20">
-        <div className="max-w-6xl mx-auto px-3 sm:px-4 lg:px-8 py-6 sm:py-12">
+      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black pt-24 sm:pt-28 lg:pt-32">
+        <div className="max-w-6xl mx-auto px-3 sm:px-4 lg:px-8 py-8 sm:py-12 lg:py-16">
           {/* Header */}
-          <div className="text-center mb-8 sm:mb-12">
-            <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-2 sm:mb-4">
+          <div className="text-center mb-10 sm:mb-16">
+            <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-3 sm:mb-6">
               Help & Support
             </h1>
             <p className="text-sm sm:text-base lg:text-xl text-gray-300 max-w-3xl mx-auto">
@@ -224,8 +224,8 @@ export default function HelpSupportPage() {
             </p>
           </div>
 
-          {/* Quick Contact Cards */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-8 sm:mb-12">
+                  {/* Quick Contact Cards */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 mb-10 sm:mb-16">
             {contactMethods.map((method) => (
               <div key={method.id} className="bg-[rgba(36,41,46,0.96)] rounded-xl shadow-lg border border-[var(--border-color)] p-4 sm:p-6 hover:shadow-xl transition-all duration-300">
                 <div className="flex items-center gap-3 sm:gap-4 mb-3 sm:mb-4">

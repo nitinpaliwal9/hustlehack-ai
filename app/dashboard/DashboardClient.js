@@ -503,11 +503,7 @@ export default function DashboardClient() {
     }
   }, [user?.id, isLoading, isAuthenticated, profileCheckError, dataFetched, currentUserId]);
 
-  useEffect(() => {
-    if (!isLoading && userPlan && userPlan !== 'Not active') {
-      setShowPlanModal(true);
-    }
-  }, [isLoading, userPlan]);
+  // Removed the conflicting useEffect that was showing modal every time
 
   useEffect(() => {
     // Show onboarding tour for new users (first dashboard visit)
@@ -770,7 +766,85 @@ export default function DashboardClient() {
       case 'ai-tools':
         return <AIToolsGrid userPlan={userPlan} />;
       case 'prompts':
-        return <PromptLibrary userPlan={userPlan} />;
+        return (
+          <PromptLibrary 
+            userPlan={userPlan}
+            platformData={{
+              name: 'Instagram',
+              platforms: [
+                { name: 'Instagram' },
+                { name: 'LinkedIn' },
+                { name: 'Twitter' },
+                { name: 'TikTok' }
+              ],
+              categories: [
+                {
+                  name: 'Fitness',
+                  prompts: [
+                    { title: 'Morning Motivation Post', prompt: '🌅 Start your day strong! Share your top 3 morning habits for crushing your fitness goals. #MorningRoutine #FitnessJourney', type: 'free' },
+                    { title: 'Transformation Story', prompt: '💪 Post your before-and-after journey and tell your audience what changed the game for you. #TransformationTuesday', type: 'free' },
+                    { title: 'Workout of the Day', prompt: '🔥 Today\'s Workout: {exercise1}, {exercise2}, {exercise3}. How many rounds can you do? Tag a friend to join! #WOD #TrainHard', type: 'free' },
+                    { title: 'Myth-Busting Post', prompt: '❌ Fitness Myth Alert: {myth}. Here\'s why that\'s wrong and what to do instead. #FitnessFacts', type: 'pro' },
+                    { title: 'Healthy Recipe Share', prompt: '🥗 Quick, healthy meal idea for busy hustlers: {recipe}. Tag someone who needs this today! #MealPrep #HealthyEating', type: 'pro' },
+                    { title: 'Gym Humor Meme', prompt: '😂 When you hit the gym and forget your headphones… relatable? Drop your favorite workout playlist below! #GymLife', type: 'free' }
+                  ]
+                },
+                {
+                  name: 'Entrepreneurship',
+                  prompts: [
+                    { title: 'Business Tip', prompt: '💡 Pro tip: {business_tip}. This simple strategy helped me {result}. #BusinessTips', type: 'free' },
+                    { title: 'Behind the Scenes', prompt: '🎥 BTS of running my business today. The reality isn\'t always pretty! #BehindTheScenes', type: 'free' },
+                    { title: 'Success Story', prompt: '🎯 How I went from {starting_point} to {current_success} in {timeframe}. #SuccessStory', type: 'pro' },
+                    { title: 'Daily Routine', prompt: '⏰ My morning routine that sets me up for success: {routine}. #ProductivityHacks', type: 'pro' },
+                    { title: 'Mistake I Made', prompt: '❌ Biggest business mistake I made: {mistake}. Learn from my failure! #BusinessLessons', type: 'free' },
+                    { title: 'Revenue Milestone', prompt: '💰 Just hit {milestone}! Here\'s what I learned along the way. #BusinessGrowth', type: 'pro' }
+                  ]
+                },
+                {
+                  name: 'Tech & AI',
+                  prompts: [
+                    { title: 'AI Tool Review', prompt: '🤖 Just tried {ai_tool} and here\'s what happened: {review}. #AITools', type: 'free' },
+                    { title: 'Tech Tip', prompt: '💻 Quick tech hack that saved me {time/money}: {tip}. #TechTips', type: 'free' },
+                    { title: 'Future Prediction', prompt: '🔮 My prediction for {tech_trend} in 2024: {prediction}. #TechTrends', type: 'pro' },
+                    { title: 'Coding Challenge', prompt: '👨‍💻 Built {project} in {timeframe}. Want to see the code? #CodingLife', type: 'pro' },
+                    { title: 'Tech Stack', prompt: '🛠️ My current tech stack: {tools}. What\'s in yours? #TechStack', type: 'free' },
+                    { title: 'AI Prompt', prompt: '🎯 Best AI prompt I\'ve used: {prompt}. Try it and thank me later! #AIPrompts', type: 'pro' }
+                  ]
+                },
+                {
+                  name: 'Lifestyle',
+                  prompts: [
+                    { title: 'Daily Habit', prompt: '✨ My daily habit that changed everything: {habit}. #DailyHabits', type: 'free' },
+                    { title: 'Life Lesson', prompt: '💭 Life lesson I learned the hard way: {lesson}. #LifeLessons', type: 'free' },
+                    { title: 'Travel Story', prompt: '✈️ Just got back from {destination}. Here\'s what I learned: {insight}. #TravelLife', type: 'pro' },
+                    { title: 'Book Recommendation', prompt: '📚 Just finished {book}. Here\'s why you need to read it: {reason}. #BookRecommendation', type: 'pro' },
+                    { title: 'Morning Routine', prompt: '🌅 My 5-minute morning routine: {routine}. #MorningRoutine', type: 'free' },
+                    { title: 'Gratitude Post', prompt: '🙏 Today I\'m grateful for: {gratitude}. What are you thankful for? #Gratitude', type: 'free' }
+                  ]
+                }
+              ]
+            }}
+            bonusVault={{
+              hooks: [
+                "The truth about {topic} nobody talks about...",
+                "You're wasting time on {task}. Here's why:",
+                "Want to {goal} in {time}? Start here:",
+                "This simple trick changed my {task} forever."
+              ],
+              ctas: [
+                "Double-tap if this helped!",
+                "Save this post for later!",
+                "Tag someone who needs this.",
+                "Comment YES if you agree."
+              ],
+              caption_hacks: [
+                "Start with a question → Share 3 tips → CTA at end.",
+                "Use emojis to break up text.",
+                "Add curiosity: 'Nobody talks about this…'"
+              ]
+            }}
+          />
+        );
       case 'resources':
         return <ResourceLibrary userPlan={userPlan} />;
       case 'achievements':

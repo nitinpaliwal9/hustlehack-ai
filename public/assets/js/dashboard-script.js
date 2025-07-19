@@ -136,7 +136,7 @@ async function initializeDashboard() {
         setTimeout(() => {
             hideLoadingScreen();
             showDashboard();
-            showToast(`Welcome back, ${profile.name || 'Hustler'}!`, 'success');
+            // Removed welcome toast to prevent repeated messages
         }, 500);
 
     } catch (error) {

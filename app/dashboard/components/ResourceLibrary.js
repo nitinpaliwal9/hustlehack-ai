@@ -30,34 +30,57 @@ export default function ResourceLibrary({ userPlan = 'starter' }) {
   }, []);
 
   if (isLoading) {
-    return <div className="text-center py-6">Loading resources...</div>;
+    return (
+      <div className="space-y-6">
+        <div className="flex justify-between items-center mb-6">
+          <h2 className="text-2xl font-bold text-white">🌐 Resource Library</h2>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {[1, 2, 3, 4].map((i) => (
+            <div key={i} className="bg-[rgba(36,41,46,0.96)] rounded-xl shadow-lg border border-[var(--border-color)] p-6 animate-pulse">
+              <div className="flex items-center mb-4">
+                <div className="w-6 h-6 bg-gray-600 rounded mr-2"></div>
+                <div className="h-6 bg-gray-600 rounded flex-1"></div>
+              </div>
+              <div className="h-4 bg-gray-600 rounded mb-4"></div>
+              <div className="flex justify-between items-center">
+                <div className="h-4 bg-gray-600 rounded w-16"></div>
+                <div className="h-4 bg-gray-600 rounded w-12"></div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    );
   }
 
   const ResourceCard = ({ resource }) => {
     const unlocked = isPlanAtLeast(userPlan, resource.minPlan);
     return (
-      <div className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition duration-300">
+      <div className="bg-[rgba(36,41,46,0.96)] rounded-xl shadow-lg border border-[var(--border-color)] p-6 hover:shadow-xl transition-all duration-300">
         <div className="flex items-center mb-4">
-          <resource.icon className="w-6 h-6 text-indigo-500 mr-2" />
-          <h3 className="text-lg font-semibold" style={{ color: 'var(--text-primary)' }}>{resource.title}</h3>
+          <resource.icon className="w-6 h-6 text-[#7F5AF0] mr-2" />
+          <h3 className="text-lg font-semibold text-white">{resource.title}</h3>
         </div>
-        <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>{resource.category}</p>
+        <p className="text-sm text-gray-300 mb-4">{resource.category}</p>
         <div className="flex justify-between items-center">
           {unlocked ? (
-            <Link href={resource.url} className="text-indigo-600 hover:underline">
+            <Link href={resource.url} className="text-[#7F5AF0] hover:text-[#6D4DC6] transition-colors font-medium">
               {resource.type === 'tool' || resource.type === 'template' ? 'Open' : 'View'}
             </Link>
           ) : (
-            <button className="bg-yellow-400 text-white px-4 py-2 rounded font-semibold shadow hover:bg-yellow-500 transition">
-              Upgrade to unlock this resource
+            <button className="bg-gradient-to-r from-yellow-500 to-orange-500 text-white px-4 py-2 rounded-lg font-semibold shadow hover:from-yellow-600 hover:to-orange-600 transition-all duration-200">
+              Upgrade to unlock
             </button>
           )}
-          <div className="flex items-center" style={{ color: 'var(--text-secondary)' }}>
+          <div className="flex items-center text-gray-400">
             <Download className="w-4 h-4 mr-1" /> {resource.downloads}
           </div>
         </div>
         {!unlocked && (
-          <div className="mt-2 text-xs text-red-500 font-medium">Locked for your current plan</div>
+          <div className="mt-3 text-xs text-red-400 font-medium bg-red-500/10 px-2 py-1 rounded">
+            🔒 Locked for your current plan
+          </div>
         )}
       </div>
     );
@@ -65,11 +88,13 @@ export default function ResourceLibrary({ userPlan = 'starter' }) {
 
   return (
     <div className="space-y-6">
-      <div className="flex justify-between items-center mb-4">
-        <h2 className="text-2xl font-bold" style={{ color: 'var(--text-primary)' }}>🌐 Resource Library</h2>
-        <Link href="/resources/all" className="text-indigo-600 hover:underline">View All</Link>
+      <div className="flex justify-between items-center mb-6">
+        <h2 className="text-2xl font-bold text-white">🌐 Resource Library</h2>
+        <Link href="/resources/all" className="text-[#7F5AF0] hover:text-[#6D4DC6] transition-colors font-medium">
+          View All
+        </Link>
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {resources.map(resource => (
           <ResourceCard key={resource.id} resource={resource} />
         ))}

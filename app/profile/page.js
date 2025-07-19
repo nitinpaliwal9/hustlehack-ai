@@ -354,11 +354,11 @@ export default function ProfileSettingsPage() {
   return (
     <>
       <Navigation />
-      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black pt-16 sm:pt-20">
-        <div className="max-w-4xl mx-auto px-3 sm:px-4 lg:px-8 py-6 sm:py-12">
+      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black pt-24 sm:pt-28 lg:pt-32">
+        <div className="max-w-4xl mx-auto px-3 sm:px-4 lg:px-8 py-8 sm:py-12 lg:py-16">
           {/* Header */}
-          <div className="text-center mb-8 sm:mb-12">
-            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white mb-2 sm:mb-4">Profile Settings</h1>
+          <div className="text-center mb-10 sm:mb-16">
+            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white mb-3 sm:mb-6">Profile Settings</h1>
             <p className="text-sm sm:text-base text-gray-300">Manage your account information and preferences</p>
           </div>
 
@@ -378,9 +378,9 @@ export default function ProfileSettingsPage() {
             </div>
           )}
 
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-8 lg:gap-10">
             {/* Main Profile Section */}
-            <div className="lg:col-span-2 space-y-4 sm:space-y-6">
+            <div className="lg:col-span-2 space-y-6 sm:space-y-8">
               {/* Profile Information Card */}
               <div className="bg-[rgba(36,41,46,0.96)] rounded-xl shadow-lg border border-[var(--border-color)] p-4 sm:p-6">
                 <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 sm:mb-6 space-y-3 sm:space-y-0">
