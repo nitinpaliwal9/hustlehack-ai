@@ -7,6 +7,7 @@ import { useAuth } from '../hooks/useAuth'
 import { Sparkles } from 'lucide-react';
 import { useUserPlan } from '../hooks/useAuth';
 import { getPlanDisplayName } from '../planUtils';
+import zxcvbn from 'zxcvbn';
 
 // Focus trap utility
 function useFocusTrap(isOpen, modalRef) {
@@ -156,68 +157,89 @@ export default function Navigation() {
     }
   }
 
-  const handleLogin = async (e) => {
-    e.preventDefault()
-    if (!checkNetworkStatus()) return
-    
-    const email = document.getElementById('loginEmail')?.value?.trim()
-    const password = document.getElementById('loginPassword')?.value?.trim()
-    
-    if (!email || !password) {
-      if (typeof window !== 'undefined' && window.showNotification) {
-        window.showNotification('Please enter both email and password', 'error')
-      }
-      return
-    }
-    
-    setIsLoading(true)
-    try {
-      await signIn(email, password)
-      closeModal('login-modal')
-      // Redirect to contact form
-      setTimeout(() => {
-        window.location.href = '/contact'
-      }, 1500)
-    } catch (error) {
-      console.error('Login error:', error)
-    } finally {
-      setIsLoading(false)
-    }
-  }
+  // Add error state for login and signup
+  const [loginSubmitError, setLoginSubmitError] = useState('');
+  const [signupSubmitError, setSignupSubmitError] = useState('');
 
-  const handleSignup = async (e) => {
-    e.preventDefault()
-    if (!checkNetworkStatus()) return
-    
-    const name = document.getElementById('name')?.value?.trim()
-    const email = document.getElementById('email')?.value?.trim()
-    const password = document.getElementById('password')?.value?.trim()
-    const role = document.getElementById('role')?.value
-    
-    if (!name || !email || !password || !role) {
-      if (typeof window !== 'undefined' && window.showNotification) {
-        window.showNotification('Please fill in all fields', 'error')
-      }
-      return
-    }
-    
-    if (password.length < 6) {
-      if (typeof window !== 'undefined' && window.showNotification) {
-        window.showNotification('Password must be at least 6 characters long', 'error')
-      }
-      return
-    }
-    
-    setIsLoading(true)
+  // Update handleLogin to show error and allow retry
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    setLoginSubmitError('');
+    if (!checkNetworkStatus()) return;
+    const { email, password } = loginFields;
+    // Validate all fields before submit
+    const errors = {
+      email: validateLoginField('email', email),
+      password: validateLoginField('password', password),
+    };
+    setLoginErrors(errors);
+    if (Object.values(errors).some(Boolean)) return;
+    setIsLoading(true);
     try {
-      await signUp(email, password, { name, role })
-      closeModal('signup-modal')
+      await signIn(email, password);
+      closeModal('login-modal');
+      setLoginFields({ email: '', password: '' });
     } catch (error) {
-      console.error('Signup error:', error)
+      setLoginSubmitError(error.message || 'Login failed. Please try again.');
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
-  }
+  };
+
+  // Add state for post-signup email verification UI
+  const [showCheckEmail, setShowCheckEmail] = useState(false);
+  const [resendLoading, setResendLoading] = useState(false);
+  const [resendSuccess, setResendSuccess] = useState(false);
+  const [resendError, setResendError] = useState('');
+
+  // Update handleSignup to show error and allow retry
+  const handleSignup = async (e) => {
+    e.preventDefault();
+    setSignupSubmitError('');
+    if (!checkNetworkStatus()) return;
+    const { name, email, password, role } = signupFields;
+    // Validate all fields before submit
+    const errors = {
+      name: validateSignupField('name', name),
+      email: validateSignupField('email', email),
+      password: validateSignupField('password', password),
+      role: validateSignupField('role', role),
+    };
+    setSignupErrors(errors);
+    if (Object.values(errors).some(Boolean)) return;
+    setIsLoading(true);
+    try {
+      await signUp(email, password, { name, role });
+      setShowCheckEmail(true);
+      setResendSuccess(false);
+      setResendError('');
+    } catch (error) {
+      setSignupSubmitError(error.message || 'Signup failed. Please try again.');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // Resend verification email logic
+  const handleResendVerification = async () => {
+    setResendLoading(true);
+    setResendSuccess(false);
+    setResendError('');
+    try {
+      // Try to use Supabase resend confirmation API if available
+      if (typeof window !== 'undefined' && window.supabase) {
+        const { error } = await window.supabase.auth.resend({ type: 'signup', email: signupFields.email });
+        if (error) throw error;
+        setResendSuccess(true);
+      } else {
+        setResendError('Resend not available. Please check your email or try again later.');
+      }
+    } catch (err) {
+      setResendError(err.message || 'Failed to resend verification email.');
+    } finally {
+      setResendLoading(false);
+    }
+  };
 
   const handleGoogleSignIn = async () => {
     try {
@@ -339,6 +361,117 @@ export default function Navigation() {
     display: 'block',
     margin: '10px 0'
   };
+
+  // Real-time validation state for login/signup
+  const [loginFields, setLoginFields] = useState({ email: '', password: '' });
+  const [loginErrors, setLoginErrors] = useState({});
+  const [signupFields, setSignupFields] = useState({ name: '', email: '', password: '', role: '' });
+  const [signupErrors, setSignupErrors] = useState({});
+
+  // Validation helpers
+  const validateLoginField = (name, value) => {
+    switch (name) {
+      case 'email':
+        if (!value.trim()) return 'Email is required';
+        if (!/\S+@\S+\.\S+/.test(value)) return 'Please enter a valid email address';
+        return '';
+      case 'password':
+        if (!value.trim()) return 'Password is required';
+        if (value.length < 6) return 'Password must be at least 6 characters';
+        return '';
+      default:
+        return '';
+    }
+  };
+  const validateSignupField = (name, value) => {
+    switch (name) {
+      case 'name':
+        if (!value.trim()) return 'Name is required';
+        if (value.trim().length < 2) return 'Name must be at least 2 characters';
+        if (value.trim().length > 50) return 'Name must be less than 50 characters';
+        return '';
+      case 'email':
+        if (!value.trim()) return 'Email is required';
+        if (!/\S+@\S+\.\S+/.test(value)) return 'Please enter a valid email address';
+        return '';
+      case 'password':
+        if (!value.trim()) return 'Password is required';
+        if (value.length < 6) return 'Password must be at least 6 characters';
+        return '';
+      case 'role':
+        if (!value) return 'Please select your role';
+        return '';
+      default:
+        return '';
+    }
+  };
+
+  // Real-time handlers for login
+  const handleLoginFieldChange = (e) => {
+    const { name, value } = e.target;
+    setLoginFields((prev) => ({ ...prev, [name]: value }));
+    setLoginErrors((prev) => ({ ...prev, [name]: validateLoginField(name, value) }));
+  };
+  const handleLoginFieldBlur = (e) => {
+    const { name, value } = e.target;
+    setLoginErrors((prev) => ({ ...prev, [name]: validateLoginField(name, value) }));
+  };
+
+  // Real-time handlers for signup
+  const handleSignupFieldChange = (e) => {
+    const { name, value } = e.target;
+    setSignupFields((prev) => ({ ...prev, [name]: value }));
+    setSignupErrors((prev) => ({ ...prev, [name]: validateSignupField(name, value) }));
+    if (name === 'password') {
+      const result = zxcvbn(value);
+      setPasswordStrength({ score: result.score, feedback: result.feedback.suggestions[0] || '' });
+    }
+  };
+  const handleSignupFieldBlur = (e) => {
+    const { name, value } = e.target;
+    setSignupErrors((prev) => ({ ...prev, [name]: validateSignupField(name, value) }));
+  };
+
+  // Add state for email verification check
+  const [checkingVerification, setCheckingVerification] = useState(false);
+  const [verificationError, setVerificationError] = useState('');
+  const [verificationSuccess, setVerificationSuccess] = useState(false);
+  const verificationIntervalRef = useRef(null);
+
+  // Function to check email verification status
+  const checkEmailVerified = async () => {
+    setCheckingVerification(true);
+    setVerificationError('');
+    setVerificationSuccess(false);
+    try {
+      if (typeof window !== 'undefined' && window.supabase) {
+        const { data, error } = await window.supabase.auth.getUser();
+        if (error) throw error;
+        if (data?.user?.email_confirmed_at) {
+          setVerificationSuccess(true);
+          setShowCheckEmail(false);
+          // Optionally, auto-login or redirect to dashboard
+          window.location.reload();
+        } else {
+          setVerificationError('Email not verified yet. Please check your inbox and click the verification link.');
+        }
+      }
+    } catch (err) {
+      setVerificationError(err.message || 'Failed to check verification status.');
+    } finally {
+      setCheckingVerification(false);
+    }
+  };
+
+  // Optionally, auto-poll for verification status every 5 seconds
+  useEffect(() => {
+    if (showCheckEmail) {
+      verificationIntervalRef.current = setInterval(checkEmailVerified, 5000);
+    } else {
+      clearInterval(verificationIntervalRef.current);
+    }
+    return () => clearInterval(verificationIntervalRef.current);
+  }, [showCheckEmail]);
 
   return (
     <>
@@ -514,7 +647,6 @@ export default function Navigation() {
         <div className="modal-content">
           <button className="modal-close" onClick={() => closeModal('login-modal')}>&times;</button>
           <h2 style={{ color: 'white', textAlign: 'center', marginBottom: '2rem' }}>Welcome Back!</h2>
-          
           {/* Google Sign In Button */}
           <button 
             type="button" 
@@ -530,27 +662,24 @@ export default function Navigation() {
             </svg>
             <span>Continue with Google</span>
           </button>
-          
           <div className="auth-divider" style={{ textAlign: 'center', margin: '1rem 0', position: 'relative' }}>
             <span style={{ background: 'var(--bg-color)', padding: '0 1rem', color: 'var(--gray-400)' }}>or continue with email</span>
           </div>
-          
-          <form id="loginForm" onSubmit={handleLogin}>
+          {loginSubmitError && <div className="text-red-500 text-sm mb-4 text-center">{loginSubmitError}</div>}
+          <form id="loginForm" onSubmit={handleLogin} autoComplete="off">
             <div className="form-group">
               <label className="form-label">Email Address</label>
-              <input type="email" id="loginEmail" className="form-input" placeholder="Enter your email" required />
+              <input type="email" id="loginEmail" name="email" className="form-input" placeholder="Enter your email" required value={loginFields.email} onChange={handleLoginFieldChange} onBlur={handleLoginFieldBlur} />
+              {loginErrors.email && <div className="text-red-500 text-xs mt-1">{loginErrors.email}</div>}
             </div>
-            
             <div className="form-group">
               <label className="form-label">Password</label>
               <div className="password-input-container">
-                <input type="password" id="loginPassword" className="form-input" placeholder="Enter your password" required />
-                <button type="button" className="password-toggle" onClick={() => togglePasswordVisibility('loginPassword')}>
-                  👁️
-                </button>
+                <input type="password" id="loginPassword" name="password" className="form-input" placeholder="Enter your password" required value={loginFields.password} onChange={handleLoginFieldChange} onBlur={handleLoginFieldBlur} />
+                <button type="button" className="password-toggle" onClick={() => togglePasswordVisibility('loginPassword')}>👁️</button>
               </div>
+              {loginErrors.password && <div className="text-red-500 text-xs mt-1">{loginErrors.password}</div>}
             </div>
-            
             <button 
               type="submit" 
               id="loginBtn" 
@@ -560,66 +689,125 @@ export default function Navigation() {
             >
               {isLoading ? 'Signing In...' : 'Sign In'}
             </button>
-            
             <div style={{ textAlign: 'center' }}>
               <a href="#" onClick={handleForgotPassword} style={{ color: 'var(--primary)', textDecoration: 'none' }}>Forgot Password?</a>
             </div>
-            
             <div style={{ textAlign: 'center', marginTop: '2rem', paddingTop: '2rem', borderTop: '1px solid rgba(255,255,255,0.1)' }}>
               <p style={{ color: 'var(--gray-400)' }}>Don&apos;t have an account? <a href="#" style={{ color: 'var(--primary)', textDecoration: 'none' }} onClick={switchToSignup}>Sign Up</a></p>
             </div>
           </form>
         </div>
       </div>
-
       {/* Sign Up Modal */}
       <div id="signup-modal" className="modal" ref={signupModalRef}>
         <div className="modal-content">
-          <button className="modal-close" onClick={() => closeModal('signup-modal')}>&times;</button>
-          <h2 style={{ color: 'white', textAlign: 'center', marginBottom: '2rem' }}>🚀 Start Your Journey</h2>
-          
-          <form id="signupForm">
-            <div className="form-group">
-              <label className="form-label">Full Name</label>
-              <input type="text" id="name" className="form-input" placeholder="Your Name" required />
-            </div>
-            
-            <div className="form-group">
-              <label className="form-label">Email</label>
-              <input type="email" id="email" className="form-input" placeholder="Your Email" required />
-            </div>
-            
-            <div className="form-group">
-              <label className="form-label">Password</label>
-              <div className="password-input-container">
-                <input type="password" id="password" className="form-input" placeholder="Password" required />
-                <button type="button" className="password-toggle" onClick={() => togglePasswordVisibility('password')}>
-                  👁️
+          <button className="modal-close" onClick={() => { closeModal('signup-modal'); setShowCheckEmail(false); }}>&times;</button>
+          {showCheckEmail ? (
+            <div className="text-center py-12 px-4">
+              <h2 className="text-2xl font-bold text-white mb-4">Check your email!</h2>
+              <p className="text-gray-300 mb-4">We've sent a verification link to <span className="font-semibold text-[#7F5AF0]">{signupFields.email}</span>. Please verify your email to activate your account.</p>
+              <button
+                className="btn btn-primary mt-4"
+                onClick={handleResendVerification}
+                disabled={resendLoading}
+              >
+                {resendLoading ? 'Resending...' : 'Resend Verification Email'}
+              </button>
+              <div className="mt-4">
+                <button
+                  className="btn btn-secondary"
+                  onClick={checkEmailVerified}
+                  disabled={checkingVerification}
+                >
+                  {checkingVerification ? "Checking..." : "I've verified, continue"}
                 </button>
               </div>
+              {verificationSuccess && <div className="text-green-500 mt-3">Email verified! Redirecting...</div>}
+              {verificationError && <div className="text-red-500 mt-3">{verificationError}</div>}
+              {resendSuccess && <div className="text-green-500 mt-3">Verification email resent!</div>}
+              {resendError && <div className="text-red-500 mt-3">{resendError}</div>}
+              <div className="mt-8 text-gray-400 text-sm">Didn’t get the email? Check your spam folder or try resending.</div>
             </div>
-            
-            <div className="form-group">
-              <label className="form-label">I am a...</label>
-              <select id="role" className="form-input" required>
-                <option value="">Select your role</option>
-                <option value="Student">Student</option>
-                <option value="Content Creator">Content Creator</option>
-                <option value="Entrepreneur">Entrepreneur</option>
-                <option value="Freelancer">Freelancer</option>
-                <option value="Hustler">Hustler</option>
-              </select>
-            </div>
-            
-            <button type="submit" className="btn btn-primary" style={{ width: '100%', marginBottom: '1rem' }} id="signupBtn">
-              <span className="btn-text">Create Account</span>
-              <span className="btn-loading" style={{ display: 'none' }}>Creating Account...</span>
-            </button>
-            
-            <div style={{ textAlign: 'center', marginTop: '2rem', paddingTop: '2rem', borderTop: '1px solid rgba(255,255,255,0.1)' }}>
-              <p style={{ color: 'var(--gray-400)' }}>Already have an account? <a href="#" style={{ color: 'var(--primary)', textDecoration: 'none' }} onClick={switchToLogin}>Sign In</a></p>
-            </div>
-          </form>
+          ) : (
+            <>
+              <h2 style={{ color: 'white', textAlign: 'center', marginBottom: '2rem' }}>🚀 Start Your Journey</h2>
+              {signupSubmitError && <div className="text-red-500 text-sm mb-4 text-center">{signupSubmitError}</div>}
+              <form id="signupForm" autoComplete="off" onSubmit={handleSignup}>
+                <div className="form-group">
+                  <label className="form-label">Full Name</label>
+                  <input type="text" id="name" name="name" className="form-input" placeholder="Your Name" required value={signupFields.name} onChange={handleSignupFieldChange} onBlur={handleSignupFieldBlur} />
+                  {signupErrors.name && <div className="text-red-500 text-xs mt-1">{signupErrors.name}</div>}
+                </div>
+                <div className="form-group">
+                  <label className="form-label">Email</label>
+                  <input type="email" id="email" name="email" className="form-input" placeholder="Your Email" required value={signupFields.email} onChange={handleSignupFieldChange} onBlur={handleSignupFieldBlur} />
+                  {signupErrors.email && <div className="text-red-500 text-xs mt-1">{signupErrors.email}</div>}
+                </div>
+                <div className="form-group">
+                  <label className="form-label" htmlFor="password">Password</label>
+                  <div className="password-input-container">
+                    <input
+                      type="password"
+                      id="password"
+                      name="password"
+                      className="form-input"
+                      placeholder="Password"
+                      required
+                      value={signupFields.password}
+                      onChange={handleSignupFieldChange}
+                      onBlur={handleSignupFieldBlur}
+                      aria-describedby="password-strength"
+                      aria-invalid={!!signupErrors.password}
+                    />
+                    <button type="button" className="password-toggle" onClick={() => togglePasswordVisibility('password')} aria-label="Show or hide password">👁️</button>
+                  </div>
+                  {signupErrors.password && <div className="text-red-500 text-xs mt-1">{signupErrors.password}</div>}
+                  {/* Password strength meter */}
+                  <div id="password-strength" className="mt-2">
+                    <div className="w-full h-2 rounded bg-gray-200 overflow-hidden">
+                      <div
+                        className={`h-2 rounded transition-all duration-300 ${
+                          passwordStrength.score === 0 ? 'w-1/5 bg-red-400' :
+                          passwordStrength.score === 1 ? 'w-2/5 bg-orange-400' :
+                          passwordStrength.score === 2 ? 'w-3/5 bg-yellow-400' :
+                          passwordStrength.score === 3 ? 'w-4/5 bg-blue-400' :
+                          'w-full bg-green-500'
+                        }`}
+                      ></div>
+                    </div>
+                    <div className="text-xs mt-1 text-gray-500">
+                      {signupFields.password && (
+                        passwordStrength.score < 3
+                          ? `Weak password. ${passwordStrength.feedback}`
+                          : passwordStrength.score < 4
+                            ? 'Good password, but could be stronger.'
+                            : 'Strong password!'
+                      )}
+                    </div>
+                  </div>
+                </div>
+                <div className="form-group">
+                  <label className="form-label">I am a...</label>
+                  <select id="role" name="role" className="form-input" required value={signupFields.role} onChange={handleSignupFieldChange} onBlur={handleSignupFieldBlur}>
+                    <option value="">Select your role</option>
+                    <option value="Student">Student</option>
+                    <option value="Content Creator">Content Creator</option>
+                    <option value="Entrepreneur">Entrepreneur</option>
+                    <option value="Freelancer">Freelancer</option>
+                    <option value="Hustler">Hustler</option>
+                  </select>
+                  {signupErrors.role && <div className="text-red-500 text-xs mt-1">{signupErrors.role}</div>}
+                </div>
+                <button type="submit" className="btn btn-primary" style={{ width: '100%', marginBottom: '1rem' }} id="signupBtn">
+                  <span className="btn-text">Create Account</span>
+                  <span className="btn-loading" style={{ display: 'none' }}>Creating Account...</span>
+                </button>
+                <div style={{ textAlign: 'center', marginTop: '2rem', paddingTop: '2rem', borderTop: '1px solid rgba(255,255,255,0.1)' }}>
+                  <p style={{ color: 'var(--gray-400)' }}>Already have an account? <a href="#" style={{ color: 'var(--primary)', textDecoration: 'none' }} onClick={switchToLogin}>Sign In</a></p>
+                </div>
+              </form>
+            </>
+          )}
         </div>
       </div>
       <style jsx>{`

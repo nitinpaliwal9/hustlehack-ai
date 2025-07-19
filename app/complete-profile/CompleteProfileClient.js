@@ -7,6 +7,12 @@ import { User, Mail, Phone, Briefcase, CheckCircle, AlertCircle, ArrowRight, Loa
 import { supabase } from '../../lib/supabaseClient';
 import { getPlanDisplayName } from '../planUtils';
 
+// Helper for phone validation (international)
+function validateInternationalPhone(value) {
+  // Simple E.164 regex: +[country][number], min 8, max 15 digits
+  return /^\+\d{8,15}$/.test(value.replace(/\s/g, ''));
+}
+
 export default function CompleteProfileClient() {
   const { user, isLoading, isAuthenticated, completeProfile, checkUserProfile, isUserInFirst100, upsertSubscriptionForFirst100 } = useAuth()
   const router = useRouter()
@@ -22,6 +28,25 @@ export default function CompleteProfileClient() {
   const [isSuccess, setIsSuccess] = useState(false)
   const [profileCheckError, setProfileCheckError] = useState(false);
   const [showCongrats, setShowCongrats] = useState(false);
+  // Add error state for profile submission
+  const [submitError, setSubmitError] = useState('');
+
+  // Auto-save and restore form data
+  useEffect(() => {
+    // Restore from localStorage
+    if (typeof window !== 'undefined') {
+      const saved = window.localStorage.getItem('profileFormData');
+      if (saved) {
+        setFormData(JSON.parse(saved));
+      }
+    }
+  }, []);
+  useEffect(() => {
+    // Auto-save to localStorage
+    if (typeof window !== 'undefined') {
+      window.localStorage.setItem('profileFormData', JSON.stringify(formData));
+    }
+  }, [formData]);
 
   useEffect(() => {
     // Check if user is authenticated
@@ -65,10 +90,7 @@ export default function CompleteProfileClient() {
         return ''
       case 'phone':
         if (!value.trim()) return 'Phone number is required'
-        const cleanPhone = value.replace(/\D/g, '')
-        // For Indian numbers, expect 12 digits (91 + 10 digits)
-        if (cleanPhone.length < 12) return 'Please enter a valid Indian phone number'
-        if (cleanPhone.length > 13) return 'Phone number is too long'
+        if (!validateInternationalPhone(value)) return 'Please enter a valid international phone number (e.g. +1234567890)'
         return ''
       case 'role':
         if (!value) return 'Please select your role'
@@ -90,6 +112,7 @@ export default function CompleteProfileClient() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setSubmitError('');
     const errors = validateForm();
     if (Object.keys(errors).length > 0) {
       // Focus on first error field
@@ -150,6 +173,7 @@ export default function CompleteProfileClient() {
       }, 1200);
     } catch (error) {
       console.error('Profile completion failed:', error);
+      setSubmitError(error.message || 'Profile completion failed. Please try again.');
       if (typeof window !== 'undefined' && window.showNotification) {
         const errorMessage = error.message && error.message.includes('timed out')
           ? 'Request timed out. Please check your connection.'
@@ -161,55 +185,36 @@ export default function CompleteProfileClient() {
     }
   }
 
+  // Real-time validation for each field
   const handleChange = (e) => {
-    const { name, value } = e.target
-    
-    // Handle phone number formatting
-    let processedValue = value
+    const { name, value } = e.target;
+    let processedValue = value;
     if (name === 'phone') {
-      // Don't allow removal of +91 prefix
       if (!value.startsWith('+91 ')) {
-        processedValue = '+91 ' + value.replace(/[^0-9]/g, '')
+        processedValue = '+91 ' + value.replace(/[^0-9]/g, '');
       } else {
-        // Remove all non-digits except the +91 prefix
-        const phoneDigits = value.slice(4).replace(/\D/g, '')
-        // Limit to 10 digits after +91
-        const limitedDigits = phoneDigits.slice(0, 10)
-        processedValue = '+91 ' + limitedDigits
+        const phoneDigits = value.slice(4).replace(/\D/g, '');
+        const limitedDigits = phoneDigits.slice(0, 10);
+        processedValue = '+91 ' + limitedDigits;
       }
     }
-    
-    setFormData(prev => ({
-      ...prev,
-      [name]: processedValue
-    }))
-    
-    // Clear error when user starts typing
-    if (formErrors[name]) {
-      setFormErrors(prev => ({
-        ...prev,
-        [name]: ''
-      }))
-    }
-  }
+    setFormData((prev) => ({ ...prev, [name]: processedValue }));
+    // Real-time validation
+    const error = validateField(name, processedValue);
+    setFormErrors((prev) => ({ ...prev, [name]: error }));
+  };
 
   const handleFocus = (fieldName) => {
     setFocusedField(fieldName)
   }
 
   const handleBlur = (e) => {
-    const { name, value } = e.target
-    setFocusedField(null)
-    
+    const { name, value } = e.target;
+    setFocusedField(null);
     // Validate field on blur
-    const error = validateField(name, value)
-    if (error) {
-      setFormErrors(prev => ({
-        ...prev,
-        [name]: error
-      }))
-    }
-  }
+    const error = validateField(name, value);
+    setFormErrors((prev) => ({ ...prev, [name]: error }));
+  };
 
   // Success screen
   if (isSuccess) {
@@ -314,22 +319,39 @@ export default function CompleteProfileClient() {
 
         {/* Progress Indicators */}
         <div className="flex justify-center mb-12">
-          <div className="flex items-center space-x-6 flex-wrap w-full max-w-xs sm:max-w-none">
+          <div className="flex flex-col sm:flex-row items-center w-full max-w-xs sm:max-w-none">
+            {/* Step 1 */}
             <div className="flex items-center min-w-0">
               <div className="w-8 h-8 bg-[#7F5AF0] rounded-full flex items-center justify-center text-white text-sm font-bold">1</div>
               <span className="ml-2 text-sm text-gray-300 truncate">Sign Up</span>
             </div>
-            <div className="w-12 h-0.5 bg-[#7F5AF0] flex-shrink-0"></div>
+            {/* Connector */}
+            <div className="h-8 w-0.5 bg-[#7F5AF0] sm:h-0.5 sm:w-12 sm:bg-[#7F5AF0] my-2 sm:my-0 sm:mx-3"></div>
+            {/* Step 2 */}
             <div className="flex items-center min-w-0">
               <div className="w-8 h-8 bg-[#7F5AF0] rounded-full flex items-center justify-center text-white text-sm font-bold">2</div>
               <span className="ml-2 text-sm text-[#7F5AF0] font-medium truncate">Complete Profile</span>
             </div>
-            <div className="w-12 h-0.5 bg-gray-600 flex-shrink-0"></div>
+            {/* Connector */}
+            <div className="h-8 w-0.5 bg-gray-600 sm:h-0.5 sm:w-12 sm:bg-gray-600 my-2 sm:my-0 sm:mx-3"></div>
+            {/* Step 3 */}
             <div className="flex items-center min-w-0">
               <div className="w-8 h-8 bg-gray-600 rounded-full flex items-center justify-center text-gray-400 text-sm font-bold">3</div>
               <span className="ml-2 text-sm text-gray-400 truncate">Get Started</span>
             </div>
           </div>
+        </div>
+
+        {/* Progress Bar */}
+        <div className="w-full bg-gray-700 rounded-full h-2.5 mb-8">
+          <div
+            className="bg-gradient-to-r from-[#7F5AF0] to-[#00FFC2] h-2.5 rounded-full transition-all duration-300"
+            style={{ width: `${(Object.values(formData).filter(Boolean).length / Object.keys(formData).length) * 100}%` }}
+            aria-valuenow={(Object.values(formData).filter(Boolean).length / Object.keys(formData).length) * 100}
+            aria-valuemin={0}
+            aria-valuemax={100}
+            role="progressbar"
+          ></div>
         </div>
 
         {/* Main Form Container */}
@@ -342,6 +364,7 @@ export default function CompleteProfileClient() {
 
           {/* Form Content */}
           <div className="p-8 md:p-12">
+            {submitError && <div className="text-red-500 text-sm mb-4 text-center">{submitError}</div>}
             <form onSubmit={handleSubmit} className="space-y-10">
               {/* Name Field */}
               <div className="relative">
@@ -373,6 +396,7 @@ export default function CompleteProfileClient() {
                     required
                     aria-invalid={!!formErrors.name}
                     aria-describedby={formErrors.name ? 'name-error' : undefined}
+                    autoComplete="name"
                   />
                 </div>
                 {formErrors.name && (
@@ -411,6 +435,7 @@ export default function CompleteProfileClient() {
                     required
                     aria-invalid={!!formErrors.email}
                     aria-describedby={formErrors.email ? 'email-error' : undefined}
+                    autoComplete="email"
                   />
                   <div className="absolute inset-y-0 right-0 pr-4 flex items-center pointer-events-none">
                     <Shield className="w-5 h-5 text-green-500" />
@@ -448,10 +473,11 @@ export default function CompleteProfileClient() {
                         ? 'border-[#7F5AF0] shadow-lg shadow-[#7F5AF0]/20'
                         : 'border-gray-600 hover:border-gray-500'
                     } focus:ring-0 focus:outline-none`}
-                    placeholder="+91 9876543210"
+                    placeholder="e.g. +1234567890"
                     required
                     aria-invalid={!!formErrors.phone}
                     aria-describedby={formErrors.phone ? 'phone-error' : undefined}
+                    autoComplete="tel"
                   />
                 </div>
                 {formErrors.phone && (

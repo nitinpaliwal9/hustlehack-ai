@@ -14,6 +14,81 @@ import { BarChart3, Brain, BookOpen, Trophy, Settings, Bell, User, TrendingUp, Z
 import { useUserPlan } from '../hooks/useAuth';
 import { getPlanDisplayName, isPlanAtLeast } from '../planUtils';
 
+// Simple onboarding tour steps
+const DASHBOARD_TOUR_STEPS = [
+  {
+    title: 'Welcome to Your Dashboard!',
+    content: 'This is your personalized AI dashboard. Here you can access all your tools, templates, and resources.'
+  },
+  {
+    title: 'Quick Actions',
+    content: 'Use Quick Actions to jump straight into popular workflows and save time.'
+  },
+  {
+    title: 'AI Tools Grid',
+    content: 'Explore a variety of AI tools tailored for your needs. Click any tool to get started.'
+  },
+  {
+    title: 'Resource Library',
+    content: 'Find guides, templates, and blueprints to help you grow faster.'
+  },
+  {
+    title: 'Track Your Progress',
+    content: 'See your recent activity and achievements right here.'
+  },
+  {
+    title: 'Need Help?',
+    content: 'Use the Help & Support section in the menu for assistance anytime.'
+  }
+];
+
+function OnboardingTour({ steps, onClose }) {
+  const [step, setStep] = useState(0);
+  return (
+    <div className="fixed inset-0 z-[99999] flex items-center justify-center bg-black/70">
+      <div className="bg-white rounded-2xl shadow-2xl p-8 max-w-md w-full text-center animate-fade-in">
+        <h2 className="text-2xl font-bold mb-4 text-[#7F5AF0]">{steps[step].title}</h2>
+        <p className="text-gray-700 mb-6">{steps[step].content}</p>
+        <div className="flex justify-between items-center mt-6">
+          <button
+            className="px-4 py-2 rounded bg-gray-200 text-gray-700 font-semibold"
+            onClick={() => setStep(s => Math.max(0, s - 1))}
+            disabled={step === 0}
+          >
+            Back
+          </button>
+          {step < steps.length - 1 ? (
+            <button
+              className="px-6 py-2 rounded bg-[#7F5AF0] text-white font-bold"
+              onClick={() => setStep(s => s + 1)}
+            >
+              Next
+            </button>
+          ) : (
+            <button
+              className="px-6 py-2 rounded bg-[#00FFC2] text-black font-bold"
+              onClick={onClose}
+            >
+              Finish
+            </button>
+          )}
+        </div>
+        <div className="mt-4 text-xs text-gray-400">Step {step + 1} of {steps.length}</div>
+      </div>
+    </div>
+  );
+}
+
+// Placeholder analytics/error reporting
+function logAnalytics(event, data) {
+  // Replace with real analytics integration (e.g., Google Analytics, Sentry, etc.)
+  console.log('[Analytics]', event, data);
+}
+function logError(error, context) {
+  // Replace with real error reporting
+  console.error('[Error]', error, context);
+}
+
 function PlanActivatedModal({ plan, onClose }) {
   const planDisplay = plan === 'pro' ? 'Pro Hacker' : plan === 'creator' ? 'Creator Mode' : 'Starter Hustler';
   const planMsg = plan === 'pro'
@@ -234,6 +309,7 @@ export default function DashboardClient() {
   const [achievementsCount, setAchievementsCount] = useState(0);
   const [achievementsData, setAchievementsData] = useState([]);
   const [showPlanModal, setShowPlanModal] = useState(false);
+  const [showTour, setShowTour] = useState(false);
 
   useEffect(() => {
     // Only fetch data if conditions are met and we haven't already fetched for this user
@@ -400,6 +476,31 @@ export default function DashboardClient() {
       setShowPlanModal(true);
     }
   }, [isLoading, userPlan]);
+
+  useEffect(() => {
+    // Show onboarding tour for new users (first dashboard visit)
+    if (typeof window !== 'undefined' && window.localStorage) {
+      const seenTour = window.localStorage.getItem('dashboardTourSeen');
+      if (!seenTour) {
+        setShowTour(true);
+        window.localStorage.setItem('dashboardTourSeen', '1');
+        logAnalytics('onboarding_tour_shown', { user: user?.id });
+      }
+    }
+  }, [user?.id]);
+
+  useEffect(() => {
+    // Example: log dashboard load event
+    if (!isLoading && user?.id) {
+      logAnalytics('dashboard_loaded', { user: user.id });
+    }
+  }, [isLoading, user?.id]);
+
+  useEffect(() => {
+    if (profileCheckError) {
+      logError('profile_check_error', { user: user?.id });
+    }
+  }, [profileCheckError, user?.id]);
 
 
   const logUserActivity = async (resourceName) => {
@@ -688,6 +789,7 @@ export default function DashboardClient() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black pt-20">
       {showPlanModal && <PlanActivatedModal plan={userPlan} onClose={() => setShowPlanModal(false)} />}
+      {showTour && <OnboardingTour steps={DASHBOARD_TOUR_STEPS} onClose={() => setShowTour(false)} />}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Main Content Container */}
         <div className="pt-12 sm:pt-20 pb-20 sm:pb-28 space-y-12 sm:space-y-16">
