@@ -163,7 +163,8 @@ export default function CompleteProfileClient() {
         name: formData.name,
         email: formData.email,
         phone: formData.phone,
-        role: formData.role
+        role: formData.role,
+        plan: 'Not Active' // Debug: show what plan we're setting
       });
       
       // Add timeout protection
@@ -180,7 +181,7 @@ export default function CompleteProfileClient() {
           email: formData.email,
           phone: formData.phone,
           role: formData.role,
-          plan: 'starter',
+          plan: 'Not Active', // Keep as 'Not Active' until they pay for starter plan
           plan_expiry: null,
           profile_completed: true,
           updated_at: new Date().toISOString(),
