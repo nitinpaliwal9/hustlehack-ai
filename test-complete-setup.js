@@ -4,17 +4,10 @@
 async function testCompleteSetup() {
   console.log('🧪 Starting complete setup test...');
   
-  // Test 1: Environment Variables
+  // Test 1: Environment Variables (Browser-safe)
   console.log('\n📋 Test 1: Environment Variables');
-  const hasSupabaseUrl = !!process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const hasSupabaseKey = !!process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-  console.log('✅ Supabase URL:', hasSupabaseUrl);
-  console.log('✅ Supabase Key:', hasSupabaseKey);
-  
-  if (!hasSupabaseUrl || !hasSupabaseKey) {
-    console.error('❌ Missing environment variables');
-    return;
-  }
+  console.log('ℹ️ Environment variables are loaded at build time in Next.js');
+  console.log('ℹ️ If Supabase client exists, environment variables are working');
   
   // Test 2: Supabase Client
   console.log('\n📋 Test 2: Supabase Client');

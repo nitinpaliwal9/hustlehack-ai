@@ -94,7 +94,7 @@ function PlanActivatedModal({ plan, onClose }) {
   const planMsg = plan === 'pro'
     ? 'You’ve unlocked all premium features. Enjoy the full power of HustleHack AI.'
     : plan === 'creator'
-      ? 'Welcome to Creator Mode! Enjoy exclusive tools and features.'
+      ? '🎉 Congratulations! You are one of our first 100 users! As a special reward, you get Creator Mode access for free. Enjoy exclusive tools and features.'
       : 'Welcome to Starter Hustler! Explore essential AI tools and templates.';
   const benefits = plan === 'pro' ? [
     'Unlimited access to all AI tools',
@@ -103,6 +103,7 @@ function PlanActivatedModal({ plan, onClose }) {
     'Early access to new features',
     'Exclusive Pro badge',
   ] : plan === 'creator' ? [
+    '🎁 Free Creator Mode (First 100 users only)',
     'Access to Creator tools',
     'Premium templates',
     'Priority support',
@@ -112,7 +113,9 @@ function PlanActivatedModal({ plan, onClose }) {
     'Basic templates',
     'Community access',
   ];
-  const shareText = `I just unlocked the ${planDisplay} plan on HustleHack AI! 🚀 #HustleHackAI`;
+  const shareText = plan === 'creator' 
+    ? `🎉 I'm one of the first 100 users and got Creator Mode for FREE on HustleHack AI! 🚀 #HustleHackAI #First100`
+    : `I just unlocked the ${planDisplay} plan on HustleHack AI! 🚀 #HustleHackAI`;
   const shareUrl = 'https://hustlehackai.in';
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-80 animate-fade-in">
@@ -289,7 +292,7 @@ function RecentActivitySection({ recentActivity }) {
 }
 
 export default function DashboardClient() {
-  const { user, isAuthenticated, isLoading, supabase, checkUserProfile, criticalError, clearCriticalError } = useAuth();
+  const { user, isLoading, isAuthenticated, supabase, checkUserProfile, criticalError, clearCriticalError } = useAuth();
   const { plan: userPlan, loading: planLoading } = useUserPlan(user?.id);
   const router = useRouter();
   const [userData, setUserData] = useState({ 
@@ -310,6 +313,28 @@ export default function DashboardClient() {
   const [achievementsData, setAchievementsData] = useState([]);
   const [showPlanModal, setShowPlanModal] = useState(false);
   const [showTour, setShowTour] = useState(false);
+  const [showPlanModalSession, setShowPlanModalSession] = useState(false)
+
+  // Session-based modal control
+  useEffect(() => {
+    if (userPlan && userPlan !== 'Not active') {
+      const sessionKey = `planModalShown_${userPlan}_${user?.id}`
+      const hasShownInSession = sessionStorage.getItem(sessionKey)
+      
+      if (!hasShownInSession) {
+        setShowPlanModalSession(true)
+        sessionStorage.setItem(sessionKey, 'true')
+      }
+    }
+  }, [userPlan, user?.id])
+
+  // Show modal only once per session
+  useEffect(() => {
+    if (showPlanModalSession) {
+      setShowPlanModal(true)
+      setShowPlanModalSession(false)
+    }
+  }, [showPlanModalSession])
 
   useEffect(() => {
     // Only fetch data if conditions are met and we haven't already fetched for this user
