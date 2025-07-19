@@ -443,7 +443,7 @@ export default function HomePage() {
                 <li>Priority support</li>
                 <li>Weekly live sessions</li>
               </ul>
-              <a href="https://rzp.io/rzp/WnoiZtJH" className="btn btn-primary premium-btn glow-cta" target="_blank" rel="noopener noreferrer" aria-label="Level Up with Creator Mode">Level Up Now</a>
+              <a href="https://rzp.io/rzp/atTfuqqZ" className="btn btn-primary premium-btn glow-cta" target="_blank" rel="noopener noreferrer" aria-label="Level Up with Creator Mode">Level Up Now</a>
               <p className="pricing-note">One-month access, renew anytime manually</p>
             </div>
             <div className="glass-card p-8 rounded-2xl shadow-xl text-center">
