@@ -5,7 +5,7 @@ import { useAuth } from '../hooks/useAuth'
 import { useRouter } from 'next/navigation'
 import { User, Mail, Phone, Briefcase, CheckCircle, AlertCircle, ArrowRight, Loader, UserPlus, Shield, Zap } from 'lucide-react'
 import { supabase } from '../../lib/supabaseClient';
-import { getPlanDisplayName } from '../planUtils';
+import './complete-profile.css';
 
 // Helper for phone validation (international)
 function validateInternationalPhone(value) {
@@ -47,6 +47,17 @@ export default function CompleteProfileClient() {
       window.localStorage.setItem('profileFormData', JSON.stringify(formData));
     }
   }, [formData]);
+
+  // Cleanup effect to clear loading state on unmount
+  useEffect(() => {
+    return () => {
+      setIsSubmitting(false);
+      // Clear any pending timeouts
+      if (typeof window !== 'undefined') {
+        window.localStorage.removeItem('profileFormData');
+      }
+    };
+  }, []);
 
   useEffect(() => {
     // Check if user is authenticated
@@ -138,8 +149,14 @@ export default function CompleteProfileClient() {
         phone: formData.phone,
         role: formData.role
       });
-      // Upsert user profile (no plan logic here)
-      const { data, error: upsertError } = await supabase
+      
+      // Add timeout protection
+      const timeoutPromise = new Promise((_, reject) => 
+        setTimeout(() => reject(new Error('Request timed out. Please try again.')), 30000)
+      );
+      
+      // Upsert user profile with timeout
+      const upsertPromise = supabase
         .from('users')
         .upsert({
           id: user.id,
@@ -153,20 +170,23 @@ export default function CompleteProfileClient() {
           updated_at: new Date().toISOString(),
         })
         .select();
+      
+      const { data, error: upsertError } = await Promise.race([upsertPromise, timeoutPromise]);
       console.log('Supabase upsert result:', { data, upsertError });
       if (upsertError) throw upsertError;
       if (!data || data.length === 0) throw new Error('Profile update failed. No data returned.');
 
-      // First-100 check and upsert subscription
+      // First-100 check and upsert subscription with timeout
       console.log('Checking if user is in first 100:', user.id);
-      const eligible = await isUserInFirst100(user.id);
+      const eligible = await Promise.race([isUserInFirst100(user.id), timeoutPromise]);
       console.log('isUserInFirst100 result:', eligible);
       if (eligible) {
         console.log('Upserting subscription for first 100:', user.id);
-        const subSuccess = await upsertSubscriptionForFirst100(user.id);
+        const subSuccess = await Promise.race([upsertSubscriptionForFirst100(user.id), timeoutPromise]);
         console.log('upsertSubscriptionForFirst100 result:', subSuccess);
         if (subSuccess) setShowCongrats(true);
       }
+      setIsSubmitting(false); // Clear loading state
       setIsSuccess(true);
       setTimeout(() => {
         router.push('/dashboard'); // Redirect to dashboard after success
@@ -182,6 +202,9 @@ export default function CompleteProfileClient() {
       }
       setIsSubmitting(false);
       setIsSuccess(false);
+    } finally {
+      // Ensure loading state is always cleared
+      setIsSubmitting(false);
     }
   }
 
@@ -219,16 +242,14 @@ export default function CompleteProfileClient() {
   // Success screen
   if (isSuccess) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black flex items-center justify-center">
-        <div className="text-center animate-fade-in">
-          <div className="relative mb-8">
-            <div className="w-24 h-24 bg-gradient-to-r from-green-500 to-emerald-500 rounded-full flex items-center justify-center mx-auto mb-6 animate-pulse">
-              <CheckCircle size={48} className="text-white" />
-            </div>
+      <div className="success-screen">
+        <div className="success-content">
+          <div className="success-icon">
+            <CheckCircle size={48} className="text-white" />
           </div>
-          <h2 className="text-3xl font-bold text-white mb-4">Profile Completed Successfully!</h2>
-          <p className="text-lg text-gray-300 mb-2">Welcome to HustleHack AI! 🚀</p>
-          <p className="text-gray-400">Redirecting you to get started...</p>
+          <h2 className="success-title">Profile Completed Successfully!</h2>
+          <p className="success-message">Welcome to HustleHack AI! 🚀</p>
+          <p className="success-subtitle">Redirecting you to get started...</p>
         </div>
       </div>
     )
@@ -236,14 +257,14 @@ export default function CompleteProfileClient() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black flex items-center justify-center">
-        <div className="text-center animate-fade-in">
-          <div className="relative mb-8">
-            <div className="animate-spin rounded-full h-20 w-20 border-4 border-[#7F5AF0] border-t-transparent mx-auto"></div>
-            <div className="absolute inset-0 rounded-full bg-gradient-to-r from-[#7F5AF0] to-[#00FFC2] opacity-20 animate-pulse"></div>
+      <div className="loading-screen">
+        <div className="loading-content">
+          <div className="loading-spinner">
+            <div className="loading-spinner-main"></div>
+            <div className="loading-spinner-glow"></div>
           </div>
-          <p className="text-2xl text-white font-bold mb-2">Loading...</p>
-          <p className="text-gray-300 text-lg">Please wait while we prepare your profile</p>
+          <p className="loading-title">Loading...</p>
+          <p className="loading-subtitle">Please wait while we prepare your profile</p>
         </div>
       </div>
     )
@@ -251,13 +272,13 @@ export default function CompleteProfileClient() {
 
   if (!isAuthenticated) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black flex items-center justify-center">
-        <div className="text-center">
-          <h2 className="text-2xl font-bold text-white mb-4">Access Denied</h2>
-          <p className="text-gray-300 mb-4">You need to be logged in to complete your profile.</p>
+      <div className="error-screen">
+        <div className="error-content">
+          <h2 className="error-title">Access Denied</h2>
+          <p className="error-message">You need to be logged in to complete your profile.</p>
           <button
             onClick={() => router.push('/')}
-            className="bg-[#7F5AF0] text-white px-6 py-3 rounded-lg hover:bg-[#6D4DC6] transition-colors"
+            className="error-retry-button"
           >
             Go to Home
           </button>
@@ -268,11 +289,11 @@ export default function CompleteProfileClient() {
 
   if (profileCheckError) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <p className="text-red-600 text-xl font-bold mb-4">We couldn't connect to our database.</p>
-          <p className="text-gray-700 mb-2">Please check your internet connection or try again later.</p>
-          <button onClick={() => window.location.reload()} className="mt-4 px-4 py-2 bg-blue-600 text-white rounded">Retry</button>
+      <div className="error-screen">
+        <div className="error-content">
+          <p className="error-title">We couldn't connect to our database.</p>
+          <p className="error-message">Please check your internet connection or try again later.</p>
+          <button onClick={() => window.location.reload()} className="error-retry-button">Retry</button>
         </div>
       </div>
     );
@@ -302,7 +323,7 @@ export default function CompleteProfileClient() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black py-16">
+    <div className="complete-profile-container">
       <div className="max-w-4xl mx-auto px-4">
         {/* Header Section */}
         <div className="text-center mb-16 pt-28">

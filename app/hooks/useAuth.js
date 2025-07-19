@@ -879,6 +879,10 @@ export function useAuth() {
     disable2FA,
     get2FAFactors,
     
+    // First 100 Functions
+    isUserInFirst100,
+    upsertSubscriptionForFirst100,
+    
     // Utilities
     clearError: () => setError(null),
     clearCriticalError: () => setCriticalError(null),
