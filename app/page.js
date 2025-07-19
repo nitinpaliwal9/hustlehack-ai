@@ -1,11 +1,9 @@
 'use client'
 
-import Navigation from './components/Navigation'
+import { LazyComponent, LazyNavigation, LazyFooter, LazyLoadingSpinner } from './components/LazyComponent'
 import { useEffect, useState } from 'react'
 import { useAuth } from './hooks/useAuth'
 import { useRouter } from 'next/navigation'
-import Footer from './components/Footer'
-import LoadingSpinner from './components/LoadingSpinner'
 import Link from 'next/link'
 
 export default function HomePage() {
@@ -83,7 +81,7 @@ export default function HomePage() {
   if (isLoading) {
     return (
       <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-        <LoadingSpinner message="Loading..." />
+        <LazyLoadingSpinner message="Loading..." />
       </div>
     );
   }
@@ -91,7 +89,7 @@ export default function HomePage() {
   return (
     <div className="overflow-x-hidden w-full">
       <Link href="#home" className="skip-link" tabIndex="0">Skip to main content</Link>
-      <Navigation />
+      <LazyNavigation />
 
       {/* Hero Section */}
       <section id="home" className="hero-section relative w-full min-h-screen flex items-center justify-center overflow-hidden pt-44 px-2 sm:px-8" style={{ position: 'relative', paddingTop: '10rem' }}>
@@ -474,7 +472,7 @@ export default function HomePage() {
       </section>
 
       {/* Footer */}
-      <Footer />
+      <LazyFooter />
       {/* Animations for gradient and confetti */}
     </div>
   )

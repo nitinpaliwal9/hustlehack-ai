@@ -367,6 +367,7 @@ export default function Navigation() {
   const [loginErrors, setLoginErrors] = useState({});
   const [signupFields, setSignupFields] = useState({ name: '', email: '', password: '', role: '' });
   const [signupErrors, setSignupErrors] = useState({});
+  const [passwordStrength, setPasswordStrength] = useState({ score: 0, feedback: '' });
 
   // Validation helpers
   const validateLoginField = (name, value) => {

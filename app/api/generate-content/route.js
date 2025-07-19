@@ -1,15 +1,43 @@
-console.log('API route hit. OPENROUTER KEY:', process.env.NEXT_PUBLIC_OPENROUTER_API_KEY);
+import { validateContentRequest, createRateLimiter } from '../../../lib/validation';
+import { logContentEvent, logApiError, logRateLimitExceeded, ACTION_TYPES } from '../../../lib/auditLogger';
+import { createClient } from '@supabase/supabase-js';
 
 export const runtime = 'edge';
 
-import { createClient } from '@supabase/supabase-js';
-
 export async function POST(req) {
   try {
+    // Get client IP for rate limiting and audit logging
+    const clientIP = req.headers.get('x-forwarded-for') || req.headers.get('x-real-ip') || 'unknown';
+    const userAgent = req.headers.get('user-agent') || 'unknown';
+    
     const { contentType, topic, tone, length, userId } = await req.json();
     
-    if (!topic) {
-      return new Response(JSON.stringify({ error: 'Topic is required.' }), { status: 400 });
+    // Initialize rate limiter
+    const rateLimiter = createRateLimiter();
+    const identifier = userId || clientIP;
+    const rateLimit = rateLimiter.checkLimit(identifier, 20, 60000); // 20 requests per minute
+    
+    if (!rateLimit.allowed) {
+      await logRateLimitExceeded(identifier, '/api/generate-content', userId, clientIP);
+      return new Response(JSON.stringify({ 
+        error: 'Rate limit exceeded. Please try again later.',
+        retryAfter: 60
+      }), { 
+        status: 429,
+        headers: { 'Retry-After': '60' }
+      });
+    }
+    
+    // Validate input
+    const validation = validateContentRequest({ contentType, topic, tone, length, userId });
+    if (!validation.isValid) {
+      await logContentEvent(ACTION_TYPES.INVALID_INPUT, {
+        endpoint: '/api/generate-content',
+        error: validation.error,
+        input: { contentType, topic, tone, length }
+      }, userId, clientIP);
+      
+      return new Response(JSON.stringify({ error: validation.error }), { status: 400 });
     }
 
     // Build the prompt based on the parameters
@@ -110,6 +138,15 @@ export async function POST(req) {
       return new Response(JSON.stringify({ error: "\u26A0\uFE0F Couldn’t generate content right now. Please try again later." }), { status: 500 });
     }
 
+    // Log successful content generation
+    await logContentEvent(ACTION_TYPES.CONTENT_GENERATION, {
+      contentType,
+      topic: topic.substring(0, 100), // Truncate for privacy
+      tone,
+      length,
+      success: true
+    }, userId, clientIP);
+    
     // Usage logging (if userId is provided)
     if (userId) {
       try {
@@ -129,7 +166,11 @@ export async function POST(req) {
     return new Response(JSON.stringify({ content: aiContent }), { status: 200 });
   } catch (err) {
     console.error('Content generation error:', err);
-    return new Response(JSON.stringify({ error: "\u26A0\uFE0F Couldn’t generate content right now. Please try again later." }), { status: 500 });
+    
+    // Log API error
+    await logApiError('/api/generate-content', err, userId, clientIP);
+    
+    return new Response(JSON.stringify({ error: "\u26A0\uFE0F Couldn't generate content right now. Please try again later." }), { status: 500 });
   }
 }
 
