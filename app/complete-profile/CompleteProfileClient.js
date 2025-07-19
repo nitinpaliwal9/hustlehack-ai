@@ -158,13 +158,24 @@ export default function CompleteProfileClient() {
         throw new Error('Supabase client not initialized. Please check your environment variables.');
       }
 
-      console.log('Submitting profile upsert to Supabase:', {
-        id: user?.id,
+      // Check Supabase connectivity
+      const isHealthy = await checkSupabaseHealth();
+      if (!isHealthy) {
+        throw new Error('Unable to connect to database. Please check your connection and try again.');
+      }
+
+      // Verify user is authenticated
+      const { data: { user: currentUser }, error: authError } = await supabase.auth.getUser();
+      if (authError || !currentUser) {
+        throw new Error('Authentication failed. Please log in again.');
+      }
+
+      console.log('Submitting profile update to Supabase:', {
+        id: currentUser?.id,
         name: formData.name,
-        email: formData.email,
         phone: formData.phone,
         role: formData.role,
-        plan: 'Not Active' // Debug: show what plan we're setting
+        profile_completed: true
       });
       
       // Add timeout protection
@@ -172,35 +183,81 @@ export default function CompleteProfileClient() {
         setTimeout(() => reject(new Error('Request timed out. Please try again.')), 30000)
       );
       
-      // Upsert user profile with timeout
-      const upsertPromise = supabase
-        .from('users')
-        .upsert({
-          id: user.id,
-          name: formData.name,
-          email: formData.email,
-          phone: formData.phone,
-          role: formData.role,
-          plan: 'Not Active', // Keep as 'Not Active' until they pay for starter plan
-          plan_expiry: null,
-          profile_completed: true,
-          updated_at: new Date().toISOString(),
-        })
-        .select();
+      // Only update the fields that are missing or need to be filled
+      const updateData = {
+        name: formData.name,
+        phone: formData.phone,
+        role: formData.role,
+        profile_completed: true,
+        updated_at: new Date().toISOString(),
+      };
       
-      const { data, error: upsertError } = await Promise.race([upsertPromise, timeoutPromise]);
-      console.log('Supabase upsert result:', { data, upsertError });
-      if (upsertError) throw upsertError;
-      if (!data || data.length === 0) throw new Error('Profile update failed. No data returned.');
+      console.log('Updating only missing fields:', updateData);
+      
+      // Update user profile with retry mechanism
+      const { data, error: updateError } = await retryProfileUpdate(updateData);
+      console.log('Supabase update result:', { data, updateError });
+      if (updateError) {
+        console.error('Update error details:', updateError);
+        
+        // Handle specific RLS policy errors
+        if (updateError.message && updateError.message.includes('policy')) {
+          throw new Error('Permission denied. Please try logging out and back in.');
+        }
+        
+        // Handle network errors
+        if (updateError.message && updateError.message.includes('fetch')) {
+          throw new Error('Network error. Please check your connection and try again.');
+        }
+
+        // Handle authentication errors
+        if (updateError.message && updateError.message.includes('JWT')) {
+          throw new Error('Session expired. Please log in again.');
+        }
+        
+        throw updateError;
+      }
+      if (!data || data.length === 0) {
+        console.error('No data returned from update');
+        throw new Error('Profile update failed. No data returned.');
+      }
+      console.log('Profile update successful:', data[0]);
+
+      // Verify the update actually worked
+      const { data: verifyData, error: verifyError } = await supabase
+        .from('users')
+        .select('profile_completed, name, phone, role')
+        .eq('id', currentUser.id)
+        .single();
+      
+      if (verifyError) {
+        console.warn('Verification failed:', verifyError);
+      } else {
+        console.log('Profile verification:', verifyData);
+        if (verifyData.profile_completed !== true) {
+          console.warn('Profile completion flag not set correctly');
+          // Try one more time with a different approach
+          const { error: retryError } = await supabase
+            .from('users')
+            .update({ profile_completed: true })
+            .eq('id', currentUser.id);
+          
+          if (retryError) {
+            console.error('Retry failed:', retryError);
+          } else {
+            console.log('Profile completion flag set on retry');
+          }
+        }
+      }
 
       // First-100 check and upsert subscription with timeout (with fallback)
       try {
-        console.log('Checking if user is in first 100:', user.id);
-        const eligible = await Promise.race([isUserInFirst100(user.id), timeoutPromise]);
+        console.log('Checking if user is in first 100:', currentUser.id);
+        const eligible = await Promise.race([isUserInFirst100(currentUser.id), timeoutPromise]);
         console.log('isUserInFirst100 result:', eligible);
         if (eligible) {
-          console.log('Upserting subscription for first 100:', user.id);
-          const subSuccess = await Promise.race([upsertSubscriptionForFirst100(user.id), timeoutPromise]);
+          console.log('Upserting subscription for first 100:', currentUser.id);
+          const subSuccess = await Promise.race([upsertSubscriptionForFirst100(currentUser.id), timeoutPromise]);
           console.log('upsertSubscriptionForFirst100 result:', subSuccess);
           if (subSuccess) setShowCongrats(true);
         }
@@ -230,6 +287,57 @@ export default function CompleteProfileClient() {
       setIsSubmitting(false);
     }
   }
+
+  // Add health check for Supabase connectivity
+  const checkSupabaseHealth = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('users')
+        .select('count')
+        .limit(1);
+      
+      if (error) {
+        console.error('❌ Supabase health check failed:', error);
+        return false;
+      }
+      
+      console.log('✅ Supabase health check passed');
+      return true;
+    } catch (error) {
+      console.error('❌ Supabase health check error:', error);
+      return false;
+    }
+  };
+
+  // Add retry mechanism for profile completion
+  const retryProfileUpdate = async (updateData, maxRetries = 3) => {
+    for (let attempt = 1; attempt <= maxRetries; attempt++) {
+      try {
+        console.log(`🔄 Profile update attempt ${attempt}/${maxRetries}`);
+        
+        const { data, error } = await supabase
+          .from('users')
+          .update(updateData)
+          .eq('id', user.id)
+          .select();
+        
+        if (error) {
+          console.error(`Attempt ${attempt} failed:`, error);
+          if (attempt === maxRetries) throw error;
+          // Wait before retry
+          await new Promise(resolve => setTimeout(resolve, 1000 * attempt));
+          continue;
+        }
+        
+        console.log(`✅ Profile update successful on attempt ${attempt}`);
+        return { data, error: null };
+      } catch (error) {
+        if (attempt === maxRetries) throw error;
+        console.warn(`Attempt ${attempt} failed, retrying...`);
+        await new Promise(resolve => setTimeout(resolve, 1000 * attempt));
+      }
+    }
+  };
 
   // Real-time validation for each field
   const handleChange = (e) => {

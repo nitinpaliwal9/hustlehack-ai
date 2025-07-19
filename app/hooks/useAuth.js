@@ -59,17 +59,11 @@ export function useAuth() {
             setCriticalError('Could not connect to the database. Please try again later.');
             return;
           }
-          // If profile is incomplete, upsert a minimal user row and redirect to complete-profile
+          // If profile is incomplete, redirect to complete-profile (user already exists from trigger)
           if (profileStatus === 'incomplete') {
             if (typeof window !== 'undefined') {
-              // Upsert minimal user row if not exists
-              await supabase.from('users').upsert({
-                id: session.user.id,
-                email: session.user.email,
-                profile_completed: false,
-                created_at: new Date().toISOString(),
-                updated_at: new Date().toISOString()
-              });
+              // Don't upsert here - let the profile completion form handle it
+              console.log('📝 Redirecting to profile completion');
               window.location.href = '/complete-profile'
             }
           } else if (profileStatus === 'complete') {
