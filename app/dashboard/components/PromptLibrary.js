@@ -17,6 +17,7 @@ import {
   BookOpen,
   Brain
 } from 'lucide-react'
+import { searchPrompts, getSearchSuggestions } from '../../utils/searchUtils'
 
 export default function PromptLibrary({ platformData, bonusVault, userPlan: propUserPlan = 'starter' }) {
   const [searchTerm, setSearchTerm] = useState('');
@@ -24,6 +25,9 @@ export default function PromptLibrary({ platformData, bonusVault, userPlan: prop
   const categories = platformData?.categories || [];
   const [selectedCategory, setSelectedCategory] = useState('');
   const [loading, setLoading] = useState(false);
+  const [searchResults, setSearchResults] = useState({ categories: [], allPrompts: [] });
+  const [showSuggestions, setShowSuggestions] = useState(false);
+  const [suggestions, setSuggestions] = useState([]);
 
   // For demo, mock user plan. In real use, fetch from user profile or subscription.
   const userPlan = propUserPlan || 'starter';
@@ -31,17 +35,40 @@ export default function PromptLibrary({ platformData, bonusVault, userPlan: prop
   // Reset selectedCategory when platform changes
   useEffect(() => {
     setSelectedCategory('');
+    setSearchResults({ categories: [], allPrompts: [] });
   }, [selectedPlatform]);
 
-  // Get prompts for selected category
+  // Enhanced search functionality
+  useEffect(() => {
+    if (searchTerm.trim()) {
+      const results = searchPrompts(searchTerm, categories, selectedCategory);
+      setSearchResults(results);
+      setSuggestions(getSearchSuggestions(searchTerm));
+      setShowSuggestions(true);
+    } else {
+      setSearchResults({ categories: [], allPrompts: [] });
+      setShowSuggestions(false);
+    }
+  }, [searchTerm, categories, selectedCategory]);
+
+  // Get prompts for selected category or search results
   const currentCategory = categories.find(cat => cat.name === selectedCategory);
-  let prompts = currentCategory?.prompts || [];
-  if (searchTerm) {
-    prompts = prompts.filter(p =>
-      p.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      p.prompt.toLowerCase().includes(searchTerm.toLowerCase())
-    );
+  let prompts = [];
+  
+  if (searchTerm.trim()) {
+    // Use search results
+    if (selectedCategory) {
+      // Search within selected category
+      prompts = searchResults.allPrompts;
+    } else {
+      // Search across all categories
+      prompts = searchResults.allPrompts;
+    }
+  } else {
+    // No search term, show selected category prompts
+    prompts = currentCategory?.prompts || [];
   }
+  
   const unlockedCount = userPlan === 'pro' ? prompts.length : 3;
 
   const PromptCard = ({ prompt, locked }) => (
@@ -175,21 +202,76 @@ export default function PromptLibrary({ platformData, bonusVault, userPlan: prop
                   <Search className="absolute left-3 top-3 w-5 h-5 text-gray-400" />
                   <input
                     type="text"
-                    placeholder="Search prompts..."
+                    placeholder="Search prompts... (e.g., 'gym', 'fitness', 'workout')"
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    className="w-full pl-10 pr-4 py-2 border border-gray-600 rounded-lg focus:ring-2 focus:ring-[#7F5AF0] focus:border-transparent bg-gray-800 text-white placeholder-gray-400"
+                    onFocus={() => searchTerm.trim() && setShowSuggestions(true)}
+                    onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
+                    className="w-full pl-10 pr-10 py-2 border border-gray-600 rounded-lg focus:ring-2 focus:ring-[#7F5AF0] focus:border-transparent bg-gray-800 text-white placeholder-gray-400"
                   />
+                  
+                  {/* Clear Search Button */}
+                  {searchTerm && (
+                    <button
+                      onClick={() => setSearchTerm('')}
+                      className="absolute right-3 top-2 w-5 h-5 text-gray-400 hover:text-white transition-colors"
+                      aria-label="Clear search"
+                    >
+                      ✕
+                    </button>
+                  )}
+                  
+                  {/* Search Suggestions */}
+                  {showSuggestions && suggestions.length > 0 && (
+                    <div className="absolute top-full left-0 right-0 mt-1 bg-gray-800 border border-gray-600 rounded-lg shadow-lg z-50 max-h-60 overflow-y-auto">
+                      {suggestions.map((suggestion, index) => (
+                        <button
+                          key={index}
+                          onClick={() => {
+                            setSearchTerm(suggestion.split(' (')[0]);
+                            setShowSuggestions(false);
+                          }}
+                          className="w-full px-4 py-2 text-left text-gray-300 hover:bg-gray-700 hover:text-white transition-colors"
+                        >
+                          {suggestion}
+                        </button>
+                      ))}
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
+            {/* Search Results Header */}
+            {searchTerm.trim() && searchResults.categories.length > 0 && (
+              <div className="mb-6 p-4 bg-gray-800 rounded-lg border border-gray-600">
+                <h4 className="text-lg font-semibold text-white mb-2">
+                  Search Results for "{searchTerm}"
+                </h4>
+                <div className="flex flex-wrap gap-2">
+                  {searchResults.categories.map((category, index) => (
+                    <span
+                      key={index}
+                      className="px-3 py-1 bg-[#7F5AF0]/20 text-[#7F5AF0] rounded-full text-sm font-medium"
+                    >
+                      {category.name} ({category.prompts.length})
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )}
+
             {/* Prompts Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {prompts.length === 0 && (
                 <div className="col-span-full text-center py-12">
                   <BookOpen className="w-16 h-16 text-gray-400" />
                   <p className="text-lg text-gray-300">No prompts found</p>
-                  <p className="text-gray-400">Try adjusting your search or category</p>
+                  <p className="text-gray-400">
+                    {searchTerm.trim() 
+                      ? `Try searching for different terms like "fitness", "gym", "workout" for fitness-related prompts`
+                      : "Try adjusting your search or category"
+                    }
+                  </p>
                 </div>
               )}
               {prompts.map((prompt, idx) => (

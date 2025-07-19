@@ -161,6 +161,7 @@ export function useAuth() {
         options: {
           data: {
             name: userData.name || '',
+            first_name: userData.name || '',
             role: userData.role || '',
             timestamp: new Date().toISOString(),
             ...userData
@@ -169,6 +170,14 @@ export function useAuth() {
       })
 
       if (error) throw error
+
+      // Trigger welcome email (async, don't wait for response)
+      if (data.user) {
+        triggerWelcomeEmail(data.user.id, data.user.email, userData.name).catch(error => {
+          console.error('❌ Welcome email trigger failed:', error);
+          // Don't fail the signup if welcome email fails
+        });
+      }
 
       // Show success notification
       if (typeof window !== 'undefined' && window.showNotification) {
@@ -188,6 +197,35 @@ export function useAuth() {
       setIsLoading(false)
     }
   }, [])
+
+  // Trigger welcome email for new user
+  const triggerWelcomeEmail = async (user_id, email, name) => {
+    try {
+      const response = await fetch('/api/welcome', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          user_id,
+          email,
+          name,
+          plan: 'creator-beta'
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`Welcome email API returned ${response.status}: ${response.statusText}`);
+      }
+
+      const result = await response.json();
+      console.log('✅ Welcome email triggered successfully:', result);
+
+    } catch (error) {
+      console.error('❌ Welcome email trigger error:', error);
+      throw error;
+    }
+  }
 
   // Sign in with email
   const signIn = useCallback(async (email, password) => {

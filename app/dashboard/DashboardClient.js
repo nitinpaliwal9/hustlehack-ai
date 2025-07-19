@@ -895,12 +895,12 @@ export default function DashboardClient() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black pt-16 sm:pt-20">
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black pt-20 sm:pt-24 md:pt-20 dashboard-mobile-spacing">
       {showPlanModal && <PlanActivatedModal plan={userPlan} onClose={() => setShowPlanModal(false)} />}
       {showTour && <OnboardingTour steps={DASHBOARD_TOUR_STEPS} onClose={() => setShowTour(false)} />}
       <div className="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8">
         {/* Main Content Container */}
-        <div className="pt-8 sm:pt-12 md:pt-20 pb-16 sm:pb-20 md:pb-28 space-y-8 sm:space-y-12 md:space-y-16">
+        <div className="pt-12 sm:pt-16 md:pt-20 pb-16 sm:pb-20 md:pb-28 space-y-8 sm:space-y-12 md:space-y-16">
           {/* Header Section */}
           <div className="text-center space-y-3 sm:space-y-4 animate-fade-in">
             <h1 className="text-xl sm:text-2xl md:text-4xl lg:text-5xl font-bold text-white transition-all duration-300 transform hover:scale-105 hover:text-[#7F5AF0] leading-tight">

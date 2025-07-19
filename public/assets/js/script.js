@@ -1715,7 +1715,7 @@ async function handleSignup(e) {
             email,
             password,
             options: {
-                data: { name, role, device, timestamp }
+                data: { name, first_name: name, role, device, timestamp }
             }
         });
 
@@ -1737,7 +1737,15 @@ async function handleSignup(e) {
             return;
         }
 
-        // Step 2: Email signup successful - user will complete profile after email confirmation
+        // Step 3: Trigger welcome email (async, don't wait for response)
+        if (signUpData.user) {
+            triggerWelcomeEmail(signUpData.user.id, signUpData.user.email, name).catch(error => {
+                console.error('❌ Welcome email trigger failed:', error);
+                // Don't fail the signup if welcome email fails
+            });
+        }
+
+        // Step 4: Email signup successful - user will complete profile after email confirmation
         showNotification('🎉 Account created successfully!', 'success');
         
         // Log to Google Apps Script for analytics (without user ID since profile not created yet)
@@ -1773,6 +1781,35 @@ async function handleSignup(e) {
     
     // Check auth status after signup attempt
     checkAuthStatus();
+}
+
+// Trigger welcome email for new user
+async function triggerWelcomeEmail(user_id, email, name) {
+    try {
+        const response = await fetch('/api/welcome', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                user_id,
+                email,
+                name,
+                plan: 'creator-beta'
+            }),
+        });
+
+        if (!response.ok) {
+            throw new Error(`Welcome email API returned ${response.status}: ${response.statusText}`);
+        }
+
+        const result = await response.json();
+        console.log('✅ Welcome email triggered successfully:', result);
+
+    } catch (error) {
+        console.error('❌ Welcome email trigger error:', error);
+        throw error;
+    }
 }
 
 

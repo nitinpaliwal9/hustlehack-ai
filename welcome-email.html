@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to HustleHack AI</title>
+    <style>
+        /* Reset styles for better email compatibility */
+        body, table, td, p, a, li, blockquote {
+            -webkit-text-size-adjust: 100%;
+            -ms-text-size-adjust: 100%;
+        }
+        
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Arial', 'Helvetica', sans-serif;
+            background-color: #f4f4f4;
+            line-height: 1.6;
+        }
+        
+        table {
+            border-collapse: collapse;
+            mso-table-lspace: 0pt;
+            mso-table-rspace: 0pt;
+        }
+        
+        /* Main container */
+        .email-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #6b46c1 0%, #14b8a6 100%);
+            padding: 30px 20px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            color: #ffffff;
+            margin: 0;
+            font-size: 28px;
+            font-weight: bold;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+        
+        .header p {
+            color: #ffffff;
+            margin: 8px 0 0 0;
+            font-size: 16px;
+            opacity: 0.9;
+        }
+        
+        /* Content sections */
+        .content {
+            padding: 30px 20px;
+        }
+        
+        .greeting {
+            font-size: 18px;
+            color: #333333;
+            margin-bottom: 20px;
+        }
+        
+        .welcome-text {
+            font-size: 16px;
+            color: #555555;
+            margin-bottom: 25px;
+            line-height: 1.6;
+        }
+        
+        .pack-contents {
+            background-color: #f8fafc;
+            border-left: 4px solid #6b46c1;
+            padding: 20px;
+            margin: 25px 0;
+            border-radius: 4px;
+        }
+        
+        .pack-contents h3 {
+            color: #333333;
+            margin: 0 0 15px 0;
+            font-size: 18px;
+        }
+        
+        .pack-contents ul {
+            margin: 0;
+            padding-left: 20px;
+            color: #555555;
+        }
+        
+        .pack-contents li {
+            margin-bottom: 8px;
+            font-size: 15px;
+        }
+        
+        .next-steps {
+            margin: 25px 0;
+        }
+        
+        .next-steps h3 {
+            color: #333333;
+            margin: 0 0 15px 0;
+            font-size: 18px;
+        }
+        
+        .next-steps ol {
+            margin: 0;
+            padding-left: 20px;
+            color: #555555;
+        }
+        
+        .next-steps li {
+            margin-bottom: 8px;
+            font-size: 15px;
+        }
+        
+        /* CTA Button */
+        .cta-container {
+            text-align: center;
+            margin: 35px 0;
+        }
+        
+        .cta-button {
+            display: inline-block;
+            background: linear-gradient(135deg, #6b46c1 0%, #14b8a6 100%);
+            color: #ffffff !important;
+            text-decoration: none;
+            padding: 16px 32px;
+            border-radius: 25px;
+            font-size: 16px;
+            font-weight: bold;
+            box-shadow: 0 4px 12px rgba(107, 70, 193, 0.3);
+            transition: transform 0.2s ease;
+        }
+        
+        .cta-button:hover {
+            transform: translateY(-2px);
+        }
+        
+        /* Thank you section */
+        .thank-you {
+            background-color: #f0fdf4;
+            border: 1px solid #bbf7d0;
+            padding: 20px;
+            margin: 25px 0;
+            border-radius: 6px;
+            font-size: 15px;
+            color: #166534;
+        }
+        
+        /* Footer */
+        .footer {
+            background-color: #f8fafc;
+            padding: 25px 20px;
+            text-align: center;
+            border-top: 1px solid #e2e8f0;
+        }
+        
+        .signature {
+            margin-bottom: 15px;
+        }
+        
+        .signature p {
+            margin: 4px 0;
+            color: #555555;
+            font-size: 15px;
+        }
+        
+        .founder-name {
+            font-weight: bold;
+            color: #333333;
+        }
+        
+        .company-name {
+            color: #6b46c1;
+            font-weight: 500;
+        }
+        
+        /* Social links (optional) */
+        .social-links {
+            margin-top: 20px;
+        }
+        
+        .social-links a {
+            color: #6b46c1;
+            text-decoration: none;
+            margin: 0 10px;
+            font-size: 14px;
+        }
+        
+        /* Mobile responsiveness */
+        @media only screen and (max-width: 600px) {
+            .email-container {
+                width: 100% !important;
+                margin: 0;
+                border-radius: 0;
+            }
+            
+            .header {
+                padding: 25px 15px;
+            }
+            
+            .header h1 {
+                font-size: 24px;
+            }
+            
+            .content {
+                padding: 25px 15px;
+            }
+            
+            .cta-button {
+                display: block;
+                width: calc(100% - 64px);
+                text-align: center;
+                padding: 18px 32px;
+            }
+            
+            .pack-contents,
+            .thank-you {
+                padding: 15px;
+                margin: 20px 0;
+            }
+        }
+        
+        /* Outlook specific fixes */
+        .outlook-fix {
+            mso-line-height-rule: exactly;
+        }
+    </style>
+</head>
+<body>
+    <!-- Preheader text -->
+    <div style="display: none; max-height: 0; overflow: hidden; font-size: 1px; line-height: 1px; color: #ffffff;">
+        Your 30-Day Free Creator Pack is ready! 300+ prompts, content hooks, and weekly AI drops await.
+    </div>
+
+    <!-- Main email container -->
+    <div class="email-container">
+        <!-- Header -->
+        <div class="header">
+            <h1>🎉 Welcome to HustleHack AI!</h1>
+            <p>Your Creator Pack is Ready</p>
+        </div>
+
+        <!-- Main content -->
+        <div class="content">
+            <!-- Greeting -->
+            <div class="greeting">
+                <strong>Hi [First Name],</strong>
+            </div>
+
+            <!-- Welcome message -->
+            <div class="welcome-text">
+                <strong>Welcome to HustleHack AI! 🎉</strong><br><br>
+                You're officially one of the first 100 founding members to get <strong>30 days of free access</strong> to our Creator Pack — designed to help students and creators build, grow, and monetize their online presence using AI.
+            </div>
+
+            <!-- Pack contents -->
+            <div class="pack-contents">
+                <h3>🚀 What's Inside Your Free Creator Pack?</h3>
+                <ul>
+                    <li><strong>300+ Social Media Prompts</strong> (Instagram, LinkedIn, TikTok, Twitter, etc.)</li>
+                    <li><strong>Content Hooks & Caption Ideas</strong> to go viral</li>
+                    <li><strong>Weekly AI Drops</strong> – new resources every week</li>
+                </ul>
+            </div>
+
+            <!-- Next steps -->
+            <div class="next-steps">
+                <h3>📋 What's Next?</h3>
+                <ol>
+                    <li>Start exploring your <strong>Social Media Prompt Pack</strong> (already live).</li>
+                    <li>Keep an eye on your inbox — our <strong>Hook Vault drops this Friday!</strong></li>
+                    <li>Share your feedback: <em>"What should we add next?"</em> (Your ideas shape HustleHack AI.)</li>
+                </ol>
+            </div>
+
+            <!-- CTA Button -->
+            <div class="cta-container">
+                <a href="#" class="cta-button">👉 Click Here to Get Started</a>
+            </div>
+
+            <!-- Thank you section -->
+            <div class="thank-you">
+                <strong>Thank you for being an early supporter!</strong><br><br>
+                You're not just getting resources — you're joining a movement of students and creators who are building businesses with AI.
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <div class="signature">
+                <p>Talk soon,</p>
+                <p class="founder-name">Nitin Paliwal</p>
+                <p>Founder – <span class="company-name">HustleHack AI</span></p>
+            </div>
+            
+            <!-- Optional social links -->
+            <div class="social-links">
+                <a href="#">Website</a> |
+                <a href="#">Twitter</a> |
+                <a href="#">LinkedIn</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

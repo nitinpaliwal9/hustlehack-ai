@@ -3,6 +3,7 @@
 
 import { useState, useEffect } from 'react';
 import { ClipboardDocumentIcon, CheckIcon, EyeIcon, EyeSlashIcon, LockClosedIcon } from '@heroicons/react/24/outline';
+import { searchPrompts, getSearchSuggestions } from '../utils/searchUtils';
 
 const CATEGORY_EMOJIS = {
   // Instagram
@@ -129,21 +130,47 @@ export default function PromptLibrary({ platformData, bonusVault, userPlan = 'st
   const categories = platformData.categories || [];
   const [selectedCategory, setSelectedCategory] = useState('');
   const [loading, setLoading] = useState(false);
+  const [searchResults, setSearchResults] = useState({ categories: [], allPrompts: [] });
+  const [showSuggestions, setShowSuggestions] = useState(false);
+  const [suggestions, setSuggestions] = useState([]);
 
   // Reset selectedCategory when platform changes
   useEffect(() => {
     setSelectedCategory('');
+    setSearchResults({ categories: [], allPrompts: [] });
   }, [selectedPlatform]);
 
-  // Get prompts for selected category
+  // Enhanced search functionality
+  useEffect(() => {
+    if (searchTerm.trim()) {
+      const results = searchPrompts(searchTerm, categories, selectedCategory);
+      setSearchResults(results);
+      setSuggestions(getSearchSuggestions(searchTerm));
+      setShowSuggestions(true);
+    } else {
+      setSearchResults({ categories: [], allPrompts: [] });
+      setShowSuggestions(false);
+    }
+  }, [searchTerm, categories, selectedCategory]);
+
+  // Get prompts for selected category or search results
   const currentCategory = categories.find(cat => cat.name === selectedCategory);
-  let prompts = currentCategory?.prompts || [];
-  if (searchTerm) {
-    prompts = prompts.filter(p =>
-      p.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      p.prompt.toLowerCase().includes(searchTerm.toLowerCase())
-    );
+  let prompts = [];
+  
+  if (searchTerm.trim()) {
+    // Use search results
+    if (selectedCategory) {
+      // Search within selected category
+      prompts = searchResults.allPrompts;
+    } else {
+      // Search across all categories
+      prompts = searchResults.allPrompts;
+    }
+  } else {
+    // No search term, show selected category prompts
+    prompts = currentCategory?.prompts || [];
   }
+  
   const unlockedCount = userPlan === 'pro' ? prompts.length : 3;
 
   // Bonus Vault Section (unchanged, but use bonusVault prop)
@@ -252,22 +279,77 @@ export default function PromptLibrary({ platformData, bonusVault, userPlan = 'st
                 <div className="relative">
                   <input
                     type="text"
-                    placeholder="Search prompts..."
+                    placeholder="Search prompts... (e.g., 'gym', 'fitness', 'workout')"
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    className="w-full pl-12 pr-4 py-3 border-2 border-gray-700 rounded-xl bg-[#181824] text-white focus:ring-2 focus:ring-accent focus:border-accent text-lg shadow"
+                    onFocus={() => searchTerm.trim() && setShowSuggestions(true)}
+                    onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
+                    className="w-full pl-12 pr-12 py-3 border-2 border-gray-700 rounded-xl bg-[#181824] text-white focus:ring-2 focus:ring-accent focus:border-accent text-lg shadow"
                   />
                   <ClipboardDocumentIcon className="absolute left-4 top-3 w-6 h-6 text-accent" />
+                  
+                  {/* Clear Search Button */}
+                  {searchTerm && (
+                    <button
+                      onClick={() => setSearchTerm('')}
+                      className="absolute right-4 top-3 w-6 h-6 text-gray-400 hover:text-white transition-colors"
+                      aria-label="Clear search"
+                    >
+                      ✕
+                    </button>
+                  )}
+                  
+                  {/* Search Suggestions */}
+                  {showSuggestions && suggestions.length > 0 && (
+                    <div className="absolute top-full left-0 right-0 mt-1 bg-[#232946] border border-gray-600 rounded-lg shadow-lg z-50 max-h-60 overflow-y-auto">
+                      {suggestions.map((suggestion, index) => (
+                        <button
+                          key={index}
+                          onClick={() => {
+                            setSearchTerm(suggestion.split(' (')[0]);
+                            setShowSuggestions(false);
+                          }}
+                          className="w-full px-4 py-2 text-left text-gray-300 hover:bg-[#2d3146] hover:text-white transition-colors"
+                        >
+                          {suggestion}
+                        </button>
+                      ))}
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
+            {/* Search Results Header */}
+            {searchTerm.trim() && searchResults.categories.length > 0 && (
+              <div className="mb-6 p-4 bg-[#232946] rounded-lg border border-gray-600">
+                <h4 className="text-lg font-semibold text-white mb-2">
+                  Search Results for "{searchTerm}"
+                </h4>
+                <div className="flex flex-wrap gap-2">
+                  {searchResults.categories.map((category, index) => (
+                    <span
+                      key={index}
+                      className="px-3 py-1 bg-[#7F5AF0]/20 text-[#7F5AF0] rounded-full text-sm font-medium"
+                    >
+                      {category.name} ({category.prompts.length})
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )}
+
             {/* Prompts Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {prompts.length === 0 && (
                 <div className="col-span-full text-center py-16">
                   <span className="text-5xl">📭</span>
                   <p className="text-xl text-gray-400 mt-4">No prompts found</p>
-                  <p className="text-gray-500">Try adjusting your search or category</p>
+                  <p className="text-gray-500">
+                    {searchTerm.trim() 
+                      ? `Try searching for different terms like "fitness", "gym", "workout" for fitness-related prompts`
+                      : "Try adjusting your search or category"
+                    }
+                  </p>
                 </div>
               )}
               {prompts.map((prompt, idx) => (

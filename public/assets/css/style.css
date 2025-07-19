@@ -1245,6 +1245,25 @@ select.form-input:focus {
     --spacing-3xl: 2rem;
   }
   
+  /* Mobile navigation adjustments for better spacing */
+  .navbar {
+    padding: 20px 0;
+  }
+  
+  .navbar.scrolled {
+    padding: 16px 0;
+  }
+  
+  /* Ensure dashboard content has proper top margin on mobile */
+  .min-h-screen {
+    padding-top: 80px !important;
+  }
+  
+  /* Dashboard specific mobile adjustments */
+  .dashboard-mobile-spacing {
+    padding-top: 100px !important;
+  }
+  
   .nav-container {
     padding: 0 16px;
     gap: 8px;
@@ -2807,5 +2826,42 @@ select.form-input:focus {
   
   .journey-item {
     padding: 1.25rem;
+  }
+}
+
+/* Dashboard specific mobile adjustments */
+.dashboard-mobile-spacing {
+  padding-top: 100px !important;
+}
+
+/* Additional mobile adjustments for dashboard */
+@media (max-width: 480px) {
+  .dashboard-mobile-spacing {
+    padding-top: 120px !important;
+  }
+  
+  .navbar {
+    padding: 16px 0;
+  }
+  
+  .nav-container {
+    min-height: 60px;
+    padding: 0 12px;
+  }
+}
+
+/* Extra small mobile adjustments */
+@media (max-width: 360px) {
+  .dashboard-mobile-spacing {
+    padding-top: 140px !important;
+  }
+  
+  .navbar {
+    padding: 12px 0;
+  }
+  
+  .nav-container {
+    min-height: 50px;
+    padding: 0 8px;
   }
 }
