@@ -5,42 +5,137 @@ import { useEffect, useState } from 'react'
 import { useAuth } from './hooks/useAuth'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
+import { supabase } from '../lib/supabaseClient'
 
 export default function HomePage() {
   const { signInWithGoogle, user, isLoading } = useAuth()
   const router = useRouter()
   const [openFAQ, setOpenFAQ] = useState(Array(6).fill(false));
+  const [userProfile, setUserProfile] = useState(null);
+  const [profileLoading, setProfileLoading] = useState(false);
   
+  // Debug navigation
+  useEffect(() => {
+    console.log('🏠 HomePage mounted/re-rendered')
+  })
+  
+  // Check user profile completion status
+  const checkUserProfile = async (userId) => {
+    if (!userId) return null;
+    
+    try {
+      setProfileLoading(true);
+      const { data: profile, error } = await supabase
+        .from('users')
+        .select('id, name, email, role, profile_completed, phone')
+        .eq('id', userId)
+        .single();
+
+      if (error) {
+        console.warn('Error checking user profile:', error);
+        return null;
+      }
+
+      return profile;
+    } catch (error) {
+      console.error('Error in checkUserProfile:', error);
+      return null;
+    } finally {
+      setProfileLoading(false);
+    }
+  };
+
   // Load client utilities on component mount
   useEffect(() => {
     if (typeof window === 'undefined') return;
-    // Check if script is already loaded
-    const existingScript = document.querySelector('script[src="/js/client-utils.js"]')
-    if (existingScript) {
-      console.log('Client utils script already loaded')
-      return
-    }
     
-    const script = document.createElement('script')
-    script.src = '/js/client-utils.js'
-    script.async = true
-    script.onload = () => {
-      console.log('Client utils loaded successfully')
+    const loadClientUtils = () => {
+      // Check if script is already loaded
+      const existingScript = document.querySelector('script[src="/js/client-utils.js"]')
+      if (existingScript) {
+        console.log('Client utils script already loaded')
+        // Re-initialize client utilities even if script exists
+        if (typeof window.initializeClientUtils === 'function') {
+          window.initializeClientUtils()
+        }
+        return
+      }
+      
+      const script = document.createElement('script')
+      script.src = '/js/client-utils.js'
+      script.async = true
+      script.onload = () => {
+        console.log('Client utils loaded successfully')
+        // Initialize client utilities after script loads
+        if (typeof window.initializeClientUtils === 'function') {
+          window.initializeClientUtils()
+        }
+      }
+      script.onerror = (error) => {
+        console.error('Error loading client utils:', error)
+      }
+      document.head.appendChild(script)
     }
-    script.onerror = (error) => {
-      console.error('Error loading client utils:', error)
+
+    // Load client utilities
+    loadClientUtils()
+    
+    // Re-initialize on route changes
+    const handleRouteChange = () => {
+      setTimeout(() => {
+        if (typeof window.initializeClientUtils === 'function') {
+          window.initializeClientUtils()
+        }
+      }, 100)
     }
-    document.head.appendChild(script)
+
+    // Listen for route changes
+    window.addEventListener('popstate', handleRouteChange)
     
     return () => {
-      // Cleanup script on unmount
-      const scriptToRemove = document.querySelector('script[src="/js/client-utils.js"]')
-      if (scriptToRemove) {
-        document.head.removeChild(scriptToRemove)
+      window.removeEventListener('popstate', handleRouteChange)
+    }
+  }, [])
+
+  // Check user profile when user changes
+  useEffect(() => {
+    if (user?.id) {
+      checkUserProfile(user.id).then(setUserProfile);
+    } else {
+      setUserProfile(null);
+    }
+  }, [user]);
+
+  // Handle route changes and re-initialization
+  useEffect(() => {
+    const handleRouteChange = () => {
+      // Re-initialize client utilities on route change
+      setTimeout(() => {
+        if (typeof window !== 'undefined' && typeof window.initializeClientUtils === 'function') {
+          window.initializeClientUtils()
+        }
+      }, 100)
+    }
+
+    // Listen for route changes
+    if (typeof window !== 'undefined') {
+      window.addEventListener('popstate', handleRouteChange)
+      
+      // Also handle pushstate events
+      const originalPushState = history.pushState
+      history.pushState = function(...args) {
+        originalPushState.apply(history, args)
+        handleRouteChange()
+      }
+    }
+
+    return () => {
+      if (typeof window !== 'undefined') {
+        window.removeEventListener('popstate', handleRouteChange)
       }
     }
   }, [])
-  
+
   // Handle Google Sign-In
   const handleGoogleSignIn = async () => {
     try {
@@ -78,7 +173,7 @@ export default function HomePage() {
     });
   }
 
-  if (isLoading) {
+  if (isLoading || profileLoading) {
     return (
       <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
         <LazyLoadingSpinner message="Loading..." />
@@ -87,7 +182,7 @@ export default function HomePage() {
   }
   
   return (
-    <div className="overflow-x-hidden w-full">
+    <div className="overflow-x-hidden w-full" key={typeof window !== 'undefined' ? window.location.pathname : 'homepage'}>
       <Link href="#home" className="skip-link" tabIndex="0">Skip to main content</Link>
       <LazyNavigation />
 
@@ -130,9 +225,20 @@ export default function HomePage() {
             </p>
             {/* CTA Buttons */}
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mt-2 flex-wrap w-full">
-              <button className="btn btn-lg premium-btn glow-cta rounded-full font-bold flex items-center gap-2 w-full sm:w-auto text-base sm:text-lg" style={{ fontSize: '1.05rem', minWidth: 0, wordBreak: 'break-word' }} onClick={handleGoogleSignIn}>
-                🚀 Start Your AI Journey
-              </button>
+              {/* Show "Start Your AI Journey" only if user is not authenticated or profile is incomplete */}
+              {(!user || (user && userProfile && !userProfile.profile_completed)) && (
+                <button className="btn btn-lg premium-btn glow-cta rounded-full font-bold flex items-center gap-2 w-full sm:w-auto text-base sm:text-lg" style={{ fontSize: '1.05rem', minWidth: 0, wordBreak: 'break-word' }} onClick={handleGoogleSignIn}>
+                  🚀 Start Your AI Journey
+                </button>
+              )}
+              
+              {/* Show "Go to Dashboard" if user is authenticated and profile is complete */}
+              {user && userProfile && userProfile.profile_completed && (
+                <button className="btn btn-lg premium-btn glow-cta rounded-full font-bold flex items-center gap-2 w-full sm:w-auto text-base sm:text-lg" style={{ fontSize: '1.05rem', minWidth: 0, wordBreak: 'break-word' }} onClick={() => router.push('/dashboard')}>
+                  🎯 Go to Dashboard
+                </button>
+              )}
+              
               <button className="btn btn-lg premium-btn glow-cta rounded-full font-bold flex items-center gap-2 w-full sm:w-auto text-base sm:text-lg" style={{ fontSize: '1.05rem', minWidth: 0, wordBreak: 'break-word' }} onClick={() => {
                 const el = document.getElementById('features');
                 if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });

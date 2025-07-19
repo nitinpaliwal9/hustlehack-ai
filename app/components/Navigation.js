@@ -530,7 +530,7 @@ export default function Navigation() {
                     <span className="profile-menu-icon">🎯</span>
                     Dashboard
                   </Link>
-                  <Link href="/contact" className="profile-menu-item" onClick={closeProfileDropdown}>
+                  <Link href="/profile" className="profile-menu-item" onClick={closeProfileDropdown}>
                     <span className="profile-menu-icon">👤</span>
                     Profile Settings
                   </Link>
@@ -618,7 +618,7 @@ export default function Navigation() {
                   <Link href="/dashboard" style={{ color: 'white', textDecoration: 'none', fontSize: 20, fontWeight: 600, padding: '16px 0', width: '100%', textAlign: 'center', borderBottom: '1px solid rgba(127,90,240,0.08)', display: 'flex', alignItems: 'center', gap: 12 }}>
                     🎯 Dashboard
                   </Link>
-                  <Link href="/contact" style={{ color: 'white', textDecoration: 'none', fontSize: 20, fontWeight: 600, padding: '16px 0', width: '100%', textAlign: 'center', borderBottom: '1px solid rgba(127,90,240,0.08)', display: 'flex', alignItems: 'center', gap: 12 }}>
+                  <Link href="/profile" style={{ color: 'white', textDecoration: 'none', fontSize: 20, fontWeight: 600, padding: '16px 0', width: '100%', textAlign: 'center', borderBottom: '1px solid rgba(127,90,240,0.08)', display: 'flex', alignItems: 'center', gap: 12 }}>
                     👤 Profile Settings
                   </Link>
                   <Link href="/billing" style={{ color: 'white', textDecoration: 'none', fontSize: 20, fontWeight: 600, padding: '16px 0', width: '100%', textAlign: 'center', borderBottom: '1px solid rgba(127,90,240,0.08)', display: 'flex', alignItems: 'center', gap: 12 }}>

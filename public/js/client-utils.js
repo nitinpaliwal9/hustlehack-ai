@@ -26,6 +26,12 @@ if (typeof window !== 'undefined' && window.ClientUtils) {
       this.initializeApp();
     }
   }
+
+  // Global initialization function for route changes
+  initializeClientUtils() {
+    console.log('🔄 Re-initializing client utilities...');
+    this.initializeApp();
+  }
   
   initializeApp() {
     console.log('🚀 HustleHack AI - Client Utils Initialized');
@@ -523,6 +529,7 @@ if (typeof window !== 'undefined' && window.ClientUtils) {
   window.togglePasswordVisibility = (inputId) => clientUtils.togglePasswordVisibility(inputId);
   window.openModal = (modalId) => clientUtils.openModal(modalId);
   window.closeModal = (modalId) => clientUtils.closeModal(modalId);
+  window.initializeClientUtils = () => clientUtils.initializeClientUtils();
 }
 
 // CSS Animations (to be added to global styles)

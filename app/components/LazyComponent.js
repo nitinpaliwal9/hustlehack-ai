@@ -10,7 +10,7 @@ export function LazyComponent({
 }) {
   return (
     <Suspense fallback={fallback}>
-      <Component {...props} />
+      <Component key={typeof window !== 'undefined' ? window.location.pathname : 'component'} {...props} />
     </Suspense>
   )
 }

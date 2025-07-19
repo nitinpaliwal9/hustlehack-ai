@@ -10,6 +10,7 @@ import AIToolsGrid from './components/AIToolsGrid';
 import ResourceLibrary from './components/ResourceLibrary';
 import PromptLibrary from './components/PromptLibrary';
 import QuickActions from './components/QuickActions';
+import First100Stats from './components/First100Stats';
 import { BarChart3, Brain, BookOpen, Trophy, Settings, Bell, User, TrendingUp, Zap, FileText } from 'lucide-react';
 import { useUserPlan } from '../hooks/useAuth';
 import { getPlanDisplayName, isPlanAtLeast } from '../planUtils';
@@ -222,7 +223,13 @@ function PlanInfoCard({ plan, expiry }) {
             </p>
             <p className="text-lg flex items-center gap-2" style={{ color: 'var(--text-secondary)' }}>
               <span className="text-2xl">⏳</span>
-              <span>Expires on: {expiry === 'Data not available' ? <span className="italic">Data not available</span> : expiry}</span>
+              <span>
+                {expiry === 'Data not available' || !expiry ? (
+                  <span className="italic">No expiry date set</span>
+                ) : (
+                  `Expires on: ${expiry}`
+                )}
+              </span>
             </p>
           </div>
           <div className="hidden lg:block">
@@ -691,6 +698,9 @@ export default function DashboardClient() {
       case 'overview':
         return (
           <div className="space-y-8">
+            {/* First 100 Users Stats */}
+            <First100Stats />
+            
             {/* Quick Stats */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <div className="rounded-xl shadow-lg p-6 border border-[var(--border-color)]" style={{ background: 'rgba(36,41,46,0.96)' }}>
