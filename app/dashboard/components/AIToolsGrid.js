@@ -65,13 +65,26 @@ export default function AIToolsGrid({ userPlan = 'starter' }) {
   }
 
   const tools = [
-    // AI Content Generator external tool card (always first)
+    // Instant Hustle Lite tool card (always first)
+    {
+      id: 'instant-hustle-lite',
+      name: 'Instant Hustle Lite',
+      description: 'AI-powered content creation for creators, students, and solopreneurs. Generate hooks, captions, and templates instantly!',
+      icon: Sparkles,
+      color: 'from-[#7F5AF0] to-[#00FFC2]',
+      category: 'Content Creation',
+      minPlan: 'starter',
+      external: true,
+      url: '/instant-hustle',
+      featured: true,
+    },
+    // AI Content Generator external tool card
     {
       id: 'ai-content-generator-external',
       name: 'AI Content Generator',
       description: 'Generate captions, blog intros, and tweets with LLaMA 3. Try our new tool!',
-      icon: Sparkles,
-      color: 'from-[#7F5AF0] to-[#00FFC2]',
+      icon: Brain,
+      color: 'from-purple-500 to-pink-500',
       category: 'Content Creation',
       minPlan: 'starter',
       external: true,

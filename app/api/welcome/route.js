@@ -6,16 +6,18 @@ import { sendWelcomeEmail } from '../../../lib/emailSender.js';
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
+let supabase = null;
+
 if (!supabaseUrl || !supabaseServiceKey) {
   console.error('Missing Supabase environment variables for welcome email API');
+} else {
+  supabase = createClient(supabaseUrl, supabaseServiceKey, {
+    auth: {
+      autoRefreshToken: false,
+      persistSession: false
+    }
+  });
 }
-
-const supabase = createClient(supabaseUrl, supabaseServiceKey, {
-  auth: {
-    autoRefreshToken: false,
-    persistSession: false
-  }
-});
 
 /**
  * POST /api/welcome
@@ -31,6 +33,15 @@ const supabase = createClient(supabaseUrl, supabaseServiceKey, {
  */
 export async function POST(request) {
   try {
+    // Check if Supabase is properly initialized
+    if (!supabase) {
+      console.error('❌ Supabase client not initialized - missing environment variables');
+      return NextResponse.json(
+        { error: 'Server configuration error - please contact support' },
+        { status: 500 }
+      );
+    }
+
     // Parse request body
     const body = await request.json();
     const { user_id, email, name, plan } = body;

@@ -1,0 +1,34 @@
+{
+  "Instagram": {
+    "Fitness": [
+      "This 10-min workout will transform your mornings!",
+      "Can you do this challenge? 💪",
+      "The 3 best exercises for {goal} – Save this!",
+      "POV: You're starting your fitness journey today.",
+      "Stop scrolling, start moving! 🏃"
+    ],
+    "Fashion": [
+      "OOTD inspo for {season} – Would you wear this?",
+      "Styling {clothing item} in 3 different ways.",
+      "This {year} fashion trend is everywhere – yay or nay?",
+      "Wardrobe hacks every fashionista needs to know.",
+      "Budget vs Luxury: Can you spot the difference?"
+    ]
+  },
+  "YouTube": {
+    "Gaming": [
+      "This game will blow your mind – Level up!",
+      "Top 5 pro tips for {game name}.",
+      "Why I can't stop playing {game name}.",
+      "This strategy will change your gameplay forever!",
+      "Are you a real gamer? Try this challenge."
+    ],
+    "Tech Reviews": [
+      "Is this the best smartphone of {year}?",
+      "Unboxing the future – {product name}.",
+      "5 things nobody told you about {product}.",
+      "Worth buying or overhyped? {product review}.",
+      "The truth about {brand}'s new launch!"
+    ]
+  }
+} 

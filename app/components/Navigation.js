@@ -50,6 +50,7 @@ export default function Navigation() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false)
+  const [currentPath, setCurrentPath] = useState('/')
   
   // Use authentication hook
   const { user, isAuthenticated, signIn, signUp, signInWithGoogle, signOut, resetPassword, checkNetworkStatus, error: authError } = useAuth()
@@ -69,6 +70,11 @@ export default function Navigation() {
     }
     window.addEventListener('scroll', handleScroll)
     return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
+
+  // Detect current path for active states
+  useEffect(() => {
+    setCurrentPath(window.location.pathname)
   }, [])
 
   // Close mobile menu and profile dropdown when clicking outside
@@ -472,169 +478,68 @@ export default function Navigation() {
 
   return (
     <>
+      <style jsx>{`
+        .nav-link:hover {
+          color: #7F5AF0 !important;
+          border-bottom-color: #7F5AF0 !important;
+          transform: translateY(-1px);
+        }
+        .nav-link.active {
+          color: #7F5AF0 !important;
+          border-bottom-color: #7F5AF0 !important;
+        }
+        .theme-toggle:hover {
+          background: rgba(127,90,240,0.1) !important;
+          border-color: rgba(127,90,240,0.3) !important;
+          transform: scale(1.05);
+        }
+        .btn-ghost:hover {
+          background: rgba(127,90,240,0.1) !important;
+          border-color: #7F5AF0 !important;
+          transform: translateY(-1px);
+        }
+        .btn-primary:hover {
+          background: linear-gradient(135deg, #6D4DC6 0%, #00E6B3 100%) !important;
+          box-shadow: 0 0 12px rgba(127,90,240,0.5), 0 8px 25px rgba(127,90,240,0.4) !important;
+          transform: translateY(-2px);
+        }
+      `}</style>
       {/* Navigation */}
-      <nav className={`navbar ${isScrolled ? 'scrolled' : ''}`}>
-        <div className="nav-container">
-          <Link href="/" className="logo">
-            <Image 
-              src="/assets/images/logo (2).png" 
-              alt="HustleHack AI Logo" 
-              className="logo-icon" 
-              width={40}
-              height={40}
-              onError={(e) => { e.target.style.display = 'none' }}
-            />
-            <span className="logo-text">HustleHack AI</span>
-          </Link>
-          
-          <ul className="nav-menu">
-            <li><Link href="/" className="nav-link">Home</Link></li>
+      <nav className="flex items-center justify-between px-6 py-4 bg-black/70 backdrop-blur-md">
+        <div className="flex items-center gap-8">
+          <div className="flex items-center gap-2">
+            <Image src="/assets/images/logo (2).png" alt="HustleHack AI Logo" className="w-8 h-8" width={32} height={32} />
+            <span className="text-xl font-bold ml-2 text-gradient">HustleHack AI</span>
+          </div>
+          <ul className="flex items-center gap-6 text-sm font-medium ml-8">
+            <li><Link href="/" className={`nav-link ${currentPath === '/' ? 'active' : ''}`}>Home</Link></li>
             <li><Link href="/#features" className="nav-link">Features</Link></li>
             <li><Link href="/#pricing" className="nav-link">Pricing</Link></li>
-            <li><Link href="/resources" className="nav-link">Resources</Link></li>
-            <li><Link href="/about" className="nav-link">About</Link></li>
-            <li><Link href="/contact" className="nav-link">Contact</Link></li>
-          </ul>
-          
-          {/* Plan Badge - always visible, premium styling */}
-          {isAuthenticated && !planLoading && (
-            <div className={`hidden md:flex items-center ml-6 mr-2 px-3 py-1 rounded-full font-bold tracking-wide uppercase ${planBadgeClass}`}
-              style={{ minWidth: 120, letterSpacing: 1, position: 'relative', zIndex: 20, boxShadow: '0 2px 8px 0 rgba(127,90,240,0.10)', whiteSpace: 'nowrap', color: '#181818', textShadow: 'none', borderRadius: '18px', fontSize: '0.95rem', maxWidth: 200, overflow: 'visible', textOverflow: 'unset', padding: '8px 16px' }}>
-              <span className="shine-text" style={{ background: 'none', WebkitBackgroundClip: 'unset', WebkitTextFillColor: 'unset', backgroundClip: 'unset', fontSize: 'inherit', whiteSpace: 'nowrap' }}>{planDisplay}</span>
+            <li><Link href="/instant-hustle" className={`nav-link ${currentPath === '/instant-hustle' ? 'active' : ''}`}>Instant Hustle Lite <span className="ml-2 px-2 py-0.5 rounded-full text-xs font-bold bg-[#00FFC2] text-black">NEW</span></Link></li>
+            <li><Link href="/client-finder" className={`nav-link ${currentPath === '/client-finder' ? 'active' : ''}`}>Client Finder <span className="ml-2 px-2 py-0.5 rounded-full text-xs font-bold bg-[#7F5AF0] text-white">BETA</span></Link></li>
+            <li><Link href="/resources" className={`nav-link ${currentPath === '/resources' ? 'active' : ''}`}>Resources</Link></li>
+            <li><Link href="/about" className={`nav-link ${currentPath === '/about' ? 'active' : ''}`}>About</Link></li>
+            <li><Link href="/contact" className={`nav-link ${currentPath === '/contact' ? 'active' : ''}`}>Contact</Link></li>
+           </ul>
             </div>
-          )}
-
-          <div className="nav-actions">
-            <button className="theme-toggle btn btn-ghost" onClick={() => window.toggleTheme && window.toggleTheme()}>
-              🌙
-            </button>
-            
-            {/* Show auth buttons when not authenticated */}
+        <div className="flex items-center gap-4">
             {!isAuthenticated && (
               <>
-                <a href="#" className="btn btn-ghost" onClick={() => openModal('login-modal')}>Sign In</a>
-                <a href="#" className="btn btn-primary" onClick={() => openModal('signup-modal')}>Get Started</a>
+              <a href="#" className="border px-4 py-2 rounded-lg" onClick={() => openModal('login-modal')}>Sign In</a>
+              <a href="#" className="bg-gradient-to-r from-[#7F5AF0] to-[#00FFC2] px-4 py-2 rounded-lg text-white font-semibold" onClick={() => openModal('signup-modal')}>Get Started</a>
               </>
             )}
-            
-            {/* Profile Dropdown (show when authenticated) */}
             {isAuthenticated && (
-              <div className={`profile-dropdown ${isProfileDropdownOpen ? 'active' : ''}`} id="profileDropdown">
-                <button className="profile-btn btn btn-ghost" id="profileBtn" onClick={toggleProfileDropdown}>
+            <div className="profile-dropdown relative ml-2">
+              <button className="profile-btn flex items-center gap-2 px-4 py-2 rounded-lg border" onClick={toggleProfileDropdown}>
                   <span className="profile-avatar">👤</span>
                   <span className="profile-name">{getDisplayName()}</span>
                   <span className={`profile-arrow ${isProfileDropdownOpen ? 'rotate' : ''}`}>▼</span>
                 </button>
-                <div className={`profile-menu ${isProfileDropdownOpen ? 'show' : ''}`} id="profileMenu">
-                  <Link href="/dashboard" className="profile-menu-item" onClick={closeProfileDropdown}>
-                    <span className="profile-menu-icon">🎯</span>
-                    Dashboard
-                  </Link>
-                  <Link href="/profile" className="profile-menu-item" onClick={closeProfileDropdown}>
-                    <span className="profile-menu-icon">👤</span>
-                    Profile Settings
-                  </Link>
-                  <Link href="/billing" className="profile-menu-item" onClick={closeProfileDropdown}>
-                    <span className="profile-menu-icon">💳</span>
-                    Billing
-                  </Link>
-                  <Link href="/help" className="profile-menu-item" onClick={closeProfileDropdown}>
-                    <span className="profile-menu-icon">❓</span>
-                    Help & Support
-                  </Link>
-                  <div className="profile-menu-divider"></div>
-                  <button className="profile-menu-item" onClick={(e) => { e.preventDefault(); closeProfileDropdown(); handleSignOut(e); }}>
-                    <span className="profile-menu-icon">🚪</span>
-                    Sign Out
-                  </button>
-                </div>
+              {/* Profile dropdown menu here */}
               </div>
             )}
           </div>
-          
-          <button className={`mobile-menu-toggle ${isMobileMenuOpen ? 'active' : ''}`} onClick={toggleMobileMenu}>☰</button>
-        </div>
-        
-        {/* Mobile Menu */}
-        {isMobileMenuOpen && (
-          <div style={{
-            position: 'fixed',
-            top: 0,
-            left: 0,
-            width: '100vw',
-            height: '100vh',
-            background: 'rgba(20,20,30,0.95)',
-            backdropFilter: 'blur(8px)',
-            zIndex: 99999,
-            color: 'white',
-            padding: 0,
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            justifyContent: 'flex-start',
-            fontSize: '20px',
-            overflowY: 'auto',
-          }}>
-            {/* Mobile Menu Header */}
-            <div style={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '28px 24px 12px 24px', borderBottom: '1px solid rgba(127,90,240,0.15)', background: 'rgba(36,41,46,0.7)' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-                <Image src="/assets/images/logo (2).png" alt="HustleHack AI Logo" width={36} height={36} style={{ borderRadius: 12, boxShadow: '0 2px 8px #7F5AF0' }} />
-                <span style={{ fontWeight: 800, fontSize: 22, letterSpacing: 1, color: '#7F5AF0', textShadow: '0 2px 8px #7F5AF0' }}>HustleHack AI</span>
-              </div>
-              <button onClick={closeMobileMenu} style={{ background: 'none', border: 'none', color: '#fff', fontSize: 28, borderRadius: 8, padding: 4, transition: 'background 0.2s', cursor: 'pointer' }} aria-label="Close Menu">
-                <span style={{ display: 'inline-block', transform: 'rotate(45deg)', fontSize: 32, fontWeight: 700 }}>+</span>
-              </button>
-            </div>
-            {/* Plan Badge (mobile) */}
-            {isAuthenticated && !planLoading && (
-              <div className={`flex items-center mt-6 mb-2 px-3 py-1 rounded-full font-bold tracking-wide uppercase ${planBadgeClass}`}
-                style={{ minWidth: 120, letterSpacing: 1, boxShadow: '0 2px 8px 0 rgba(127,90,240,0.10)', whiteSpace: 'nowrap', color: '#181818', textShadow: 'none', borderRadius: '18px', fontSize: '0.95rem', maxWidth: 200, overflow: 'visible', textOverflow: 'unset', padding: '8px 16px' }}>
-                <span className="shine-text" style={{ background: 'none', WebkitBackgroundClip: 'unset', WebkitTextFillColor: 'unset', backgroundClip: 'unset', fontSize: 'inherit', whiteSpace: 'nowrap' }}>{planDisplay}</span>
-              </div>
-            )}
-            {/* Mobile Menu Links */}
-            <div style={{ width: '100%', marginTop: 24, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 0 }}>
-              <Link href="/" style={{ color: 'white', textDecoration: 'none', fontSize: 20, fontWeight: 600, padding: '18px 0', width: '100%', textAlign: 'left', borderBottom: '1px solid rgba(127,90,240,0.08)', display: 'flex', alignItems: 'center', gap: 12, marginLeft: 24 }}>
-                🏠 Home
-              </Link>
-              <Link href="/#features" style={{ color: 'white', textDecoration: 'none', fontSize: 20, fontWeight: 600, padding: '18px 0', width: '100%', textAlign: 'left', borderBottom: '1px solid rgba(127,90,240,0.08)', display: 'flex', alignItems: 'center', gap: 12, marginLeft: 24 }}>
-                ✨ Features
-              </Link>
-              <Link href="/#pricing" style={{ color: 'white', textDecoration: 'none', fontSize: 20, fontWeight: 600, padding: '18px 0', width: '100%', textAlign: 'left', borderBottom: '1px solid rgba(127,90,240,0.08)', display: 'flex', alignItems: 'center', gap: 12, marginLeft: 24 }}>
-                💰 Pricing
-              </Link>
-              <Link href="/resources" style={{ color: 'white', textDecoration: 'none', fontSize: 20, fontWeight: 600, padding: '18px 0', width: '100%', textAlign: 'left', borderBottom: '1px solid rgba(127,90,240,0.08)', display: 'flex', alignItems: 'center', gap: 12, marginLeft: 24 }}>
-                📚 Resources
-              </Link>
-              <Link href="/about" style={{ color: 'white', textDecoration: 'none', fontSize: 20, fontWeight: 600, padding: '18px 0', width: '100%', textAlign: 'left', borderBottom: '1px solid rgba(127,90,240,0.08)', display: 'flex', alignItems: 'center', gap: 12, marginLeft: 24 }}>
-                ℹ️ About
-              </Link>
-              <Link href="/contact" style={{ color: 'white', textDecoration: 'none', fontSize: 20, fontWeight: 600, padding: '18px 0', width: '100%', textAlign: 'left', borderBottom: '1px solid rgba(127,90,240,0.08)', display: 'flex', alignItems: 'center', gap: 12, marginLeft: 24 }}>
-                📞 Contact
-              </Link>
-              {isAuthenticated && (
-                <>
-                  <div style={{ color: '#7F5AF0', fontWeight: 700, fontSize: 18, margin: '32px 0 8px 0', width: '100%', textAlign: 'center', letterSpacing: 1 }}>Account</div>
-                  <Link href="/dashboard" style={{ color: 'white', textDecoration: 'none', fontSize: 20, fontWeight: 600, padding: '16px 0', width: '100%', textAlign: 'center', borderBottom: '1px solid rgba(127,90,240,0.08)', display: 'flex', alignItems: 'center', gap: 12 }}>
-                    🎯 Dashboard
-                  </Link>
-                  <Link href="/profile" style={{ color: 'white', textDecoration: 'none', fontSize: 20, fontWeight: 600, padding: '16px 0', width: '100%', textAlign: 'center', borderBottom: '1px solid rgba(127,90,240,0.08)', display: 'flex', alignItems: 'center', gap: 12 }}>
-                    👤 Profile Settings
-                  </Link>
-                  <Link href="/billing" style={{ color: 'white', textDecoration: 'none', fontSize: 20, fontWeight: 600, padding: '16px 0', width: '100%', textAlign: 'center', borderBottom: '1px solid rgba(127,90,240,0.08)', display: 'flex', alignItems: 'center', gap: 12 }}>
-                    💳 Billing
-                  </Link>
-                  <Link href="/help" style={{ color: 'white', textDecoration: 'none', fontSize: 20, fontWeight: 600, padding: '16px 0', width: '100%', textAlign: 'center', borderBottom: '1px solid rgba(127,90,240,0.08)', display: 'flex', alignItems: 'center', gap: 12 }}>
-                    ❓ Help & Support
-                  </Link>
-                  <button onClick={handleSignOut} style={{ background: 'none', border: 'none', color: '#FF5A5F', fontWeight: 700, fontSize: 20, width: '100%', textAlign: 'center', padding: '16px 0', marginTop: 8, cursor: 'pointer', borderRadius: 8, transition: 'background 0.2s' }}>
-                    🚪 Sign Out
-                  </button>
-                </>
-              )}
-            </div>
-          </div>
-        )}
       </nav>
 
       {/* Login Modal */}

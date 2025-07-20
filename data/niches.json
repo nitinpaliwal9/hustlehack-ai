@@ -1,0 +1,65 @@
+{
+  "platforms": [
+    {
+      "name": "Instagram",
+      "niches": [
+        "Fitness",
+        "Travel",
+        "Fashion",
+        "Food",
+        "Business",
+        "Education",
+        "Tech & AI",
+        "Finance",
+        "Parenting",
+        "Motivation",
+        "Gaming",
+        "Beauty",
+        "Health & Wellness",
+        "Photography",
+        "Art & Design",
+        "Music",
+        "Sports",
+        "Lifestyle",
+        "Startups",
+        "Self Improvement"
+      ]
+    },
+    {
+      "name": "YouTube",
+      "niches": [
+        "Vlogs",
+        "Tech Reviews",
+        "Gaming",
+        "Education",
+        "Fitness",
+        "Motivation",
+        "Finance",
+        "Cooking",
+        "Travel",
+        "Music",
+        "Comedy",
+        "DIY & Crafts",
+        "Parenting",
+        "Fashion & Beauty"
+      ]
+    },
+    {
+      "name": "LinkedIn",
+      "niches": [
+        "Career Advice",
+        "Entrepreneurship",
+        "Leadership",
+        "Startups",
+        "Technology",
+        "Finance",
+        "Personal Branding",
+        "Education",
+        "Marketing",
+        "Sales",
+        "Work Culture",
+        "Productivity"
+      ]
+    }
+  ]
+} 

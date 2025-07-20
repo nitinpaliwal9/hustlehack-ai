@@ -5,16 +5,18 @@ import { NextResponse } from 'next/server';
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
+let supabase = null;
+
 if (!supabaseUrl || !supabaseServiceKey) {
   console.error('Missing Supabase environment variables for signup API');
+} else {
+  supabase = createClient(supabaseUrl, supabaseServiceKey, {
+    auth: {
+      autoRefreshToken: false,
+      persistSession: false
+    }
+  });
 }
-
-const supabase = createClient(supabaseUrl, supabaseServiceKey, {
-  auth: {
-    autoRefreshToken: false,
-    persistSession: false
-  }
-});
 
 /**
  * POST /api/signup
@@ -30,6 +32,15 @@ const supabase = createClient(supabaseUrl, supabaseServiceKey, {
  */
 export async function POST(request) {
   try {
+    // Check if Supabase is properly initialized
+    if (!supabase) {
+      console.error('❌ Supabase client not initialized - missing environment variables');
+      return NextResponse.json(
+        { error: 'Server configuration error - please contact support' },
+        { status: 500 }
+      );
+    }
+
     // Parse request body
     const body = await request.json();
     const { email, password, first_name, role } = body;

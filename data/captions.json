@@ -1,0 +1,34 @@
+{
+  "Instagram": {
+    "Fitness": [
+      "No excuses, just results. 💪 #FitnessJourney",
+      "Strong mind, strong body. Who's with me? 🔥",
+      "Small steps every day = Big changes! ✨",
+      "Train insane or remain the same. 🏋️",
+      "Your only limit is YOU. #Motivation"
+    ],
+    "Fashion": [
+      "Stay classy, stay fabulous. ✨ #OOTD",
+      "When in doubt, overdress. 😉",
+      "Style is a way to say who you are without words.",
+      "Fall vibes = cozy & chic. 🍂",
+      "Which look is your vibe? Comment A or B!"
+    ]
+  },
+  "YouTube": {
+    "Gaming": [
+      "Pro gamer tip: This will save your next game! 🎮",
+      "Who else is addicted to {game}? 😂",
+      "Level unlocked: Pure fun. 🔥",
+      "Gaming all day, winning all night.",
+      "This is the ultimate challenge – Are you in?"
+    ],
+    "Tech Reviews": [
+      "Would you buy {product} after seeing this? 🤔",
+      "Tech lovers, this one's for you! 🔥",
+      "Is {brand} really worth the hype?",
+      "5 features you'll love about {product}.",
+      "Tech meets style – what's your pick?"
+    ]
+  }
+} 

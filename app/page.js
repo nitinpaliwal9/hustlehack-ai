@@ -225,6 +225,11 @@ export default function HomePage() {
             </p>
             {/* CTA Buttons */}
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mt-2 flex-wrap w-full">
+              {/* Instant Hustle Lite - Featured CTA */}
+              <Link href="/instant-hustle" className="btn btn-lg premium-btn glow-cta rounded-full font-bold flex items-center gap-2 w-full sm:w-auto text-base sm:text-lg animate-pulse" style={{ fontSize: '1.05rem', minWidth: 0, wordBreak: 'break-word', background: 'linear-gradient(135deg, #7F5AF0 0%, #00FFC2 100%)', border: '2px solid #00FFC2' }}>
+                ✨ Try Instant Hustle Lite
+              </Link>
+              
               {/* Show "Start Your AI Journey" only if user is not authenticated or profile is incomplete */}
               {(!user || (user && userProfile && !userProfile.profile_completed)) && (
                 <button className="btn btn-lg premium-btn glow-cta rounded-full font-bold flex items-center gap-2 w-full sm:w-auto text-base sm:text-lg" style={{ fontSize: '1.05rem', minWidth: 0, wordBreak: 'break-word' }} onClick={handleGoogleSignIn}>
