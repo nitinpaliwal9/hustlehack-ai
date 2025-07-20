@@ -54,10 +54,10 @@ const LoadingSpinner = ({
         </div>
         
         <div className="text-center">
-          <h3 className="text-lg font-medium text-gray-900 mb-2">
+          <h3 className="text-lg font-bold text-[#F9FAFB] mb-2">
             Taking longer than expected
           </h3>
-          <p className="text-gray-600 text-sm mb-4">
+          <p className="text-[#9CA3AF] text-sm mb-4">
             This is taking a while. There might be a network issue or the server is busy.
           </p>
           

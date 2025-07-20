@@ -158,16 +158,16 @@ export default function StepReview({ state, setState, step }: Props) {
       >
         <div className="w-full flex flex-col gap-4">
           {results.map((ch) => (
-            <div key={ch.channelId} className="bg-gray-50 rounded-lg p-4 flex gap-4 items-center shadow">
-              <img src={ch.thumbSamples[0]} alt={ch.name} className="w-16 h-16 rounded object-cover border" />
+            <div key={ch.channelId} className="bg-white/5 border border-white/10 rounded-xl p-4 flex gap-4 items-center shadow-lg">
+              <img src={ch.thumbSamples[0]} alt={ch.name} className="w-16 h-16 rounded object-cover border border-white/10" />
               <div className="flex-1">
-                <div className="font-semibold text-lg">{ch.name}</div>
-                <div className="text-gray-600 text-sm">{ch.subs.toLocaleString()} subs • {ch.country}</div>
-                <div className="text-gray-500 text-xs">{ch.notes}</div>
+                <div className="font-semibold text-lg text-[#F9FAFB]">{ch.name}</div>
+                <div className="text-[#9CA3AF] text-sm">{ch.subs.toLocaleString()} subs • {ch.country}</div>
+                <div className="text-[#9CA3AF] text-xs">{ch.notes}</div>
               </div>
               <div className="flex flex-col items-end">
                 <span className="text-[--hh-purple] font-bold">{ch.scores.overall}/100</span>
-                <a href={ch.url} target="_blank" rel="noopener" className="text-xs text-blue-600 underline mt-1">View Channel</a>
+                <a href={ch.url} target="_blank" rel="noopener" className="text-xs text-[#00AEEF] underline mt-1">View Channel</a>
               </div>
             </div>
           ))}
@@ -199,11 +199,11 @@ export default function StepReview({ state, setState, step }: Props) {
       subtitle="Review your selections and run the scan to find clients."
       variant="current"
     >
-      <div className="bg-gray-50 rounded-lg p-4 w-full max-w-md text-left">
-        <div><span className="font-semibold">Niches:</span> {state.niches.join(", ")}</div>
-        <div><span className="font-semibold">Subscribers:</span> {state.subsMin} – {state.subsMax}</div>
-        <div><span className="font-semibold">Recent Activity:</span> Last {state.recentDays} days</div>
-        <div><span className="font-semibold">Thumbnail Help:</span> {state.needThumbnailHelp ? "Yes" : "No"}</div>
+      <div className="bg-white/5 border border-white/10 rounded-xl p-4 w-full max-w-md text-left shadow-lg">
+        <div className="text-[#F9FAFB]"><span className="font-semibold">Niches:</span> <span className="text-[#9CA3AF]">{state.niches.join(", ")}</span></div>
+        <div className="text-[#F9FAFB]"><span className="font-semibold">Subscribers:</span> <span className="text-[#9CA3AF]">{state.subsMin} – {state.subsMax}</span></div>
+        <div className="text-[#F9FAFB]"><span className="font-semibold">Recent Activity:</span> <span className="text-[#9CA3AF]">Last {state.recentDays} days</span></div>
+        <div className="text-[#F9FAFB]"><span className="font-semibold">Thumbnail Help:</span> <span className="text-[#9CA3AF]">{state.needThumbnailHelp ? "Yes" : "No"}</span></div>
       </div>
       <button
         className="mt-4 px-6 py-2 bg-[--hh-purple] text-white rounded-md font-semibold hover:bg-purple-700 transition"

@@ -11,7 +11,7 @@ type Props = {
 export default function StepWelcome({ setStep, step }: Props) {
   return (
     <div className="flex flex-col items-center text-center gap-6">
-      <Image src="/logo.png" alt="HustleHack AI Logo" width={64} height={64} className="mb-2" />
+      <Image src="/assets/images/logo (2).png" alt="HustleHack AI Logo" width={64} height={64} className="mb-2 rounded-xl shadow-lg" />
       <h1 className="text-2xl font-bold text-gray-100">Find YouTube Clients Who Need Better Thumbnails</h1>
       <p className="text-gray-400">Let’s help you land paying clients. Pick a niche and we’ll find YouTube creators who could use better thumbnails.</p>
       <button

@@ -62,7 +62,7 @@ export default function PlanBadgeModal({ open, onClose, planName = 'Creator Plan
         >
           <div
             ref={modalRef}
-            className="relative w-full max-w-lg mx-auto bg-gradient-to-br from-[#18192b] to-[#232946] rounded-2xl shadow-2xl p-6 sm:p-10 border border-white/10 scale-95 opacity-0 animate-modalin focus:outline-none"
+            className="relative w-full max-w-lg mx-auto bg-gradient-to-br from-[#18192b] to-[#232946] rounded-2xl shadow-2xl p-6 sm:p-10 border border-white/10 scale-95 opacity-0 animate-modalin focus:outline-none pointer-events-auto mt-10 sm:mt-20"
             style={{
               animation: 'modalin 0.3s cubic-bezier(0.4,0,0.2,1) forwards',
               boxShadow: '0 8px 40px 0 #7F5AF055, 0 2px 8px 0 #00FFC255'

@@ -9,8 +9,8 @@ type Props = {
 export default function StepActivity({ state, setState, setStep, step }: Props) {
   return (
     <div className="flex flex-col items-center text-center gap-6">
-      <h2 className="text-xl font-bold text-[--hh-purple]">Recent Activity Filter</h2>
-      <label className="text-gray-700">
+      <h2 className="text-xl font-bold text-[#F9FAFB]">Recent Activity Filter</h2>
+      <label className="text-[#9CA3AF]">
         Show channels that uploaded in last
         <input
           type="number"

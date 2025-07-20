@@ -48,7 +48,7 @@ export default function HomePage() {
   // Load client utilities on component mount
   useEffect(() => {
     if (typeof window === 'undefined') return;
-    
+    let lastFocus = Date.now();
     const loadClientUtils = () => {
       // Check if script is already loaded
       const existingScript = document.querySelector('script[src="/js/client-utils.js"]')
@@ -60,7 +60,6 @@ export default function HomePage() {
         }
         return
       }
-      
       const script = document.createElement('script')
       script.src = '/js/client-utils.js'
       script.async = true
@@ -76,10 +75,19 @@ export default function HomePage() {
       }
       document.head.appendChild(script)
     }
-
     // Load client utilities
     loadClientUtils()
-    
+    // Debounced re-initialization on tab focus
+    const handleFocus = () => {
+      const now = Date.now();
+      if (now - lastFocus > 30000) { // Only re-init if >30s since last focus
+        if (typeof window.initializeClientUtils === 'function') {
+          window.initializeClientUtils();
+        }
+      }
+      lastFocus = now;
+    };
+    window.addEventListener('focus', handleFocus);
     // Re-initialize on route changes
     const handleRouteChange = () => {
       setTimeout(() => {
@@ -88,11 +96,9 @@ export default function HomePage() {
         }
       }, 100)
     }
-
-    // Listen for route changes
     window.addEventListener('popstate', handleRouteChange)
-    
     return () => {
+      window.removeEventListener('focus', handleFocus);
       window.removeEventListener('popstate', handleRouteChange)
     }
   }, [])
@@ -183,7 +189,6 @@ export default function HomePage() {
   
   return (
     <div className="overflow-x-hidden w-full" key={typeof window !== 'undefined' ? window.location.pathname : 'homepage'}>
-      <Link href="#home" className="skip-link" tabIndex="0">Skip to main content</Link>
       <LazyNavigation />
 
       {/* Hero Section */}
