@@ -1,8 +1,8 @@
 // Startup Launch Kit (AI-Mode) Page
 'use client';
 
-import Navigation from '../../../components/Navigation';
-import Footer from '../../../components/Footer';
+import Navigation from '../../../components/NavigationClient';
+import Footer from '../../../components/FooterClient';
 import { useState } from 'react';
 import { LightBulbIcon, DocumentTextIcon, CameraIcon, ChartBarIcon, UserGroupIcon, CalendarIcon, ChevronRightIcon } from '@heroicons/react/24/outline';
 import { LockClosedIcon } from '@heroicons/react/24/solid';

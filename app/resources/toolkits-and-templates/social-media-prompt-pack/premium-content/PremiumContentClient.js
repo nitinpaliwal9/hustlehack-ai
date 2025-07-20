@@ -1,6 +1,6 @@
 'use client';
 import { useState } from 'react';
-import Navigation from '../../../../components/Navigation';
+import Navigation from '../../../../components/NavigationClient';
 import InstagramCategoryGrid from './InstagramCategoryGrid';
 // Import icons for nav bar
 import { HomeIcon, Squares2X2Icon, BookmarkIcon, UserCircleIcon } from '@heroicons/react/24/solid';

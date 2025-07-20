@@ -2,8 +2,8 @@
 
 import { useState } from 'react';
 import { ChevronRightIcon, StarIcon, ClockIcon, UserGroupIcon, BookOpenIcon, LightBulbIcon, ChartBarIcon, CalendarIcon, PencilIcon, GlobeAltIcon, DocumentTextIcon, CameraIcon } from '@heroicons/react/24/outline';
-import Navigation from '../../../components/Navigation';
-import Footer from '../../../components/Footer';
+import Navigation from '../../../components/NavigationClient';
+import Footer from '../../../components/FooterClient';
 
 export default function StudentProductivitySuite() {
   const [hoveredCard, setHoveredCard] = useState(null);

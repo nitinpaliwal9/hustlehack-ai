@@ -1,8 +1,8 @@
 // Social Media Prompt Pack Page
 'use client';
 
-import Navigation from '../../../components/Navigation';
-import Footer from '../../../components/Footer';
+import Navigation from '../../../components/NavigationClient';
+import Footer from '../../../components/FooterClient';
 import { useState, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { CheckCircleIcon, BoltIcon, BookOpenIcon, UserGroupIcon, ArrowTrendingUpIcon, ChatBubbleLeftRightIcon, ClipboardDocumentCheckIcon, SparklesIcon, AcademicCapIcon, RocketLaunchIcon, BriefcaseIcon, PencilIcon } from '@heroicons/react/24/outline';

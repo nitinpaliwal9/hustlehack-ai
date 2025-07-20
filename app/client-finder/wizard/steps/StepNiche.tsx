@@ -22,12 +22,13 @@ export default function StepNiche({ state, setState, setStep, step }: Props) {
 
   return (
     <div className="flex flex-col items-center text-center gap-6">
-      <h2 className="text-xl font-bold text-[--hh-purple]">Select Your Niche(s)</h2>
+      <h2 className="text-xl font-bold text-gray-100">Select Your Niche(s)</h2>
+      <p className="text-gray-400 mb-2">Choose one or more niches to find the best-fit clients.</p>
       <div className="flex flex-wrap gap-2 justify-center">
         {NICHES.map((niche) => (
           <button
             key={niche}
-            className={`px-4 py-2 rounded-full border font-medium transition ${state.niches.includes(niche) ? 'bg-[--hh-purple] text-white' : 'bg-gray-100 text-gray-800'}`}
+            className={`px-4 py-2 rounded-full border font-medium transition focus:outline-none focus:ring-2 focus:ring-[#7F5AF0] focus:ring-offset-2 ${state.niches.includes(niche) ? 'bg-[#7F5AF0] text-white border-[#7F5AF0]' : 'bg-white/10 text-gray-100 border-white/10 hover:bg-[#232136] hover:text-white'}`}
             onClick={() => toggleNiche(niche)}
           >
             {niche}
@@ -35,7 +36,7 @@ export default function StepNiche({ state, setState, setStep, step }: Props) {
         ))}
       </div>
       <button
-        className="mt-4 px-6 py-2 bg-[--hh-purple] text-white rounded-md font-semibold hover:bg-purple-700 transition disabled:opacity-50"
+        className="mt-4 px-6 py-2 bg-[#7F5AF0] text-white rounded-md font-semibold hover:bg-[#5A3FA3] transition disabled:opacity-50 focus:outline-none focus:ring-2 focus:ring-[#7F5AF0] focus:ring-offset-2"
         onClick={() => setStep(step + 1)}
         disabled={state.niches.length === 0}
       >

@@ -64,6 +64,21 @@ export default function StepReview({ state, setState }: Props) {
   };
 
   if (processing) {
+    // Skeleton shimmer card
+    const SkeletonCard = () => (
+      <div className="bg-gray-50 rounded-lg p-4 flex gap-4 items-center shadow animate-pulse">
+        <div className="w-16 h-16 rounded bg-gray-200 animate-shimmer" />
+        <div className="flex-1 space-y-2">
+          <div className="h-4 w-2/3 bg-gray-200 rounded" />
+          <div className="h-3 w-1/3 bg-gray-200 rounded" />
+          <div className="h-3 w-1/2 bg-gray-200 rounded" />
+        </div>
+        <div className="flex flex-col items-end gap-2">
+          <div className="h-4 w-10 bg-gray-200 rounded" />
+          <div className="h-3 w-16 bg-gray-200 rounded" />
+        </div>
+      </div>
+    );
     return (
       <div className="flex flex-col items-center gap-4">
         <h2 className="text-xl font-bold text-[--hh-purple]">Scanning YouTube…</h2>
@@ -80,11 +95,53 @@ export default function StepReview({ state, setState }: Props) {
             <div className="bg-[--hh-purple] h-2 rounded-full transition-all" style={{ width: `${((stage+1)/STAGES.length)*100}%` }}></div>
           </div>
         </div>
+        {/* Skeleton shimmer cards */}
+        <div className="w-full flex flex-col gap-4 mt-6">
+          {Array.from({ length: 3 }).map((_, i) => <SkeletonCard key={i} />)}
+        </div>
+        <style jsx global>{`
+          @keyframes shimmer {
+            0% { background-position: -400px 0; }
+            100% { background-position: 400px 0; }
+          }
+          .animate-shimmer {
+            background: linear-gradient(90deg, #e0e0e0 0%, #f5f5f5 50%, #e0e0e0 100%);
+            background-size: 800px 100%;
+            animation: shimmer 1.5s linear infinite;
+          }
+        `}</style>
       </div>
     );
   }
 
   if (results.length > 0) {
+    // Instagram share logic
+    const handleInstagramShare = async () => {
+      // Download PNG (placeholder: use a static image for now)
+      const imgUrl = '/branding/sample-thumb1.jpg';
+      const link = document.createElement('a');
+      link.href = imgUrl;
+      link.download = 'client-finder-success.png';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      // Copy caption
+      const caption = `Just landed new YouTube clients with @HustleHackAI Client Finder! 🚀 Try it: https://hustlehackai.in #AItools #ClientFinder`;
+      await navigator.clipboard.writeText(caption);
+      // Try to open Instagram intent (mobile)
+      const isMobile = /android|iphone|ipad|ipod/i.test(navigator.userAgent);
+      if (isMobile) {
+        window.location.href = 'intent://instagram.com#Intent;package=com.instagram.android;scheme=https;end';
+      } else {
+        alert('Instagram sharing works best on mobile. Download the image and caption, then post manually in the Instagram app.');
+      }
+    };
+    // LinkedIn share logic
+    const handleLinkedInShare = () => {
+      const text = encodeURIComponent('Just landed new YouTube clients using HustleHack AI\'s Client Finder! 🚀 Highly recommend for creators and freelancers.');
+      const url = encodeURIComponent('https://hustlehackai.in');
+      window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${url}&summary=${text}`,'_blank');
+    };
     return (
       <div className="flex flex-col items-center gap-6">
         <h2 className="text-xl font-bold text-[--hh-purple]">Results</h2>
@@ -103,6 +160,21 @@ export default function StepReview({ state, setState }: Props) {
               </div>
             </div>
           ))}
+        </div>
+        {/* Share actions */}
+        <div className="flex flex-col sm:flex-row gap-3 mt-4 w-full max-w-xs">
+          <button
+            onClick={handleInstagramShare}
+            className="flex-1 bg-gradient-to-r from-pink-500 to-yellow-400 text-white font-semibold py-2 px-4 rounded-lg shadow hover:from-pink-600 hover:to-yellow-500 transition"
+          >
+            Share on Instagram
+          </button>
+          <button
+            onClick={handleLinkedInShare}
+            className="flex-1 bg-[#0077b5] text-white font-semibold py-2 px-4 rounded-lg shadow hover:bg-[#005983] transition"
+          >
+            Share on LinkedIn
+          </button>
         </div>
       </div>
     );

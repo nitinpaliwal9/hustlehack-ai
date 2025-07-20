@@ -3,7 +3,7 @@
 import { useState, useEffect, Suspense } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useAuth } from '../../hooks/useAuth'
-import Navigation from '../../components/Navigation'
+import Navigation from '../../components/NavigationClient'
 import { 
   Key, 
   Eye, 

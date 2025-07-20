@@ -1,6 +1,6 @@
-import Navigation from '../components/Navigation'
+import Navigation from '../components/NavigationClient'
 import DashboardClient from './DashboardClient'
-import Footer from '../components/Footer'
+import Footer from '../components/FooterClient'
 
 // --- SEO Metadata for Private Dashboard Page ---
 export const metadata = {

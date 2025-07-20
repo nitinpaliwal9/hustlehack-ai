@@ -68,6 +68,15 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en" className={`${inter.variable} ${poppins.variable}`}>
       <body className={`${inter.className} premium-bg min-h-screen`}>
+        {/* Skip to main content accessibility link */}
+        <a
+          href="#main"
+          className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:bg-white focus:text-black focus:rounded focus:px-4 focus:py-2 focus:shadow-lg transition-all duration-200"
+          tabIndex={0}
+          // onClick handler removed: interactive logic must be in a Client Component
+        >
+          Skip to main content
+        </a>
         <ErrorBoundary>
           <GlobalLoadingProvider>
             {children}

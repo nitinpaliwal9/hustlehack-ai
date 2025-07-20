@@ -1,5 +1,5 @@
-import Navigation from './Navigation'
-import Footer from './Footer'
+import Navigation from './NavigationClient'
+import Footer from './FooterClient'
 
 export default function PageLayout({ children }) {
   return (

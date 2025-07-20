@@ -1,8 +1,8 @@
 'use client'
 
 import Link from 'next/link'
-import Navigation from '../components/Navigation'
-import Footer from '../components/Footer'
+import Navigation from '../components/NavigationClient'
+import Footer from '../components/FooterClient'
 import './resources.css'
 import { useAuth } from '../hooks/useAuth'
 import { useEffect, useState } from 'react'

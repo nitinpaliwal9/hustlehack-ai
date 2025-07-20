@@ -1,8 +1,8 @@
 // Creator’s AI Toolkit Page
 'use client';
 
-import Navigation from '../../../components/Navigation';
-import Footer from '../../../components/Footer';
+import Navigation from '../../../components/NavigationClient';
+import Footer from '../../../components/FooterClient';
 import { useState } from 'react';
 import { LightBulbIcon, CameraIcon, CalendarIcon, UserGroupIcon, BookOpenIcon, ChartBarIcon, ChevronRightIcon } from '@heroicons/react/24/outline';
 import { LockClosedIcon } from '@heroicons/react/24/solid';

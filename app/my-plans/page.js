@@ -401,10 +401,10 @@ export default function BillingPage() {
           {/* Header */}
           <div className="text-center mb-10 sm:mb-16">
             <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-3 sm:mb-6">
-              Billing & Subscriptions
+              My Plans
             </h1>
             <p className="text-sm sm:text-base lg:text-xl text-gray-300 max-w-3xl mx-auto">
-              Choose the perfect plan for your needs. Upgrade, downgrade, or manage your subscription anytime.
+              View and manage your current plan, explore upgrades, and see your payment history.
             </p>
           </div>
 
@@ -421,7 +421,7 @@ export default function BillingPage() {
             <div className="bg-[rgba(36,41,46,0.96)] rounded-xl shadow-lg border border-[var(--border-color)] p-4 sm:p-6 mb-6 sm:mb-8">
               <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-3 sm:space-y-0">
                 <div>
-                  <h2 className="text-xl sm:text-2xl font-bold text-white mb-2">Current Plan</h2>
+                  <h2 className="text-xl sm:text-2xl font-bold text-white mb-2">Your Current Plan</h2>
                   <div className="flex items-center gap-2 sm:gap-3 mb-2">
                     <currentPlan.icon className="w-5 h-5 sm:w-6 sm:h-6 text-[#7F5AF0]" />
                     <span className="text-lg sm:text-xl font-semibold text-white">{currentPlan.name}</span>
@@ -449,7 +449,7 @@ export default function BillingPage() {
           )}
 
           {/* Plans Grid */}
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-8 lg:gap-10 mb-10 sm:mb-16">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-8 lg:gap-10 mb-10 sm:mb-16" aria-label="Available Plans">
             {plans.map((plan) => {
               const isCurrentPlan = billingData?.subscription?.plan_name === plan.id
               const isUpgradeable = !isCurrentPlan && (
@@ -564,7 +564,7 @@ export default function BillingPage() {
 
           {/* Icon Legend */}
           <div className="bg-[rgba(36,41,46,0.96)] rounded-xl shadow-lg border border-[var(--border-color)] p-6 sm:p-8 mb-8 sm:mb-12">
-            <h3 className="text-lg sm:text-xl font-bold text-white mb-3 sm:mb-4">Feature Status Legend</h3>
+            <h3 className="text-lg sm:text-xl font-bold text-white mb-3 sm:mb-4">Plan Feature Status Legend</h3>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
               <div className="flex items-center gap-2">
                 <Check className="w-4 h-4 text-green-500 flex-shrink-0" />
@@ -584,7 +584,7 @@ export default function BillingPage() {
           {/* Payment History */}
           <div className="bg-[rgba(36,41,46,0.96)] rounded-xl shadow-lg border border-[var(--border-color)] p-4 sm:p-6">
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 sm:mb-6 space-y-3 sm:space-y-0">
-              <h2 className="text-xl sm:text-2xl font-bold text-white">Payment History</h2>
+              <h2 className="text-xl sm:text-2xl font-bold text-white">Plan Payment History</h2>
               <button
                 onClick={loadBillingData}
                 className="flex items-center justify-center gap-2 px-3 sm:px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors text-sm sm:text-base w-full sm:w-auto"

@@ -1,8 +1,9 @@
 'use client'
 
 import Link from 'next/link'
+import { useRouter } from 'next/navigation';
 import Image from 'next/image'
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, MouseEvent } from 'react'
 import { useAuth } from '../hooks/useAuth'
 import { Sparkles } from 'lucide-react';
 import { useUserPlan } from '../hooks/useAuth';
@@ -46,6 +47,8 @@ function useFocusTrap(isOpen, modalRef) {
 }
 
 export default function Navigation() {
+  const router = useRouter();
+  const dropdownRef = useRef<HTMLDivElement>(null);
   const [isScrolled, setIsScrolled] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
@@ -107,6 +110,26 @@ export default function Navigation() {
       document.body.style.overflow = 'unset'
     }
   }, [isMobileMenuOpen, isProfileDropdownOpen])
+
+  // Close dropdown on outside click or ESC
+  useEffect(() => {
+    function handleClick(e) {
+      if (isProfileDropdownOpen && dropdownRef.current && dropdownRef.current.contains(e.target)) {
+        setIsProfileDropdownOpen(false);
+      }
+    }
+    function handleEsc(e) {
+      if (e.key === 'Escape') setIsProfileDropdownOpen(false);
+    }
+    if (isProfileDropdownOpen) {
+      document.addEventListener('mousedown', handleClick);
+      document.addEventListener('keydown', handleEsc);
+    }
+    return () => {
+      document.removeEventListener('mousedown', handleClick);
+      document.removeEventListener('keydown', handleEsc);
+    };
+  }, [isProfileDropdownOpen]);
 
   // Debug CSS loading
   useEffect(() => {
@@ -351,6 +374,44 @@ export default function Navigation() {
     planBadgeClass = 'bg-gradient-to-r from-teal-400 via-gray-700 to-gray-900 text-white shadow border-2 border-teal-400';
   }
 
+  // Plan badge mapping
+  const getPlanBadge = (plan) => {
+    if (plan === 'pro') {
+      return (
+        <span
+          className="hidden sm:inline-block ml-2 px-3 py-1 rounded-full text-xs font-bold tracking-widest uppercase border border-yellow-400 shadow-sm align-middle bg-white/5 premium-gold-text hover:animate-shimmer"
+          title="You're on the PRO HACKER plan – Enjoy unlimited tools!"
+          style={{ fontVariant: 'small-caps', letterSpacing: '0.08em' }}
+        >
+          <span className="premium-gold-text-gradient">PRO HACKER</span>
+        </span>
+      );
+    }
+    if (plan === 'creator') {
+      return (
+        <span
+          className="hidden sm:inline-block ml-2 px-3 py-1 rounded-full text-xs font-bold tracking-widest uppercase bg-gradient-to-r from-[#7F5AF0] to-[#6B46C1] text-white border border-[#7F5AF0] shadow-sm align-middle"
+          title="Your current HustleHack AI plan."
+          style={{ fontVariant: 'small-caps', letterSpacing: '0.08em' }}
+        >
+          CREATOR
+        </span>
+      );
+    }
+    if (plan === 'starter') {
+      return (
+        <span
+          className="hidden sm:inline-block ml-2 px-3 py-1 rounded-full text-xs font-bold tracking-widest uppercase bg-white/10 text-gray-100 border border-white/20 shadow-sm align-middle"
+          title="Your current HustleHack AI plan."
+          style={{ fontVariant: 'small-caps', letterSpacing: '0.08em' }}
+        >
+          STARTER
+        </span>
+      );
+    }
+    return null;
+  };
+
   const loginModalRef = useRef(null);
   const signupModalRef = useRef(null);
   useFocusTrap(isMobileMenuOpen, loginModalRef);
@@ -476,6 +537,9 @@ export default function Navigation() {
     return () => clearInterval(verificationIntervalRef.current);
   }, [showCheckEmail]);
 
+  // Add state for mobile nav
+  const [mobileNavOpen, setMobileNavOpen] = useState(false);
+
   return (
     <>
       <style jsx>{`
@@ -505,41 +569,151 @@ export default function Navigation() {
         }
       `}</style>
       {/* Navigation */}
-      <nav className="flex items-center justify-between px-6 py-4 bg-black/70 backdrop-blur-md">
-        <div className="flex items-center gap-8">
-          <div className="flex items-center gap-2">
-            <Image src="/assets/images/logo (2).png" alt="HustleHack AI Logo" className="w-8 h-8" width={32} height={32} />
-            <span className="text-xl font-bold ml-2 text-gradient">HustleHack AI</span>
+      <nav className="relative z-50 w-full">
+        {/* Desktop Navbar */}
+        <div className="hidden md:flex items-center justify-between px-6 py-4 bg-black/70 backdrop-blur-md">
+          <div className="flex items-center gap-8">
+            <Link href="/" aria-label="Go to Home" onClick={e => {
+              e.preventDefault();
+              if (window.location.pathname === "/") {
+                router.refresh();
+              } else {
+                router.push("/");
+                setTimeout(() => router.refresh(), 100);
+              }
+            }} className="flex items-center gap-2 cursor-pointer select-none">
+              <Image src="/assets/images/logo (2).png" alt="HustleHack AI Logo" className="w-8 h-8" width={32} height={32} />
+              <span className="text-xl font-bold ml-2 text-gradient">HustleHack AI</span>
+            </Link>
+            <ul className="flex items-center gap-6 text-sm font-medium ml-8">
+              <li><Link href="/" className={`nav-link pointer-events-auto ${currentPath === '/' ? 'active' : ''}`}>Home</Link></li>
+              <li><Link href="/#features" className="nav-link pointer-events-auto">Features</Link></li>
+              <li><Link href="/#pricing" className="nav-link pointer-events-auto">Pricing</Link></li>
+              <li><Link href="/instant-hustle" className={`nav-link pointer-events-auto ${currentPath === '/instant-hustle' ? 'active' : ''}`}>Instant Hustle Lite <span className="ml-2 px-2 py-0.5 rounded-full text-xs font-bold bg-[#00FFC2] text-black">NEW</span></Link></li>
+              <li><Link href="/client-finder" className={`nav-link pointer-events-auto ${currentPath === '/client-finder' ? 'active' : ''}`}>Client Finder <span className="ml-2 px-2 py-0.5 rounded-full text-xs font-bold bg-[#7F5AF0] text-white">BETA</span></Link></li>
+              <li><Link href="/resources" className={`nav-link pointer-events-auto ${currentPath === '/resources' ? 'active' : ''}`}>Resources</Link></li>
+              <li><Link href="/about" className={`nav-link pointer-events-auto ${currentPath === '/about' ? 'active' : ''}`}>About</Link></li>
+              <li><Link href="/contact" className={`nav-link pointer-events-auto ${currentPath === '/contact' ? 'active' : ''}`}>Contact</Link></li>
+            </ul>
           </div>
-          <ul className="flex items-center gap-6 text-sm font-medium ml-8">
-            <li><Link href="/" className={`nav-link ${currentPath === '/' ? 'active' : ''}`}>Home</Link></li>
-            <li><Link href="/#features" className="nav-link">Features</Link></li>
-            <li><Link href="/#pricing" className="nav-link">Pricing</Link></li>
-            <li><Link href="/instant-hustle" className={`nav-link ${currentPath === '/instant-hustle' ? 'active' : ''}`}>Instant Hustle Lite <span className="ml-2 px-2 py-0.5 rounded-full text-xs font-bold bg-[#00FFC2] text-black">NEW</span></Link></li>
-            <li><Link href="/client-finder" className={`nav-link ${currentPath === '/client-finder' ? 'active' : ''}`}>Client Finder <span className="ml-2 px-2 py-0.5 rounded-full text-xs font-bold bg-[#7F5AF0] text-white">BETA</span></Link></li>
-            <li><Link href="/resources" className={`nav-link ${currentPath === '/resources' ? 'active' : ''}`}>Resources</Link></li>
-            <li><Link href="/about" className={`nav-link ${currentPath === '/about' ? 'active' : ''}`}>About</Link></li>
-            <li><Link href="/contact" className={`nav-link ${currentPath === '/contact' ? 'active' : ''}`}>Contact</Link></li>
-           </ul>
-            </div>
-        <div className="flex items-center gap-4">
+          <div className="flex items-center gap-4">
             {!isAuthenticated && (
               <>
-              <a href="#" className="border px-4 py-2 rounded-lg" onClick={() => openModal('login-modal')}>Sign In</a>
-              <a href="#" className="bg-gradient-to-r from-[#7F5AF0] to-[#00FFC2] px-4 py-2 rounded-lg text-white font-semibold" onClick={() => openModal('signup-modal')}>Get Started</a>
+                <a href="#" className="border px-4 py-2 rounded-lg" onClick={() => openModal('login-modal')}>Sign In</a>
+                <a href="#" className="bg-gradient-to-r from-[#7F5AF0] to-[#00FFC2] px-4 py-2 rounded-lg text-white font-semibold" onClick={() => openModal('signup-modal')}>Get Started</a>
               </>
             )}
             {isAuthenticated && (
-            <div className="profile-dropdown relative ml-2">
-              <button className="profile-btn flex items-center gap-2 px-4 py-2 rounded-lg border" onClick={toggleProfileDropdown}>
+              <div className="relative ml-2 flex items-center">
+                <button
+                  className="profile-btn flex items-center gap-2 px-4 py-2 rounded-lg border"
+                  onClick={toggleProfileDropdown}
+                  aria-haspopup="menu"
+                  aria-expanded={isProfileDropdownOpen}
+                >
                   <span className="profile-avatar">👤</span>
                   <span className="profile-name">{getDisplayName()}</span>
+                  {getPlanBadge(plan)}
                   <span className={`profile-arrow ${isProfileDropdownOpen ? 'rotate' : ''}`}>▼</span>
                 </button>
-              {/* Profile dropdown menu here */}
+                {isProfileDropdownOpen && (
+                  <div
+                    className="absolute right-0 mt-2 w-56 bg-[#18181b] border border-[#232136] rounded-lg shadow-lg z-50 animate-fadein"
+                    role="menu"
+                    tabIndex={-1}
+                  >
+                    <a
+                      href="/dashboard"
+                      className="block px-4 py-3 text-gray-100 hover:bg-[#232136] transition"
+                      role="menuitem"
+                      onClick={e => { e.preventDefault(); setIsProfileDropdownOpen(false); router.push('/dashboard'); }}
+                    >Dashboard</a>
+                    <a
+                      href="/my-plans"
+                      className="block px-4 py-3 text-gray-100 hover:bg-[#232136] transition"
+                      role="menuitem"
+                      onClick={e => { e.preventDefault(); setIsProfileDropdownOpen(false); router.push('/my-plans'); }}
+                    >My Plan</a>
+                    <a
+                      href="/profile"
+                      className="block px-4 py-3 text-gray-100 hover:bg-[#232136] transition"
+                      role="menuitem"
+                      onClick={e => { e.preventDefault(); setIsProfileDropdownOpen(false); router.push('/profile'); }}
+                    >Account Settings</a>
+                    <button
+                      className="block w-full text-left px-4 py-3 text-red-400 hover:bg-[#232136] transition"
+                      role="menuitem"
+                      onClick={async e => { e.preventDefault(); setIsProfileDropdownOpen(false); await handleSignOut(e); }}
+                    >Sign Out</button>
+                  </div>
+                )}
               </div>
             )}
           </div>
+        </div>
+
+        {/* Mobile Navbar */}
+        <div className="md:hidden w-full bg-black/80 backdrop-blur-md border-b border-[#232136]/40">
+          {/* Row 1: Logo + Plan Badge + Menu Toggle */}
+          <div className="flex items-center justify-between px-4 py-3">
+            <Link href="/" aria-label="Go to Home" onClick={e => {
+              e.preventDefault();
+              if (window.location.pathname === "/") {
+                router.refresh();
+              } else {
+                router.push("/");
+                setTimeout(() => router.refresh(), 100);
+              }
+            }} className="flex items-center gap-2 cursor-pointer select-none">
+              <Image src="/assets/images/logo (2).png" alt="HustleHack AI Logo" className="w-8 h-8" width={32} height={32} />
+              <span className="text-lg font-bold ml-2 text-gradient">HustleHack AI</span>
+            </Link>
+            {isAuthenticated && !planLoading && (
+              <span className="ml-2 px-3 py-1 rounded-full text-xs font-bold bg-[#7F5AF0]/20 text-[#7F5AF0]">
+                {planDisplay}
+              </span>
+            )}
+            <button
+              className="ml-auto text-white text-2xl focus:outline-none"
+              onClick={() => setMobileNavOpen(v => !v)}
+              aria-label="Toggle navigation menu"
+            >
+              {mobileNavOpen ? '✕' : '☰'}
+            </button>
+          </div>
+          {/* Row 2: Scrollable nav pills */}
+          <div className={`transition-all duration-300 ${mobileNavOpen ? 'max-h-32 py-2' : 'max-h-0 py-0'} overflow-hidden`}> 
+            <div className="flex overflow-x-auto gap-2 px-2 pb-2 scrollbar-hide whitespace-nowrap">
+              {[
+                { href: '/', label: 'Home' },
+                { href: '/#features', label: 'Features' },
+                { href: '/#pricing', label: 'Pricing' },
+                { href: '/instant-hustle', label: 'Instant Hustle Lite' },
+                { href: '/client-finder', label: 'Client Finder' },
+                { href: '/resources', label: 'Resources' },
+                { href: '/about', label: 'About' },
+                { href: '/contact', label: 'Contact' },
+              ].map(link => (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  className={`inline-block px-4 py-2 rounded-full font-medium text-sm transition-colors bg-[#232136] text-gray-100 hover:bg-[#7F5AF0] hover:text-white ${currentPath === link.href ? 'bg-[#7F5AF0] text-white' : ''}`}
+                  onClick={() => setMobileNavOpen(false)}
+                >
+                  {link.label}
+                </Link>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* Sticky Sign In / Get Started CTA for mobile */}
+        {!isAuthenticated && (
+          <div className="md:hidden fixed bottom-0 left-0 right-0 z-50 flex gap-2 p-3 bg-gradient-to-t from-black/80 to-transparent backdrop-blur-md">
+            <button className="flex-1 border px-4 py-2 rounded-lg bg-[#18181b] text-white" onClick={() => openModal('login-modal')}>Sign In</button>
+            <button className="flex-1 bg-gradient-to-r from-[#7F5AF0] to-[#00FFC2] px-4 py-2 rounded-lg text-white font-semibold" onClick={() => openModal('signup-modal')}>Get Started</button>
+          </div>
+        )}
       </nav>
 
       {/* Login Modal */}
@@ -630,22 +804,22 @@ export default function Navigation() {
             </div>
           ) : (
             <>
-          <h2 style={{ color: 'white', textAlign: 'center', marginBottom: '2rem' }}>🚀 Start Your Journey</h2>
+              <h2 style={{ color: 'white', textAlign: 'center', marginBottom: '2rem' }}>🚀 Start Your Journey</h2>
               {signupSubmitError && <div className="text-red-500 text-sm mb-4 text-center">{signupSubmitError}</div>}
               <form id="signupForm" autoComplete="off" onSubmit={handleSignup}>
-            <div className="form-group">
-              <label className="form-label">Full Name</label>
+                <div className="form-group">
+                  <label className="form-label">Full Name</label>
                   <input type="text" id="name" name="name" className="form-input" placeholder="Your Name" required value={signupFields.name} onChange={handleSignupFieldChange} onBlur={handleSignupFieldBlur} />
                   {signupErrors.name && <div className="text-red-500 text-xs mt-1">{signupErrors.name}</div>}
-            </div>
-            <div className="form-group">
-              <label className="form-label">Email</label>
+                </div>
+                <div className="form-group">
+                  <label className="form-label">Email</label>
                   <input type="email" id="email" name="email" className="form-input" placeholder="Your Email" required value={signupFields.email} onChange={handleSignupFieldChange} onBlur={handleSignupFieldBlur} />
                   {signupErrors.email && <div className="text-red-500 text-xs mt-1">{signupErrors.email}</div>}
-            </div>
-            <div className="form-group">
+                </div>
+                <div className="form-group">
                   <label className="form-label" htmlFor="password">Password</label>
-              <div className="password-input-container">
+                  <div className="password-input-container">
                     <input
                       type="password"
                       id="password"
@@ -684,28 +858,28 @@ export default function Navigation() {
                             : 'Strong password!'
                       )}
                     </div>
-              </div>
-            </div>
-            <div className="form-group">
-              <label className="form-label">I am a...</label>
+                  </div>
+                </div>
+                <div className="form-group">
+                  <label className="form-label">I am a...</label>
                   <select id="role" name="role" className="form-input" required value={signupFields.role} onChange={handleSignupFieldChange} onBlur={handleSignupFieldBlur}>
-                <option value="">Select your role</option>
-                <option value="Student">Student</option>
-                <option value="Content Creator">Content Creator</option>
-                <option value="Entrepreneur">Entrepreneur</option>
-                <option value="Freelancer">Freelancer</option>
-                <option value="Hustler">Hustler</option>
-              </select>
+                    <option value="">Select your role</option>
+                    <option value="Student">Student</option>
+                    <option value="Content Creator">Content Creator</option>
+                    <option value="Entrepreneur">Entrepreneur</option>
+                    <option value="Freelancer">Freelancer</option>
+                    <option value="Hustler">Hustler</option>
+                  </select>
                   {signupErrors.role && <div className="text-red-500 text-xs mt-1">{signupErrors.role}</div>}
-            </div>
-            <button type="submit" className="btn btn-primary" style={{ width: '100%', marginBottom: '1rem' }} id="signupBtn">
-              <span className="btn-text">Create Account</span>
-              <span className="btn-loading" style={{ display: 'none' }}>Creating Account...</span>
-            </button>
-            <div style={{ textAlign: 'center', marginTop: '2rem', paddingTop: '2rem', borderTop: '1px solid rgba(255,255,255,0.1)' }}>
-              <p style={{ color: 'var(--gray-400)' }}>Already have an account? <a href="#" style={{ color: 'var(--primary)', textDecoration: 'none' }} onClick={switchToLogin}>Sign In</a></p>
-            </div>
-          </form>
+                </div>
+                <button type="submit" className="btn btn-primary" style={{ width: '100%', marginBottom: '1rem' }} id="signupBtn">
+                  <span className="btn-text">Create Account</span>
+                  <span className="btn-loading" style={{ display: 'none' }}>Creating Account...</span>
+                </button>
+                <div style={{ textAlign: 'center', marginTop: '2rem', paddingTop: '2rem', borderTop: '1px solid rgba(255,255,255,0.1)' }}>
+                  <p style={{ color: 'var(--gray-400)' }}>Already have an account? <a href="#" style={{ color: 'var(--primary)', textDecoration: 'none' }} onClick={switchToLogin}>Sign In</a></p>
+                </div>
+              </form>
             </>
           )}
         </div>
@@ -734,6 +908,26 @@ export default function Navigation() {
         @keyframes shineMove {
           0% { background-position: 200% center; }
           100% { background-position: 0% center; }
+        }
+        .premium-gold-text-gradient {
+          background: linear-gradient(90deg, #FFD700 0%, #FFB300 50%, #FFD700 100%);
+          background-size: 200% auto;
+          color: transparent;
+          background-clip: text;
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          animation: gold-gradient-move 2.5s linear infinite;
+        }
+        @keyframes gold-gradient-move {
+          0% { background-position: 200% center; }
+          100% { background-position: 0% center; }
+        }
+        @keyframes shimmer {
+          0% { filter: brightness(1) drop-shadow(0 0 4px #FFD700); }
+          100% { filter: brightness(1.2) drop-shadow(0 0 12px #FFD700); }
+        }
+        .hover\:animate-shimmer:hover {
+          animation: shimmer 1.2s linear infinite;
         }
       `}</style>
     </>

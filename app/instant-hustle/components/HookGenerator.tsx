@@ -18,10 +18,27 @@ const AI_LOADING_STEPS = [
 ];
 
 function AILoader({ stepIndex, tip }: { stepIndex: number; tip: string }) {
+  // Animated dots
+  const [dotCount, setDotCount] = useState(1);
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setDotCount((prev) => (prev % 3) + 1);
+    }, 500);
+    return () => clearInterval(interval);
+  }, []);
+  // Fun micro-texts
+  const microTexts = [
+    'Our AI is cooking 🔥...',
+    'Analyzing top trends for you...',
+    'Finding viral patterns...',
+    'Optimizing your content magic...',
+    'Scanning 1,000+ hooks...'
+  ];
+  const microText = microTexts[stepIndex % microTexts.length];
   return (
     <div className="flex flex-col items-center justify-center py-12">
-      {/* AI Avatar */}
-      <div className="mb-4 animate-pulse">
+      {/* AI Avatar with rotating icon */}
+      <div className="mb-4 animate-spin-slow">
         <span className="inline-block w-12 h-12 rounded-full bg-gradient-to-br from-[#7F5AF0] to-[#00FFC2] flex items-center justify-center shadow-lg">
           <svg width="32" height="32" viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="16" fill="#18181b"/><text x="50%" y="55%" textAnchor="middle" fill="#7F5AF0" fontSize="18" fontWeight="bold" dy=".3em">🤖</text></svg>
         </span>
@@ -37,13 +54,24 @@ function AILoader({ stepIndex, tip }: { stepIndex: number; tip: string }) {
           <div className="h-2 bg-gradient-to-r from-[#7F5AF0] to-[#00FFC2] transition-all duration-500" style={{ width: `${((stepIndex+1)/AI_LOADING_STEPS.length)*100}%` }} />
         </div>
       </div>
-      {/* Animated Step Text */}
-      <div className="text-lg font-semibold text-gray-100 mb-2 min-h-[32px]">
-        {AI_LOADING_STEPS[stepIndex]}
+      {/* Animated dots and micro-text */}
+      <div className="text-lg font-semibold text-gray-100 mb-2 min-h-[32px] flex items-center gap-2">
+        AI is thinking{'.'.repeat(dotCount)}
+        <span className="ml-2 animate-pulse text-[#00FFC2]">●</span>
       </div>
+      <div className="text-sm text-gray-400 mt-2 italic">{microText}</div>
       {/* AI Tip */}
-      <div className="text-sm text-gray-400 mt-2 italic">{tip}</div>
+      <div className="text-xs text-gray-500 mt-1">{tip}</div>
       <div className="mt-4 text-[#00FFC2] text-xs font-mono animate-pulse">AI Generating…</div>
+      <style jsx>{`
+        .animate-spin-slow {
+          animation: spin 2.5s linear infinite;
+        }
+        @keyframes spin {
+          0% { transform: rotate(0deg); }
+          100% { transform: rotate(360deg); }
+        }
+      `}</style>
     </div>
   );
 }
@@ -264,8 +292,22 @@ export default function HookGenerator({ platform, niche, onNext, onBack }: Props
       upgradePlan();
       return;
     }
+
+    // Patch: Only fetch if tab is visible
+    if (typeof document !== 'undefined' && document.visibilityState !== 'visible') {
+      console.log('Tab not visible, skipping AI fetch');
+      return;
+    }
+
     startAILoading();
+    let controller: AbortController | null = null;
+    let timeout: NodeJS.Timeout | null = null;
     try {
+      controller = new AbortController();
+      timeout = setTimeout(() => {
+        controller?.abort();
+        console.log('AI fetch aborted due to timeout');
+      }, 20000); // 20s timeout
       const endpoint = type === 'hooks' ? '/api/generate-hooks' : '/api/generate-captions';
       const response = await fetch(endpoint, {
         method: 'POST',
@@ -277,6 +319,7 @@ export default function HookGenerator({ platform, niche, onNext, onBack }: Props
           niche,
           count: 5
         }),
+        signal: controller.signal,
       });
       const data = await response.json();
       if (data.success) {
@@ -286,8 +329,15 @@ export default function HookGenerator({ platform, niche, onNext, onBack }: Props
           setCaptions(data.captions);
         }
       }
-    } catch (error) {
-      console.error(`Error generating ${type}:`, error);
+    } catch (error: any) {
+      if (error.name === 'AbortError') {
+        console.error('AI fetch request timed out/aborted');
+      } else {
+        console.error(`Error generating ${type}:`, error);
+      }
+    } finally {
+      setIsGenerating(false);
+      if (timeout) clearTimeout(timeout);
     }
   };
 

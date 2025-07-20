@@ -1,7 +1,7 @@
 'use client'
 
-import Navigation from '../../components/Navigation'
-import Footer from '../../components/Footer'
+import Navigation from '../../components/NavigationClient'
+import Footer from '../../components/FooterClient'
 import Link from 'next/link'
 import '../../legacy-styles.css'
 

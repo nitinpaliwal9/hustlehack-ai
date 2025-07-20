@@ -1,6 +1,6 @@
-import Navigation from '../components/Navigation'
+import Navigation from '../components/NavigationClient'
 import CompleteProfileClient from './CompleteProfileClient'
-import Footer from '../components/Footer'
+import Footer from '../components/FooterClient'
 
 export default function CompleteProfile() {
   return (
