@@ -45,7 +45,7 @@ export default function Footer() {
           </div>
         </div>
         <div className="text-center pt-8 border-t border-[var(--border-color)]">
-          <p className="text-[var(--text-secondary)] text-sm">© 2024 HustleHack AI. All rights reserved. <span className="text-accent">Made with ❤️ in India.</span></p>
+          <p className="text-[var(--text-secondary)] text-sm">© 2024 HustleHack AI. All rights reserved.<br /><span className="block mt-2 text-accent">Made with ❤️ in India.</span></p>
         </div>
       </div>
     </footer>

@@ -39,7 +39,7 @@ export default function TermsAndConditionsPage() {
               color: 'var(--accent)',
               fontSize: '0.9rem',
               fontWeight: '500'
-            }}>Last updated: December 2024</p>
+            }}>Last updated: July 2025</p>
           </div>
           
           {/* Content Card */}

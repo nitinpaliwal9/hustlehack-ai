@@ -1,4 +1,5 @@
 import { useState } from "react";
+import StepShell from '../../components/StepShell';
 
 const sleep = (ms: number) => new Promise((res) => setTimeout(res, ms));
 
@@ -47,7 +48,7 @@ type Props = {
   totalSteps: number;
 };
 
-export default function StepReview({ state, setState }: Props) {
+export default function StepReview({ state, setState, step }: Props) {
   const [processing, setProcessing] = useState(false);
   const [stage, setStage] = useState(0);
   const [results, setResults] = useState<any[]>([]);
@@ -80,8 +81,13 @@ export default function StepReview({ state, setState }: Props) {
       </div>
     );
     return (
-      <div className="flex flex-col items-center gap-4">
-        <h2 className="text-xl font-bold text-[--hh-purple]">Scanning YouTube…</h2>
+      <StepShell
+        step={step}
+        totalSteps={6}
+        title="Scanning YouTube…"
+        subtitle="Running your client search. This may take a few seconds."
+        variant="current"
+      >
         <div className="w-full max-w-xs">
           <div className="flex flex-col gap-2">
             {STAGES.map((label, i) => (
@@ -110,7 +116,7 @@ export default function StepReview({ state, setState }: Props) {
             animation: shimmer 1.5s linear infinite;
           }
         `}</style>
-      </div>
+      </StepShell>
     );
   }
 
@@ -143,8 +149,13 @@ export default function StepReview({ state, setState }: Props) {
       window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${url}&summary=${text}`,'_blank');
     };
     return (
-      <div className="flex flex-col items-center gap-6">
-        <h2 className="text-xl font-bold text-[--hh-purple]">Results</h2>
+      <StepShell
+        step={step}
+        totalSteps={6}
+        title="Results"
+        subtitle="Here are your best-fit YouTube clients."
+        variant="current"
+      >
         <div className="w-full flex flex-col gap-4">
           {results.map((ch) => (
             <div key={ch.channelId} className="bg-gray-50 rounded-lg p-4 flex gap-4 items-center shadow">
@@ -176,13 +187,18 @@ export default function StepReview({ state, setState }: Props) {
             Share on LinkedIn
           </button>
         </div>
-      </div>
+      </StepShell>
     );
   }
 
   return (
-    <div className="flex flex-col items-center text-center gap-6">
-      <h2 className="text-xl font-bold text-[--hh-purple]">Review & Run</h2>
+    <StepShell
+      step={step}
+      totalSteps={6}
+      title="Review & Run"
+      subtitle="Review your selections and run the scan to find clients."
+      variant="current"
+    >
       <div className="bg-gray-50 rounded-lg p-4 w-full max-w-md text-left">
         <div><span className="font-semibold">Niches:</span> {state.niches.join(", ")}</div>
         <div><span className="font-semibold">Subscribers:</span> {state.subsMin} – {state.subsMax}</div>
@@ -195,6 +211,6 @@ export default function StepReview({ state, setState }: Props) {
       >
         Run Scan
       </button>
-    </div>
+    </StepShell>
   );
 } 

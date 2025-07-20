@@ -8,6 +8,7 @@ import { useAuth } from '../hooks/useAuth'
 import { Sparkles } from 'lucide-react';
 import { useUserPlan } from '../hooks/useAuth';
 import { getPlanDisplayName } from '../planUtils';
+import PlanBadgeModal from '@/app/components/PlanBadgeModal';
 import zxcvbn from 'zxcvbn';
 
 // Focus trap utility
@@ -54,6 +55,7 @@ export default function Navigation() {
   const [isLoading, setIsLoading] = useState(false)
   const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false)
   const [currentPath, setCurrentPath] = useState('/')
+  const [isModalOpen, setIsModalOpen] = useState(false);
   
   // Use authentication hook
   const { user, isAuthenticated, signIn, signUp, signInWithGoogle, signOut, resetPassword, checkNetworkStatus, error: authError } = useAuth()
@@ -595,6 +597,14 @@ export default function Navigation() {
               <li><Link href="/about" className={`nav-link pointer-events-auto ${currentPath === '/about' ? 'active' : ''}`}>About</Link></li>
               <li><Link href="/contact" className={`nav-link pointer-events-auto ${currentPath === '/contact' ? 'active' : ''}`}>Contact</Link></li>
             </ul>
+            {/* Plan Badge Modal Trigger Button (for demo) */}
+            <button 
+              className="plan-badge ml-4 px-4 py-2 rounded-full bg-gradient-to-r from-[#7F5AF0] to-[#00FFC2] text-white font-bold shadow hover:shadow-lg transition-all"
+              onClick={() => setIsModalOpen(true)}
+            >
+              Creator Plan
+            </button>
+            <PlanBadgeModal open={isModalOpen} onClose={() => setIsModalOpen(false)} />
           </div>
           <div className="flex items-center gap-4">
             {!isAuthenticated && (

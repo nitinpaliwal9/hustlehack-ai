@@ -1,3 +1,5 @@
+import StepShell from '../../components/StepShell';
+
 const NICHES = [
   "Fitness", "Education", "Tech & AI", "Finance", "Entrepreneurship", "Motivation", "Parenting", "Health & Wellness", "Gaming", "Beauty", "Travel", "Food", "Fashion", "Personal Branding"
 ];
@@ -21,9 +23,13 @@ export default function StepNiche({ state, setState, setStep, step }: Props) {
   };
 
   return (
-    <div className="flex flex-col items-center text-center gap-6">
-      <h2 className="text-xl font-bold text-gray-100">Select Your Niche(s)</h2>
-      <p className="text-gray-400 mb-2">Choose one or more niches to find the best-fit clients.</p>
+    <StepShell
+      step={step}
+      totalSteps={6}
+      title="Select Your Niche(s)"
+      subtitle="Choose one or more niches to find the best-fit clients."
+      variant="current"
+    >
       <div className="flex flex-wrap gap-2 justify-center">
         {NICHES.map((niche) => (
           <button
@@ -42,6 +48,6 @@ export default function StepNiche({ state, setState, setStep, step }: Props) {
       >
         Next
       </button>
-    </div>
+    </StepShell>
   );
 } 
