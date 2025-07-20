@@ -2,8 +2,11 @@
 
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 // @ts-ignore
-import { supabase as _supabase } from '../../../lib/supabaseClient';
-const supabase: any = _supabase;
+import { supabase } from '../../../lib/supabaseClient';
+
+// Type assertion for supabase client
+// @ts-ignore
+const supabaseClient = supabase as any;
 
 type Plan = 'starter' | 'creator' | 'pro';
 
@@ -47,14 +50,14 @@ export default function PlanGatingProvider({ children }: Props) {
   useEffect(() => {
     const checkUserPlan = async () => {
       try {
-        const { data: { user } } = await supabase.auth.getUser();
+        const { data: { user } } = await supabaseClient.auth.getUser();
         if (!user) {
           setUserPlan({ plan: 'starter', isAuthenticated: false });
           setIsLoading(false);
           return;
         }
         // Fetch subscription for this user
-        const { data: subscription, error } = await supabase
+        const { data: subscription, error } = await supabaseClient
           .from('subscriptions')
           .select('plan_name')
           .eq('user_id', user.id)
