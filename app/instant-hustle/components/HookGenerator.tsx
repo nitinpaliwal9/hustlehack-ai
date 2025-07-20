@@ -133,7 +133,7 @@ export default function HookGenerator({ platform, niche, onNext, onBack }: Props
     if (platformHooks && platformHooks[niche as keyof typeof platformHooks]) {
       const allHooks = platformHooks[niche as keyof typeof platformHooks] as string[];
       // For Starter users, only show first 2 hooks
-      const limitedHooks = userPlan.plan === 'starter' ? allHooks.slice(0, 2) : allHooks;
+      const limitedHooks = (userPlan.plan !== 'creator' && userPlan.plan !== 'pro') ? allHooks.slice(0, 2) : allHooks;
       setHooks(limitedHooks);
     } else {
       const fallbackHooks = [
@@ -143,7 +143,7 @@ export default function HookGenerator({ platform, niche, onNext, onBack }: Props
         "Why {platform} creators are obsessed with this",
         "This {niche} hack will blow your mind!"
       ];
-      const limitedHooks = userPlan.plan === 'starter' ? fallbackHooks.slice(0, 2) : fallbackHooks;
+      const limitedHooks = (userPlan.plan !== 'creator' && userPlan.plan !== 'pro') ? fallbackHooks.slice(0, 2) : fallbackHooks;
       setHooks(limitedHooks);
     }
   }, [platform, niche, userPlan.plan]);
@@ -402,7 +402,7 @@ export default function HookGenerator({ platform, niche, onNext, onBack }: Props
       </p>
 
       {/* Plan Status */}
-      {userPlan.plan === 'starter' && (
+      {userPlan.plan !== 'creator' && userPlan.plan !== 'pro' && (
         <div className="mb-6 p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
           <p className="text-sm text-yellow-800">
             ⭐ Starter Plan: {remainingGenerations} AI generations remaining
@@ -438,7 +438,7 @@ export default function HookGenerator({ platform, niche, onNext, onBack }: Props
       
       {isGenerating ? (
         <AILoader stepIndex={aiStep} tip={aiTip ?? ""} />
-      ) : userPlan.plan === 'starter' && activeTab === 'hooks' ? (
+      ) : (userPlan.plan !== 'creator' && userPlan.plan !== 'pro' && activeTab === 'hooks') ? (
         <>
           {/* Show limited content for Starter */}
           <div className="space-y-4 max-w-2xl mx-auto">

@@ -52,7 +52,7 @@ export default function FinderWizard() {
         <div className="text-red-500 font-bold text-center">Step not found.</div>
       )}
       {/* Sticky Upgrade Bar for Free Users */}
-      {userPlan.plan === 'starter' && (
+      {userPlan.plan !== 'creator' && userPlan.plan !== 'pro' && (
         <div className="fixed bottom-0 left-0 w-full z-40 flex justify-center pointer-events-none">
           <div className="pointer-events-auto w-full max-w-2xl mx-auto px-4">
             <div className="bg-gradient-to-r from-[#7F5AF0] to-[#00FFC2] text-white rounded-t-xl shadow-2xl flex flex-col sm:flex-row items-center justify-between gap-3 py-4 px-6 animate-slideup">

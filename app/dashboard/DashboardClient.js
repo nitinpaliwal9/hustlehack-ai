@@ -993,7 +993,7 @@ export default function DashboardClient() {
                   <Link href="/#pricing" className="w-full sm:w-auto bg-white text-[#7F5AF0] px-4 sm:px-6 md:px-8 py-2.5 sm:py-3 md:py-4 rounded-xl font-bold text-sm sm:text-base md:text-lg hover:bg-gray-50 transition-all duration-300 shadow-md hover:shadow-lg transform hover:scale-105">
                     Upgrade / Renew Plan
                   </Link>
-                  <a href="mailto:hustlehackai@gmail.com" className="text-white underline hover:text-gray-100 transition-colors text-xs sm:text-sm md:text-lg">
+                  <a href="/help" className="text-white underline hover:text-gray-100 transition-colors text-xs sm:text-sm md:text-lg">
                     Need help? Contact support
                   </a>
                 </div>

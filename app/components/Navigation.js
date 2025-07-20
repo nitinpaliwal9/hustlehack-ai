@@ -618,7 +618,8 @@ export default function Navigation() {
                 </button>
                 {isProfileDropdownOpen && (
                   <div
-                    className="absolute right-0 mt-2 w-56 bg-[#18181b] border border-[#232136] rounded-lg shadow-lg z-50 animate-fadein"
+                    className="absolute right-0 w-56 bg-[#18181b] border border-[#232136] rounded-lg shadow-lg z-50 animate-fadein"
+                    style={{ top: 'calc(100% + 8px)', marginTop: 0 }}
                     role="menu"
                     tabIndex={-1}
                   >
@@ -673,6 +674,16 @@ export default function Navigation() {
                 {planDisplay}
               </span>
             )}
+            {/* Mobile Profile Avatar */}
+            {isAuthenticated && (
+              <button
+                className="ml-2 flex items-center justify-center rounded-full bg-[#232136] w-10 h-10 text-2xl md:hidden border border-[#2d2a45] focus:outline-none focus:ring-2 focus:ring-[#7F5AF0]"
+                onClick={() => setIsProfileDropdownOpen(v => !v)}
+                aria-label="Open profile menu"
+              >
+                <span role="img" aria-label="Profile">👤</span>
+              </button>
+            )}
             <button
               className="ml-auto text-white text-2xl focus:outline-none"
               onClick={() => setMobileNavOpen(v => !v)}
@@ -715,219 +726,44 @@ export default function Navigation() {
           </div>
         )}
       </nav>
-
-      {/* Login Modal */}
-      <div id="login-modal" className="modal" ref={loginModalRef}>
-        <div className="modal-content">
-          <button className="modal-close" onClick={() => closeModal('login-modal')}>&times;</button>
-          <h2 style={{ color: 'white', textAlign: 'center', marginBottom: '2rem' }}>Welcome Back!</h2>
-          {/* Google Sign In Button */}
-          <button 
-            type="button" 
-            className="btn-google" 
-            onClick={handleGoogleSignIn}
-            style={{ width: '100%', marginBottom: '1rem' }}
-          >
-            <svg className="google-icon" viewBox="0 0 24 24" width="20" height="20">
-              <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
-              <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
-              <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
-              <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
-            </svg>
-            <span>Continue with Google</span>
-          </button>
-          <div className="auth-divider" style={{ textAlign: 'center', margin: '1rem 0', position: 'relative' }}>
-            <span style={{ background: 'var(--bg-color)', padding: '0 1rem', color: 'var(--gray-400)' }}>or continue with email</span>
-          </div>
-          {loginSubmitError && <div className="text-red-500 text-sm mb-4 text-center">{loginSubmitError}</div>}
-          <form id="loginForm" onSubmit={handleLogin} autoComplete="off">
-            <div className="form-group">
-              <label className="form-label">Email Address</label>
-              <input type="email" id="loginEmail" name="email" className="form-input" placeholder="Enter your email" required value={loginFields.email} onChange={handleLoginFieldChange} onBlur={handleLoginFieldBlur} />
-              {loginErrors.email && <div className="text-red-500 text-xs mt-1">{loginErrors.email}</div>}
-            </div>
-            <div className="form-group">
-              <label className="form-label">Password</label>
-              <div className="password-input-container">
-                <input type="password" id="loginPassword" name="password" className="form-input" placeholder="Enter your password" required value={loginFields.password} onChange={handleLoginFieldChange} onBlur={handleLoginFieldBlur} />
-                <button type="button" className="password-toggle" onClick={() => togglePasswordVisibility('loginPassword')}>👁️</button>
-              </div>
-              {loginErrors.password && <div className="text-red-500 text-xs mt-1">{loginErrors.password}</div>}
-            </div>
-            <button 
-              type="submit" 
-              id="loginBtn" 
-              className="btn btn-primary" 
-              style={{ width: '100%', marginBottom: '1rem' }}
-              disabled={isLoading}
-            >
-              {isLoading ? 'Signing In...' : 'Sign In'}
-            </button>
-            <div style={{ textAlign: 'center' }}>
-              <a href="#" onClick={handleForgotPassword} style={{ color: 'var(--primary)', textDecoration: 'none' }}>Forgot Password?</a>
-            </div>
-            <div style={{ textAlign: 'center', marginTop: '2rem', paddingTop: '2rem', borderTop: '1px solid rgba(255,255,255,0.1)' }}>
-              <p style={{ color: 'var(--gray-400)' }}>Don&apos;t have an account? <a href="#" style={{ color: 'var(--primary)', textDecoration: 'none' }} onClick={switchToSignup}>Sign Up</a></p>
-            </div>
-          </form>
-        </div>
-      </div>
-      {/* Sign Up Modal */}
-      <div id="signup-modal" className="modal" ref={signupModalRef}>
-        <div className="modal-content">
-          <button className="modal-close" onClick={() => { closeModal('signup-modal'); setShowCheckEmail(false); }}>&times;</button>
-          {showCheckEmail ? (
-            <div className="text-center py-12 px-4">
-              <h2 className="text-2xl font-bold text-white mb-4">Check your email!</h2>
-              <p className="text-gray-300 mb-4">We've sent a verification link to <span className="font-semibold text-[#7F5AF0]">{signupFields.email}</span>. Please verify your email to activate your account.</p>
+      {/* Mobile Profile Overlay (outside nav for correct JSX structure) */}
+      {isProfileDropdownOpen && (
+        <div className="fixed inset-0 z-[999] flex items-end md:hidden" style={{ background: 'rgba(24,24,36,0.92)' }}>
+          <div className="w-full rounded-t-2xl bg-[#18181b] border-t border-[#232136] shadow-2xl animate-slideup-profile p-6">
+            <div className="flex flex-col gap-2">
               <button
-                className="btn btn-primary mt-4"
-                onClick={handleResendVerification}
-                disabled={resendLoading}
-              >
-                {resendLoading ? 'Resending...' : 'Resend Verification Email'}
-              </button>
-              <div className="mt-4">
-                <button
-                  className="btn btn-secondary"
-                  onClick={checkEmailVerified}
-                  disabled={checkingVerification}
-                >
-                  {checkingVerification ? "Checking..." : "I've verified, continue"}
-                </button>
-              </div>
-              {verificationSuccess && <div className="text-green-500 mt-3">Email verified! Redirecting...</div>}
-              {verificationError && <div className="text-red-500 mt-3">{verificationError}</div>}
-              {resendSuccess && <div className="text-green-500 mt-3">Verification email resent!</div>}
-              {resendError && <div className="text-red-500 mt-3">{resendError}</div>}
-              <div className="mt-8 text-gray-400 text-sm">Didn’t get the email? Check your spam folder or try resending.</div>
+                className="w-full text-left px-4 py-4 text-lg text-gray-100 rounded-lg hover:bg-[#232136] transition"
+                onClick={e => { e.preventDefault(); setIsProfileDropdownOpen(false); router.push('/dashboard'); }}
+              >Dashboard</button>
+              <button
+                className="w-full text-left px-4 py-4 text-lg text-gray-100 rounded-lg hover:bg-[#232136] transition"
+                onClick={e => { e.preventDefault(); setIsProfileDropdownOpen(false); router.push('/my-plans'); }}
+              >My Plan</button>
+              <button
+                className="w-full text-left px-4 py-4 text-lg text-gray-100 rounded-lg hover:bg-[#232136] transition"
+                onClick={e => { e.preventDefault(); setIsProfileDropdownOpen(false); router.push('/profile'); }}
+              >Account Settings</button>
+              <button
+                className="w-full text-left px-4 py-4 text-lg text-red-400 rounded-lg hover:bg-[#232136] transition"
+                onClick={async e => { e.preventDefault(); setIsProfileDropdownOpen(false); await handleSignOut(e); }}
+              >Sign Out</button>
             </div>
-          ) : (
-            <>
-              <h2 style={{ color: 'white', textAlign: 'center', marginBottom: '2rem' }}>🚀 Start Your Journey</h2>
-              {signupSubmitError && <div className="text-red-500 text-sm mb-4 text-center">{signupSubmitError}</div>}
-              <form id="signupForm" autoComplete="off" onSubmit={handleSignup}>
-                <div className="form-group">
-                  <label className="form-label">Full Name</label>
-                  <input type="text" id="name" name="name" className="form-input" placeholder="Your Name" required value={signupFields.name} onChange={handleSignupFieldChange} onBlur={handleSignupFieldBlur} />
-                  {signupErrors.name && <div className="text-red-500 text-xs mt-1">{signupErrors.name}</div>}
-                </div>
-                <div className="form-group">
-                  <label className="form-label">Email</label>
-                  <input type="email" id="email" name="email" className="form-input" placeholder="Your Email" required value={signupFields.email} onChange={handleSignupFieldChange} onBlur={handleSignupFieldBlur} />
-                  {signupErrors.email && <div className="text-red-500 text-xs mt-1">{signupErrors.email}</div>}
-                </div>
-                <div className="form-group">
-                  <label className="form-label" htmlFor="password">Password</label>
-                  <div className="password-input-container">
-                    <input
-                      type="password"
-                      id="password"
-                      name="password"
-                      className="form-input"
-                      placeholder="Password"
-                      required
-                      value={signupFields.password}
-                      onChange={handleSignupFieldChange}
-                      onBlur={handleSignupFieldBlur}
-                      aria-describedby="password-strength"
-                      aria-invalid={!!signupErrors.password}
-                    />
-                    <button type="button" className="password-toggle" onClick={() => togglePasswordVisibility('password')} aria-label="Show or hide password">👁️</button>
-                  </div>
-                  {signupErrors.password && <div className="text-red-500 text-xs mt-1">{signupErrors.password}</div>}
-                  {/* Password strength meter */}
-                  <div id="password-strength" className="mt-2">
-                    <div className="w-full h-2 rounded bg-gray-200 overflow-hidden">
-                      <div
-                        className={`h-2 rounded transition-all duration-300 ${
-                          passwordStrength.score === 0 ? 'w-1/5 bg-red-400' :
-                          passwordStrength.score === 1 ? 'w-2/5 bg-orange-400' :
-                          passwordStrength.score === 2 ? 'w-3/5 bg-yellow-400' :
-                          passwordStrength.score === 3 ? 'w-4/5 bg-blue-400' :
-                          'w-full bg-green-500'
-                        }`}
-                      ></div>
-                    </div>
-                    <div className="text-xs mt-1 text-gray-500">
-                      {signupFields.password && (
-                        passwordStrength.score < 3
-                          ? `Weak password. ${passwordStrength.feedback}`
-                          : passwordStrength.score < 4
-                            ? 'Good password, but could be stronger.'
-                            : 'Strong password!'
-                      )}
-                    </div>
-                  </div>
-                </div>
-                <div className="form-group">
-                  <label className="form-label">I am a...</label>
-                  <select id="role" name="role" className="form-input" required value={signupFields.role} onChange={handleSignupFieldChange} onBlur={handleSignupFieldBlur}>
-                    <option value="">Select your role</option>
-                    <option value="Student">Student</option>
-                    <option value="Content Creator">Content Creator</option>
-                    <option value="Entrepreneur">Entrepreneur</option>
-                    <option value="Freelancer">Freelancer</option>
-                    <option value="Hustler">Hustler</option>
-                  </select>
-                  {signupErrors.role && <div className="text-red-500 text-xs mt-1">{signupErrors.role}</div>}
-                </div>
-                <button type="submit" className="btn btn-primary" style={{ width: '100%', marginBottom: '1rem' }} id="signupBtn">
-                  <span className="btn-text">Create Account</span>
-                  <span className="btn-loading" style={{ display: 'none' }}>Creating Account...</span>
-                </button>
-                <div style={{ textAlign: 'center', marginTop: '2rem', paddingTop: '2rem', borderTop: '1px solid rgba(255,255,255,0.1)' }}>
-                  <p style={{ color: 'var(--gray-400)' }}>Already have an account? <a href="#" style={{ color: 'var(--primary)', textDecoration: 'none' }} onClick={switchToLogin}>Sign In</a></p>
-                </div>
-              </form>
-            </>
-          )}
+            <button
+              className="mt-6 w-full py-3 rounded-lg bg-[#232136] text-gray-400 text-base font-medium hover:bg-[#232136]/80 transition"
+              onClick={() => setIsProfileDropdownOpen(false)}
+            >Close</button>
+          </div>
+          {/* Overlay background click closes menu */}
+          <div className="absolute inset-0 -z-10" onClick={() => setIsProfileDropdownOpen(false)} />
         </div>
-      </div>
-      <style jsx>{`
-        .animate-glow {
-          box-shadow: 0 0 16px 4px #ffe27a, 0 0 32px 8px #7f5af0;
-          animation: glowPulse 2.5s infinite alternate;
+      )}
+      <style jsx global>{`
+        @keyframes slideup-profile {
+          0% { transform: translateY(100%); opacity: 0; }
+          100% { transform: translateY(0); opacity: 1; }
         }
-        @keyframes glowPulse {
-          0% { box-shadow: 0 0 16px 4px #ffe27a, 0 0 32px 8px #7f5af0; }
-          100% { box-shadow: 0 0 32px 8px #ffe27a, 0 0 48px 16px #7f5af0; }
-        }
-        .animate-sparkle {
-          animation: sparkle 2s infinite linear;
-        }
-        @keyframes sparkle {
-          0%, 100% { filter: drop-shadow(0 0 8px #fff) brightness(1.1); }
-          50% { filter: drop-shadow(0 0 16px #ffb6f9) brightness(1.3); }
-        }
-        .shine-text {
-          background: linear-gradient(90deg, #fff 20%, #ffe27a 40%, #7f5af0 60%, #fff 80%);
-          background-size: 200% auto;
-          animation: shineMove 2.5s linear infinite;
-        }
-        @keyframes shineMove {
-          0% { background-position: 200% center; }
-          100% { background-position: 0% center; }
-        }
-        .premium-gold-text-gradient {
-          background: linear-gradient(90deg, #FFD700 0%, #FFB300 50%, #FFD700 100%);
-          background-size: 200% auto;
-          color: transparent;
-          background-clip: text;
-          -webkit-background-clip: text;
-          -webkit-text-fill-color: transparent;
-          animation: gold-gradient-move 2.5s linear infinite;
-        }
-        @keyframes gold-gradient-move {
-          0% { background-position: 200% center; }
-          100% { background-position: 0% center; }
-        }
-        @keyframes shimmer {
-          0% { filter: brightness(1) drop-shadow(0 0 4px #FFD700); }
-          100% { filter: brightness(1.2) drop-shadow(0 0 12px #FFD700); }
-        }
-        .hover\:animate-shimmer:hover {
-          animation: shimmer 1.2s linear infinite;
+        .animate-slideup-profile {
+          animation: slideup-profile 0.4s cubic-bezier(0.4,0,0.2,1) forwards;
         }
       `}</style>
     </>
