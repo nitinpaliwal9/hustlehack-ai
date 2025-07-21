@@ -49,7 +49,7 @@ function useFocusTrap(isOpen, modalRef) {
 
 export default function Navigation() {
   const router = useRouter();
-  const dropdownRef = useRef<HTMLDivElement>(null);
+  const dropdownRef = useRef(null);
   const [isScrolled, setIsScrolled] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const [isLoading, setIsLoading] = useState(false)

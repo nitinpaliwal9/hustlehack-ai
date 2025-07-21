@@ -7,6 +7,7 @@ import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { supabase } from '../lib/supabaseClient'
 import Image from 'next/image'
+import PoweredByBar from './components/PoweredByBar';
 
 export default function HomePage() {
   const { signInWithGoogle, user, isLoading } = useAuth()
@@ -509,6 +510,9 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+
+      {/* Powered By Bar */}
+      <PoweredByBar />
 
       {/* Footer */}
       <LazyFooter />

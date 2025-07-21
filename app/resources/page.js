@@ -257,6 +257,13 @@ export default function ResourcesPage() {
             </div>
             <div className="tools-grid" role="list" style={{gap: '2rem', position: 'relative'}}>
               <div className="tool-card" role="listitem" tabIndex="0" style={{padding: '2rem', position: 'relative'}}>
+                <span className="tool-icon" aria-hidden="true">🤖</span>
+                <h3 className="tool-name">AutoGPT</h3>
+                <p className="tool-description">No-code AI agent that breaks down goals, executes tasks, and refines results. Build your own AutoGPT system!</p>
+                <Link href="/resources/ai-tools-stack/auto-gpt" className="btn btn-primary w-full mt-4">Explore</Link>
+              </div>
+              
+              <div className="tool-card" role="listitem" tabIndex="0" style={{padding: '2rem', position: 'relative'}}>
                 <span className="tool-badge absolute top-3 right-3 bg-gradient-to-r from-yellow-400 via-yellow-300 to-yellow-500 text-white shadow-lg px-3 py-1 rounded-full text-xs font-bold tracking-wide border border-yellow-200/60 uppercase z-10" style={{letterSpacing: '0.08em', boxShadow: '0 2px 8px 0 rgba(255, 215, 0, 0.18)'}}>Coming Soon</span>
                 <span className="tool-icon" aria-hidden="true">🤖</span>
                 <h3 className="tool-name">ChatGPT</h3>
