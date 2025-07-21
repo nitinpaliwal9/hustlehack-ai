@@ -378,6 +378,7 @@ export default function Navigation() {
 
   // Plan badge mapping
   const getPlanBadge = (plan) => {
+    if (!isAuthenticated || !plan || plan === 'Not active') return null;
     if (plan === 'pro') {
       return (
         <span
@@ -403,7 +404,7 @@ export default function Navigation() {
     if (plan === 'starter') {
       return (
         <span
-          className="hidden sm:inline-block ml-2 px-3 py-1 rounded-full text-xs font-bold tracking-widest uppercase bg-white/10 text-gray-100 border border-white/20 shadow-sm align-middle"
+          className="hidden sm:inline-block ml-2 px-3 py-1 rounded-full text-xs font-bold tracking-widest uppercase bg-gradient-to-r from-teal-400 via-gray-700 to-gray-900 text-white border-2 border-teal-400 shadow align-middle"
           title="Your current HustleHack AI plan."
           style={{ fontVariant: 'small-caps', letterSpacing: '0.08em' }}
         >
@@ -584,7 +585,7 @@ export default function Navigation() {
                 setTimeout(() => router.refresh(), 100);
               }
             }} className="flex items-center gap-2 cursor-pointer select-none">
-              <Image src="/assets/images/logo (2).png" alt="HustleHack AI Logo" className="w-8 h-8" width={32} height={32} />
+              <Image src="/logo (2).webp" alt="HustleHack AI Logo" className="w-8 h-8" width={32} height={32} />
               <span className="text-xl font-bold ml-2 text-gradient">HustleHack AI</span>
             </Link>
             <ul className="flex items-center gap-6 text-sm font-medium ml-8">
@@ -676,7 +677,7 @@ export default function Navigation() {
                 setTimeout(() => router.refresh(), 100);
               }
             }} className="flex items-center gap-2 cursor-pointer select-none">
-              <Image src="/assets/images/logo (2).png" alt="HustleHack AI Logo" className="w-8 h-8" width={32} height={32} />
+              <Image src="/logo (2).webp" alt="HustleHack AI Logo" className="w-8 h-8" width={32} height={32} />
               <span className="text-lg font-bold ml-2 text-gradient">HustleHack AI</span>
             </Link>
             {isAuthenticated && !planLoading && (

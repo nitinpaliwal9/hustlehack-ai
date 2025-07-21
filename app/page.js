@@ -6,6 +6,7 @@ import { useAuth } from './hooks/useAuth'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { supabase } from '../lib/supabaseClient'
+import Image from 'next/image'
 
 export default function HomePage() {
   const { signInWithGoogle, user, isLoading } = useAuth()
@@ -192,130 +193,52 @@ export default function HomePage() {
       <LazyNavigation />
 
       {/* Hero Section */}
-      <section id="home" className="hero-section relative w-full min-h-screen flex items-center justify-center overflow-hidden pt-44 px-2 sm:px-8" style={{ position: 'relative', paddingTop: '10rem' }}>
-        {/* Background Image with Slow Zoom */}
-        <div
-          className="absolute inset-0 w-full h-full z-0 bg-cover bg-center bg-no-repeat sm:hero-bg-zoom"
-          style={{
-            backgroundImage: `url(${typeof window !== 'undefined' && window.innerWidth < 640 ? '/hero_section_mobile.jpg' : '/hero_section.jpg'})`,
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-            backgroundRepeat: 'no-repeat',
-            transition: 'background-image 0.3s',
-          }}
+      <header className="relative min-h-[60vh] md:min-h-[70vh] flex items-center justify-center">
+        <Image
+          src="/hero_section.webp"
+          alt="HustleHack AI – AI tools for creators, students & solopreneurs"
+          fill
+          priority
+          sizes="100vw"
+          className="object-cover"
         />
-        {/* Dark Overlay for Depth and Text Clarity */}
-        <div className="absolute inset-0 w-full h-full z-10 pointer-events-none" style={{ background: 'rgba(0,0,0,0.32)' }} />
-        {/* Golden Badge */}
-        <div className="absolute left-0 right-0 z-30 flex justify-center animate-badge-fade-in w-full" style={{ top: '7.5rem', pointerEvents: 'none' }}>
-          <div className="relative w-full max-w-xl flex justify-center" style={{ pointerEvents: 'auto' }}>
-            <span className="absolute left-0 right-0 top-0 bottom-0 w-full h-full rounded-full" style={{ background: 'linear-gradient(90deg, #FFD700 0%, #FFB300 100%)', zIndex: 1 }} aria-hidden="true"></span>
-            <span className="relative z-10 font-semibold text-xs sm:text-sm md:text-base tracking-wide uppercase whitespace-normal px-4 py-1.5 rounded-full block text-center" style={{ color: '#232946', boxShadow: '0 1px 6px #FFD70044, 0 0 16px 4px #FFD70055', letterSpacing: 1, border: '1px solid #FFD700', textShadow: '0 1px 2px #fff8, 0 0.5px 0.5px #FFD700', wordBreak: 'break-word', maxWidth: '100%', background: 'transparent' }}>
-              India’s #1 AI Learning Platform 🔥
-            </span>
+        <div className="absolute inset-0 bg-gradient-to-b from-black/40 to-black/90" />
+        <div className="relative z-10 max-w-2xl px-4 text-center">
+          <h1 className="text-4xl md:text-6xl font-bold text-white">
+            Build. Launch. Earn with AI.
+          </h1>
+          <p className="mt-4 text-lg md:text-xl text-white/80">
+            Tools, templates & growth packs for students and creators.
+          </p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mt-6">
+            <Link href="/instant-hustle" className="btn btn-lg premium-btn glow-cta rounded-full font-bold flex items-center justify-center gap-2 min-w-[220px] px-6 py-3 text-base sm:text-lg animate-pulse">
+              ✨ Try Instant Hustle Lite
+            </Link>
+            {(!user || (user && userProfile && !userProfile.profile_completed)) && (
+              <button className="btn btn-lg premium-btn glow-cta rounded-full font-bold flex items-center justify-center gap-2 min-w-[220px] px-6 py-3 text-base sm:text-lg" onClick={handleGoogleSignIn}>
+                🚀 Start Your AI Journey
+              </button>
+            )}
+            {user && userProfile && userProfile.profile_completed && (
+              <button className="btn btn-lg premium-btn glow-cta rounded-full font-bold flex items-center justify-center gap-2 min-w-[220px] px-6 py-3 text-base sm:text-lg" onClick={() => router.push('/dashboard')}>
+                🎯 Go to Dashboard
+              </button>
+            )}
+            <button className="btn btn-lg premium-btn glow-cta rounded-full font-bold flex items-center justify-center min-w-[260px] px-6 py-3 text-base sm:text-lg" onClick={() => {
+              const el = document.getElementById('features');
+              if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }}>
+              📁 Explore the Toolkit
+            </button>
+            <button className="btn btn-lg premium-btn glow-cta rounded-full font-bold flex items-center justify-center min-w-[300px] px-8 py-3 text-base sm:text-lg whitespace-normal text-center" onClick={() => {
+              const el = document.getElementById('pricing');
+              if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }}>
+              <span className="block w-full">⚡ Unlock&nbsp;Resources<br />Now</span>
+            </button>
           </div>
         </div>
-        {/* Hero Content */}
-        <div className="relative z-40 w-full flex flex-col items-center justify-center text-center px-2 sm:px-4" style={{ marginTop: '0', minWidth: 0 }}>
-          <div className="max-w-5xl mx-auto w-full min-w-0">
-            {/* Headline with fast swipe animations */}
-            <div className="overflow-hidden min-w-0 break-words">
-              <h1 className="hero-title premium-heading mb-2 text-3xl xs:text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold" style={{ fontWeight: 900, lineHeight: 1.05, letterSpacing: '0.04em', color: '#fff', marginBottom: 0, background: 'none', WebkitTextFillColor: '#fff', WebkitBackgroundClip: 'unset', backgroundClip: 'unset', wordBreak: 'break-word' }}>
-                <span className="block hero-line hero-line-1 animate-hero-swipe-left">AI Isn’t the Future.</span>
-                <span className="block hero-line hero-line-2 animate-hero-swipe-right" style={{ marginTop: 0 }}>It’s Your Shortcut.</span>
-              </h1>
-            </div>
-            <p className="hero-subtitle text-base sm:text-lg md:text-xl text-gray-200 mb-10 max-w-2xl mx-auto font-medium break-words" tabIndex="0" style={{ textShadow: '0 2px 8px #23294688', wordBreak: 'break-word' }}>
-              Access ready-to-use blueprints, prompt packs, and automation stacks built for people who actually build.
-            </p>
-            {/* CTA Buttons */}
-            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mt-2 flex-wrap w-full">
-              {/* Instant Hustle Lite - Featured CTA */}
-              <Link href="/instant-hustle" className="btn btn-lg premium-btn glow-cta rounded-full font-bold flex items-center gap-2 w-full sm:w-auto text-base sm:text-lg animate-pulse" style={{ fontSize: '1.05rem', minWidth: 0, wordBreak: 'break-word', background: 'linear-gradient(135deg, #7F5AF0 0%, #00FFC2 100%)', border: '2px solid #00FFC2' }}>
-                ✨ Try Instant Hustle Lite
-              </Link>
-              
-              {/* Show "Start Your AI Journey" only if user is not authenticated or profile is incomplete */}
-              {(!user || (user && userProfile && !userProfile.profile_completed)) && (
-                <button className="btn btn-lg premium-btn glow-cta rounded-full font-bold flex items-center gap-2 w-full sm:w-auto text-base sm:text-lg" style={{ fontSize: '1.05rem', minWidth: 0, wordBreak: 'break-word' }} onClick={handleGoogleSignIn}>
-                  🚀 Start Your AI Journey
-                </button>
-              )}
-              
-              {/* Show "Go to Dashboard" if user is authenticated and profile is complete */}
-              {user && userProfile && userProfile.profile_completed && (
-                <button className="btn btn-lg premium-btn glow-cta rounded-full font-bold flex items-center gap-2 w-full sm:w-auto text-base sm:text-lg" style={{ fontSize: '1.05rem', minWidth: 0, wordBreak: 'break-word' }} onClick={() => router.push('/dashboard')}>
-                  🎯 Go to Dashboard
-                </button>
-              )}
-              
-              <button className="btn btn-lg premium-btn glow-cta rounded-full font-bold flex items-center gap-2 w-full sm:w-auto text-base sm:text-lg" style={{ fontSize: '1.05rem', minWidth: 0, wordBreak: 'break-word' }} onClick={() => {
-                const el = document.getElementById('features');
-                if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-              }}>
-                📁 Explore the Toolkit
-              </button>
-              <button className="btn btn-lg premium-btn glow-cta rounded-full font-bold flex items-center gap-2 w-full sm:w-auto text-base sm:text-lg" style={{ fontSize: '1.05rem', minWidth: 0, wordBreak: 'break-word' }} onClick={() => {
-                const el = document.getElementById('pricing');
-                if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-              }}>
-                ⚡ Unlock Resources Now
-              </button>
-            </div>
-          </div>
-        </div>
-        {/* Animations and styles for hero */}
-        <style jsx>{`
-          .hero-bg-zoom {
-            animation: heroZoom 18s ease-in-out infinite alternate;
-          }
-          @keyframes heroZoom {
-            0% { transform: scale(1); }
-            100% { transform: scale(1.08); }
-          }
-          .animate-badge-fade-in {
-            animation: badgeFadeIn 1.2s cubic-bezier(0.7,0,0.3,1) 0.2s both;
-          }
-          @keyframes badgeFadeIn {
-            0% { opacity: 0; transform: translateY(-40px) scale(0.9); }
-            100% { opacity: 1; transform: translateY(0) scale(1); }
-          }
-          .hero-line {
-            opacity: 0;
-            transform: translateX(-80vw);
-            will-change: transform, opacity;
-          }
-          .hero-line-2 {
-            transform: translateX(80vw);
-          }
-          .animate-hero-swipe-left {
-            animation: heroSwipeLeft 0.55s cubic-bezier(0.7,0,0.3,1) 0.2s forwards;
-          }
-          .animate-hero-swipe-right {
-            animation: heroSwipeRight 0.55s cubic-bezier(0.7,0,0.3,1) 0.8s forwards;
-          }
-          @keyframes heroSwipeLeft {
-            0% { opacity: 0; transform: translateX(-80vw); }
-            80% { opacity: 1; transform: translateX(2vw); }
-            100% { opacity: 1; transform: translateX(0); }
-          }
-          @keyframes heroSwipeRight {
-            0% { opacity: 0; transform: translateX(80vw); }
-            80% { opacity: 1; transform: translateX(-2vw); }
-            100% { opacity: 1; transform: translateX(0); }
-          }
-        `}</style>
-        {/* Gradient Fade Overlay for smooth transition */}
-        <div style={{ position: 'absolute', left: 0, right: 0, bottom: '70px', width: '100%', height: '80px', zIndex: 19, pointerEvents: 'none' }} aria-hidden="true">
-          <div style={{ width: '100%', height: '100%', background: 'linear-gradient(to bottom, rgba(35,36,58,0) 0%, #23243a 100%)' }} />
-        </div>
-        {/* Wave SVG Divider for smooth transition */}
-        <div style={{ position: 'absolute', left: 0, right: 0, bottom: '-1px', width: '100%', zIndex: 20, pointerEvents: 'none', lineHeight: 0 }} aria-hidden="true">
-          <svg viewBox="0 0 1440 120" width="100%" height="80" preserveAspectRatio="none" style={{ display: 'block', width: '100%', height: '80px' }}>
-            <path fill="#23243a" d="M0,32 C360,120 1080,0 1440,80 L1440,120 L0,120 Z" />
-          </svg>
-        </div>
-      </section>
+      </header>
 
       {/* How It Works Section */}
       <section id="how-it-works" className="section py-24" role="region" aria-label="How HustleHack AI works">

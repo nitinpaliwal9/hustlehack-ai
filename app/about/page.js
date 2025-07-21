@@ -59,7 +59,7 @@ export default function AboutPage() {
           <div className="hero-content w-full max-w-3xl mx-auto rounded-2xl sm:rounded-3xl shadow-[0_8px_40px_0_rgba(127,90,240,0.25)] bg-[rgba(30,32,44,0.75)] backdrop-blur-xl border-2 sm:border-4 border-[#7F5AF0] relative overflow-hidden p-4 sm:p-12 md:p-20 flex flex-col items-center">
             <div className="flex flex-col items-center relative z-10 w-full">
               <IconBadge color="#7F5AF0">
-                <Image src="/assets/images/logo (2).png" alt="HustleHack AI Logo" width={40} height={40} className="rounded-xl" />
+                <Image src="/logo (2).webp" alt="HustleHack AI Logo" width={40} height={40} className="rounded-xl" />
               </IconBadge>
               <h1 className="text-2xl sm:text-4xl md:text-5xl font-extrabold text-white mb-4 sm:mb-6 mt-2 tracking-tight text-center">🔷 HustleHack AI — About Us</h1>
               <p className="text-base sm:text-xl text-gray-200 mb-6 sm:mb-10 font-medium text-center max-w-full sm:max-w-2xl">Make AI practical, accessible, and empowering — for every young Indian who’s ready to hustle smarter.</p>
@@ -86,13 +86,12 @@ export default function AboutPage() {
         <section className="flex flex-col items-center justify-center mt-10 px-4">
           <div className="w-full max-w-xs sm:max-w-2xl bg-[rgba(36,37,50,0.7)] backdrop-blur-xl rounded-2xl sm:rounded-3xl shadow-2xl border-2 sm:border-4 border-[#7F5AF0] p-4 sm:p-10 flex flex-col items-center transition-transform duration-300 hover:scale-[1.025] hover:shadow-[0_8px_40px_0_rgba(127,90,240,0.18)] relative overflow-hidden">
             <Image
-              src="/founder_img.png"
-              alt="Nitin Paliwal, Founder of HustleHack AI (uncropped hair, 1:1 aspect ratio)"
+              src="/founder_img.webp"
+              alt="Founder of HustleHack AI"
               width={120}
               height={120}
-              className="rounded-full border-2 sm:border-4 border-[#7F5AF0] shadow-xl mb-4"
-              style={{aspectRatio: '1/1', objectFit: 'cover', objectPosition: 'center'}}
-              priority
+              className="rounded-2xl shadow-xl"
+              loading="lazy"
             />
             <h3 className="font-bold text-lg sm:text-2xl text-[#7F5AF0] mb-2">Nitin Paliwal</h3>
             <p className="text-gray-200 text-base sm:text-lg italic mb-2 text-center max-w-full sm:max-w-md">"Building HustleHack AI to empower the next generation of creators, students, and solopreneurs with the best AI tools and resources. Let’s build, learn, and grow together!"</p>
@@ -115,7 +114,7 @@ export default function AboutPage() {
             </div>
             <div className="flex-1 flex flex-col items-center justify-center relative z-10">
               <Image src="/globe.svg" alt="Global Impact" width={100} height={100} className="mb-4" />
-              <Image src="/assets/images/logo (2).png" alt="HustleHack AI Logo" width={120} height={120} className="rounded-2xl shadow-xl" />
+              <Image src="/logo (2).webp" alt="HustleHack AI Logo" width={120} height={120} className="rounded-2xl shadow-xl" />
             </div>
           </div>
         </section>

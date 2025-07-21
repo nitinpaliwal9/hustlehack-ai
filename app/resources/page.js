@@ -89,7 +89,6 @@ export default function ResourcesPage() {
 
   return (
     <div>
-      <a href="#main-content" className="skip-link" tabIndex="0">Skip to main content</a>
       <Navigation />
 
       {/* Resources Content */}

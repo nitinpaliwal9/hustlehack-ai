@@ -37,7 +37,7 @@ export const metadata = {
     url: 'https://hustlehackai.in',
     images: [
       {
-        url: '/assets/images/logo (2).png',
+        url: '/logo (2).webp',
         width: 1200,
         height: 630,
         alt: 'HustleHack AI - Build Faster. Learn Smarter.',
@@ -51,13 +51,13 @@ export const metadata = {
     description: 'Discover AI-powered tools and content packs to hustle smarter, build faster, and succeed.',
     images: [
       {
-        url: '/assets/images/logo (2).png',
+        url: '/logo (2).webp',
         alt: 'HustleHack AI - Build Faster. Learn Smarter.',
       }
     ],
   },
   icons: {
-    icon: '/assets/images/logo (2).png',
+    icon: '/logo (2).webp',
   },
 }
 
@@ -68,6 +68,12 @@ export const viewport = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en" className={`${inter.variable} ${poppins.variable}`}>
+      <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" />
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" />
+      </head>
       <body className={`${inter.className} premium-bg min-h-screen`}>
         <ErrorBoundary>
           <GlobalLoadingProvider>
