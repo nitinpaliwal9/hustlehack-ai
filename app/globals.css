@@ -1212,3 +1212,13 @@ main, .section, .about-main, .resources-content {
 .theme-toggle {}
 .scroll-progress {}
 */
+
+@media (max-width: 640px) {
+  .glow-cta-mobile {
+    box-shadow: 0 0 8px 2px #7F5AF0, 0 0 12px 4px #00FFC2 !important;
+    background: linear-gradient(90deg, #7F5AF0 0%, #00FFC2 100%) !important;
+    filter: brightness(0.98) saturate(0.95);
+    /* Remove pulse/animation if any */
+    animation: none !important;
+  }
+}

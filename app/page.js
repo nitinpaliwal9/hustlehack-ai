@@ -194,51 +194,93 @@ export default function HomePage() {
       <LazyNavigation />
 
       {/* Hero Section */}
-      <header className="relative min-h-[60vh] md:min-h-[70vh] flex items-center justify-center">
+      <header className="relative min-h-[70vh] md:min-h-[80vh] flex items-center justify-center px-3 sm:px-0 py-10 sm:py-20 overflow-hidden">
+        {/* Animated background overlays */}
+        <div className="absolute inset-0 z-0 pointer-events-none">
+          {/* Subtle animated particles (CSS or SVG) */}
+          <div className="absolute inset-0 animate-fade-in" style={{background: 'radial-gradient(ellipse at 60% 30%, #7F5AF022 0%, transparent 70%), radial-gradient(ellipse at 30% 80%, #00FFC222 0%, transparent 70%)'}} />
+          {/* Faint vertical gradient for separation */}
+          <div className="absolute inset-0 bg-gradient-to-b from-[#181A2A] via-transparent to-[#232946] opacity-80" />
+        </div>
         <Image
           src="/hero_section.webp"
           alt="HustleHack AI – AI tools for creators, students & solopreneurs"
           fill
           priority
           sizes="(max-width: 768px) 100vw, 1200px"
-          className="object-cover"
+          className="object-cover z-0"
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-black/40 to-black/90" />
-        <div className="relative z-10 max-w-2xl px-4 text-center">
-          <h1 className="text-4xl md:text-6xl font-bold text-white">
-            Build. Launch. Earn with AI.
+        <div className="absolute inset-0 bg-gradient-to-b from-black/50 to-black/90 z-0" />
+        <div className="relative z-10 max-w-2xl w-full px-3 sm:px-6 text-center flex flex-col items-center justify-center">
+          {/* Animated Credibility Badge */}
+          <div className="inline-flex items-center gap-2 px-5 py-1.5 mb-7 rounded-full bg-white/95 shadow-lg border border-[#7F5AF0]/20 text-[#232946] font-semibold text-xs sm:text-sm tracking-wide uppercase animate-slide-fade-down hero-badge-glow" style={{fontFamily:'Inter, Sora, sans-serif', letterSpacing:'0.06em', boxShadow:'0 2px 16px 0 #00FFC2AA, 0 1px 8px 0 #7F5AF0AA'}}>
+            <span className="text-lg">✅</span>
+            <span className="font-bold text-[#1a237e]" style={{fontWeight:700}}> #1 AI Tool </span>
+            <span className="hidden xs:inline">for</span>
+            <span className="ml-1 whitespace-nowrap">Indian Creators & Students</span>
+          </div>
+          {/* Headline with gradient AI */}
+          <h1 className="text-4xl sm:text-5xl md:text-7xl font-extrabold text-white leading-tight mb-4 sm:mb-7 animate-fade-in-up" style={{letterSpacing:'-0.01em'}}>
+            <span className="shimmer-text">Build.</span> Launch. <span className="bg-gradient-to-r from-[#7F5AF0] to-[#00FFC2] bg-clip-text text-transparent drop-shadow-lg">AI</span>. <span className="shimmer-text">Earn</span>
           </h1>
-          <p className="mt-4 text-lg md:text-xl text-white/80">
+          {/* Subheadline */}
+          <p className="mt-0 sm:mt-2 text-sm sm:text-base md:text-lg text-white/90 mb-8 sm:mb-10 font-light animate-fade-in-up-2" style={{fontWeight:400, color:'#e5e7eb'}}>
             Tools, templates & growth packs for students and creators.
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mt-6">
-            <Link href="/instant-hustle" className="btn btn-lg premium-btn glow-cta rounded-full font-bold flex items-center justify-center gap-2 min-w-[220px] px-6 py-3 text-base sm:text-lg animate-pulse">
-              ✨ Try Instant Hustle Lite
+          {/* CTA Buttons (3 only) */}
+          <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 justify-center items-center mt-2 sm:mt-4 w-full">
+            <Link href="/instant-hustle" className="w-full sm:w-auto max-w-xs sm:min-w-[200px] flex items-center justify-center gap-2 rounded-full font-extrabold text-base sm:text-lg px-7 sm:px-10 py-3 sm:py-4 shadow-xl border-2 border-[#7F5AF0]/30 bg-gradient-to-br from-white/80 via-[#E9E4F0]/80 to-[#7F5AF0]/20 text-[#232946] hover:from-[#FFD700]/90 hover:to-[#7F5AF0]/40 hover:text-[#1a1333] focus:outline-none transition-all duration-200 backdrop-blur-md hover:scale-105">
+              <span className="inline-block text-xl align-middle">🚀</span> Start with Hustle Lite
             </Link>
-            {(!user || (user && userProfile && !userProfile.profile_completed)) && (
-              <button className="btn btn-lg premium-btn glow-cta rounded-full font-bold flex items-center justify-center gap-2 min-w-[220px] px-6 py-3 text-base sm:text-lg" onClick={handleGoogleSignIn}>
-                🚀 Start Your AI Journey
-              </button>
-            )}
-            {user && userProfile && userProfile.profile_completed && (
-              <button className="btn btn-lg premium-btn glow-cta rounded-full font-bold flex items-center justify-center gap-2 min-w-[220px] px-6 py-3 text-base sm:text-lg" onClick={() => router.push('/dashboard')}>
-                🎯 Go to Dashboard
-              </button>
-            )}
-            <button className="btn btn-lg premium-btn glow-cta rounded-full font-bold flex items-center justify-center min-w-[260px] px-6 py-3 text-base sm:text-lg" onClick={() => {
-              const el = document.getElementById('features');
-              if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            }}>
-              📁 Explore the Toolkit
-            </button>
-            <button className="btn btn-lg premium-btn glow-cta rounded-full font-bold flex items-center justify-center min-w-[300px] px-8 py-3 text-base sm:text-lg whitespace-normal text-center" onClick={() => {
-              const el = document.getElementById('pricing');
-              if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            }}>
-              <span className="block w-full">⚡ Unlock&nbsp;Resources<br />Now</span>
-            </button>
+            <Link href="#features" className="w-full sm:w-auto max-w-xs sm:min-w-[200px] flex items-center justify-center gap-2 rounded-full font-extrabold text-base sm:text-lg px-7 sm:px-10 py-3 sm:py-4 shadow-xl border-2 border-[#00FFC2]/30 bg-gradient-to-br from-white/80 via-[#E9E4F0]/80 to-[#00FFC2]/20 text-[#232946] hover:from-[#FFD700]/90 hover:to-[#00FFC2]/40 hover:text-[#1a1333] focus:outline-none transition-all duration-200 backdrop-blur-md hover:scale-105" onClick={e => {e.preventDefault(); const el=document.getElementById('features'); if(el)el.scrollIntoView({behavior:'smooth',block:'start'});}}>
+              <span className="inline-block text-xl align-middle">🧠</span> Explore AI Tools
+            </Link>
+            <Link href="#pricing" className="w-full sm:w-auto max-w-xs sm:min-w-[200px] flex items-center justify-center gap-2 rounded-full font-extrabold text-base sm:text-lg px-7 sm:px-10 py-3 sm:py-4 shadow-xl border-2 border-[#FFD700]/40 bg-gradient-to-br from-white/80 via-[#E9E4F0]/80 to-[#FFD700]/20 text-[#232946] hover:from-[#FFD700]/90 hover:to-[#7F5AF0]/40 hover:text-[#1a1333] focus:outline-none transition-all duration-200 backdrop-blur-md hover:scale-105" onClick={e => {e.preventDefault(); const el=document.getElementById('pricing'); if(el)el.scrollIntoView({behavior:'smooth',block:'start'});}}>
+              <span className="inline-block text-xl align-middle">📚</span> Access Resources
+            </Link>
           </div>
         </div>
+        {/* Hero Animations and Royal Button Styles */}
+        <style jsx>{`
+          .hero-btn-royal {
+            @apply flex items-center justify-center gap-2 rounded-full font-extrabold text-base sm:text-lg px-7 sm:px-10 py-3 sm:py-4 shadow-xl transition-all duration-200 border-2 border-transparent bg-gradient-to-br from-[#fff]/80 via-[#E9E4F0]/80 to-[#7F5AF0]/20 text-[#232946] hover:from-[#FFD700]/90 hover:to-[#7F5AF0]/40 hover:text-[#1a1333] focus:outline-none;
+            background: linear-gradient(120deg, #fff 60%, #E9E4F0 80%, #7F5AF0 100%);
+            color: #232946;
+            border: 2px solid rgba(127,90,240,0.12);
+            box-shadow: 0 2px 24px 0 #7F5AF055, 0 1.5px 8px 0 #FFD70033, 0 0 0 1.5px #fff inset;
+            font-family: 'Sora', 'Inter', sans-serif;
+            font-weight: 800;
+            letter-spacing: 0.01em;
+            position: relative;
+            z-index: 1;
+            overflow: hidden;
+          }
+          .hero-btn-royal:before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 9999px;
+            background: linear-gradient(120deg, #FFD70055 0%, #7F5AF055 100%);
+            opacity: 0;
+            transition: opacity 0.2s;
+            z-index: 0;
+          }
+          .hero-btn-royal:hover, .hero-btn-royal:focus {
+            color: #1a1333;
+            border-color: #FFD700;
+            box-shadow: 0 4px 32px 0 #FFD70055, 0 2px 16px 0 #7F5AF0AA, 0 0 0 2px #FFD700 inset;
+            background: linear-gradient(120deg, #FFD700 60%, #E9E4F0 80%, #7F5AF0 100%);
+          }
+          .hero-btn-royal:hover:before, .hero-btn-royal:focus:before {
+            opacity: 0.18;
+          }
+          .hero-btn-royal span {
+            position: relative;
+            z-index: 2;
+            font-size: 1.25em;
+            margin-right: 0.25em;
+          }
+        `}</style>
       </header>
 
       {/* How It Works Section */}

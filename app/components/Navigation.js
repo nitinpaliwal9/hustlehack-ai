@@ -10,6 +10,49 @@ import { useUserPlan } from '../hooks/useAuth';
 import { getPlanDisplayName } from '../planUtils';
 import PlanBadgeModal from '@/app/components/PlanBadgeModal';
 import zxcvbn from 'zxcvbn';
+import { motion, AnimatePresence } from 'framer-motion';
+const BLOG_CATEGORIES = [
+  {
+    name: 'AI for Creators',
+    slug: 'ai-for-creators',
+    description: 'Tips on leveraging AI to build & grow as a content creator.',
+  },
+  {
+    name: 'Hustle Strategies',
+    slug: 'hustle-strategies',
+    description: 'Side hustles, passive income hacks, and success stories.',
+  },
+  {
+    name: 'Design & Branding',
+    slug: 'design-branding',
+    description: 'Canva, visuals, personal brand building with AI.',
+  },
+  {
+    name: 'Marketing & Growth',
+    slug: 'marketing-growth',
+    description: 'Organic + paid growth, funnel tactics, retention tips.',
+  },
+  {
+    name: 'AI Tools & Reviews',
+    slug: 'ai-tools-reviews',
+    description: 'Deep-dives, comparisons, and usage tips for AI tools.',
+  },
+  {
+    name: 'Freelancing & Clients',
+    slug: 'freelancing-clients',
+    description: 'Client acquisition, service delivery, scaling freelance.',
+  },
+  {
+    name: 'Productivity & Mindset',
+    slug: 'productivity-mindset',
+    description: 'High-performance habits, routines, and focus with AI.',
+  },
+  {
+    name: 'Behind HustleHack AI',
+    slug: 'behind-hustlehack-ai',
+    description: 'Product updates, team insights, founder thoughts.',
+  },
+];
 
 // Focus trap utility
 function useFocusTrap(isOpen, modalRef) {
@@ -56,6 +99,8 @@ export default function Navigation() {
   const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false)
   const [currentPath, setCurrentPath] = useState('/')
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [blogOverlayOpen, setBlogOverlayOpen] = useState(false);
+  const [mobileBlogOpen, setMobileBlogOpen] = useState(false);
   
   // Use authentication hook
   const { user, isAuthenticated, signIn, signUp, signInWithGoogle, signOut, resetPassword, checkNetworkStatus, error: authError } = useAuth()
@@ -575,7 +620,7 @@ export default function Navigation() {
       <nav className="relative z-50 w-full">
         {/* Desktop Navbar */}
         <div className="hidden md:flex items-center justify-between px-6 py-4 bg-black/70 backdrop-blur-md">
-          <div className="flex items-center gap-8">
+          <div className="flex items-center gap-8 min-w-0">
             <Link href="/" aria-label="Go to Home" onClick={e => {
               e.preventDefault();
               if (window.location.pathname === "/") {
@@ -584,11 +629,11 @@ export default function Navigation() {
                 router.push("/");
                 setTimeout(() => router.refresh(), 100);
               }
-            }} className="flex items-center gap-2 cursor-pointer select-none">
+            }} className="flex items-center gap-2 cursor-pointer select-none min-w-0">
               <Image src="/logo (2).webp" alt="HustleHack AI Logo" className="w-8 h-8" width={32} height={32} />
-              <span className="text-xl font-bold ml-2 text-gradient">HustleHack AI</span>
+              <span className="text-xl font-bold ml-2 text-gradient whitespace-nowrap">HustleHack AI</span>
             </Link>
-            <ul className="flex items-center gap-6 text-sm font-medium ml-8">
+            <ul className="flex items-center gap-5 text-sm font-medium ml-8 min-w-0 overflow-x-auto scrollbar-hide">
               <li><Link href="/" className={`nav-link pointer-events-auto ${currentPath === '/' ? 'active' : ''}`}>Home</Link></li>
               <li><Link href="/#features" className="nav-link pointer-events-auto">Features</Link></li>
               <li><Link href="/#pricing" className="nav-link pointer-events-auto">Pricing</Link></li>
@@ -597,69 +642,24 @@ export default function Navigation() {
               <li><Link href="/resources" className={`nav-link pointer-events-auto ${currentPath === '/resources' ? 'active' : ''}`}>Resources</Link></li>
               <li><Link href="/about" className={`nav-link pointer-events-auto ${currentPath === '/about' ? 'active' : ''}`}>About</Link></li>
               <li><Link href="/contact" className={`nav-link pointer-events-auto ${currentPath === '/contact' ? 'active' : ''}`}>Contact</Link></li>
+              <li>
+                <Link href="/blog" className={`nav-link px-3 py-2 rounded-md font-semibold transition ${currentPath === '/blog' ? 'text-accent' : 'text-white/90 hover:text-accent'}`}>Blog</Link>
+              </li>
             </ul>
-            {/* Plan Badge Modal Trigger Button (for demo) */}
+          </div>
+          <div className="flex items-center gap-4 ml-auto min-w-0">
             <button 
-              className="plan-badge ml-4 px-4 py-2 rounded-full bg-gradient-to-r from-[#7F5AF0] to-[#00FFC2] text-white font-bold shadow hover:shadow-lg transition-all"
+              className="plan-badge px-4 py-2 rounded-full bg-gradient-to-r from-[#7F5AF0] to-[#00FFC2] text-white font-bold shadow hover:shadow-lg transition-all whitespace-nowrap"
               onClick={() => setIsModalOpen(true)}
             >
               Creator Plan
             </button>
             <PlanBadgeModal open={isModalOpen} onClose={() => setIsModalOpen(false)} />
-          </div>
-          <div className="flex items-center gap-4">
             {!isAuthenticated && (
               <>
-                <a href="#" className="border px-4 py-2 rounded-lg" onClick={() => openModal('login-modal')}>Sign In</a>
-                <a href="#" className="bg-gradient-to-r from-[#7F5AF0] to-[#00FFC2] px-4 py-2 rounded-lg text-white font-semibold" onClick={() => openModal('signup-modal')}>Get Started</a>
+                <a href="#" className="border px-4 py-2 rounded-lg whitespace-nowrap" onClick={() => openModal('login-modal')}>Sign In</a>
+                <a href="#" className="bg-gradient-to-r from-[#7F5AF0] to-[#00FFC2] px-4 py-2 rounded-lg text-white font-semibold whitespace-nowrap" onClick={() => openModal('signup-modal')}>Get Started</a>
               </>
-            )}
-            {isAuthenticated && (
-              <div className="relative ml-2 flex items-center">
-                <button
-                  className="profile-btn flex items-center gap-2 px-4 py-2 rounded-lg border"
-                  onClick={toggleProfileDropdown}
-                  aria-haspopup="menu"
-                  aria-expanded={isProfileDropdownOpen}
-                >
-                  <span className="profile-avatar">👤</span>
-                  <span className="profile-name">{getDisplayName()}</span>
-                  {getPlanBadge(plan)}
-                  <span className={`profile-arrow ${isProfileDropdownOpen ? 'rotate' : ''}`}>▼</span>
-                </button>
-                {isProfileDropdownOpen && (
-                  <div
-                    className="absolute right-0 w-56 bg-[#18181b] border border-[#232136] rounded-lg shadow-lg z-50 animate-fadein"
-                    style={{ top: 'calc(100% + 8px)', marginTop: 0 }}
-                    role="menu"
-                    tabIndex={-1}
-                  >
-                    <a
-                      href="/dashboard"
-                      className="block px-4 py-3 text-gray-100 hover:bg-[#232136] transition"
-                      role="menuitem"
-                      onClick={e => { e.preventDefault(); setIsProfileDropdownOpen(false); router.push('/dashboard'); }}
-                    >Dashboard</a>
-                    <a
-                      href="/my-plans"
-                      className="block px-4 py-3 text-gray-100 hover:bg-[#232136] transition"
-                      role="menuitem"
-                      onClick={e => { e.preventDefault(); setIsProfileDropdownOpen(false); router.push('/my-plans'); }}
-                    >My Plan</a>
-                    <a
-                      href="/profile"
-                      className="block px-4 py-3 text-gray-100 hover:bg-[#232136] transition"
-                      role="menuitem"
-                      onClick={e => { e.preventDefault(); setIsProfileDropdownOpen(false); router.push('/profile'); }}
-                    >Account Settings</a>
-                    <button
-                      className="block w-full text-left px-4 py-3 text-red-400 hover:bg-[#232136] transition"
-                      role="menuitem"
-                      onClick={async e => { e.preventDefault(); setIsProfileDropdownOpen(false); await handleSignOut(e); }}
-                    >Sign Out</button>
-                  </div>
-                )}
-              </div>
             )}
           </div>
         </div>
@@ -715,6 +715,7 @@ export default function Navigation() {
                 { href: '/resources', label: 'Resources' },
                 { href: '/about', label: 'About' },
                 { href: '/contact', label: 'Contact' },
+                { href: '/blog', label: 'Blog' },
               ].map(link => (
                 <Link
                   key={link.href}
