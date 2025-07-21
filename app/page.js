@@ -199,7 +199,7 @@ export default function HomePage() {
           alt="HustleHack AI – AI tools for creators, students & solopreneurs"
           fill
           priority
-          sizes="100vw"
+          sizes="(max-width: 768px) 100vw, 1200px"
           className="object-cover"
         />
         <div className="absolute inset-0 bg-gradient-to-b from-black/40 to-black/90" />

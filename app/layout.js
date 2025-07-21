@@ -1,27 +1,14 @@
 // app/layout.js
 
-import { Inter, Poppins } from 'next/font/google'
+import { Inter } from 'next/font/google'
 import './globals.css'
-import './legacy-styles.css'
 import ErrorBoundary from './components/ErrorBoundary'
 import GlobalLoadingProvider from './components/GlobalLoadingProvider'
 import OfflineNotification from './components/OfflineNotification'
 import { SpeedInsights } from '@vercel/speed-insights/next'
 
-const inter = Inter({
-  subsets: ['latin'],
-  display: 'swap',
-  variable: '--font-inter',
-})
+const inter = Inter({ subsets: ['latin'], display: 'swap', variable: '--font-inter' })
 
-const poppins = Poppins({
-  weight: ['400', '500', '600', '700', '800'],
-  subsets: ['latin'],
-  display: 'swap',
-  variable: '--font-poppins',
-})
-
-// ✅ ✅ ONLY ONE export const metadata
 export const metadata = {
   metadataBase: new URL('https://hustlehackai.in'),
   title: 'HustleHack AI - Build Faster. Learn Smarter.',
@@ -67,14 +54,12 @@ export const viewport = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" className={`${inter.variable} ${poppins.variable}`}>
+    <html lang="en" className={inter.variable}>
       <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" />
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" />
+        <link rel="preload" as="image" href="/hero_section.webp" />
+        <link rel="preload" as="image" href="/logo (2).webp" />
       </head>
-      <body className={`${inter.className} premium-bg min-h-screen`}>
+      <body className={inter.className + ' premium-bg min-h-screen'}>
         <ErrorBoundary>
           <GlobalLoadingProvider>
             {children}
