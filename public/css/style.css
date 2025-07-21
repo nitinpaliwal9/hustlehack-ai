@@ -1159,21 +1159,14 @@ select.form-input:focus {
 }
 
 /* Animation Classes */
-.animate-fadeInUp {
-  animation: fadeInUp 0.8s ease-out;
-}
-
-.animate-fadeInLeft {
-  animation: fadeInLeft 0.8s ease-out;
-}
-
-.animate-fadeInRight {
-  animation: fadeInRight 0.8s ease-out;
-}
-
-.animate-scaleIn {
-  animation: scaleIn 0.6s ease-out;
-}
+/* TODO: Remove if confirmed unused
+.animate-fadeInUp {}
+.animate-fadeInLeft {}
+.animate-fadeInRight {}
+.animate-scaleIn {}
+.theme-toggle {}
+.scroll-progress {}
+*/
 
 .animate-slideInDown {
   animation: slideInDown 0.6s ease-out;

@@ -1203,3 +1203,12 @@ main, .section, .about-main, .resources-content {
   0% { background-position: 0 0; }
   100% { background-position: 300px 300px; }
 }
+
+/* TODO: Remove if confirmed unused
+.animate-fadeInUp {}
+.animate-fadeInLeft {}
+.animate-fadeInRight {}
+.animate-scaleIn {}
+.theme-toggle {}
+.scroll-progress {}
+*/

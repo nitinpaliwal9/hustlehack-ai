@@ -12,34 +12,34 @@ export default function HomePage() {
   const [openFAQ, setOpenFAQ] = useState(Array(6).fill(false));
   
   // Load client utilities on component mount
-  useEffect(() => {
-    if (typeof window === 'undefined') return;
-    // Check if script is already loaded
-    const existingScript = document.querySelector('script[src="/js/client-utils.js"]')
-    if (existingScript) {
-      console.log('Client utils script already loaded')
-      return
-    }
+  // useEffect(() => {
+  //   if (typeof window === 'undefined') return;
+  //   // Check if script is already loaded
+  //   const existingScript = document.querySelector('script[src="/js/client-utils.js"]')
+  //   if (existingScript) {
+  //     console.log('Client utils script already loaded')
+  //     return
+  //   }
     
-    const script = document.createElement('script')
-    script.src = '/js/client-utils.js'
-    script.async = true
-    script.onload = () => {
-      console.log('Client utils loaded successfully')
-    }
-    script.onerror = (error) => {
-      console.error('Error loading client utils:', error)
-    }
-    document.head.appendChild(script)
+  //   const script = document.createElement('script')
+  //   script.src = '/js/client-utils.js'
+  //   script.async = true
+  //   script.onload = () => {
+  //     console.log('Client utils loaded successfully')
+  //   }
+  //   script.onerror = (error) => {
+  //     console.error('Error loading client utils:', error)
+  //   }
+  //   document.head.appendChild(script)
     
-    return () => {
-      // Cleanup script on unmount
-      const scriptToRemove = document.querySelector('script[src="/js/client-utils.js"]')
-      if (scriptToRemove) {
-        document.head.removeChild(scriptToRemove)
-      }
-    }
-  }, [])
+  //   return () => {
+  //     // Cleanup script on unmount
+  //     const scriptToRemove = document.querySelector('script[src="/js/client-utils.js"]')
+  //     if (scriptToRemove) {
+  //       document.head.removeChild(scriptToRemove)
+  //     }
+  //   }
+  // }, [])
   
   // Handle Google Sign-In
   const handleGoogleSignIn = async () => {
