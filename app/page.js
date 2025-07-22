@@ -229,14 +229,17 @@ export default function HomePage() {
           </p>
           {/* CTA Buttons (3 only) */}
           <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 justify-center items-center mt-2 sm:mt-4 w-full">
-            <Link href="/instant-hustle" className="w-full sm:w-auto max-w-xs sm:min-w-[200px] flex items-center justify-center gap-2 rounded-full font-extrabold text-base sm:text-lg px-7 sm:px-10 py-3 sm:py-4 shadow-xl border-2 border-[#7F5AF0]/30 bg-gradient-to-br from-white/80 via-[#E9E4F0]/80 to-[#7F5AF0]/20 text-[#232946] hover:from-[#FFD700]/90 hover:to-[#7F5AF0]/40 hover:text-[#1a1333] focus:outline-none transition-all duration-200 backdrop-blur-md hover:scale-105">
-              <span className="inline-block text-xl align-middle">🚀</span> Start with Hustle Lite
+            <Link href="/instant-hustle" className="hero-btn-pro w-full sm:w-auto max-w-xs sm:min-w-[220px] flex items-center justify-center gap-3 rounded-full font-bold text-lg px-8 py-4 shadow-lg border-0 bg-gradient-to-br from-[#e0e7ff] to-[#c7d2fe] text-gray-900 hover:scale-105 hover:shadow-2xl transition-all duration-200">
+              <span className="text-2xl">🚀</span>
+              <span>Start with Hustle Lite</span>
             </Link>
-            <Link href="#features" className="w-full sm:w-auto max-w-xs sm:min-w-[200px] flex items-center justify-center gap-2 rounded-full font-extrabold text-base sm:text-lg px-7 sm:px-10 py-3 sm:py-4 shadow-xl border-2 border-[#00FFC2]/30 bg-gradient-to-br from-white/80 via-[#E9E4F0]/80 to-[#00FFC2]/20 text-[#232946] hover:from-[#FFD700]/90 hover:to-[#00FFC2]/40 hover:text-[#1a1333] focus:outline-none transition-all duration-200 backdrop-blur-md hover:scale-105" onClick={e => {e.preventDefault(); const el=document.getElementById('features'); if(el)el.scrollIntoView({behavior:'smooth',block:'start'});}}>
-              <span className="inline-block text-xl align-middle">🧠</span> Explore AI Tools
+            <Link href="#features" className="hero-btn-pro w-full sm:w-auto max-w-xs sm:min-w-[220px] flex items-center justify-center gap-3 rounded-full font-bold text-lg px-8 py-4 shadow-lg border-0 bg-gradient-to-br from-[#f0fdfa] to-[#a7f3d0] text-gray-900 hover:scale-105 hover:shadow-2xl transition-all duration-200" onClick={e => {e.preventDefault(); const el=document.getElementById('features'); if(el)el.scrollIntoView({behavior:'smooth',block:'start'});}}>
+              <span className="text-2xl">🧠</span>
+              <span>Explore AI Tools</span>
             </Link>
-            <Link href="#pricing" className="w-full sm:w-auto max-w-xs sm:min-w-[200px] flex items-center justify-center gap-2 rounded-full font-extrabold text-base sm:text-lg px-7 sm:px-10 py-3 sm:py-4 shadow-xl border-2 border-[#FFD700]/40 bg-gradient-to-br from-white/80 via-[#E9E4F0]/80 to-[#FFD700]/20 text-[#232946] hover:from-[#FFD700]/90 hover:to-[#7F5AF0]/40 hover:text-[#1a1333] focus:outline-none transition-all duration-200 backdrop-blur-md hover:scale-105" onClick={e => {e.preventDefault(); const el=document.getElementById('pricing'); if(el)el.scrollIntoView({behavior:'smooth',block:'start'});}}>
-              <span className="inline-block text-xl align-middle">📚</span> Access Resources
+            <Link href="#pricing" className="hero-btn-pro w-full sm:w-auto max-w-xs sm:min-w-[220px] flex items-center justify-center gap-3 rounded-full font-bold text-lg px-8 py-4 shadow-lg border-0 bg-gradient-to-br from-[#fef9c3] to-[#fde68a] text-gray-900 hover:scale-105 hover:shadow-2xl transition-all duration-200" onClick={e => {e.preventDefault(); const el=document.getElementById('pricing'); if(el)el.scrollIntoView({behavior:'smooth',block:'start'});}}>
+              <span className="text-2xl">📚</span>
+              <span>Access Resources</span>
             </Link>
           </div>
         </div>

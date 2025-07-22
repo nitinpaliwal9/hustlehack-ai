@@ -155,135 +155,73 @@ export default function CompleteProfileClient() {
     try {
       // Check if Supabase is available
       if (!supabase) {
-        throw new Error('Supabase client not initialized. Please check your environment variables.');
+        setSubmitError('Supabase client not initialized. Please check your environment variables.');
+        setIsSubmitting(false);
+        return;
       }
 
       // Check Supabase connectivity
       const isHealthy = await checkSupabaseHealth();
       if (!isHealthy) {
-        throw new Error('Unable to connect to database. Please check your connection and try again.');
+        setSubmitError('Unable to connect to database. Please check your connection and try again.');
+        setIsSubmitting(false);
+        return;
       }
 
       // Verify user is authenticated
       const { data: { user: currentUser }, error: authError } = await supabase.auth.getUser();
       if (authError || !currentUser) {
-        throw new Error('Authentication failed. Please log in again.');
+        setSubmitError('Authentication failed. Please log in again.');
+        setIsSubmitting(false);
+        return;
       }
 
-      console.log('Submitting profile update to Supabase:', {
+      console.log('DEBUG: Submitting minimal profile update to Supabase:', {
         id: currentUser?.id,
-        name: formData.name,
-        phone: formData.phone,
-        role: formData.role,
         profile_completed: true
       });
-      
-      // Add timeout protection
-      const timeoutPromise = new Promise((_, reject) => 
-        setTimeout(() => reject(new Error('Request timed out. Please try again.')), 30000)
-      );
-      
-      // Only update the fields that are missing or need to be filled
-      const updateData = {
-          name: formData.name,
-          phone: formData.phone,
-          role: formData.role,
-          profile_completed: true,
-          updated_at: new Date().toISOString(),
-      };
-      
-      console.log('Updating only missing fields:', updateData);
-      
-      // Update user profile with retry mechanism
-      const { data, error: updateError } = await retryProfileUpdate(updateData);
-      console.log('Supabase update result:', { data, updateError });
-      if (updateError) {
-        console.error('Update error details:', updateError);
-        
-        // Handle specific RLS policy errors
-        if (updateError.message && updateError.message.includes('policy')) {
-          throw new Error('Permission denied. Please try logging out and back in.');
-        }
-        
-        // Handle network errors
-        if (updateError.message && updateError.message.includes('fetch')) {
-          throw new Error('Network error. Please check your connection and try again.');
-        }
 
-        // Handle authentication errors
-        if (updateError.message && updateError.message.includes('JWT')) {
-          throw new Error('Session expired. Please log in again.');
-        }
-        
-        throw updateError;
+      // Add timeout protection (10s for fast feedback)
+      const timeoutPromise = new Promise((_, reject) =>
+        setTimeout(() => reject(new Error('Request timed out. Please try again.')), 10000)
+      );
+
+      // Minimal update for debugging
+      const minimalUpdatePromise = supabase
+        .from('users')
+        .update({ profile_completed: true })
+        .eq('id', currentUser.id)
+        .select();
+
+      const { data, error: updateError } = await Promise.race([
+        minimalUpdatePromise,
+        timeoutPromise
+      ]);
+
+      console.log('DEBUG: Minimal update result:', { data, updateError });
+      if (updateError) {
+        setSubmitError('Update error: ' + (updateError.message || 'Unknown error'));
+        setIsSubmitting(false);
+        return;
       }
       if (!data || data.length === 0) {
-        console.error('No data returned from update');
-        throw new Error('Profile update failed. No data returned.');
+        setSubmitError('Profile update failed. No data returned.');
+        setIsSubmitting(false);
+        return;
       }
-      console.log('Profile update successful:', data[0]);
+      console.log('DEBUG: Profile update successful:', data[0]);
 
-      // Verify the update actually worked
-      const { data: verifyData, error: verifyError } = await supabase
-        .from('users')
-        .select('profile_completed, name, phone, role')
-        .eq('id', currentUser.id)
-        .single();
-      
-      if (verifyError) {
-        console.warn('Verification failed:', verifyError);
-      } else {
-        console.log('Profile verification:', verifyData);
-        if (verifyData.profile_completed !== true) {
-          console.warn('Profile completion flag not set correctly');
-          // Try one more time with a different approach
-          const { error: retryError } = await supabase
-            .from('users')
-            .update({ profile_completed: true })
-            .eq('id', currentUser.id);
-          
-          if (retryError) {
-            console.error('Retry failed:', retryError);
-          } else {
-            console.log('Profile completion flag set on retry');
-          }
-        }
-      }
-
-      // First-100 check and upsert subscription with timeout (with fallback)
-      try {
-        console.log('Checking if user is in first 100:', currentUser.id);
-        const eligible = await Promise.race([isUserInFirst100(currentUser.id), timeoutPromise]);
-        console.log('isUserInFirst100 result:', eligible);
-      if (eligible) {
-          console.log('Upserting subscription for first 100:', currentUser.id);
-          const subSuccess = await Promise.race([upsertSubscriptionForFirst100(currentUser.id), timeoutPromise]);
-          console.log('upsertSubscriptionForFirst100 result:', subSuccess);
-        if (subSuccess) setShowCongrats(true);
-        }
-      } catch (first100Error) {
-        console.warn('First-100 check failed, continuing without subscription:', first100Error);
-        // Continue without first-100 benefits if it fails
-      }
-      
-      setIsSubmitting(false); // Clear loading state
+      setIsSubmitting(false);
       setIsSuccess(true);
       setTimeout(() => {
-        router.push('/dashboard'); // Redirect to dashboard after success
+        router.push('/dashboard');
       }, 1200);
     } catch (error) {
-      console.error('Profile completion failed:', error);
+      console.error('DEBUG: Profile completion failed:', error);
       setSubmitError(error.message || 'Profile completion failed. Please try again.');
-      if (typeof window !== 'undefined' && window.showNotification) {
-        const errorMessage = error.message && error.message.includes('timed out')
-          ? 'Request timed out. Please check your connection.'
-          : error.message || 'Failed to complete profile. Please try again.';
-        window.showNotification(`❌ ${errorMessage}`, 'error', 5000);
-      }
       setIsSubmitting(false);
       setIsSuccess(false);
     } finally {
-      // Ensure loading state is always cleared
       setIsSubmitting(false);
     }
   }

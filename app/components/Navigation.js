@@ -618,53 +618,69 @@ export default function Navigation() {
       `}</style>
       {/* Navigation */}
       <nav className="relative z-50 w-full">
-        {/* Desktop Navbar */}
-        <div className="hidden md:flex items-center justify-between px-6 py-4 bg-black/70 backdrop-blur-md">
-          <div className="flex items-center gap-8 min-w-0">
-            <Link href="/" aria-label="Go to Home" onClick={e => {
-              e.preventDefault();
-              if (window.location.pathname === "/") {
-                router.refresh();
-              } else {
-                router.push("/");
-                setTimeout(() => router.refresh(), 100);
-              }
-            }} className="flex items-center gap-2 cursor-pointer select-none min-w-0">
-              <Image src="/logo (2).webp" alt="HustleHack AI Logo" className="w-8 h-8" width={32} height={32} />
-              <span className="text-xl font-bold ml-2 text-gradient whitespace-nowrap">HustleHack AI</span>
-            </Link>
-            <ul className="flex items-center gap-2 text-[15px] font-medium ml-2 min-w-0 whitespace-nowrap">
-              <li><Link href="/" className={`nav-link pointer-events-auto ${currentPath === '/' ? 'active' : ''}`}>Home</Link></li>
-              <li><Link href="/#features" className="nav-link pointer-events-auto">Features</Link></li>
-              <li><Link href="/#pricing" className="nav-link pointer-events-auto">Pricing</Link></li>
-              <li><Link href="/instant-hustle" className={`nav-link pointer-events-auto ${currentPath === '/instant-hustle' ? 'active' : ''}`}>Instant Hustle Lite <span className="ml-1 px-1.5 py-0.5 rounded-full text-[11px] font-bold bg-[#00FFC2] text-black align-middle">NEW</span></Link></li>
-              <li><Link href="/client-finder" className={`nav-link pointer-events-auto ${currentPath === '/client-finder' ? 'active' : ''}`}>Client Finder <span className="ml-1 px-1.5 py-0.5 rounded-full text-[11px] font-bold bg-[#7F5AF0] text-white align-middle">BETA</span></Link></li>
-              <li><Link href="/resources" className={`nav-link pointer-events-auto ${currentPath === '/resources' ? 'active' : ''}`}>Resources</Link></li>
-              <li><Link href="/ai-products" className={`nav-link pointer-events-auto font-bold text-[#377DFF] ${currentPath === '/ai-products' ? 'active' : ''}`}>AI Products <span className="ml-1 px-1.5 py-0.5 rounded-full text-[11px] font-bold bg-[#377DFF]/10 text-[#377DFF] align-middle">HOT</span></Link></li>
-              <li><Link href="/about" className={`nav-link pointer-events-auto ${currentPath === '/about' ? 'active' : ''}`}>About</Link></li>
-              <li><Link href="/contact" className={`nav-link pointer-events-auto ${currentPath === '/contact' ? 'active' : ''}`}>Contact</Link></li>
-              <li>
-                <Link href="/blog" className={`nav-link px-3 py-2 rounded-md font-semibold transition ${currentPath === '/blog' ? 'text-accent' : 'text-white/90 hover:text-accent'}`}>Blog</Link>
-              </li>
-            </ul>
-          </div>
-          <div className="flex items-center gap-4 ml-auto min-w-0">
-            <button 
-              className="plan-badge px-4 py-2 rounded-full bg-gradient-to-r from-[#7F5AF0] to-[#00FFC2] text-white font-bold shadow hover:shadow-lg transition-all whitespace-nowrap"
-              onClick={() => setIsModalOpen(true)}
-            >
-              Creator Plan
-            </button>
-            <PlanBadgeModal open={isModalOpen} onClose={() => setIsModalOpen(false)} />
-            {!isAuthenticated && (
-              <>
-                <a href="#" className="border px-4 py-2 rounded-lg whitespace-nowrap" onClick={() => openModal('login-modal')}>Sign In</a>
-                <a href="#" className="bg-gradient-to-r from-[#7F5AF0] to-[#00FFC2] px-4 py-2 rounded-lg text-white font-semibold whitespace-nowrap" onClick={() => openModal('signup-modal')}>Get Started</a>
-              </>
-            )}
+        {/* Desktop Navbar - Three Section Horizontal Layout */}
+        <div className="hidden md:block w-full bg-black/70 backdrop-blur-md">
+          <div className="flex items-center justify-between px-6 pt-4 pb-2 w-full">
+            {/* Left: Brand/Logo */}
+            <div className="flex items-center gap-2 min-w-0 flex-shrink-0">
+              <Link href="/" aria-label="Go to Home" onClick={e => {
+                e.preventDefault();
+                if (window.location.pathname === "/") {
+                  router.refresh();
+                } else {
+                  router.push("/");
+                  setTimeout(() => router.refresh(), 100);
+                }
+              }} className="flex items-center gap-2 cursor-pointer select-none min-w-0">
+                <Image src="/logo (2).webp" alt="HustleHack AI Logo" className="w-8 h-8" width={32} height={32} />
+                <span className="text-xl font-bold ml-2 text-gradient whitespace-nowrap">HustleHack AI</span>
+              </Link>
+            </div>
+            {/* Center: 2x5 Nav Links Grid as a block */}
+            <div className="flex-1 flex justify-center items-center">
+              <ul className="grid grid-cols-5 grid-rows-2 gap-x-3 gap-y-2 text-[15px] font-medium min-w-0 whitespace-nowrap">
+                <li><Link href="/" className={`nav-link pointer-events-auto ml-4 ${currentPath === '/' ? 'active' : ''}`}>Home</Link></li>
+                <li><Link href="/#features" className="nav-link pointer-events-auto">Features</Link></li>
+                <li><Link href="/#pricing" className="nav-link pointer-events-auto">Pricing</Link></li>
+                <li><Link href="/instant-hustle" className={`nav-link pointer-events-auto ${currentPath === '/instant-hustle' ? 'active' : ''}`}>Instant Hustle Lite <span className="ml-1 px-1.5 py-0.5 rounded-full text-[11px] font-bold bg-[#00FFC2] text-black align-middle">NEW</span></Link></li>
+                <li><Link href="/client-finder" className={`nav-link pointer-events-auto ${currentPath === '/client-finder' ? 'active' : ''}`}>Client Finder <span className="ml-1 px-1.5 py-0.5 rounded-full text-[11px] font-bold bg-[#7F5AF0] text-white align-middle">BETA</span></Link></li>
+                <li><Link href="/resources" className={`nav-link pointer-events-auto ml-4 ${currentPath === '/resources' ? 'active' : ''}`}>Resources</Link></li>
+                <li><Link href="/ai-products" className={`nav-link pointer-events-auto font-bold text-[#377DFF] ${currentPath === '/ai-products' ? 'active' : ''}`}>AI Products <span className="ml-1 px-1.5 py-0.5 rounded-full text-[11px] font-bold bg-[#377DFF]/10 text-[#377DFF] align-middle">HOT</span></Link></li>
+                <li><Link href="/about" className={`nav-link pointer-events-auto ${currentPath === '/about' ? 'active' : ''}`}>About</Link></li>
+                <li><Link href="/contact" className={`nav-link pointer-events-auto ${currentPath === '/contact' ? 'active' : ''}`}>Contact</Link></li>
+                <li>
+                  <Link href="/blog" className={`nav-link px-3 py-2 rounded-md font-semibold transition ${currentPath === '/blog' ? 'text-accent' : 'text-white/90 hover:text-accent'}`}>Blog</Link>
+                </li>
+              </ul>
+            </div>
+            {/* Right: Plan badge + actions */}
+            <div className="flex items-center gap-4 ml-auto min-w-0 flex-shrink-0">
+              <button 
+                className="plan-badge px-4 py-2 rounded-full bg-gradient-to-r from-[#7F5AF0] to-[#00FFC2] text-white font-bold shadow hover:shadow-lg transition-all whitespace-nowrap"
+                onClick={() => setIsModalOpen(true)}
+              >
+                Creator Plan
+              </button>
+              <PlanBadgeModal open={isModalOpen} onClose={() => setIsModalOpen(false)} />
+              {!isAuthenticated && (
+                <div className="hidden md:flex gap-2 items-center ml-2">
+                  <button
+                    className="border px-3 py-2 rounded-lg bg-[#18181b] text-white font-semibold hover:bg-[#232946] transition"
+                    onClick={signInWithGoogle}
+                  >
+                    Continue with Google
+                  </button>
+                  <Link
+                    href="/plans"
+                    className="bg-gradient-to-r from-[#7F5AF0] to-[#00FFC2] px-3 py-2 rounded-lg text-white font-semibold text-center hover:from-[#6D4DC6] hover:to-[#00E6B3] transition"
+                  >
+                    Get Started
+                  </Link>
+                </div>
+              )}
+            </div>
           </div>
         </div>
-
         {/* Mobile Navbar */}
         <div className="md:hidden w-full bg-black/80 backdrop-blur-md border-b border-[#232136]/40">
           {/* Row 1: Logo + Plan Badge + Menu Toggle */}
@@ -736,8 +752,18 @@ export default function Navigation() {
         {/* Sticky Sign In / Get Started CTA for mobile */}
         {!isAuthenticated && (
           <div className="md:hidden fixed bottom-0 left-0 right-0 z-50 flex gap-2 p-3 bg-gradient-to-t from-black/80 to-transparent backdrop-blur-md">
-            <button className="flex-1 border px-4 py-2 rounded-lg bg-[#18181b] text-white" onClick={() => openModal('login-modal')}>Sign In</button>
-            <button className="flex-1 bg-gradient-to-r from-[#7F5AF0] to-[#00FFC2] px-4 py-2 rounded-lg text-white font-semibold" onClick={() => openModal('signup-modal')}>Get Started</button>
+            <button
+              className="flex-1 border px-4 py-2 rounded-lg bg-[#18181b] text-white"
+              onClick={signInWithGoogle}
+            >
+              Continue with Google
+            </button>
+            <Link
+              href="/plans"
+              className="flex-1 bg-gradient-to-r from-[#7F5AF0] to-[#00FFC2] px-4 py-2 rounded-lg text-white font-semibold text-center"
+            >
+              Get Started
+            </Link>
           </div>
         )}
       </nav>
