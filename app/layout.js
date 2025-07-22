@@ -58,6 +58,24 @@ export default function RootLayout({ children }) {
       <head>
         <link rel="preload" as="image" href="/hero_section.webp" />
         <link rel="preload" as="image" href="/logo (2).webp" />
+        <style>{`
+          html, body {
+            scroll-behavior: smooth;
+          }
+          body {
+            -webkit-overflow-scrolling: touch;
+            overflow-y: scroll;
+          }
+          .scroll-container {
+            overflow-y: scroll;
+            -webkit-overflow-scrolling: touch;
+            transform: translateZ(0);
+          }
+          .sticky, .hero, .navbar {
+            will-change: transform;
+          }
+          /* Suggestion: For heavy images/components, use loading="lazy" or dynamic import for JS. */
+        `}</style>
       </head>
       <body className={inter.className + ' premium-bg min-h-screen'}>
         <ErrorBoundary>

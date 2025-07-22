@@ -633,13 +633,14 @@ export default function Navigation() {
               <Image src="/logo (2).webp" alt="HustleHack AI Logo" className="w-8 h-8" width={32} height={32} />
               <span className="text-xl font-bold ml-2 text-gradient whitespace-nowrap">HustleHack AI</span>
             </Link>
-            <ul className="flex items-center gap-5 text-sm font-medium ml-8 min-w-0 overflow-x-auto scrollbar-hide">
+            <ul className="flex items-center gap-2 text-[15px] font-medium ml-2 min-w-0 whitespace-nowrap">
               <li><Link href="/" className={`nav-link pointer-events-auto ${currentPath === '/' ? 'active' : ''}`}>Home</Link></li>
               <li><Link href="/#features" className="nav-link pointer-events-auto">Features</Link></li>
               <li><Link href="/#pricing" className="nav-link pointer-events-auto">Pricing</Link></li>
-              <li><Link href="/instant-hustle" className={`nav-link pointer-events-auto ${currentPath === '/instant-hustle' ? 'active' : ''}`}>Instant Hustle Lite <span className="ml-2 px-2 py-0.5 rounded-full text-xs font-bold bg-[#00FFC2] text-black">NEW</span></Link></li>
-              <li><Link href="/client-finder" className={`nav-link pointer-events-auto ${currentPath === '/client-finder' ? 'active' : ''}`}>Client Finder <span className="ml-2 px-2 py-0.5 rounded-full text-xs font-bold bg-[#7F5AF0] text-white">BETA</span></Link></li>
+              <li><Link href="/instant-hustle" className={`nav-link pointer-events-auto ${currentPath === '/instant-hustle' ? 'active' : ''}`}>Instant Hustle Lite <span className="ml-1 px-1.5 py-0.5 rounded-full text-[11px] font-bold bg-[#00FFC2] text-black align-middle">NEW</span></Link></li>
+              <li><Link href="/client-finder" className={`nav-link pointer-events-auto ${currentPath === '/client-finder' ? 'active' : ''}`}>Client Finder <span className="ml-1 px-1.5 py-0.5 rounded-full text-[11px] font-bold bg-[#7F5AF0] text-white align-middle">BETA</span></Link></li>
               <li><Link href="/resources" className={`nav-link pointer-events-auto ${currentPath === '/resources' ? 'active' : ''}`}>Resources</Link></li>
+              <li><Link href="/ai-products" className={`nav-link pointer-events-auto font-bold text-[#377DFF] ${currentPath === '/ai-products' ? 'active' : ''}`}>AI Products <span className="ml-1 px-1.5 py-0.5 rounded-full text-[11px] font-bold bg-[#377DFF]/10 text-[#377DFF] align-middle">HOT</span></Link></li>
               <li><Link href="/about" className={`nav-link pointer-events-auto ${currentPath === '/about' ? 'active' : ''}`}>About</Link></li>
               <li><Link href="/contact" className={`nav-link pointer-events-auto ${currentPath === '/contact' ? 'active' : ''}`}>Contact</Link></li>
               <li>
@@ -713,6 +714,7 @@ export default function Navigation() {
                 { href: '/instant-hustle', label: 'Instant Hustle Lite' },
                 { href: '/client-finder', label: 'Client Finder' },
                 { href: '/resources', label: 'Resources' },
+                { href: '/ai-products', label: 'AI Products', badge: 'HOT', accent: true },
                 { href: '/about', label: 'About' },
                 { href: '/contact', label: 'Contact' },
                 { href: '/blog', label: 'Blog' },
@@ -720,10 +722,11 @@ export default function Navigation() {
                 <Link
                   key={link.href}
                   href={link.href}
-                  className={`inline-block px-4 py-2 rounded-full font-medium text-sm transition-colors bg-[#232136] text-gray-100 hover:bg-[#7F5AF0] hover:text-white ${currentPath === link.href ? 'bg-[#7F5AF0] text-white' : ''}`}
+                  className={`inline-block px-4 py-2 rounded-full font-medium text-sm transition-colors bg-[#232136] text-gray-100 hover:bg-[#7F5AF0] hover:text-white ${currentPath === link.href ? 'bg-[#7F5AF0] text-white' : ''} ${link.accent ? 'font-bold text-[#377DFF] border border-[#377DFF] bg-[#377DFF]/10' : ''}`}
                   onClick={() => setMobileNavOpen(false)}
                 >
                   {link.label}
+                  {link.badge && <span className="ml-2 px-2 py-0.5 rounded-full text-xs font-bold bg-[#377DFF]/10 text-[#377DFF]">{link.badge}</span>}
                 </Link>
               ))}
             </div>
