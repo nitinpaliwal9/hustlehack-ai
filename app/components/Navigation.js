@@ -617,9 +617,9 @@ export default function Navigation() {
         }
       `}</style>
       {/* Navigation */}
-      <nav className="relative z-50 w-full">
+      <nav className="sticky top-0 z-50 w-full border-b border-[#232946]/70 bg-[#0A1020]">
         {/* Desktop Navbar - Three Section Horizontal Layout */}
-        <div className="hidden md:block w-full bg-black/70 backdrop-blur-md">
+        <div className="hidden md:block w-full bg-[#0A1020]">
           <div className="flex items-center justify-between px-6 pt-4 pb-2 w-full">
             {/* Left: Brand/Logo */}
             <div className="flex items-center gap-2 min-w-0 flex-shrink-0">
@@ -638,25 +638,25 @@ export default function Navigation() {
             </div>
             {/* Center: 2x5 Nav Links Grid as a block */}
             <div className="flex-1 flex justify-center items-center">
-              <ul className="grid grid-cols-5 grid-rows-2 gap-x-3 gap-y-2 text-[15px] font-medium min-w-0 whitespace-nowrap">
-                <li><Link href="/" className={`nav-link pointer-events-auto ml-4 ${currentPath === '/' ? 'active' : ''}`}>Home</Link></li>
-                <li><Link href="/#features" className="nav-link pointer-events-auto">Features</Link></li>
-                <li><Link href="/#pricing" className="nav-link pointer-events-auto">Pricing</Link></li>
-                <li><Link href="/instant-hustle" className={`nav-link pointer-events-auto ${currentPath === '/instant-hustle' ? 'active' : ''}`}>Instant Hustle Lite <span className="ml-1 px-1.5 py-0.5 rounded-full text-[11px] font-bold bg-[#00FFC2] text-black align-middle">NEW</span></Link></li>
-                <li><Link href="/client-finder" className={`nav-link pointer-events-auto ${currentPath === '/client-finder' ? 'active' : ''}`}>Client Finder <span className="ml-1 px-1.5 py-0.5 rounded-full text-[11px] font-bold bg-[#7F5AF0] text-white align-middle">BETA</span></Link></li>
-                <li><Link href="/resources" className={`nav-link pointer-events-auto ml-4 ${currentPath === '/resources' ? 'active' : ''}`}>Resources</Link></li>
-                <li><Link href="/ai-products" className={`nav-link pointer-events-auto font-bold text-[#377DFF] ${currentPath === '/ai-products' ? 'active' : ''}`}>AI Products <span className="ml-1 px-1.5 py-0.5 rounded-full text-[11px] font-bold bg-[#377DFF]/10 text-[#377DFF] align-middle">HOT</span></Link></li>
-                <li><Link href="/about" className={`nav-link pointer-events-auto ${currentPath === '/about' ? 'active' : ''}`}>About</Link></li>
-                <li><Link href="/contact" className={`nav-link pointer-events-auto ${currentPath === '/contact' ? 'active' : ''}`}>Contact</Link></li>
-                <li>
-                  <Link href="/blog" className={`nav-link px-3 py-2 rounded-md font-semibold transition ${currentPath === '/blog' ? 'text-accent' : 'text-white/90 hover:text-accent'}`}>Blog</Link>
+              <ul className="flex gap-6 text-[16px] font-semibold min-w-0 whitespace-nowrap items-center">
+                <li><Link href="/" className={`nav-link pointer-events-auto ${currentPath === '/' ? 'active' : ''}`}>Home</Link></li>
+                <li><Link href="/features" className={`nav-link pointer-events-auto ${currentPath === '/features' ? 'active' : ''}`}>Features</Link></li>
+                <li><Link href="/ai-products" className={`nav-link pointer-events-auto ${currentPath === '/ai-products' ? 'active' : ''}`}>Tools</Link></li>
+                <li><Link href="/pricing" className={`nav-link pointer-events-auto ${currentPath === '/pricing' ? 'active' : ''}`}>Pricing</Link></li>
+                <li className="relative group">
+                  <Link href="/resources" className={`nav-link pointer-events-auto ${currentPath.startsWith('/resources') ? 'active' : ''}`}>Resources</Link>
+                  <div className="absolute left-0 top-full mt-2 hidden group-hover:block bg-[#181A2A] border border-[#232946]/40 rounded-lg shadow-lg min-w-[180px] z-50">
+                    <Link href="/resources/blog" className="block px-4 py-2 text-sm text-white hover:bg-[#232946] rounded-t-lg">Blog</Link>
+                    <Link href="/resources/ebooks" className="block px-4 py-2 text-sm text-white hover:bg-[#232946]">eBooks</Link>
+                    <Link href="/resources" className="block px-4 py-2 text-sm text-white hover:bg-[#232946] rounded-b-lg">All Resources</Link>
+                  </div>
                 </li>
               </ul>
             </div>
             {/* Right: Plan badge + actions */}
             <div className="flex items-center gap-4 ml-auto min-w-0 flex-shrink-0">
               <button 
-                className="plan-badge px-4 py-2 rounded-full bg-gradient-to-r from-[#7F5AF0] to-[#00FFC2] text-white font-bold shadow hover:shadow-lg transition-all whitespace-nowrap"
+                className="plan-badge px-4 py-2 rounded-2xl bg-[#2563eb] hover:bg-[#1d4ed8] text-white font-bold shadow-lg transition-all whitespace-nowrap"
                 onClick={() => setIsModalOpen(true)}
               >
                 Creator Plan
@@ -665,14 +665,24 @@ export default function Navigation() {
               {!isAuthenticated && (
                 <div className="hidden md:flex gap-2 items-center ml-2">
                   <button
-                    className="border px-3 py-2 rounded-lg bg-[#18181b] text-white font-semibold hover:bg-[#232946] transition"
+                    className="px-4 py-2 rounded-2xl bg-transparent border border-white/60 text-white font-semibold flex items-center gap-2 hover:bg-white/10 transition"
                     onClick={signInWithGoogle}
                   >
-                    Continue with Google
+                    <span className="inline-block align-middle" style={{width: 22, height: 22}}>
+                      <svg width="22" height="22" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <g>
+                          <path d="M44.5 20H24v8.5h11.7C34.7 32.9 30.1 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c2.6 0 5 .8 7 2.3l6.4-6.4C33.7 6.2 29.1 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20c11 0 19.7-8 19.7-20 0-1.3-.1-2.7-.2-4z" fill="#FFC107"/>
+                          <path d="M6.3 14.7l7 5.1C15.1 16.1 19.2 13 24 13c2.6 0 5 .8 7 2.3l6.4-6.4C33.7 6.2 29.1 4 24 4c-7.1 0-13.1 3.7-16.7 9.3z" fill="#FF3D00"/>
+                          <path d="M24 44c5.9 0 10.8-1.9 14.4-5.1l-6.6-5.4C29.2 35.7 26.7 36.5 24 36.5c-6.1 0-10.7-4.1-12.5-9.6l-7 5.4C7.9 40.3 15.3 44 24 44z" fill="#4CAF50"/>
+                          <path d="M44.5 20H24v8.5h11.7c-1.1 3.1-4.2 5.5-7.7 5.5-2.2 0-4.2-.7-5.7-2l-7 5.4C17.3 41.9 20.5 44 24 44c11 0 19.7-8 19.7-20 0-1.3-.1-2.7-.2-4z" fill="#1976D2"/>
+                        </g>
+                      </svg>
+                    </span>
+                    <span>Continue with Google</span>
                   </button>
                   <Link
                     href="/plans"
-                    className="bg-gradient-to-r from-[#7F5AF0] to-[#00FFC2] px-3 py-2 rounded-lg text-white font-semibold text-center hover:from-[#6D4DC6] hover:to-[#00E6B3] transition"
+                    className="px-4 py-2 rounded-2xl bg-[#2563eb] hover:bg-[#1d4ed8] text-white font-semibold text-center shadow-lg transition"
                   >
                     Get Started
                   </Link>
@@ -682,7 +692,7 @@ export default function Navigation() {
           </div>
         </div>
         {/* Mobile Navbar */}
-        <div className="md:hidden w-full bg-black/80 backdrop-blur-md border-b border-[#232136]/40">
+        <div className="md:hidden w-full bg-[#0A1020] border-b border-[#232946]/70">
           {/* Row 1: Logo + Plan Badge + Menu Toggle */}
           <div className="flex items-center justify-between px-4 py-3">
             <Link href="/" aria-label="Go to Home" onClick={e => {
@@ -725,8 +735,8 @@ export default function Navigation() {
             <div className="flex overflow-x-auto gap-2 px-2 pb-2 scrollbar-hide whitespace-nowrap">
               {[
                 { href: '/', label: 'Home' },
-                { href: '/#features', label: 'Features' },
-                { href: '/#pricing', label: 'Pricing' },
+                { href: '/features', label: 'Features' },
+                { href: '/pricing', label: 'Pricing' },
                 { href: '/instant-hustle', label: 'Instant Hustle Lite' },
                 { href: '/client-finder', label: 'Client Finder' },
                 { href: '/resources', label: 'Resources' },
@@ -749,23 +759,7 @@ export default function Navigation() {
           </div>
         </div>
 
-        {/* Sticky Sign In / Get Started CTA for mobile */}
-        {!isAuthenticated && (
-          <div className="md:hidden fixed bottom-0 left-0 right-0 z-50 flex gap-2 p-3 bg-gradient-to-t from-black/80 to-transparent backdrop-blur-md">
-            <button
-              className="flex-1 border px-4 py-2 rounded-lg bg-[#18181b] text-white"
-              onClick={signInWithGoogle}
-            >
-              Continue with Google
-            </button>
-            <Link
-              href="/plans"
-              className="flex-1 bg-gradient-to-r from-[#7F5AF0] to-[#00FFC2] px-4 py-2 rounded-lg text-white font-semibold text-center"
-            >
-              Get Started
-            </Link>
-          </div>
-        )}
+        {/* Sticky Sign In / Get Started CTA for mobile - removed as per request */}
       </nav>
       {/* Mobile Profile Overlay (outside nav for correct JSX structure) */}
       {isProfileDropdownOpen && (

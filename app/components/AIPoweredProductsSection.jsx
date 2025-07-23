@@ -100,7 +100,7 @@ export default function AIPoweredProductsSection() {
   };
 
   return (
-    <section className="py-16 px-4 bg-[#181A2A]">
+    <section className="py-16 px-4">
       <div className="max-w-5xl mx-auto text-center mb-10">
         <h2 className="text-3xl md:text-4xl font-extrabold text-white mb-2">AI-Powered Content That Works While You Sleep</h2>
         <p className="text-lg text-gray-200 max-w-2xl mx-auto">Smart content solutions for solopreneurs, creators, and small brands. Just enter your niche and goals — we’ll do the rest.</p>

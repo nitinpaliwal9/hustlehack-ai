@@ -190,370 +190,226 @@ export default function HomePage() {
   }
   
   return (
-    <div className="overflow-x-hidden w-full" key={typeof window !== 'undefined' ? window.location.pathname : 'homepage'}>
+    <div className="w-full scroll-smooth" key={typeof window !== 'undefined' ? window.location.pathname : 'homepage'}>
       <LazyNavigation />
 
-      {/* Hero Section */}
-      <header className="relative min-h-[70vh] md:min-h-[80vh] flex items-center justify-center px-3 sm:px-0 py-10 sm:py-20 overflow-hidden">
-        {/* Animated background overlays */}
-        <div className="absolute inset-0 z-0 pointer-events-none">
-          {/* Subtle animated particles (CSS or SVG) */}
-          <div className="absolute inset-0 animate-fade-in" style={{background: 'radial-gradient(ellipse at 60% 30%, #7F5AF022 0%, transparent 70%), radial-gradient(ellipse at 30% 80%, #00FFC222 0%, transparent 70%)'}} />
-          {/* Faint vertical gradient for separation */}
-          <div className="absolute inset-0 bg-gradient-to-b from-[#181A2A] via-transparent to-[#232946] opacity-80" />
-        </div>
-        <Image
-          src="/hero_section.webp"
-          alt="HustleHack AI – AI tools for creators, students & solopreneurs"
-          fill
-          priority
-          sizes="(max-width: 768px) 100vw, 1200px"
-          className="object-cover z-0"
-        />
-        <div className="absolute inset-0 bg-gradient-to-b from-black/50 to-black/90 z-0" />
-        <div className="relative z-10 max-w-2xl w-full px-3 sm:px-6 text-center flex flex-col items-center justify-center">
-          {/* Animated Credibility Badge */}
-          <div className="inline-flex items-center gap-2 px-5 py-1.5 mb-7 rounded-full bg-white/95 shadow-lg border border-[#7F5AF0]/20 text-[#232946] font-semibold text-xs sm:text-sm tracking-wide uppercase animate-slide-fade-down hero-badge-glow" style={{fontFamily:'Inter, Sora, sans-serif', letterSpacing:'0.06em', boxShadow:'0 2px 16px 0 #00FFC2AA, 0 1px 8px 0 #7F5AF0AA'}}>
-            <span className="text-lg">✅</span>
-            <span className="font-bold text-[#1a237e]" style={{fontWeight:700}}> #1 AI Tool </span>
-            <span className="hidden xs:inline">for</span>
-            <span className="ml-1 whitespace-nowrap">Indian Creators & Students</span>
-          </div>
-          {/* Headline with gradient AI */}
-          <h1 className="text-4xl sm:text-5xl md:text-7xl font-extrabold text-white leading-tight mb-4 sm:mb-7 animate-fade-in-up" style={{letterSpacing:'-0.01em'}}>
-            <span className="shimmer-text">Build.</span> Launch. <span className="bg-gradient-to-r from-[#7F5AF0] to-[#00FFC2] bg-clip-text text-transparent drop-shadow-lg">AI</span>. <span className="shimmer-text">Earn</span>
+      {/* Hero Section with background image, overlay, and large center-aligned headline */}
+      <header
+        className="w-full min-h-[80vh] flex items-center justify-center px-2 sm:px-4 md:px-12 pt-28 sm:pt-32 md:pt-56 pb-10 md:pb-24 relative overflow-hidden"
+        style={{
+          backgroundImage: "url('/Journey from Student to Startup Founder.webp')",
+          backgroundSize: 'cover',
+          backgroundPosition: 'center top -40px',
+        }}
+      >
+        {/* Overlay */}
+        <div className="absolute inset-0 bg-[#0A1020]/80 z-0"></div>
+        {/* Bottom Gradient Overlay for smooth darkness */}
+        <div className="absolute inset-0 z-0 pointer-events-none" style={{background: 'linear-gradient(to bottom, rgba(10,16,32,0) 60%, rgba(10,16,32,0.95) 100%)'}}></div>
+        {/* Centered Text Block, lowered to reveal faces */}
+        <div className="relative z-10 w-full flex flex-col items-center justify-end text-center mt-72 sm:mt-44 md:mt-80 md:mt-[28rem] px-2" style={{maxWidth: '900px'}}>
+          <h1 className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-extrabold text-white mb-6 sm:mb-10 leading-tight tracking-tight drop-shadow-lg whitespace-nowrap">
+            From Student to Founder
           </h1>
-          {/* Subheadline */}
-          <p className="mt-0 sm:mt-2 text-sm sm:text-base md:text-lg text-white/90 mb-8 sm:mb-10 font-light animate-fade-in-up-2" style={{fontWeight:400, color:'#e5e7eb'}}>
-            Tools, templates & growth packs for students and creators.
-          </p>
-          {/* CTA Buttons (3 only) */}
-          <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 justify-center items-center mt-2 sm:mt-4 w-full">
-            <Link href="/instant-hustle" className="hero-btn-pro w-full sm:w-auto max-w-xs sm:min-w-[220px] flex items-center justify-center gap-3 rounded-full font-bold text-lg px-8 py-4 shadow-lg border-0 bg-gradient-to-br from-[#e0e7ff] to-[#c7d2fe] text-gray-900 hover:scale-105 hover:shadow-2xl transition-all duration-200">
-              <span className="text-2xl">🚀</span>
-              <span>Start with Hustle Lite</span>
+          <h2 className="text-2xl sm:text-3xl md:text-7xl lg:text-8xl font-extrabold text-white mb-6 sm:mb-10 leading-tight tracking-tight drop-shadow-lg whitespace-nowrap">
+            Your AI Growth Toolkit.
+          </h2>
+          <p className="text-base sm:text-lg md:text-2xl text-[#cbd5e1] mb-6 sm:mb-8 font-light drop-shadow max-w-xs sm:max-w-xl md:max-w-2xl mx-auto">HustleHack AI helps ambitious students learn faster, create smarter, and launch side hustles with AI — all in one place.</p>
+          {user ? (
+            <Link
+              href="/dashboard"
+              className="inline-block bg-[#2563eb] hover:bg-[#1d4ed8] text-white font-semibold text-xl md:text-2xl px-10 py-5 rounded-2xl shadow-lg transition-all duration-150 mt-2"
+            >
+              Dashboard
             </Link>
-            <Link href="#features" className="hero-btn-pro w-full sm:w-auto max-w-xs sm:min-w-[220px] flex items-center justify-center gap-3 rounded-full font-bold text-lg px-8 py-4 shadow-lg border-0 bg-gradient-to-br from-[#f0fdfa] to-[#a7f3d0] text-gray-900 hover:scale-105 hover:shadow-2xl transition-all duration-200" onClick={e => {e.preventDefault(); const el=document.getElementById('features'); if(el)el.scrollIntoView({behavior:'smooth',block:'start'});}}>
-              <span className="text-2xl">🧠</span>
-              <span>Explore AI Tools</span>
-            </Link>
-            <Link href="#pricing" className="hero-btn-pro w-full sm:w-auto max-w-xs sm:min-w-[220px] flex items-center justify-center gap-3 rounded-full font-bold text-lg px-8 py-4 shadow-lg border-0 bg-gradient-to-br from-[#fef9c3] to-[#fde68a] text-gray-900 hover:scale-105 hover:shadow-2xl transition-all duration-200" onClick={e => {e.preventDefault(); const el=document.getElementById('pricing'); if(el)el.scrollIntoView({behavior:'smooth',block:'start'});}}>
-              <span className="text-2xl">📚</span>
-              <span>Access Resources</span>
-            </Link>
-          </div>
+          ) : (
+            <button
+              onClick={handleGoogleSignIn}
+              className="inline-block bg-[#2563eb] hover:bg-[#1d4ed8] text-white font-semibold text-xl md:text-2xl px-10 py-5 rounded-2xl shadow-lg transition-all duration-150 mt-2"
+            >
+              Start for Free
+            </button>
+          )}
         </div>
-        {/* Hero Animations and Royal Button Styles */}
-        <style jsx>{`
-          .hero-btn-royal {
-            @apply flex items-center justify-center gap-2 rounded-full font-extrabold text-base sm:text-lg px-7 sm:px-10 py-3 sm:py-4 shadow-xl transition-all duration-200 border-2 border-transparent bg-gradient-to-br from-[#fff]/80 via-[#E9E4F0]/80 to-[#7F5AF0]/20 text-[#232946] hover:from-[#FFD700]/90 hover:to-[#7F5AF0]/40 hover:text-[#1a1333] focus:outline-none;
-            background: linear-gradient(120deg, #fff 60%, #E9E4F0 80%, #7F5AF0 100%);
-            color: #232946;
-            border: 2px solid rgba(127,90,240,0.12);
-            box-shadow: 0 2px 24px 0 #7F5AF055, 0 1.5px 8px 0 #FFD70033, 0 0 0 1.5px #fff inset;
-            font-family: 'Sora', 'Inter', sans-serif;
-            font-weight: 800;
-            letter-spacing: 0.01em;
-            position: relative;
-            z-index: 1;
-            overflow: hidden;
-          }
-          .hero-btn-royal:before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            border-radius: 9999px;
-            background: linear-gradient(120deg, #FFD70055 0%, #7F5AF055 100%);
-            opacity: 0;
-            transition: opacity 0.2s;
-            z-index: 0;
-          }
-          .hero-btn-royal:hover, .hero-btn-royal:focus {
-            color: #1a1333;
-            border-color: #FFD700;
-            box-shadow: 0 4px 32px 0 #FFD70055, 0 2px 16px 0 #7F5AF0AA, 0 0 0 2px #FFD700 inset;
-            background: linear-gradient(120deg, #FFD700 60%, #E9E4F0 80%, #7F5AF0 100%);
-          }
-          .hero-btn-royal:hover:before, .hero-btn-royal:focus:before {
-            opacity: 0.18;
-          }
-          .hero-btn-royal span {
-            position: relative;
-            z-index: 2;
-            font-size: 1.25em;
-            margin-right: 0.25em;
-          }
-        `}</style>
       </header>
 
-      {/* How It Works Section */}
-      <section id="how-it-works" className="section py-24" role="region" aria-label="How HustleHack AI works">
-        <div className="container max-w-6xl mx-auto px-6">
-          <h2 className="section-title premium-heading mb-2" tabIndex="0">How It Works</h2>
-          <p className="section-subtitle text-lg text-gray-300 mb-10" tabIndex="0">Get started with HustleHack AI in three simple steps</p>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
-            <div className="glass-card p-8 rounded-2xl shadow-xl text-center">
-              <span className="card-icon text-3xl mb-4 block">🔍</span>
-              <h3 className="card-title premium-heading mb-2">Pick Your Plan</h3>
-              <p className="card-description text-gray-200">Choose from our flexible plans designed for different needs and budgets. Start with basics or go pro.</p>
-            </div>
-            <div className="glass-card p-8 rounded-2xl shadow-xl text-center">
-              <span className="card-icon text-2xl sm:text-3xl mb-2 sm:mb-4 block">🎁</span>
-              <h3 className="card-title premium-heading mb-1 sm:mb-2 text-base sm:text-lg md:text-xl">Unlock Tools & Resources</h3>
-              <p className="card-description text-gray-200 text-sm sm:text-base">Access AI tools, templates, prompts, and exclusive content to supercharge your productivity.</p>
-            </div>
-            <div className="glass-card p-8 rounded-2xl shadow-xl text-center">
-              <span className="card-icon text-2xl sm:text-3xl mb-2 sm:mb-4 block">🚀</span>
-              <h3 className="card-title premium-heading mb-1 sm:mb-2 text-base sm:text-lg md:text-xl">Grow & Scale</h3>
-              <p className="card-description text-gray-200 text-sm sm:text-base">Apply your newfound skills to grow your studies, side hustles, and creative projects faster than ever.</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Features Section */}
-      <section id="features" className="section py-24" role="region" aria-label="Platform features">
-        <div className="container max-w-7xl mx-auto px-6">
-          <h2 className="section-title premium-heading mb-2" tabIndex="0">Why Choose HustleHack AI?</h2>
-          <p className="section-subtitle text-lg text-gray-300 mb-10" tabIndex="0">Everything you need to succeed in the AI-driven world</p>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
-            <div className="glass-card p-8 rounded-2xl shadow-xl text-center">
-              <span className="card-icon text-xl sm:text-2xl mb-1 sm:mb-2 block">✨</span>
-              <h3 className="card-title premium-heading mb-1 sm:mb-2 text-sm sm:text-base md:text-lg break-words min-w-0 max-w-full">Weekly AI Drops</h3>
-              <p className="card-description text-gray-200 text-sm sm:text-base">Fresh AI tools, prompts, and resources delivered weekly to keep you ahead of the curve.</p>
-            </div>
-            <div className="glass-card p-8 rounded-2xl shadow-xl text-center">
-              <span className="card-icon text-2xl sm:text-3xl mb-2 sm:mb-4 block">🛠️</span>
-              <h3 className="card-title premium-heading mb-1 sm:mb-2 text-base sm:text-lg md:text-xl">Tools & Templates</h3>
-              <p className="card-description text-gray-200 text-sm sm:text-base">Ready-to-use templates, blueprints, and automation tools for instant productivity boost.</p>
-            </div>
-            <div className="glass-card p-8 rounded-2xl shadow-xl text-center">
-              <span className="card-icon text-2xl sm:text-3xl mb-2 sm:mb-4 block">📚</span>
-              <h3 className="card-title premium-heading mb-1 sm:mb-2 text-base sm:text-lg md:text-xl">Study & Creator Resources</h3>
-              <p className="card-description text-gray-200 text-sm sm:text-base">Comprehensive guides, tutorials, and resources for students and content creators.</p>
-            </div>
-            <div className="glass-card p-8 rounded-2xl shadow-xl text-center">
-              <span className="card-icon text-2xl sm:text-3xl mb-2 sm:mb-4 block">🧠</span>
-              <h3 className="card-title premium-heading mb-1 sm:mb-2 text-base sm:text-lg md:text-xl">Learn AI on the Go</h3>
-              <p className="card-description text-gray-200 text-sm sm:text-base">Mobile-friendly platform with bite-sized learning modules that fit your schedule.</p>
-            </div>
-            <div className="glass-card p-8 rounded-2xl shadow-xl text-center">
-              <span className="card-icon text-2xl sm:text-3xl mb-2 sm:mb-4 block">🎯</span>
-              <h3 className="card-title premium-heading mb-1 sm:mb-2 text-base sm:text-lg md:text-xl">Personalized Learning</h3>
-              <p className="card-description text-gray-200 text-sm sm:text-base">AI-powered recommendations based on your interests and learning goals.</p>
-            </div>
-            <div className="glass-card p-8 rounded-2xl shadow-xl text-center">
-              <span className="card-icon text-2xl sm:text-3xl mb-2 sm:mb-4 block">🌟</span>
-              <h3 className="card-title premium-heading mb-1 sm:mb-2 text-base sm:text-lg md:text-xl">Community Access</h3>
-              <p className="card-description text-gray-200 text-sm sm:text-base">Connect with like-minded hustlers, get feedback, and collaborate on projects.</p>
-            </div>
-            <div className="glass-card p-8 rounded-2xl shadow-xl text-center">
-              <span className="card-icon text-2xl sm:text-3xl mb-2 sm:mb-4 block">💡</span>
-              <h3 className="card-title premium-heading mb-1 sm:mb-2 text-base sm:text-lg md:text-xl">Innovation Hub</h3>
-              <p className="card-description text-gray-200 text-sm sm:text-base">Access to cutting-edge AI tools and beta features before they go mainstream.</p>
-            </div>
-            <div className="glass-card p-8 rounded-2xl shadow-xl text-center">
-              <span className="card-icon text-2xl sm:text-3xl mb-2 sm:mb-4 block">🏆</span>
-              <h3 className="card-title premium-heading mb-1 sm:mb-2 text-base sm:text-lg md:text-xl">Success Tracking</h3>
-              <p className="card-description text-gray-200 text-sm sm:text-base">Track your progress, achievements, and growth with detailed analytics.</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Pricing Section */}
-      <section id="pricing" className="section py-24 relative" role="region" aria-label="Pricing plans">
-        {/* Animated Gradient Overlay */}
-        <div className="absolute inset-0 z-0 animate-bg-gradient" style={{ pointerEvents: 'none', opacity: 0.5 }} />
-        <div className="container max-w-5xl mx-auto px-6 relative z-10">
-          <h2 className="section-title premium-heading mb-2" tabIndex="0">Choose Your Plan</h2>
-          <p className="section-subtitle text-lg text-gray-300 mb-10" tabIndex="0">Flexible pricing that grows with your ambitions</p>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
-            <div className="glass-card p-8 rounded-2xl shadow-xl text-center">
-              <div className="pricing-rating">
-                <div className="rating-stars" aria-label="4.2 out of 5 stars">
-                  <span className="star filled" aria-hidden="true">★</span>
-                  <span className="star filled" aria-hidden="true">★</span>
-                  <span className="star filled" aria-hidden="true">★</span>
-                  <span className="star filled" aria-hidden="true">★</span>
-                  <span className="star partial" aria-hidden="true">★</span>
-                </div>
-                <span className="rating-text">4.2/5 (2,847 reviews)</span>
+      {/* Growth Journey Section styled like 'How it Works', with our content */}
+      <section id="growth-journey" className="section py-20 bg-[#0A1020]" role="region" aria-label="Growth Journey">
+        <div className="container max-w-5xl mx-auto px-4">
+          <div className="bg-[#0A1020] border border-[#232946] rounded-2xl shadow-lg p-10 md:p-14 flex flex-col items-center">
+            <h2 className="text-3xl md:text-4xl font-extrabold text-white mb-8 text-center">The Growth Journey</h2>
+            <div className="w-full grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-0">
+              <div className="flex flex-col items-center text-center px-4">
+                <span className="text-4xl md:text-5xl mb-4 text-[#2563eb] flex items-center justify-center"><svg width='40' height='40' fill='none' xmlns='http://www.w3.org/2000/svg'><circle cx='20' cy='20' r='20' fill='#2563eb' fillOpacity='0.15'/><path d='M20 12a2 2 0 1 1 0 4 2 2 0 0 1 0-4zm0 6c-2.67 0-8 1.34-8 4v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2c0-2.66-5.33-4-8-4z' fill='#2563eb'/></svg></span>
+                <h3 className="text-lg md:text-xl font-semibold text-white mb-2">Study Smarter</h3>
+                <p className="text-gray-300 text-base">AI notes, planners, exam hacks.</p>
               </div>
-              <h3 className="pricing-title premium-plan-name">Starter Hustle</h3>
-              <p className="pricing-subtitle text-gray-200">Perfect for getting started</p>
-              <div className="pricing-container">
-                <div className="pricing-original">₹499</div>
-                <div className="pricing-current">₹99<span className="pricing-period">/month</span></div>
-                <div className="pricing-discount">80% OFF</div>
+              <div className="flex flex-col items-center text-center px-4">
+                <span className="text-4xl md:text-5xl mb-4 text-[#2563eb] flex items-center justify-center"><svg width='40' height='40' fill='none' xmlns='http://www.w3.org/2000/svg'><circle cx='20' cy='20' r='20' fill='#2563eb' fillOpacity='0.15'/><path d='M14 20h12M20 14v12' stroke='#2563eb' strokeWidth='2' strokeLinecap='round'/></svg></span>
+                <h3 className="text-lg md:text-xl font-semibold text-white mb-2">Create Faster</h3>
+                <p className="text-gray-300 text-base">Social media prompts, content planners.</p>
               </div>
-              <ul className="pricing-features">
-                <li>Essential AI tools & templates</li>
-                <li>Basic automation scripts</li>
-                <li>Community access</li>
-                <li>Email support</li>
-              </ul>
-              <a href="https://rzp.io/rzp/ppw09ED" className="btn btn-outline premium-btn glow-cta" target="_blank" rel="noopener noreferrer" aria-label="Get Started with Starter Hustle">Get Started Now</a>
-              <p className="pricing-note">One-month access, renew anytime manually</p>
-            </div>
-            <div className="glass-card p-8 rounded-2xl shadow-xl text-center featured">
-              <div className="pricing-badge">Most Popular</div>
-              <div className="pricing-rating">
-                <div className="rating-stars" aria-label="4.8 out of 5 stars">
-                  <span className="star filled" aria-hidden="true">★</span>
-                  <span className="star filled" aria-hidden="true">★</span>
-                  <span className="star filled" aria-hidden="true">★</span>
-                  <span className="star filled" aria-hidden="true">★</span>
-                  <span className="star filled" aria-hidden="true">★</span>
-                </div>
-                <span className="rating-text">4.8/5 (5,632 reviews)</span>
-              </div>
-              <h3 className="pricing-title premium-plan-name">Creator Mode</h3>
-              <p className="pricing-subtitle text-gray-200">For serious creators</p>
-              <div className="pricing-container">
-                <div className="pricing-original">₹799</div>
-                <div className="pricing-current">₹199<span className="pricing-period">/month</span></div>
-                <div className="pricing-discount">75% OFF</div>
-              </div>
-              <ul className="pricing-features">
-                <li>Everything in Starter +</li>
-                <li>Advanced AI workflows</li>
-                <li>Premium templates library</li>
-                <li>Priority support</li>
-                <li>Weekly live sessions</li>
-              </ul>
-              <a href="https://rzp.io/rzp/atTfuqqZ" className="btn btn-primary premium-btn glow-cta" target="_blank" rel="noopener noreferrer" aria-label="Level Up with Creator Mode">Level Up Now</a>
-              <p className="pricing-note">One-month access, renew anytime manually</p>
-            </div>
-            <div className="glass-card p-8 rounded-2xl shadow-xl text-center">
-              <div className="pricing-rating">
-                <div className="rating-stars" aria-label="4.5 out of 5 stars">
-                  <span className="star filled" aria-hidden="true">★</span>
-                  <span className="star filled" aria-hidden="true">★</span>
-                  <span className="star filled" aria-hidden="true">★</span>
-                  <span className="star filled" aria-hidden="true">★</span>
-                  <span className="star half" aria-hidden="true">★</span>
-                </div>
-                <span className="rating-text">4.5/5 (1,923 reviews)</span>
-              </div>
-              <h3 className="pricing-title premium-plan-name">Pro Hacker</h3>
-              <p className="pricing-subtitle text-gray-200">Maximum firepower</p>
-              <div className="pricing-container">
-                <div className="pricing-original">₹1,199</div>
-                <div className="pricing-current">₹299<span className="pricing-period">/month</span></div>
-                <div className="pricing-discount">75% OFF</div>
-              </div>
-              <ul className="pricing-features">
-                <li>Everything in Creator +</li>
-                <li>Exclusive AI models</li>
-                <li>Custom automation builds</li>
-                <li>1-on-1 strategy calls</li>
-                <li>VIP community access</li>
-              </ul>
-              <a href="https://rzp.io/rzp/nraUuNBx" className="btn btn-outline premium-btn glow-cta" target="_blank" rel="noopener noreferrer" aria-label="Go Pro with Pro Hacker">Go Pro Now</a>
-              <p className="pricing-note">One-month access, renew anytime manually</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Testimonials Section */}
-      <section id="testimonials" className="section py-24" role="region" aria-label="User testimonials">
-        <div className="container max-w-6xl mx-auto px-6">
-          <h2 className="section-title premium-heading mb-2" tabIndex="0">What Our Users Say</h2>
-          <p className="section-subtitle text-lg text-gray-300 mb-10" tabIndex="0">Join thousands of students and creators who are already winning with AI</p>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
-            <div className="glass-card p-8 rounded-2xl shadow-xl text-center">
-              <p className="card-description text-gray-200">&quot;HustleHack AI transformed my content creation workflow. I&apos;m now producing 3x more content with better quality!&quot;</p>
-              <div style={{marginTop: '1rem'}}>
-                <strong style={{color: 'var(--accent)'}}>Priya Sharma</strong>
-                <p style={{color: 'var(--gray-400)', fontSize: '0.9rem', margin: 0}}>Content Creator, Mumbai</p>
-              </div>
-            </div>
-            <div className="glass-card p-8 rounded-2xl shadow-xl text-center">
-              <p className="card-description text-gray-200">&quot;The AI study tools helped me crack my engineering entrance exam. The personalized learning path was a game-changer!&quot;</p>
-              <div style={{marginTop: '1rem'}}>
-                <strong style={{color: 'var(--accent)'}}>Arjun Patel</strong>
-                <p style={{color: 'var(--gray-400)', fontSize: '0.9rem', margin: 0}}>Student, Delhi</p>
-              </div>
-            </div>
-            <div className="glass-card p-8 rounded-2xl shadow-xl text-center">
-              <p className="card-description text-gray-200">&quot;My freelance business grew 5x after using HustleHack&apos;s automation tools. The ROI was incredible!&quot;</p>
-              <div style={{marginTop: '1rem'}}>
-                <strong style={{color: 'var(--accent)'}}>Sneha Reddy</strong>
-                <p style={{color: 'var(--gray-400)', fontSize: '0.9rem', margin: 0}}>Freelancer, Bangalore</p>
+              <div className="flex flex-col items-center text-center px-4">
+                <span className="text-4xl md:text-5xl mb-4 text-[#2563eb] flex items-center justify-center"><svg width='40' height='40' fill='none' xmlns='http://www.w3.org/2000/svg'><circle cx='20' cy='20' r='20' fill='#2563eb' fillOpacity='0.15'/><path d='M16 24l4-4 4 4M20 16v8' stroke='#2563eb' strokeWidth='2' strokeLinecap='round'/></svg></span>
+                <h3 className="text-lg md:text-xl font-semibold text-white mb-2">Launch Mini Startups</h3>
+                <p className="text-gray-300 text-base">AI business ideas, pitch decks, MVP templates.</p>
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* FAQ Section */}
-      <section id="faq" className="section py-24" role="region" aria-label="Frequently asked questions">
-        <div className="container max-w-6xl mx-auto px-6">
-          <h2 className="section-title premium-heading mb-2" tabIndex="0">Frequently Asked Questions</h2>
-          <p className="section-subtitle text-lg text-gray-300 mb-10" tabIndex="0">Everything you need to know about HustleHack AI</p>
-          <div className="faq-container" role="list">
-            {/* FAQ items with React state for open/close */}
-            {[
-              {
-                q: 'What is HustleHack AI?',
-                a: 'HustleHack AI is a comprehensive platform designed for young Indian students, creators, and solopreneurs. We provide AI tools, templates, prompts, and resources to help you learn faster, create better content, and grow your ventures using artificial intelligence.'
-              },
-              {
-                q: 'How do I get started?',
-                a: 'Getting started is easy! Simply choose a plan that fits your needs, sign up for an account, and you\'ll get instant access to our platform. We also provide onboarding tutorials to help you make the most of our tools.'
-              },
-              {
-                q: 'Can I cancel my subscription anytime?',
-                a: 'Yes, you can cancel your subscription at any time. There are no long-term contracts or cancellation fees. You&apos;ll continue to have access to your account until the end of your current billing cycle.'
-              },
-              {
-                q: 'Do you offer student discounts?',
-                a: 'Yes! We offer special student pricing for verified students. Contact our support team with your student ID to learn more about available discounts and verification process.'
-              },
-              {
-                q: 'What payment methods do you accept?',
-                a: 'We accept all major credit cards, debit cards, UPI, net banking, and digital wallets. All payments are processed securely through our payment partners.'
-              },
-              {
-                q: 'Is there a free trial available?',
-                a: 'Yes! We offer a 7-day free trial for new users. You can explore all features and decide which plan works best for you before committing to a subscription.'
-              }
-            ].map((item, idx) => (
-              <div className="faq-item" role="listitem" tabIndex="0" key={idx}>
-                <button
-                  className="faq-question"
-                  onClick={() => toggleFAQ(idx)}
-                  aria-expanded={openFAQ[idx]}
-                  aria-controls={`faq-answer-${idx}`}
-                >
-                  {item.q}
-                  <span className="faq-icon">{openFAQ[idx] ? '-' : '+'}</span>
-                </button>
-                <div
-                  className={`faq-answer${openFAQ[idx] ? ' show' : ''}`}
-                  id={`faq-answer-${idx}`}
-                  hidden={!openFAQ[idx]}
-                >
-                  <p>{item.a}</p>
-                </div>
-              </div>
-            ))}
+      {/* Section 3: What's Inside HustleHack AI? */}
+      <section id="whats-inside" className="section py-14 sm:py-20 bg-[#0A1020]" role="region" aria-label="What's Inside HustleHack AI?">
+        <div className="container max-w-6xl mx-auto px-2 sm:px-4">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-white mb-8 sm:mb-10 text-center">What’s Inside HustleHack AI?</h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
+            {/* Card 1 */}
+            <div className="bg-[#151a28] border border-[#232946] rounded-2xl shadow-lg p-6 sm:p-8 flex flex-col items-center text-center">
+              <span className="text-5xl mb-4 text-[#2563eb]">📦</span>
+              <h3 className="text-xl font-semibold text-white mb-2">Weekly Hustle Drops</h3>
+              <p className="text-gray-300 text-base">New AI blueprints every week.</p>
+            </div>
+            {/* Card 2 */}
+            <div className="bg-[#151a28] border border-[#232946] rounded-2xl shadow-lg p-6 sm:p-8 flex flex-col items-center text-center">
+              <span className="text-5xl mb-4 text-[#2563eb]">🗂️</span>
+              <h3 className="text-xl font-semibold text-white mb-2">Done-for-you templates</h3>
+              <p className="text-gray-300 text-base">Notion dashboards, content packs, startup planners.</p>
+            </div>
+            {/* Card 3 */}
+            <div className="bg-[#151a28] border border-[#232946] rounded-2xl shadow-lg p-6 sm:p-8 flex flex-col items-center text-center">
+              <span className="text-5xl mb-4 text-[#2563eb]">⚡</span>
+              <h3 className="text-xl font-semibold text-white mb-2">1-click study and content generators</h3>
+              <p className="text-gray-300 text-base">Instantly create study notes, content, and more with a single click.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Section 4: Community & Social Proof */}
+      <section id="community" className="section py-14 sm:py-20 bg-[#151a28]" role="region" aria-label="Community & Social Proof">
+        <div className="container max-w-3xl mx-auto px-2 sm:px-4 flex flex-col items-center text-center">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-white mb-6 sm:mb-8">Join 100+ students and creators who are building with AI.</h2>
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mt-2 w-full">
+            <span className="inline-flex items-center justify-center mb-3 sm:mb-0">
+              <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 48 48" fill="none">
+                <g>
+                  <circle cx="24" cy="24" r="24" fill="#25D366"/>
+                  <path d="M34.6 29.7c-.5-.2-2.8-1.4-3.2-1.6-.4-.2-.7-.2-1 .2-.3.4-1.1 1.6-1.4 1.9-.3.3-.5.4-1 .1-2.7-1.1-4.5-3.7-5.2-4.5-.4-.5-.1-.8.2-1.1.3-.3.6-.7.9-1.1.3-.4.2-.7 0-1.1-.2-.4-1.1-2.7-1.5-3.7-.4-.9-.8-.8-1.1-.8-.3 0-.7 0-1.1 0-.4 0-1 .1-1.5.7-.5.6-2 2-2 4.8 0 2.8 2 5.5 2.3 5.9.3.4 4 6.1 9.7 8.3 1.4.6 2.5.9 3.3 1.1 1.4.4 2.7.3 3.7.2 1.1-.2 3.5-1.4 4-2.7.5-1.3.5-2.5.3-2.7-.2-.2-.5-.4-1-.6z" fill="#fff"/>
+                </g>
+              </svg>
+            </span>
+            <a
+              href="https://chat.whatsapp.com/E8soXdqX3IfCeYie93qlIh"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-block bg-[#25D366] hover:bg-[#128C7E] text-white font-bold text-lg sm:text-xl md:text-2xl px-6 sm:px-8 py-3 sm:py-4 rounded-2xl shadow-lg transition-all duration-150 w-full sm:w-auto text-center"
+              style={{ boxShadow: '0 4px 24px 0 rgba(37,211,102,0.15)' }}
+              aria-label="Join WhatsApp Community"
+            >
+              Join WhatsApp Community
+            </a>
           </div>
         </div>
       </section>
 
       {/* Final CTA Section */}
-      <section className="section py-24" style={{background: 'linear-gradient(135deg, #7F5AF0, #00FFC2)', color: 'white'}} role="region" aria-label="Final call to action">
-        <div className="container max-w-6xl mx-auto px-6 text-center">
-          <h2 className="section-title premium-heading mb-2" style={{color: 'white'}} tabIndex="0">Ready to Unlock Your AI Superpowers?</h2>
-          <p className="section-subtitle text-lg text-gray-200 mb-10" style={{color: 'white', opacity: 0.9}} tabIndex="0">Join thousands of students and creators who are already building their future with AI</p>
-          <div className="hero-actions flex flex-col md:flex-row gap-4 justify-center items-center" role="group" aria-label="Final actions">
-            <a href="https://rzp.io/rzp/ppw09ED" className="btn btn-lg premium-btn" style={{background: 'white', color: '#7F5AF0'}} target="_blank" rel="noopener noreferrer" aria-label="Start with Starter Hustle - ₹99">🚀 Start with Starter Hustle - ₹99</a>
-            <a href="#pricing" className="btn btn-lg premium-btn" style={{background: 'rgba(255,255,255,0.2)', color: 'white', border: '2px solid white'}} aria-label="Compare Plans">Compare Plans</a>
+      <section className="section py-16 bg-[#0A1020]" role="region" aria-label="Final CTA">
+        <div className="container max-w-3xl mx-auto px-2 sm:px-4 flex flex-col items-center text-center">
+          <div className="relative flex justify-center items-center w-full my-8">
+            <div className="relative w-full max-w-2xl flex items-center justify-center">
+              <svg
+                className="absolute left-0 top-0 w-full h-full z-0"
+                viewBox="0 0 600 160"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+                style={{ pointerEvents: 'none' }}
+              >
+                <defs>
+                  <linearGradient id="neon-gradient" x1="0" y1="0" x2="600" y2="0" gradientUnits="userSpaceOnUse">
+                    <stop stopColor="#7F5AF0" />
+                    <stop offset="0.5" stopColor="#00FFC2" />
+                    <stop offset="1" stopColor="#7F5AF0" />
+                  </linearGradient>
+                  <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+                    <feGaussianBlur stdDeviation="6" result="coloredBlur" />
+                    <feMerge>
+                      <feMergeNode in="coloredBlur" />
+                      <feMergeNode in="SourceGraphic" />
+                    </feMerge>
+                  </filter>
+                </defs>
+                <rect
+                  x="8" y="8" width="584" height="144" rx="40"
+                  stroke="url(#neon-gradient)"
+                  strokeWidth="6"
+                  fill="none"
+                  filter="url(#glow)"
+                  strokeDasharray="1200"
+                  strokeDashoffset="0"
+                  style={{
+                    animation: 'dashmove 3s linear infinite',
+                  }}
+                />
+                <style>{`
+                  @keyframes dashmove {
+                    0% { stroke-dashoffset: 1200; opacity: 1; }
+                    60% { opacity: 1; }
+                    80% { opacity: 0.5; }
+                    100% { stroke-dashoffset: 0; opacity: 0; }
+                  }
+                `}</style>
+              </svg>
+              <div className="relative z-10 bg-[#151a28] rounded-[2rem] px-6 sm:px-12 py-10 sm:py-14 w-full flex items-center justify-center" style={{boxShadow: '0 0 32px 0 rgba(127,90,240,0.15)'}}>
+                <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-white mb-0">Don’t just study. Don’t just dream. Build your future with AI.</h2>
+              </div>
+            </div>
           </div>
+          {user ? (
+            <Link
+              href="/dashboard"
+              className="inline-block bg-[#2563eb] hover:bg-[#1d4ed8] text-white font-bold text-lg sm:text-xl md:text-2xl px-8 sm:px-10 py-4 sm:py-5 rounded-2xl shadow-lg transition-all duration-150 mt-8"
+              aria-label="Dashboard"
+            >
+              Dashboard
+            </Link>
+          ) : (
+            <button
+              onClick={handleGoogleSignIn}
+              className="inline-block bg-[#2563eb] hover:bg-[#1d4ed8] text-white font-bold text-lg sm:text-xl md:text-2xl px-8 sm:px-10 py-4 sm:py-5 rounded-2xl shadow-lg transition-all duration-150 mt-8"
+              aria-label="Start Your Hustle Today."
+            >
+              Start Your Hustle Today.
+            </button>
+          )}
         </div>
+        <style jsx>{`
+          .neon-border-card {
+            position: relative;
+            border-radius: 2rem;
+            overflow: visible;
+          }
+          .neon-border-card::before {
+            content: '';
+            position: absolute;
+            inset: -4px;
+            border-radius: 2rem;
+            z-index: 1;
+            background: none;
+            pointer-events: none;
+            width: calc(100% + 8px);
+            height: calc(100% + 8px);
+            /* Use a moving radial gradient for the glowing point */
+            background: conic-gradient(from 0deg, #7F5AF0 0deg, #00FFC2 90deg, transparent 120deg, transparent 360deg);
+            filter: blur(2px) brightness(1.5);
+            animation: neon-glow-revolve 3s linear infinite;
+            opacity: 0.9;
+          }
+          @keyframes neon-glow-revolve {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+          }
+        `}</style>
       </section>
 
       {/* Powered By Bar */}

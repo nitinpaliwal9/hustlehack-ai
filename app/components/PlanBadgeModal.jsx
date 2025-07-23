@@ -35,6 +35,18 @@ export default function PlanBadgeModal({ open, onClose, planName = 'Creator Plan
     return () => window.removeEventListener('keydown', handleKey);
   }, [open, onClose]);
 
+  // Enhanced: Close on outside click (anywhere outside modal)
+  useEffect(() => {
+    if (!open) return;
+    function handleClick(e) {
+      if (modalRef.current && !modalRef.current.contains(e.target)) {
+        onClose();
+      }
+    }
+    document.addEventListener('mousedown', handleClick);
+    return () => document.removeEventListener('mousedown', handleClick);
+  }, [open, onClose]);
+
   // Trap focus inside modal
   useEffect(() => {
     if (!open) return;
@@ -54,7 +66,7 @@ export default function PlanBadgeModal({ open, onClose, planName = 'Creator Plan
       {open && (
         <div
           ref={overlayRef}
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm transition-opacity duration-300 animate-fadein"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm transition-opacity duration-300 animate-fadein pointer-events-auto"
           aria-hidden={!open}
           role="dialog"
           tabIndex={-1}
@@ -62,7 +74,7 @@ export default function PlanBadgeModal({ open, onClose, planName = 'Creator Plan
         >
           <div
             ref={modalRef}
-            className="relative w-full max-w-lg mx-auto bg-gradient-to-br from-[#18192b] to-[#232946] rounded-2xl shadow-2xl p-6 sm:p-10 border border-white/10 scale-95 opacity-0 animate-modalin focus:outline-none pointer-events-auto mt-10 sm:mt-20"
+            className="relative w-full max-w-full sm:max-w-lg mx-2 sm:mx-auto my-auto bg-gradient-to-br from-[#18192b] to-[#232946] rounded-2xl shadow-2xl p-4 sm:p-6 md:p-10 border border-white/10 scale-95 opacity-0 animate-modalin focus:outline-none pointer-events-auto"
             style={{
               animation: 'modalin 0.3s cubic-bezier(0.4,0,0.2,1) forwards',
               boxShadow: '0 8px 40px 0 #7F5AF055, 0 2px 8px 0 #00FFC255'
@@ -71,7 +83,7 @@ export default function PlanBadgeModal({ open, onClose, planName = 'Creator Plan
           >
             {/* Close button */}
             <button
-              className="absolute top-4 right-4 text-gray-400 hover:text-white focus:outline-none"
+              className="absolute top-2 right-2 sm:top-4 sm:right-4 text-gray-400 hover:text-white focus:outline-none z-10"
               onClick={onClose}
               aria-label="Close modal"
             >
@@ -79,30 +91,30 @@ export default function PlanBadgeModal({ open, onClose, planName = 'Creator Plan
             </button>
             {/* Plan name and tagline */}
             <div className="mb-6 text-center">
-              <span className="inline-block px-4 py-1 rounded-full bg-gradient-to-r from-[#7F5AF0] to-[#00FFC2] text-white font-bold text-sm mb-2 shadow-md">{planName}</span>
-              <h2 className="text-2xl sm:text-3xl font-extrabold text-white mb-2">{planName}</h2>
-              <p className="text-gray-300 text-base sm:text-lg font-medium">{tagline}</p>
+              <span className="inline-block px-3 py-1 rounded-full bg-gradient-to-r from-[#7F5AF0] to-[#00FFC2] text-white font-bold text-xs sm:text-sm mb-2 shadow-md">{planName}</span>
+              <h2 className="text-xl sm:text-2xl md:text-3xl font-extrabold text-white mb-2">{planName}</h2>
+              <p className="text-gray-300 text-sm sm:text-base md:text-lg font-medium">{tagline}</p>
             </div>
             {/* Feature list */}
-            <ul className="mb-8 space-y-4">
+            <ul className="mb-8 space-y-3 sm:space-y-4">
               {FEATURES.map((f, i) => (
-                <li key={i} className="flex items-start text-gray-200 text-base">
+                <li key={i} className="flex items-start text-gray-200 text-sm sm:text-base">
                   {f.icon}
                   <span>{f.text}</span>
                 </li>
               ))}
             </ul>
             {/* CTA buttons */}
-            <div className="flex flex-col sm:flex-row gap-4 mt-6">
+            <div className="flex flex-col gap-3 sm:flex-row sm:gap-4 mt-6">
               <button
-                className="flex-1 py-3 px-6 rounded-lg font-bold text-white bg-gradient-to-r from-[#7F5AF0] to-[#00FFC2] shadow-lg hover:shadow-[0_0_16px_2px_#00FFC2] hover:from-[#7F5AF0]/90 hover:to-[#00FFC2]/90 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[#00FFC2] focus:ring-offset-2"
+                className="flex-1 py-2 sm:py-3 px-4 sm:px-6 rounded-lg font-bold text-white bg-gradient-to-r from-[#7F5AF0] to-[#00FFC2] shadow-lg hover:shadow-[0_0_16px_2px_#00FFC2] hover:from-[#7F5AF0]/90 hover:to-[#00FFC2]/90 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[#00FFC2] focus:ring-offset-2 text-sm sm:text-base"
                 onClick={() => { onClose(); window.location.href = '/resources'; }}
               >
                 Explore All Resources
               </button>
               {showUpgrade && (
                 <button
-                  className="flex-1 py-3 px-6 rounded-lg font-bold text-[#7F5AF0] bg-white/10 border border-[#7F5AF0] hover:bg-[#7F5AF0] hover:text-white hover:shadow-[0_0_16px_2px_#7F5AF0] transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[#7F5AF0] focus:ring-offset-2"
+                  className="flex-1 py-2 sm:py-3 px-4 sm:px-6 rounded-lg font-bold text-[#7F5AF0] bg-white/10 border border-[#7F5AF0] hover:bg-[#7F5AF0] hover:text-white hover:shadow-[0_0_16px_2px_#7F5AF0] transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[#7F5AF0] focus:ring-offset-2 text-sm sm:text-base"
                   onClick={() => { onClose(); window.location.href = '/my-plans'; }}
                 >
                   Upgrade to Pro
