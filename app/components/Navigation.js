@@ -589,6 +589,9 @@ export default function Navigation() {
   // Add state for mobile nav
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
 
+  // Log router for debugging
+  console.log('[Navigation] router:', router);
+
   return (
     <>
       <style jsx>{`
@@ -680,18 +683,18 @@ export default function Navigation() {
                     <div ref={dropdownRef} className="profile-dropdown absolute right-0 mt-2 w-56 bg-[#181A2A] border border-[#232946]/40 rounded-xl shadow-lg z-50 animate-fade-in">
                       <button
                         className="block w-full text-left px-5 py-3 text-white hover:bg-[#232946] rounded-t-xl transition"
-                        onClick={() => { setIsProfileDropdownOpen(false); router.push('/dashboard'); }}
+                        onClick={() => { console.log('[Dropdown] Dashboard clicked'); setIsProfileDropdownOpen(false); router.push('/dashboard'); }}
                       >Dashboard</button>
                       <button
                         className="block w-full text-left px-5 py-3 text-white hover:bg-[#232946] transition"
-                        onClick={() => { setIsProfileDropdownOpen(false); router.push('/profile'); }}
+                        onClick={() => { console.log('[Dropdown] Profile Settings clicked'); setIsProfileDropdownOpen(false); router.push('/profile'); }}
                       >Profile Settings</button>
                       <button
                         className="block w-full text-left px-5 py-3 text-white hover:bg-[#232946] transition"
-                        onClick={() => { setIsProfileDropdownOpen(false); router.push('/my-plans'); }}
+                        onClick={() => { console.log('[Dropdown] Billing clicked'); setIsProfileDropdownOpen(false); router.push('/my-plans'); }}
                       >Billing</button>
                       <button
-                        onClick={async (e) => { setIsProfileDropdownOpen(false); await handleSignOut(e); }}
+                        onClick={async (e) => { console.log('[Dropdown] Logout clicked'); setIsProfileDropdownOpen(false); await handleSignOut(e); }}
                         className="w-full text-left px-5 py-3 text-red-400 hover:bg-[#232946] rounded-b-xl transition"
                       >Logout</button>
                     </div>
