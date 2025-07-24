@@ -126,6 +126,8 @@ export function useAuth() {
         .eq('id', user.id)
         .single()
 
+      console.log('[checkUserProfile] Supabase returned:', existingUser, 'Error:', error)
+
       if (error) {
         console.warn('Error checking user profile:', error)
         // If user doesn't exist (PGRST116), they need to complete profile
@@ -137,18 +139,29 @@ export function useAuth() {
         return 'incomplete'
       }
 
-      // Check if profile is truly complete
+      // Log all required fields
+      console.log('[checkUserProfile] Fields:', {
+        profile_completed: existingUser?.profile_completed,
+        name: existingUser?.name,
+        role: existingUser?.role,
+        phone: existingUser?.phone
+      })
+
+      // Check if profile is truly complete (all required fields must be non-empty)
       const isComplete = existingUser && 
         existingUser.profile_completed === true && 
-        existingUser.name && 
-        existingUser.role && 
-        existingUser.phone
+        !!existingUser.name &&
+        !!existingUser.role &&
+        !!existingUser.phone &&
+        existingUser.name.trim().length > 1 &&
+        existingUser.role.trim().length > 0 &&
+        existingUser.phone.trim().length > 7
 
       if (isComplete) {
         console.log('✅ User profile complete')
         return 'complete'
       } else {
-        console.log('📝 User profile incomplete')
+        console.log('📝 User profile incomplete (missing or invalid fields)')
         return 'incomplete'
       }
     } catch (error) {

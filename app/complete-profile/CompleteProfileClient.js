@@ -213,9 +213,40 @@ export default function CompleteProfileClient() {
 
       setIsSubmitting(false);
       setIsSuccess(true);
-      setTimeout(() => {
-        router.push('/dashboard');
-      }, 1200);
+      // Refetch user row and check profile completion before redirecting
+      try {
+        const { data: refetchedUser, error: refetchError } = await supabase
+          .from('users')
+          .select('id, name, email, role, profile_completed, phone')
+          .eq('id', currentUser.id)
+          .single();
+        console.log('[Profile Refetch] User:', refetchedUser, 'Error:', refetchError);
+        if (refetchError || !refetchedUser) {
+          setSubmitError('Could not verify profile completion. Please refresh and try again.');
+          setIsSuccess(false);
+          return;
+        }
+        // Check all required fields
+        const isComplete = refetchedUser.profile_completed === true &&
+          !!refetchedUser.name &&
+          !!refetchedUser.role &&
+          !!refetchedUser.phone &&
+          refetchedUser.name.trim().length > 1 &&
+          refetchedUser.role.trim().length > 0 &&
+          refetchedUser.phone.trim().length > 7;
+        console.log('[Profile Refetch] Completion status:', isComplete);
+        if (isComplete) {
+          setTimeout(() => {
+            router.push('/dashboard');
+          }, 1200);
+        } else {
+          setSubmitError('Profile not fully complete after update. Please check all fields and try again.');
+          setIsSuccess(false);
+        }
+      } catch (err) {
+        setSubmitError('Error verifying profile completion. Please refresh and try again.');
+        setIsSuccess(false);
+      }
     } catch (error) {
       console.error('DEBUG: Profile completion failed:', error);
       setSubmitError(error.message || 'Profile completion failed. Please try again.');
