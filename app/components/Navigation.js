@@ -589,6 +589,41 @@ export default function Navigation() {
   // Add state for mobile nav
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
 
+  // Robust dropdown: state for disabling buttons and error feedback
+  const [dropdownBusy, setDropdownBusy] = useState(false);
+  const [dropdownError, setDropdownError] = useState('');
+
+  // Keyboard navigation for dropdown
+  useEffect(() => {
+    if (!isProfileDropdownOpen) return;
+    function handleKeyDown(e) {
+      if (e.key === 'Escape') setIsProfileDropdownOpen(false);
+      // Arrow key navigation
+      const items = document.querySelectorAll('.profile-dropdown button');
+      if (!items.length) return;
+      const active = document.activeElement;
+      let idx = Array.from(items).indexOf(active);
+      if (e.key === 'ArrowDown') {
+        e.preventDefault();
+        items[(idx + 1) % items.length].focus();
+      } else if (e.key === 'ArrowUp') {
+        e.preventDefault();
+        items[(idx - 1 + items.length) % items.length].focus();
+      } else if (e.key === 'Tab') {
+        // Trap focus
+        if (e.shiftKey && idx === 0) {
+          e.preventDefault();
+          items[items.length - 1].focus();
+        } else if (!e.shiftKey && idx === items.length - 1) {
+          e.preventDefault();
+          items[0].focus();
+        }
+      }
+    }
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, [isProfileDropdownOpen]);
+
   // Log router for debugging
   console.log('[Navigation] router:', router);
 
@@ -680,22 +715,90 @@ export default function Navigation() {
                     <ChevronDown className="w-4 h-4 ml-1" />
                   </button>
                   {isProfileDropdownOpen && (
-                    <div ref={dropdownRef} className="profile-dropdown absolute right-0 mt-2 w-56 bg-[#181A2A] border border-[#232946]/40 rounded-xl shadow-lg z-50 animate-fade-in">
+                    <div
+                      ref={dropdownRef}
+                      className="profile-dropdown absolute right-0 mt-2 w-56 bg-[#181A2A] border border-[#232946]/40 rounded-xl shadow-lg z-50 animate-fade-in"
+                      role="menu"
+                      aria-label="Account options"
+                    >
+                      {dropdownError && (
+                        <div className="px-5 py-2 text-red-400 text-sm font-semibold">{dropdownError}</div>
+                      )}
                       <button
                         className="block w-full text-left px-5 py-3 text-white hover:bg-[#232946] rounded-t-xl transition"
-                        onClick={() => { console.log('[Dropdown] Dashboard clicked'); setIsProfileDropdownOpen(false); router.push('/dashboard'); }}
+                        onMouseDown={async () => {
+                          if (dropdownBusy) return;
+                          setDropdownBusy(true);
+                          setDropdownError('');
+                          try {
+                            setIsProfileDropdownOpen(false);
+                            await router.push('/dashboard');
+                          } catch (err) {
+                            setDropdownError('Failed to navigate. Please try again.');
+                          } finally {
+                            setDropdownBusy(false);
+                          }
+                        }}
+                        disabled={dropdownBusy}
+                        tabIndex={0}
+                        role="menuitem"
                       >Dashboard</button>
                       <button
                         className="block w-full text-left px-5 py-3 text-white hover:bg-[#232946] transition"
-                        onClick={() => { console.log('[Dropdown] Profile Settings clicked'); setIsProfileDropdownOpen(false); router.push('/profile'); }}
+                        onMouseDown={async () => {
+                          if (dropdownBusy) return;
+                          setDropdownBusy(true);
+                          setDropdownError('');
+                          try {
+                            setIsProfileDropdownOpen(false);
+                            await router.push('/profile');
+                          } catch (err) {
+                            setDropdownError('Failed to navigate. Please try again.');
+                          } finally {
+                            setDropdownBusy(false);
+                          }
+                        }}
+                        disabled={dropdownBusy}
+                        tabIndex={0}
+                        role="menuitem"
                       >Profile Settings</button>
                       <button
                         className="block w-full text-left px-5 py-3 text-white hover:bg-[#232946] transition"
-                        onClick={() => { console.log('[Dropdown] Billing clicked'); setIsProfileDropdownOpen(false); router.push('/my-plans'); }}
+                        onMouseDown={async () => {
+                          if (dropdownBusy) return;
+                          setDropdownBusy(true);
+                          setDropdownError('');
+                          try {
+                            setIsProfileDropdownOpen(false);
+                            await router.push('/my-plans');
+                          } catch (err) {
+                            setDropdownError('Failed to navigate. Please try again.');
+                          } finally {
+                            setDropdownBusy(false);
+                          }
+                        }}
+                        disabled={dropdownBusy}
+                        tabIndex={0}
+                        role="menuitem"
                       >Billing</button>
                       <button
-                        onClick={async (e) => { console.log('[Dropdown] Logout clicked'); setIsProfileDropdownOpen(false); await handleSignOut(e); }}
+                        onMouseDown={async (e) => {
+                          if (dropdownBusy) return;
+                          setDropdownBusy(true);
+                          setDropdownError('');
+                          try {
+                            setIsProfileDropdownOpen(false);
+                            await handleSignOut(e);
+                          } catch (err) {
+                            setDropdownError('Failed to logout. Please try again.');
+                          } finally {
+                            setDropdownBusy(false);
+                          }
+                        }}
                         className="w-full text-left px-5 py-3 text-red-400 hover:bg-[#232946] rounded-b-xl transition"
+                        disabled={dropdownBusy}
+                        tabIndex={0}
+                        role="menuitem"
                       >Logout</button>
                     </div>
                   )}
