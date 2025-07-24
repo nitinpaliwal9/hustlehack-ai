@@ -678,10 +678,22 @@ export default function Navigation() {
                   </button>
                   {isProfileDropdownOpen && (
                     <div ref={dropdownRef} className="profile-dropdown absolute right-0 mt-2 w-56 bg-[#181A2A] border border-[#232946]/40 rounded-xl shadow-lg z-50 animate-fade-in">
-                      <Link href="/dashboard" className="block px-5 py-3 text-white hover:bg-[#232946] rounded-t-xl transition">Dashboard</Link>
-                      <Link href="/profile" className="block px-5 py-3 text-white hover:bg-[#232946] transition">Profile Settings</Link>
-                      <Link href="/my-plans" className="block px-5 py-3 text-white hover:bg-[#232946] transition">Billing</Link>
-                      <button onClick={handleSignOut} className="w-full text-left px-5 py-3 text-red-400 hover:bg-[#232946] rounded-b-xl transition">Logout</button>
+                      <button
+                        className="block w-full text-left px-5 py-3 text-white hover:bg-[#232946] rounded-t-xl transition"
+                        onClick={() => { setIsProfileDropdownOpen(false); router.push('/dashboard'); }}
+                      >Dashboard</button>
+                      <button
+                        className="block w-full text-left px-5 py-3 text-white hover:bg-[#232946] transition"
+                        onClick={() => { setIsProfileDropdownOpen(false); router.push('/profile'); }}
+                      >Profile Settings</button>
+                      <button
+                        className="block w-full text-left px-5 py-3 text-white hover:bg-[#232946] transition"
+                        onClick={() => { setIsProfileDropdownOpen(false); router.push('/my-plans'); }}
+                      >Billing</button>
+                      <button
+                        onClick={async (e) => { setIsProfileDropdownOpen(false); await handleSignOut(e); }}
+                        className="w-full text-left px-5 py-3 text-red-400 hover:bg-[#232946] rounded-b-xl transition"
+                      >Logout</button>
                     </div>
                   )}
                 </div>

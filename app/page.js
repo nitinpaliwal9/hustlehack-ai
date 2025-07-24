@@ -18,7 +18,8 @@ export default function HomePage() {
   const [openFAQ, setOpenFAQ] = useState(Array(6).fill(false));
   const [userProfile, setUserProfile] = useState(null);
   const [profileLoading, setProfileLoading] = useState(false);
-  
+  const [loadingError, setLoadingError] = useState(null);
+
   // Debug navigation
   useEffect(() => {
     console.log('🏠 HomePage mounted/re-rendered')
@@ -184,10 +185,43 @@ export default function HomePage() {
     });
   }
 
+  // Retry handler for loading errors
+  const handleRetry = async () => {
+    setLoadingError(null);
+    setProfileLoading(true);
+    try {
+      if (user?.id) {
+        await checkUserProfile(user.id).then(setUserProfile);
+      }
+    } catch (err) {
+      setLoadingError('Failed to reload. Please check your connection and try again.');
+    } finally {
+      setProfileLoading(false);
+    }
+  };
+
+  // Listen for loading errors from useAuth (network/server issues)
+  useEffect(() => {
+    if (!isLoading && !profileLoading && !user && !userProfile) {
+      setLoadingError('Taking longer than expected. There might be a network issue or the server is busy.');
+    }
+  }, [isLoading, profileLoading, user, userProfile]);
+
   if (isLoading || profileLoading) {
     return (
-      <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column' }}>
         <LazyLoadingSpinner message="Loading..." />
+        {loadingError && (
+          <div className="mt-8 text-center">
+            <div className="text-lg font-semibold text-red-400 mb-2">{loadingError}</div>
+            <button
+              onClick={handleRetry}
+              className="px-6 py-3 rounded-xl bg-[#2563eb] hover:bg-[#1d4ed8] text-white font-bold text-lg shadow-lg transition-all duration-150 mt-2"
+            >
+              Retry
+            </button>
+          </div>
+        )}
       </div>
     );
   }

@@ -7,6 +7,32 @@ import Navigation from '../components/Navigation';
 import PoweredByBar from '../components/PoweredByBar';
 import Footer from '../components/Footer';
 import { Doughnut, Bar, Line, Radar } from 'react-chartjs-2';
+import {
+  Chart as ChartJS,
+  ArcElement,
+  BarElement,
+  LineElement,
+  PointElement,
+  CategoryScale,
+  LinearScale,
+  RadialLinearScale,
+  Title,
+  Tooltip,
+  Legend,
+} from 'chart.js';
+
+ChartJS.register(
+  ArcElement,
+  BarElement,
+  LineElement,
+  PointElement,
+  CategoryScale,
+  LinearScale,
+  RadialLinearScale,
+  Title,
+  Tooltip,
+  Legend
+);
 // Removed: chart.js and react-chartjs-2 imports
 
 export default function FeaturesPage() {

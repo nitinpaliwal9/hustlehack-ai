@@ -27,14 +27,18 @@ export function useAuth() {
         
         if (error) {
           console.error('Error getting session:', error)
-          setError(error.message)
+          setError('Network/server error: ' + error.message + '. Please check your connection and try again.');
+          setIsLoading(false);
+          return;
         } else {
           setUser(session?.user || null)
           setIsAuthenticated(!!session?.user)
         }
       } catch (err) {
         console.error('Auth initialization error:', err)
-        setError(err.message)
+        setError('Network/server error: ' + err.message + '. Please check your connection and try again.');
+        setIsLoading(false);
+        return;
       } finally {
         setIsLoading(false)
       }
@@ -99,10 +103,10 @@ export function useAuth() {
     // Add timeout to break infinite loading
     const loadingTimeout = setTimeout(() => {
       if (isLoading) {
-        setError('Something went wrong. Please refresh the page.');
+        setError('Taking longer than expected. Please check your connection and try again, or refresh the page.');
         setIsLoading(false);
       }
-    }, 15000); // 15 seconds
+    }, 8000); // 8 seconds
 
     return () => {
       subscription.unsubscribe()
