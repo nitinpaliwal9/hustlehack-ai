@@ -189,14 +189,14 @@ export default function CompleteProfileClient() {
       // Minimal update for debugging
       const profileUpdatePromise = supabase
         .from('users')
-        .update({
-          name: formData.name,
+        .upsert({
+          id: currentUser.id,
           email: formData.email,
+          name: formData.name,
           phone: formData.phone,
           role: formData.role,
           profile_completed: true
         })
-        .eq('id', currentUser.id)
         .select();
 
       const { data, error: updateError } = await Promise.race([
