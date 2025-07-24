@@ -82,7 +82,33 @@ export function useAuth() {
       }
     )
 
-    return () => subscription.unsubscribe()
+    // Add focus event listener to re-fetch session on tab focus
+    const handleFocus = () => {
+      setIsLoading(true);
+      supabase.auth.getSession().then(({ data: { session } }) => {
+        setUser(session?.user || null);
+        setIsAuthenticated(!!session?.user);
+        setIsLoading(false);
+      }).catch((err) => {
+        setError('Failed to refresh session on tab focus.');
+        setIsLoading(false);
+      });
+    };
+    window.addEventListener('focus', handleFocus);
+
+    // Add timeout to break infinite loading
+    const loadingTimeout = setTimeout(() => {
+      if (isLoading) {
+        setError('Something went wrong. Please refresh the page.');
+        setIsLoading(false);
+      }
+    }, 15000); // 15 seconds
+
+    return () => {
+      subscription.unsubscribe()
+      window.removeEventListener('focus', handleFocus)
+      clearTimeout(loadingTimeout)
+    }
   }, [])
 
   // Check user profile status

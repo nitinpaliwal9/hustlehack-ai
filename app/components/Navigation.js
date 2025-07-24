@@ -11,6 +11,7 @@ import { getPlanDisplayName } from '../planUtils';
 import PlanBadgeModal from '@/app/components/PlanBadgeModal';
 import zxcvbn from 'zxcvbn';
 import { motion, AnimatePresence } from 'framer-motion';
+import { ChevronDown } from 'lucide-react';
 const BLOG_CATEGORIES = [
   {
     name: 'AI for Creators',
@@ -662,6 +663,29 @@ export default function Navigation() {
                 Creator Plan
               </button>
               <PlanBadgeModal open={isModalOpen} onClose={() => setIsModalOpen(false)} />
+              {isAuthenticated && (
+                <div className="hidden md:inline-flex relative" style={{ marginLeft: 8 }}>
+                  <button
+                    className="inline-flex items-center gap-2 px-4 py-2 rounded-2xl bg-[#232946] hover:bg-[#151a28] text-white font-semibold shadow transition text-base focus:outline-none"
+                    onClick={toggleProfileDropdown}
+                    aria-haspopup="true"
+                    aria-expanded={isProfileDropdownOpen}
+                    aria-label="Account Menu"
+                  >
+                    <span role="img" aria-label="Profile">👤</span>
+                    Account
+                    <ChevronDown className="w-4 h-4 ml-1" />
+                  </button>
+                  {isProfileDropdownOpen && (
+                    <div ref={dropdownRef} className="profile-dropdown absolute right-0 mt-2 w-56 bg-[#181A2A] border border-[#232946]/40 rounded-xl shadow-lg z-50 animate-fade-in">
+                      <Link href="/dashboard" className="block px-5 py-3 text-white hover:bg-[#232946] rounded-t-xl transition">Dashboard</Link>
+                      <Link href="/profile" className="block px-5 py-3 text-white hover:bg-[#232946] transition">Profile Settings</Link>
+                      <Link href="/my-plans" className="block px-5 py-3 text-white hover:bg-[#232946] transition">Billing</Link>
+                      <button onClick={handleSignOut} className="w-full text-left px-5 py-3 text-red-400 hover:bg-[#232946] rounded-b-xl transition">Logout</button>
+                    </div>
+                  )}
+                </div>
+              )}
               {!isAuthenticated && (
                 <div className="hidden md:flex gap-2 items-center ml-2">
                   <button

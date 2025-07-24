@@ -1,6 +1,5 @@
 'use client'
 
-import '../about/about.css';
 import PageLayout from '../components/PageLayout';
 import { Mail, Phone, MessageCircle, Users, Star, Instagram, Linkedin, HeartHandshake } from 'lucide-react';
 import Image from 'next/image';

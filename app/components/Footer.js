@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import { FaInstagram, FaTelegramPlane, FaLinkedin, FaYoutube } from 'react-icons/fa';
 
 export default function Footer() {
   return (
@@ -11,16 +12,17 @@ export default function Footer() {
             <h3 className="text-2xl font-bold text-accent mb-3">HustleHack AI</h3>
             <p className="text-[var(--text-secondary)] mb-4">Empowering the next generation of Indian creators and entrepreneurs with AI.</p>
             <div className="flex gap-4 mt-2">
-              <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" aria-label="Instagram" className="text-accent text-2xl hover:opacity-80 transition-opacity"><span aria-hidden="true">📸</span></a>
-              <a href="https://t.me" target="_blank" rel="noopener noreferrer" aria-label="Telegram" className="text-accent text-2xl hover:opacity-80 transition-opacity"><span aria-hidden="true">✈️</span></a>
-              <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" aria-label="Twitter" className="text-accent text-2xl hover:opacity-80 transition-opacity"><span aria-hidden="true">🐦</span></a>
+              <a href="https://www.instagram.com/hustlehackai" target="_blank" rel="noopener noreferrer" aria-label="Instagram" className="text-accent text-2xl hover:opacity-80 transition-opacity"><FaInstagram aria-hidden="true" /></a>
+              <a href="https://t.me/hustlehackai" target="_blank" rel="noopener noreferrer" aria-label="Telegram" className="text-accent text-2xl hover:opacity-80 transition-opacity"><FaTelegramPlane aria-hidden="true" /></a>
+              <a href="https://www.linkedin.com/company/hustlehackai/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" className="text-accent text-2xl hover:opacity-80 transition-opacity"><FaLinkedin aria-hidden="true" /></a>
+              <a href="https://www.youtube.com/@HustleHackAI" target="_blank" rel="noopener noreferrer" aria-label="YouTube" className="text-accent text-2xl hover:opacity-80 transition-opacity"><FaYoutube aria-hidden="true" /></a>
             </div>
           </div>
           <div>
             <h4 className="text-lg font-semibold text-white mb-3">Product</h4>
             <ul className="space-y-2">
-              <li><Link href="/#features" className="footer-link">Features</Link></li>
-              <li><Link href="/#pricing" className="footer-link">Pricing</Link></li>
+              <li><Link href="/features" className="footer-link">Features</Link></li>
+              <li><Link href="/pricing" className="footer-link">Pricing</Link></li>
               <li><Link href="/resources" className="footer-link">Resources</Link></li>
               <li><Link href="/contact" className="footer-link">API</Link></li>
             </ul>
@@ -45,6 +47,10 @@ export default function Footer() {
           </div>
         </div>
         <div className="text-center pt-8 border-t border-[var(--border-color)]">
+          <div className="inline-block mb-4 px-5 py-2 rounded-full bg-[#151a28] border border-[#7F5AF0] text-[#7F5AF0] font-semibold text-base shadow-md">
+            <span role="img" aria-label="heart" className="mr-2">❤️</span>
+            Loved by Students & Creators
+          </div>
           <p className="text-[var(--text-secondary)] text-sm">© 2024 HustleHack AI. All rights reserved.<br /><span className="block mt-2 text-accent">Made with ❤️ in India.</span></p>
         </div>
       </div>

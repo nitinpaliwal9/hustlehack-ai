@@ -72,7 +72,7 @@ export default function PricingPage() {
                 <li>• Access to student community group</li>
               </ul>
               <div className="text-xs text-[#00FFC2] mb-4">Just ₹3/day — cheaper than a coffee!</div>
-              <Link href="/signup" className="w-full inline-block bg-[#2563eb] hover:bg-[#1d4ed8] text-white font-bold py-3 rounded-xl shadow-lg transition-all duration-150">Start with Starter</Link>
+              <a href="https://rzp.io/rzp/ppw09ED" target="_blank" rel="noopener noreferrer" className="w-full inline-block bg-[#2563eb] hover:bg-[#1d4ed8] text-white font-bold py-3 rounded-xl shadow-lg transition-all duration-150">Start with Starter</a>
             </div>
             {/* Creator Mode (Most Popular) */}
             <div className="bg-[#181f36] rounded-2xl p-6 flex flex-col items-center text-center shadow-2xl border-2 border-[#7F5AF0] relative scale-105 z-10">
@@ -88,7 +88,7 @@ export default function PricingPage() {
                 <li>• Access to “Creator Tips” Telegram Channel</li>
               </ul>
               <div className="text-xs text-[#7F5AF0] mb-4">Launch your creator brand for less than ₹7/day!</div>
-              <Link href="/signup" className="w-full inline-block bg-gradient-to-r from-[#7F5AF0] to-[#00FFC2] hover:from-[#6D4DC6] hover:to-[#00E6B3] text-white font-bold py-3 rounded-xl shadow-lg transition-all duration-150 text-lg">Upgrade to Creator Mode</Link>
+              <a href="https://rzp.io/rzp/atTfuqqZ" target="_blank" rel="noopener noreferrer" className="w-full inline-block bg-gradient-to-r from-[#7F5AF0] to-[#00FFC2] hover:from-[#6D4DC6] hover:to-[#00E6B3] text-white font-bold py-3 rounded-xl shadow-lg transition-all duration-150 text-lg">Upgrade to Creator Mode</a>
             </div>
             {/* Pro Hacker */}
             <div className="bg-[#151a28] rounded-2xl p-6 flex flex-col items-center text-center shadow-lg border border-[#232946]">
@@ -102,7 +102,7 @@ export default function PricingPage() {
                 <li>• Advanced AI automation tips</li>
               </ul>
               <div className="text-xs text-[#00FFC2] mb-4">Just ₹10/day — invest in your dream.</div>
-              <Link href="/signup" className="w-full inline-block bg-[#2563eb] hover:bg-[#1d4ed8] text-white font-bold py-3 rounded-xl shadow-lg transition-all duration-150">Go Pro Hacker</Link>
+              <a href="https://rzp.io/rzp/nraUuNBx" target="_blank" rel="noopener noreferrer" className="w-full inline-block bg-[#2563eb] hover:bg-[#1d4ed8] text-white font-bold py-3 rounded-xl shadow-lg transition-all duration-150">Go Pro Hacker</a>
             </div>
           </div>
         </section>

@@ -5,10 +5,12 @@ import { useAuth } from '../hooks/useAuth';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import DashboardCard from '../../components/DashboardCard';
-import UserAnalytics from './components/UserAnalytics';
-import AIToolsGrid from './components/AIToolsGrid';
-import ResourceLibrary from './components/ResourceLibrary';
-import PromptLibrary from './components/PromptLibrary';
+import dynamic from 'next/dynamic';
+import { Suspense } from 'react';
+const UserAnalytics = dynamic(() => import('./components/UserAnalytics'), { ssr: false, loading: () => <div className="min-h-[200px] flex items-center justify-center w-full"><span className="animate-pulse text-[#7F5AF0] text-xl">Loading analytics...</span></div> });
+const AIToolsGrid = dynamic(() => import('./components/AIToolsGrid'), { ssr: false, loading: () => <div className="min-h-[200px] flex items-center justify-center w-full"><span className="animate-pulse text-[#7F5AF0] text-xl">Loading AI tools...</span></div> });
+const ResourceLibrary = dynamic(() => import('./components/ResourceLibrary'), { ssr: false, loading: () => <div className="min-h-[200px] flex items-center justify-center w-full"><span className="animate-pulse text-[#7F5AF0] text-xl">Loading resources...</span></div> });
+const PromptLibrary = dynamic(() => import('./components/PromptLibrary'), { ssr: false, loading: () => <div className="min-h-[200px] flex items-center justify-center w-full"><span className="animate-pulse text-[#7F5AF0] text-xl">Loading prompts...</span></div> });
 import QuickActions from './components/QuickActions';
 
 import { BarChart3, Brain, BookOpen, Trophy, Settings, Bell, User, TrendingUp, Zap, FileText } from 'lucide-react';
@@ -761,12 +763,11 @@ export default function DashboardClient() {
       case 'quick-actions':
         return <QuickActions userPlan={userPlan} onActionClick={handleQuickAction} />;
       case 'analytics':
-        return <UserAnalytics user={user} userProfile={userData} />;
+        return <Suspense fallback={<div className="min-h-[200px] flex items-center justify-center w-full"><span className="animate-pulse text-[#7F5AF0] text-xl">Loading analytics...</span></div>}><UserAnalytics user={user} userProfile={userData} /></Suspense>;
       case 'ai-tools':
-        return <AIToolsGrid userPlan={userPlan} />;
+        return <Suspense fallback={<div className="min-h-[200px] flex items-center justify-center w-full"><span className="animate-pulse text-[#7F5AF0] text-xl">Loading AI tools...</span></div>}><AIToolsGrid userPlan={userPlan} /></Suspense>;
       case 'prompts':
-        return (
-          <PromptLibrary 
+        return <Suspense fallback={<div className="min-h-[200px] flex items-center justify-center w-full"><span className="animate-pulse text-[#7F5AF0] text-xl">Loading prompts...</span></div>}><PromptLibrary 
             userPlan={userPlan}
             platformData={{
               name: 'Instagram',
@@ -842,10 +843,9 @@ export default function DashboardClient() {
                 "Add curiosity: 'Nobody talks about this…'"
               ]
             }}
-          />
-        );
+          /></Suspense>;
       case 'resources':
-        return <ResourceLibrary userPlan={userPlan} />;
+        return <Suspense fallback={<div className="min-h-[200px] flex items-center justify-center w-full"><span className="animate-pulse text-[#7F5AF0] text-xl">Loading resources...</span></div>}><ResourceLibrary userPlan={userPlan} /></Suspense>;
       case 'achievements':
         return (
           <div className="space-y-8">
@@ -953,52 +953,6 @@ export default function DashboardClient() {
           {/* Tab Content */}
           <div className="animate-fade-in" id={`tabpanel-${activeTab}`} role="tabpanel" aria-labelledby={`tab-${activeTab}`}> 
             {renderTabContent()}
-          </div>
-
-          {/* Plan Info Card */}
-          {/* Removed Plan Info Card */}
-
-          {/* Plan Expiry Warning */}
-          {userData.expiry !== 'Data not available' && new Date(userData.expiry) - new Date() < 5 * 24 * 60 * 60 * 1000 && (
-            <div className="bg-yellow-50 border border-yellow-200 rounded-xl sm:rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300" style={{ background: 'var(--bg-surface)' }}>
-              <div className="p-4 sm:p-6 md:p-8">
-                <div className="flex items-start gap-3 sm:gap-4">
-                  <div className="flex-shrink-0">
-                    <svg className="h-5 w-5 sm:h-6 sm:w-6 text-yellow-400" viewBox="0 0 20 20" fill="currentColor">
-                      <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
-                    </svg>
-                  </div>
-                  <div className="flex-1 space-y-1 sm:space-y-2">
-                    <h3 className="text-base sm:text-lg font-medium text-yellow-800">Plan Expiring Soon</h3>
-                    <p className="text-sm sm:text-base text-yellow-700">
-                      Your plan is about to expire soon. <a href="/#pricing" className="font-medium underline hover:text-yellow-600 transition-colors">Renew now</a> to continue accessing premium features.
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* Call to Action */}
-          <div className="bg-gradient-to-r from-[#7F5AF0] to-[#00FFC2] rounded-xl sm:rounded-2xl shadow-lg hover:shadow-xl transform hover:scale-[1.02] transition-all duration-300" style={{ background: 'var(--bg-surface)' }}>
-            <div className="p-6 sm:p-8 md:p-10 text-center text-white">
-              <div className="space-y-4 sm:space-y-6">
-                <div className="space-y-2">
-                  <h3 className="text-base sm:text-lg md:text-2xl font-bold">🎯 Ready to Upgrade?</h3>
-                  <p className="text-xs sm:text-sm md:text-lg opacity-90 max-w-2xl mx-auto">
-                    Unlock premium features and boost your productivity
-                  </p>
-                </div>
-                <div className="flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-3 md:gap-4">
-                  <Link href="/#pricing" className="w-full sm:w-auto bg-white text-[#7F5AF0] px-4 sm:px-6 md:px-8 py-2.5 sm:py-3 md:py-4 rounded-xl font-bold text-sm sm:text-base md:text-lg hover:bg-gray-50 transition-all duration-300 shadow-md hover:shadow-lg transform hover:scale-105">
-                    Upgrade / Renew Plan
-                  </Link>
-                  <a href="/help" className="text-white underline hover:text-gray-100 transition-colors text-xs sm:text-sm md:text-lg">
-                    Need help? Contact support
-                  </a>
-                </div>
-              </div>
-            </div>
           </div>
         </div>
       </div>

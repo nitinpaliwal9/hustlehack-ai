@@ -3,56 +3,22 @@
 import Navigation from '../../components/NavigationClient'
 import Footer from '../../components/FooterClient'
 import Link from 'next/link'
-import '../../legacy-styles.css'
+// Removed: import '../../legacy-styles.css'
 
 export default function PrivacyPolicyPage() {
   return (
     <div>
       <Navigation />
-      
-      <main style={{ 
-        paddingTop: '8rem',
-        paddingBottom: '8rem',
-        minHeight: '100vh',
-        backgroundColor: 'var(--bg-primary)'
-      }}>
-        <div className="container">
+      <main className="pt-32 pb-32 min-h-screen bg-[#0A1020]">
+        <div className="max-w-3xl mx-auto px-4">
           {/* Header Section */}
-          <div className="text-center" style={{ marginBottom: '6rem' }}>
-            <h1 style={{ 
-              background: 'var(--gradient)',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              backgroundClip: 'text',
-              marginBottom: '1rem',
-              fontSize: '2.5rem',
-              fontWeight: '700',
-              fontFamily: 'var(--font-display)'
-            }}>🔒 Privacy Policy</h1>
-            <p style={{ 
-              color: 'var(--text-secondary)',
-              fontSize: '1.125rem',
-              marginBottom: '0.5rem',
-              lineHeight: '1.6'
-            }}>Your privacy is important to us. Here's how we protect it.</p>
-            <p style={{ 
-              color: 'var(--accent)',
-              fontSize: '0.9rem',
-              fontWeight: '500'
-            }}>Last updated: July 2025</p>
+          <div className="text-center mb-24">
+            <h1 className="bg-gradient-to-r from-[#7F5AF0] to-[#00FFC2] bg-clip-text text-transparent mb-4 text-4xl sm:text-5xl font-extrabold font-display">🔒 Privacy Policy</h1>
+            <p className="text-[#9CA3AF] text-lg mb-2 leading-relaxed">Your privacy is important to us. Here's how we protect it.</p>
+            <p className="text-[#00FFC2] text-base font-semibold">Last updated: July 2025</p>
           </div>
-          
           {/* Content Card */}
-          <div className="card" style={{
-            background: 'var(--bg-surface)',
-            border: '1px solid var(--border-color)',
-            borderRadius: 'var(--radius-2xl)',
-            padding: '4rem',
-            maxWidth: '900px',
-            margin: '0 auto',
-            boxShadow: 'var(--shadow-xl)',
-            backdropFilter: 'blur(20px)'
-          }}>
+          <div className="bg-[#181f36]/80 border border-[#7F5AF0] rounded-2xl shadow-2xl p-8 sm:p-12 text-white text-base leading-7">
             <style jsx>{`
               .card h2 {
                 color: var(--text-primary);
@@ -282,7 +248,6 @@ export default function PrivacyPolicyPage() {
           </div>
         </div>
       </main>
-      
       <Footer />
     </div>
   )
