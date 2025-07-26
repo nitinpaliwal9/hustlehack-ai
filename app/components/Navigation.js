@@ -690,6 +690,9 @@ export default function Navigation() {
                     <Link href="/resources" className="block px-4 py-2 text-sm text-white hover:bg-[#232946] rounded-b-lg">All Resources</Link>
                   </div>
                 </li>
+                <li>
+                  <Link href="/startup-community" className={`nav-link pointer-events-auto font-bold text-[#00FFC2] border-b-2 border-[#00FFC2] px-3 py-1 rounded-full bg-[#00FFC2]/10 hover:bg-[#00FFC2]/20 transition ${currentPath === '/startup-community' ? 'active' : ''}`}>🔥 Startup Community</Link>
+                </li>
               </ul>
             </div>
             {/* Right: Plan badge + actions */}
@@ -882,6 +885,7 @@ export default function Navigation() {
                 { href: '/instant-hustle', label: 'Instant Hustle Lite' },
                 { href: '/client-finder', label: 'Client Finder' },
                 { href: '/resources', label: 'Resources' },
+                { href: '/startup-community', label: '🔥 Startup Community', accent: true },
                 { href: '/ai-products', label: 'AI Products', badge: 'HOT', accent: true },
                 { href: '/about', label: 'About' },
                 { href: '/contact', label: 'Contact' },
@@ -890,7 +894,7 @@ export default function Navigation() {
                 <Link
                   key={link.href}
                   href={link.href}
-                  className={`inline-block px-4 py-2 rounded-full font-medium text-sm transition-colors bg-[#232136] text-gray-100 hover:bg-[#7F5AF0] hover:text-white ${currentPath === link.href ? 'bg-[#7F5AF0] text-white' : ''} ${link.accent ? 'font-bold text-[#377DFF] border border-[#377DFF] bg-[#377DFF]/10' : ''}`}
+                  className={`inline-block px-4 py-2 rounded-full font-medium text-sm transition-colors bg-[#232136] text-gray-100 hover:bg-[#7F5AF0] hover:text-white ${currentPath === link.href ? 'bg-[#7F5AF0] text-white' : ''} ${link.accent ? 'font-bold text-[#00FFC2] border border-[#00FFC2] bg-[#00FFC2]/10' : ''}`}
                   onClick={() => setMobileNavOpen(false)}
                 >
                   {link.label}
