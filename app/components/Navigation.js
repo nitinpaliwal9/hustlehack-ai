@@ -98,6 +98,7 @@ export default function Navigation() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false)
+  const [isResourcesDropdownOpen, setIsResourcesDropdownOpen] = useState(false)
   const [currentPath, setCurrentPath] = useState('/')
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [blogOverlayOpen, setBlogOverlayOpen] = useState(false);
@@ -683,11 +684,29 @@ export default function Navigation() {
                 <li><Link href="/ai-products" className={`nav-link pointer-events-auto ${currentPath === '/ai-products' ? 'active' : ''}`}>Tools</Link></li>
                 <li><Link href="/pricing" className={`nav-link pointer-events-auto ${currentPath === '/pricing' ? 'active' : ''}`}>Pricing</Link></li>
                 <li className="relative group">
-                  <Link href="/resources" className={`nav-link pointer-events-auto ${currentPath.startsWith('/resources') ? 'active' : ''}`}>Resources</Link>
-                  <div className="absolute left-0 top-full mt-2 hidden group-hover:block bg-[#181A2A] border border-[#232946]/40 rounded-lg shadow-lg min-w-[180px] z-50">
-                    <Link href="/resources/blog" className="block px-4 py-2 text-sm text-white hover:bg-[#232946] rounded-t-lg">Blog</Link>
-                    <Link href="/resources/ebooks" className="block px-4 py-2 text-sm text-white hover:bg-[#232946]">eBooks</Link>
-                    <Link href="/resources" className="block px-4 py-2 text-sm text-white hover:bg-[#232946] rounded-b-lg">All Resources</Link>
+                  <div 
+                    className="relative"
+                    onMouseEnter={() => setIsResourcesDropdownOpen(true)}
+                    onMouseLeave={() => {
+                      // Add a small delay to allow moving to dropdown
+                      setTimeout(() => setIsResourcesDropdownOpen(false), 100)
+                    }}
+                  >
+                    <Link 
+                      href="/resources" 
+                      className={`nav-link pointer-events-auto ${currentPath.startsWith('/resources') ? 'active' : ''}`}
+                    >
+                      Resources
+                    </Link>
+                    <div 
+                      className={`absolute left-0 top-full ${isResourcesDropdownOpen ? 'block' : 'hidden'} bg-[#181A2A] border border-[#232946]/40 rounded-lg shadow-lg min-w-[180px] z-50`}
+                      onMouseEnter={() => setIsResourcesDropdownOpen(true)}
+                      onMouseLeave={() => setIsResourcesDropdownOpen(false)}
+                    >
+                      <Link href="/resources/blog" className="block px-4 py-2 text-sm text-white hover:bg-[#232946] rounded-t-lg">Blog</Link>
+                      <Link href="/resources/ebooks" className="block px-4 py-2 text-sm text-white hover:bg-[#232946]">eBooks</Link>
+                      <Link href="/resources" className="block px-4 py-2 text-sm text-white hover:bg-[#232946] rounded-b-lg">All Resources</Link>
+                    </div>
                   </div>
                 </li>
                 <li>

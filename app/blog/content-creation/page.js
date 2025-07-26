@@ -1,5 +1,5 @@
-import Navigation from '@/app/components/Navigation';
-import Footer from '@/app/components/Footer';
+import Navigation from '../../components/Navigation';
+import Footer from '../../components/Footer';
 import Link from 'next/link';
 import Image from 'next/image';
 
@@ -21,20 +21,27 @@ const BLOGS = [
 export default function ContentCreationCategoryPage() {
   return (
     <>
-      <Navigation active="blog" />
-      <main className="min-h-screen bg-gradient-to-b from-[#232946] via-[#181A2A] to-[#232946] pb-12">
-        <div className="max-w-4xl mx-auto px-4 pt-24 pb-8">
+      <Navigation />
+      <main className="min-h-screen bg-gradient-to-b from-[#0F0F1B] via-[#181A2A] to-[#0F0F1B] pb-12">
+        <div className="max-w-6xl mx-auto px-4 pt-24 pb-8">
           <h1 className="text-3xl md:text-4xl font-extrabold text-white mb-8">Content Creation</h1>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {BLOGS.length === 0 && <div className="text-gray-400">No blogs found in this category yet.</div>}
             {BLOGS.map(blog => (
-              <div key={blog.slug} className="bg-white/10 rounded-2xl shadow-xl p-6 flex flex-col gap-3 border border-[#7F5AF0]/10 hover:scale-105 hover:shadow-2xl transition">
-                <Image src={blog.banner} alt={blog.bannerAlt} width={400} height={180} className="rounded-lg object-cover w-full h-40 mb-2" />
+              <div key={blog.slug} className="bg-white/5 backdrop-blur-xl rounded-2xl shadow-xl p-6 flex flex-col gap-3 border border-white/10 hover:border-[#7F5AF0]/50 hover:scale-105 hover:shadow-2xl transition-all duration-300">
+                <div className="relative w-full h-40 mb-2">
+                  <Image 
+                    src={blog.banner} 
+                    alt={blog.bannerAlt} 
+                    fill
+                    className="rounded-lg object-cover"
+                  />
+                </div>
                 <h2 className="font-bold text-lg text-white mb-1">{blog.title}</h2>
                 <p className="text-gray-300 text-base mb-2">{blog.excerpt}</p>
                 <div className="flex items-center justify-between mt-auto">
                   <span className="text-xs text-gray-400">By {blog.author} • {blog.date} • {blog.readTime}</span>
-                  <Link href={`/blog/content-creation/${blog.slug}`} className="btn btn-sm premium-btn rounded-full font-bold px-4 py-2 text-sm shadow hover:scale-105 transition">Read More →</Link>
+                  <Link href={`/blog/content-creation/${blog.slug}`} className="inline-block bg-gradient-to-r from-[#7F5AF0] to-[#00FFC2] text-white font-bold px-4 py-2 rounded-full text-sm shadow-lg hover:shadow-[#00FFC2]/25 transition-all duration-300 transform hover:scale-105">Read More →</Link>
                 </div>
               </div>
             ))}
